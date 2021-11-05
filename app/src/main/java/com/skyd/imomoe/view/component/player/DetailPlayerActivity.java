@@ -3,6 +3,10 @@ package com.skyd.imomoe.view.component.player;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.viewbinding.ViewBinding;
+
+import com.skyd.imomoe.view.activity.BaseActivity;
 import com.skyd.skin.core.SkinBaseActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
@@ -16,7 +20,7 @@ import static com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAU
 /**
  * 详情模式播放页面基础类
  */
-public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer> extends SkinBaseActivity implements MyVideoAllCallBack {
+public abstract class DetailPlayerActivity<T extends GSYBaseVideoPlayer, VB extends ViewBinding> extends BaseActivity<VB> implements MyVideoAllCallBack {
 
     protected boolean isPlay;
 
