@@ -70,13 +70,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance
-        appUpdateHelper.getUpdateStatus().observe(this, {
+        appUpdateHelper.getUpdateStatus().observe(this) {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
                 AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
                 else -> Unit
             }
-        })
+        }
 
         if (savedInstanceState != null) {
             homeFragment = supportFragmentManager.getFragment(

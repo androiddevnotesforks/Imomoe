@@ -225,13 +225,13 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
         mBinding.ivPlayActivityFavorite.isEnabled = false
 
-        viewModel.mldAnimeCover.observe(this, {
+        viewModel.mldAnimeCover.observe(this) {
             if (it) {
                 favoriteBeanDataReady++
             }
-        })
+        }
 
-        viewModel.mldPlayBean.observe(this, {
+        viewModel.mldPlayBean.observe(this) {
             mBinding.srlPlayActivity.isRefreshing = false
 
             val title = viewModel.playBean?.title?.title
@@ -245,7 +245,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 mBinding.avpPlayActivity.startPlay()
                 isFirstTime = false
             }
-        })
+        }
 
         //缓存番剧调用getAnimeEpisodeData()来获取视频url
         viewModel.mldGetAnimeEpisodeData.observe(this, Observer {
@@ -275,10 +275,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             }
         })
 
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this, {
+        viewModel.mldAnimeEpisodeDataRefreshed.observe(this) {
             if (it) mBinding.avpPlayActivity.currentPlayer
                 .startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
-        })
+        }
 
         mBinding.srlPlayActivity.isRefreshing = true
         viewModel.getPlayData(partUrl)
@@ -529,7 +529,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             action
         )
         recyclerView.adapter = adapter
-        viewModel.mldEpisodesList.observe(this, {
+        viewModel.mldEpisodesList.observe(this) {
             adapter.notifyDataSetChanged()
             mBinding.avpPlayActivity.setEpisodeAdapter(
                 PlayerEpisodeRecyclerViewAdapter(
@@ -537,7 +537,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     viewModel.episodesList
                 )
             )
-        })
+        }
         return bottomSheetDialog
     }
 

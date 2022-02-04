@@ -36,9 +36,9 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             atbDataSourceConfigActivity.setButtonClickListener(0) { resetDataSource() }
         }
 
-        viewModel.mldDataSourceList.observe(this, {
+        viewModel.mldDataSourceList.observe(this) {
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.dataSourceList)
-        })
+        }
 
         viewModel.getDataSourceList()
     }

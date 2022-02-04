@@ -215,4 +215,6 @@
     <string name="have_not_watched_this_anime">追番后还未观看</string>
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="all_history_count">%d条</string>
+    <string name="no_storage_permission_can_not_olay_local_video">无存储权限，无法播放本地缓存视频</string>
+    <string name="confirm_delete_all_watch_history">确定要删除所有观看历史记录？</string>
 </resources>

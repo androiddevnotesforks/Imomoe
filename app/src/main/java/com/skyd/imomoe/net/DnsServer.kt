@@ -86,11 +86,11 @@ object DnsServer {
     fun AppCompatActivity.customDnsServer() {
         MaterialDialog(this).input(hintRes = R.string.custom_dns_server_describe) { _, text ->
             val url = text.toString()
-            try {
+            runCatching {
                 // 测试url合法性
                 url.toHttpUrl()
                 dnsServer = url
-            } catch (e: Exception) {
+            }.onFailure { e ->
                 e.printStackTrace()
                 e.message?.showToast()
             }

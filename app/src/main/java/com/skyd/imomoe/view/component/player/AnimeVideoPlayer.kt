@@ -1040,13 +1040,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private fun storePlayPosition(position: Long = gsyVideoManager.currentPosition) {
         val url = mOriginUrl
         val duration = gsyVideoManager.duration
+        var newPosition = position
+        // 若还剩10s结束，则直接标记为“看完”
+        if (newPosition > 0 && abs(newPosition - duration) <= 10000L) newPosition = -1L
         // 进度为负（已经播放完） 或 当前进度大于最小限制且小于最大限制（播放完时不记录），则记录
-        if (position < 0 || (position > playPositionMemoryTimeLimit && duration > 0
-                    && abs(position - duration) > 2000L)
-        ) {
+        if (newPosition < 0 || (newPosition > playPositionMemoryTimeLimit && duration > 0)) {
             playPositionMemoryStore?.apply {
                 playPositionMemoryStoreCoroutineScope.launch {
-                    putPlayPosition(url, position)
+                    putPlayPosition(url, newPosition)
                 }
             }
         }

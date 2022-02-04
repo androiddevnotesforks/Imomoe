@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util.html
 
 import android.app.Activity
-import android.util.Log
 import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onCancel

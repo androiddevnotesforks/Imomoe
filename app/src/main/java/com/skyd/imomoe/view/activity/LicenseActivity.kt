@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.LicenseBean
 import com.skyd.imomoe.config.Const.ActionUrl
 import com.skyd.imomoe.config.Const.ViewHolderTypeString

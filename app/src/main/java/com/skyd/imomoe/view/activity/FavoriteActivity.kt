@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.ViewStub
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
@@ -34,7 +33,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
             rvFavoriteActivity.addItemDecoration(AnimeEpisodeItemDecoration())
         }
 
-        viewModel.mldFavoriteList.observe(this, Observer {
+        viewModel.mldFavoriteList.observe(this) {
             mBinding.srlFavoriteActivity.isRefreshing = false
             if (it) {
                 if (viewModel.favoriteList.isEmpty()) showLoadFailedTip(
@@ -43,7 +42,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
                 )
                 adapter.notifyDataSetChanged()
             }
-        })
+        }
     }
 
     override fun getBinding(): ActivityFavoriteBinding =
@@ -56,6 +55,6 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         viewModel.getFavoriteData()
     }
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutFavoriteActivityNoFavorite
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutFavoriteActivityNoFavorite
 }
 

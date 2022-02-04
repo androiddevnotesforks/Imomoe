@@ -87,7 +87,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         }
 
-        viewModel.mldSearchResultList.observe(this, {
+        viewModel.mldSearchResultList.observe(this) {
             mBinding.srlSearchActivity.closeHeaderOrFooter()
             if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
             // 仅在搜索框不为“”时展示搜索结果
@@ -107,22 +107,22 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                     }
                 }
             }
-        })
+        }
 
-        viewModel.mldSearchHistoryList.observe(this, {
+        viewModel.mldSearchHistoryList.observe(this) {
             if (viewModel.searchResultList.size == 0) {
                 mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
                 setHistoryAdapter()
                 historyAdapter.notifyDataSetChanged()
             }
-        })
+        }
 
-        viewModel.mldDeleteCompleted.observe(this, {
+        viewModel.mldDeleteCompleted.observe(this) {
             if (viewModel.searchResultList.size == 0) {
                 setHistoryAdapter()
                 historyAdapter.notifyItemRemoved(it)
             }
-        })
+        }
 
         mBinding.tvSearchActivityCancel.setOnClickListener { finish() }
 

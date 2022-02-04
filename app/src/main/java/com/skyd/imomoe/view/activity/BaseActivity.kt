@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView

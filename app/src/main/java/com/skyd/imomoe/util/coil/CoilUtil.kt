@@ -1,6 +1,5 @@
 package com.skyd.imomoe.util.coil
 
-import android.util.Log
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.Coil

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
@@ -62,7 +61,7 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             }
         }
 
-        viewModel.mldRankData.observe(viewLifecycleOwner, Observer {
+        viewModel.mldRankData.observe(viewLifecycleOwner) {
             mBinding.srlRankFragment.closeHeaderOrFooter()
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.rankList)
 
@@ -75,7 +74,7 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
                     }
                 }
             }
-        })
+        }
 
         mBinding.srlRankFragment.autoRefresh()
     }

@@ -8,16 +8,16 @@ import okhttp3.OkHttpClient
 import okhttp3.dnsoverhttps.DnsOverHttps
 import java.io.File
 
-private val okhttpCache = Cache(File("cacheDir", "okhttpcache"), 10 * 1024 * 1024)
+private val okhttpCache = Cache(File("cacheDir", "okhttpcache"), 10 * 1024 * 1024L)
 private val bootstrapClient = OkHttpClient.Builder().cache(okhttpCache).build()
 
 var dns: DnsOverHttps? = DnsServer.dnsServer.let {
     if (it.isNullOrBlank()) null else {
-        try {
+        runCatching {
             DnsOverHttps.Builder().client(bootstrapClient)
                 .url(it.toHttpUrl())
                 .build()
-        } catch (e: Exception) {
+        }.getOrElse { e ->
             e.printStackTrace()
             e.message?.showToast()
             null
@@ -29,11 +29,11 @@ var okhttpClient = bootstrapClient.newBuilder().apply { dns?.let { dns(it) } }.b
 
 fun changeDnsServer(server: String) {
     dns = if (server.isBlank()) null else {
-        try {
+        runCatching {
             DnsOverHttps.Builder().client(bootstrapClient)
                 .url(server.toHttpUrl())
                 .build()
-        } catch (e: Exception) {
+        }.getOrElse { e ->
             e.printStackTrace()
             e.message?.showToast()
             null

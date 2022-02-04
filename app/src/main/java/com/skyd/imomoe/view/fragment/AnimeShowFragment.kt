@@ -30,15 +30,15 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         viewModel = ViewModelProvider(this).get(AnimeShowViewModel::class.java)
         val arguments = arguments
 
-        try {
+        runCatching {
             partUrl = arguments?.getString("partUrl") ?: ""
             viewModel.viewPool =
                 arguments?.getSerializable("viewPool") as SerializableRecycledViewPool
             viewModel.childViewPool =
                 arguments.getSerializable("childViewPool") as SerializableRecycledViewPool
-        } catch (e: Exception) {
-            e.printStackTrace()
-            e.message?.showToast(Toast.LENGTH_LONG)
+        }.onFailure {
+            it.printStackTrace()
+            it.message?.showToast(Toast.LENGTH_LONG)
         }
     }
 
@@ -89,7 +89,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             mBinding.rvAnimeShowFragment.setRecycledViewPool(it)
         }
 
-        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner, {
+        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner) {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
             adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeShowList)
             when (it.first) {
@@ -101,7 +101,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
                     }
                 }
             }
-        })
+        }
         refresh()
     }
 

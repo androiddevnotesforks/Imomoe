@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.ViewStub
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityRankBinding
 import com.skyd.imomoe.view.fragment.RankFragment
+import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.RankViewModel
 
 class RankActivity : BaseActivity<ActivityRankBinding>() {
@@ -31,18 +30,9 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
 
             vp2RankActivity.setOffscreenPageLimit(offscreenPageLimit)
 
-            tlRankActivity.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    selectedTabIndex = tab.position
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab) {
-                }
-
-            })
+            tlRankActivity.addOnTabSelectedListener {
+                onTabSelected { tab -> selectedTabIndex = tab?.position ?: return@onTabSelected }
+            }
 
             //添加rv
             vp2RankActivity.setAdapter(adapter)
@@ -56,7 +46,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
         }
 
 
-        viewModel.mldRankData.observe(this, Observer {
+        viewModel.mldRankData.observe(this) {
             adapter.clearAllFragment()
             if (it) {
                 hideLoadFailedTip()
@@ -78,7 +68,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
             }
             adapter.notifyDataSetChanged()
             viewModel.isRequesting = false
-        })
+        }
 
         viewModel.getRankTabData()
     }
@@ -90,7 +80,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
         overridePendingTransition(0, R.anim.anl_push_left_out)
     }
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutRankActivityLoadFailed
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutRankActivityLoadFailed
 
     class VpAdapter : FragmentStateAdapter {
 

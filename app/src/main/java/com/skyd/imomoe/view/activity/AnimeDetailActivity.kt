@@ -4,17 +4,13 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.smartNotifyDataSetChanged
@@ -23,16 +19,11 @@ import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.URL
 import kotlin.random.Random
 
 
 class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
-    private var partUrl: String = ""
-    private var isFavorite: Boolean = false
     private lateinit var viewModel: AnimeDetailViewModel
     private lateinit var adapter: AnimeDetailAdapter
     override var statusBarSkin: Boolean = false
@@ -45,54 +36,27 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         viewModel = ViewModelProvider(this).get(AnimeDetailViewModel::class.java)
         adapter = AnimeDetailAdapter(this, viewModel.animeDetailList)
 
-        partUrl = intent.getStringExtra("partUrl") ?: ""
+        viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
 
         mBinding.atbAnimeDetailActivityToolbar.run {
             setBackButtonClickListener { finish() }
             // 分享
             setButtonClickListener(0) {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + partUrl)
+                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
                     .show(supportFragmentManager, "share_dialog")
             }
             addButton(null)
             // 收藏
-            lifecycleScope.launch(Dispatchers.IO) {
-                val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
-                isFavorite = favoriteAnime != null
-                withContext(Dispatchers.Main) {
-                    setButtonDrawable(
-                        1, if (isFavorite) R.drawable.ic_star_white_24_skin else
-                            R.drawable.ic_star_border_white_24
-                    )
-                }
+            viewModel.mldFavorite.observe(this@AnimeDetailActivity) {
+                setButtonDrawable(
+                    1, if (it) R.drawable.ic_star_white_24_skin else
+                        R.drawable.ic_star_border_white_24
+                )
             }
             setButtonEnable(1, false)
             setButtonClickListener(1) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    if (isFavorite) {
-                        getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
-                        withContext(Dispatchers.Main) {
-                            isFavorite = false
-                            setButtonDrawable(1, R.drawable.ic_star_border_white_24)
-                            getString(R.string.remove_favorite_succeed).showToast()
-                        }
-                    } else {
-                        getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                            FavoriteAnimeBean(
-                                Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                                partUrl,
-                                viewModel.title,
-                                System.currentTimeMillis(),
-                                viewModel.cover
-                            )
-                        )
-                        withContext(Dispatchers.Main) {
-                            isFavorite = true
-                            setButtonDrawable(1, R.drawable.ic_star_white_24_skin)
-                            getString(R.string.favorite_succeed).showToast()
-                        }
-                    }
-                }
+                if (viewModel.mldFavorite.value == true) viewModel.deleteFavorite()
+                else viewModel.insertFavorite()
             }
         }
 
@@ -103,7 +67,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             rvAnimeDetailActivityInfo.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeDetailActivityInfo.adapter = adapter
 
-            srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData(partUrl) }
+            srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData() }
             srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
@@ -129,13 +93,13 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
-        viewModel.getAnimeDetailData(partUrl)
+        viewModel.getAnimeDetailData()
     }
 
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
 
-    fun getPartUrl(): String = partUrl
+    fun getPartUrl(): String = viewModel.partUrl
 
     override fun onChangeSkin() {
         super.onChangeSkin()

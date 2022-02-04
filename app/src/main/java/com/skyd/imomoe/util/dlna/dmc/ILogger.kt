@@ -1,6 +1,5 @@
 package com.skyd.imomoe.util.dlna.dmc
 
-import android.util.Log
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.util.*
 

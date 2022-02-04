@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
-import android.view.View
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding

@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util.html.source
 
 import android.text.TextUtils
-import android.util.Log
 import android.webkit.WebView
 import com.skyd.imomoe.util.logE
 import java.net.HttpURLConnection

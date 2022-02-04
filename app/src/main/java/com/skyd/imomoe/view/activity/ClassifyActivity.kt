@@ -100,7 +100,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             }
         }
 
-        viewModel.mldClassifyTabList.observe(this, {
+        viewModel.mldClassifyTabList.observe(this) {
             when (it.second) {
                 ResponseDataType.REFRESH -> {
                     viewModel.classifyTabList.apply {
@@ -148,9 +148,9 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 }
                 else -> mBinding.srlClassifyActivity.finishRefresh()
             }
-        })
+        }
 
-        viewModel.mldClassifyList.observe(this, {
+        viewModel.mldClassifyList.observe(this) {
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
             viewModel.isRequesting = false
             classifyAdapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.classifyList)
@@ -164,7 +164,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                         else classifyTabTitle
                     }：$classifyTitle"
             }
-        })
+        }
 
         viewModel.setActivity(this)
 

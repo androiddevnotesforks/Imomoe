@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.skyd.imomoe.App
 import com.skyd.imomoe.bean.UpdateBean

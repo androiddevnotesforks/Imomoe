@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
@@ -23,6 +22,7 @@ import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.WrapLinearLayoutManager
+import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -56,26 +56,16 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             vp2EverydayAnimeFragment.setOffscreenPageLimit(offscreenPageLimit)
             srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
 
-            tlEverydayAnimeFragment.addOnTabSelectedListener(object :
-                TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    selectedTabIndex = tab.position
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab) {
-                }
-
-            })
+            tlEverydayAnimeFragment.addOnTabSelectedListener {
+                onTabSelected { tab -> selectedTabIndex = tab?.position ?: return@onTabSelected }
+            }
         }
 
-        viewModel.mldHeader.observe(viewLifecycleOwner, {
+        viewModel.mldHeader.observe(viewLifecycleOwner) {
             mBinding.atbEverydayAnimeFragment.titleText = it.title
-        })
+        }
 
-        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner, {
+        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner) {
             mBinding.srlEverydayAnimeFragment.isRefreshing = false
 
             if (it != null) {
@@ -136,7 +126,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     hideLoadFailedTip()
                 }
             }
-        })
+        }
 
         mBinding.srlEverydayAnimeFragment.isRefreshing = true
         viewModel.getEverydayAnimeData()

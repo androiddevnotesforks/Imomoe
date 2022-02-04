@@ -1,9 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewStub
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
@@ -52,20 +50,18 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             }
         }
 
-        viewModel.mldMonthAnimeList.observe(this, Observer {
+        viewModel.mldMonthAnimeList.observe(this) {
             mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
             if (it) {
                 hideLoadFailedTip()
             } else {
-                showLoadFailedTip(
-                    getString(R.string.load_data_failed_click_to_retry),
-                    View.OnClickListener {
-                        viewModel.getMonthAnimeData(partUrl)
-                        hideLoadFailedTip()
-                    })
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                    viewModel.getMonthAnimeData(partUrl)
+                    hideLoadFailedTip()
+                }
             }
             adapter.notifyDataSetChanged()
-        })
+        }
 
         mBinding.srlMonthAnimeActivity.autoRefresh()
     }
@@ -73,5 +69,5 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
     override fun getBinding(): ActivityMonthAnimeBinding =
         ActivityMonthAnimeBinding.inflate(layoutInflater)
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutMonthAnimeActivityLoadFailed
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutMonthAnimeActivityLoadFailed
 }

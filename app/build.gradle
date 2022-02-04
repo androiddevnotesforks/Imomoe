@@ -120,7 +120,7 @@ android {
         exclude 'org/seamless/**'
         exclude 'org/eclipse/jetty/**'
         exclude 'org/fourthline/cling/**'
-//        exclude 'okhttp3/internal/**'
+        exclude 'okhttp3/internal/publicsuffix/NOTICE'
         exclude 'com/badlogic/**'
     }
 

@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.webkit.SslErrorHandler
 import android.webkit.WebView

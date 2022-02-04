@@ -44,14 +44,14 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         viewModel.getAllHistoryCount()
-        viewModel.mldAllHistoryCount.observe(this, {
+        viewModel.mldAllHistoryCount.observe(this) {
             if (it >= 0) {
                 mBinding.tvSettingActivityAllHistoryCount.apply {
                     visible()
                     text = getString(R.string.all_history_count, it)
                 }
             } else mBinding.tvSettingActivityAllHistoryCount.gone()
-        })
+        }
         // 清理历史记录
         viewModel.mldDeleteAllHistory.observe(this, Observer {
             if (it == null) return@Observer
@@ -70,9 +70,9 @@ class SettingActivity : BaseActivity<ActivitySettingBinding>() {
         }
 
         // 清理缓存文件
-        viewModel.mldCacheSize.observe(this, {
+        viewModel.mldCacheSize.observe(this) {
             mBinding.tvSettingActivityClearCacheSize.text = it
-        })
+        }
         viewModel.mldClearAllCache.observe(this, Observer {
             if (it == null) return@Observer
             lifecycleScope.launch(Dispatchers.IO) {

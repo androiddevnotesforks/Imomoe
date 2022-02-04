@@ -105,7 +105,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
             }
         }
 
-        viewModel.mldGetAllTabList.observe(viewLifecycleOwner, {
+        viewModel.mldGetAllTabList.observe(viewLifecycleOwner) {
             adapter.clearAllFragment()
             if (!it) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
@@ -129,7 +129,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 }
             }
             adapter.notifyDataSetChanged()
-        })
+        }
 
         viewModel.getAllTabData()
     }

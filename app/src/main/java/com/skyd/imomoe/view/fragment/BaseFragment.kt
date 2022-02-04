@@ -1,13 +1,11 @@
 package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber

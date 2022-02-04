@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -58,7 +57,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 getString(R.string.read_download_data_file)
         }
 
-        viewModel.mldAnimeCoverList.observe(this, Observer {
+        viewModel.mldAnimeCoverList.observe(this) {
             if (it) {
                 mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
                 if (viewModel.animeCoverList.size == 0) {
@@ -66,7 +65,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 }
                 adapter.notifyDataSetChanged()
             }
-        })
+        }
 
         requestManageExternalStorage {
             onGranted {
@@ -77,7 +76,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 }
             }
             onDenied {
-                "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG)
+                getString(R.string.no_storage_permission_can_not_olay_local_video).showToast(Toast.LENGTH_LONG)
                 finish()
             }
         }
@@ -86,5 +85,5 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
     override fun getBinding(): ActivityAnimeDownloadBinding =
         ActivityAnimeDownloadBinding.inflate(layoutInflater)
 
-    override fun getLoadFailedTipView(): ViewStub? = mBinding.layoutAnimeDownloadNoDownload
+    override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeDownloadNoDownload
 }

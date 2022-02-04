@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util
 
 import android.content.Context
-import android.util.Log
 import com.skyd.imomoe.view.activity.CrashActivity
 import java.io.PrintWriter
 import java.io.StringWriter

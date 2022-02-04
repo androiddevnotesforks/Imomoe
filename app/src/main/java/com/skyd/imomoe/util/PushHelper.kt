@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util
 
 import android.content.Context
-import android.util.Log
 import com.umeng.message.PushAgent
 import com.umeng.message.api.UPushRegisterCallback
 
