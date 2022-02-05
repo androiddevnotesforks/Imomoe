@@ -43,17 +43,13 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
                 adapter.notifyDataSetChanged()
             }
         }
-    }
-
-    override fun getBinding(): ActivityFavoriteBinding =
-        ActivityFavoriteBinding.inflate(layoutInflater)
-
-    override fun onResume() {
-        super.onResume()
 
         mBinding.srlFavoriteActivity.isRefreshing = true
         viewModel.getFavoriteData()
     }
+
+    override fun getBinding(): ActivityFavoriteBinding =
+        ActivityFavoriteBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutFavoriteActivityNoFavorite
 }

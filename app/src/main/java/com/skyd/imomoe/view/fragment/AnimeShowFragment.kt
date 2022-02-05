@@ -11,7 +11,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.smartNotifyDataSetChanged
+import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.AnimeShowAdapter
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration

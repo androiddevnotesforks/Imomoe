@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.ext
 
 import android.net.Uri
 import android.os.Build

@@ -1,12 +1,12 @@
 package com.skyd.imomoe.util.update
 
-import android.text.Html
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.model.AppUpdateModel
 import com.skyd.imomoe.util.Util.openBrowser
-import com.skyd.imomoe.util.formatSize
+import com.skyd.imomoe.ext.formatSize
+import com.skyd.imomoe.ext.toHtml
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -67,7 +67,7 @@ class AppUpdateHelper private constructor() {
                 }
                 append(updateBean.body)
                 this@show.message(
-                    text = Html.fromHtml(this.toString())
+                    text = this.toString().toHtml()
                 )
             }
             positiveButton(text = "下载更新") {

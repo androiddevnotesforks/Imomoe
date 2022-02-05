@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util
 
 import android.util.Log
-import com.jakewharton.disklrucache.DiskLruCache
 import com.skyd.imomoe.App
 import java.text.SimpleDateFormat
 import java.util.*

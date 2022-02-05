@@ -17,9 +17,9 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.smartNotifyDataSetChanged
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.smartNotifyDataSetChanged
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
 import com.skyd.imomoe.viewmodel.SearchViewModel

@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import com.skyd.imomoe.bean.DataSourceFileBean
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import java.io.File
@@ -178,9 +179,11 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                             )
                             else {
                                 Thread {
-                                    if (needRestartApp) Util.restartApp()
-                                    else {
-                                        uri.copyTo(target)
+                                    uri.copyTo(target)
+                                    if (needRestartApp) {
+                                        viewModel.clearDataSourceCache()
+                                        Util.restartApp()
+                                    } else {
                                         runOnUiThread { onSuccess?.invoke(target) }
                                     }
                                 }.start()

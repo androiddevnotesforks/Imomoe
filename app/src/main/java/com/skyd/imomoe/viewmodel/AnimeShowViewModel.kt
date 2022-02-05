@@ -2,7 +2,6 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
@@ -11,10 +10,9 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
+import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class AnimeShowViewModel : ViewModel() {
@@ -30,29 +28,24 @@ class AnimeShowViewModel : ViewModel() {
 
     private var isRequesting = false
 
-    //http://www.yhdm.io版本
     fun getAnimeShowData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (isRequesting) return@launch
-                isRequesting = true
-                pageNumberBean = null
-                animeShowModel.getAnimeShowData(partUrl).apply {
-                    pageNumberBean = second
-                    mldGetAnimeShowList.postValue(
-                        Pair(
-                            if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first
-                        )
-                    )
-                    isRequesting = false
-                }
-            } catch (e: Exception) {
-                mldGetAnimeShowList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
-                isRequesting = false
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
-            }
-        }
+        if (isRequesting) return
+        isRequesting = true
+        pageNumberBean = null
+        request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
+            pageNumberBean = it.second
+            mldGetAnimeShowList.postValue(
+                Pair(
+                    if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE,
+                    it.first
+                )
+            )
+            isRequesting = false
+        }, error = {
+            mldGetAnimeShowList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
+            isRequesting = false
+            (App.context.getString(R.string.get_data_failed) + "\n" + it.message).showToast()
+        })
     }
 
     companion object {

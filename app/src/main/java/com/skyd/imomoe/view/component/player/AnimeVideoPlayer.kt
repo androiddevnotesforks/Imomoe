@@ -33,9 +33,9 @@ import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.invisible
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.invisible
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.SkinRvAdapter
 import com.skyd.imomoe.view.component.ZoomView

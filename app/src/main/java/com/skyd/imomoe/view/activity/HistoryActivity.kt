@@ -72,17 +72,13 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
                 }
             }
         }
-    }
-
-    override fun getBinding(): ActivityHistoryBinding =
-        ActivityHistoryBinding.inflate(layoutInflater)
-
-    override fun onResume() {
-        super.onResume()
 
         mBinding.srlHistoryActivity.isRefreshing = true
         viewModel.getHistoryList()
     }
+
+    override fun getBinding(): ActivityHistoryBinding =
+        ActivityHistoryBinding.inflate(layoutInflater)
 
     fun deleteHistory(historyBean: HistoryBean) {
         viewModel.deleteHistory(historyBean)

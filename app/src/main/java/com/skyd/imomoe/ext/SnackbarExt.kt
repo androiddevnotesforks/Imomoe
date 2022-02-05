@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.ext
 
 import android.app.Activity
 import android.content.res.ColorStateList

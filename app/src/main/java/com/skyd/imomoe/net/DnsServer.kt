@@ -6,11 +6,10 @@ import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.editor
-import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.util.showToast
 import okhttp3.HttpUrl.Companion.toHttpUrl
-import java.lang.Exception
 
 object DnsServer {
     class Dns(val dnsName: String, val dnsServer: String) : CharSequence {

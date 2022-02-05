@@ -17,6 +17,8 @@ import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp

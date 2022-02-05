@@ -3,19 +3,17 @@ package com.skyd.imomoe.viewmodel
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
+import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.util.showToast
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class ClassifyViewModel : ViewModel() {
@@ -40,38 +38,31 @@ class ClassifyViewModel : ViewModel() {
     }
 
     fun getClassifyTabData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                mldClassifyTabList.postValue(
-                    Pair(classifyModel.getClassifyTabData(), ResponseDataType.REFRESH)
-                )
-            } catch (e: Exception) {
-                classifyTabList.clear()
-                mldClassifyTabList.postValue(Pair(ArrayList(), ResponseDataType.FAILED))
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
-            }
-        }
+        request(request = { classifyModel.getClassifyTabData() }, success = {
+            mldClassifyTabList.postValue(Pair(it, ResponseDataType.REFRESH))
+        }, error = {
+            classifyTabList.clear()
+            mldClassifyTabList.postValue(Pair(ArrayList(), ResponseDataType.FAILED))
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
     }
 
     fun getClassifyData(partUrl: String, isRefresh: Boolean = true) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                if (isRequesting) return@launch
-                isRequesting = true
-                classifyModel.getClassifyData(partUrl).apply {
-                    pageNumberBean = second
-                    mldClassifyList.postValue(
-                        Pair(if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE, first)
-                    )
-                }
-            } catch (e: Exception) {
-                pageNumberBean = null
-                mldClassifyList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
-            }
-        }
+        if (isRequesting) return
+        isRequesting = true
+        request(request = { classifyModel.getClassifyData(partUrl) }, success = {
+            pageNumberBean = it.second
+            mldClassifyList.postValue(
+                Pair(
+                    if (isRefresh) ResponseDataType.REFRESH else ResponseDataType.LOAD_MORE,
+                    it.first
+                )
+            )
+        }, error = {
+            pageNumberBean = null
+            mldClassifyList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
     }
 
     companion object {

@@ -19,7 +19,7 @@ import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.smartNotifyDataSetChanged
+import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.BaseRvAdapter
 import com.skyd.imomoe.view.adapter.SearchAdapter
 import com.skyd.imomoe.view.listener.dsl.setOnItemSelectedListener

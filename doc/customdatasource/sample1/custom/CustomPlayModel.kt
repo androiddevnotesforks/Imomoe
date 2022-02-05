@@ -17,7 +17,7 @@ class CustomPlayModel : IPlayModel {
         val div = e.select("[class=area]").select("[class=bofang]")[0].children()
         val rawUrl = div.attr("data-vid")
         return when {
-            rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "")
+            rawUrl.endsWith("\$mp4", true) -> rawUrl.replace("\$mp4", "").replace("\\", "/")
             rawUrl.endsWith("\$url", true) -> rawUrl.replace("\$url", "")
             rawUrl.endsWith("\$hp", true) -> {
                 JsoupUtil.getDocument("http://tup.yhdm.so/hp.php?url=${rawUrl.substringBefore("\$hp")}")

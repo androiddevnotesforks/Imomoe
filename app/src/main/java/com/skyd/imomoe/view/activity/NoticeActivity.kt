@@ -1,8 +1,8 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.text.Html
 import com.skyd.imomoe.databinding.ActivityNoticeBinding
+import com.skyd.imomoe.ext.toHtml
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 
@@ -37,7 +37,7 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>() {
                 titleText = paramMap[TOOLBAR_TITLE] ?: "通知"
             }
             tvNoticeActivityTitle.text = paramMap[TITLE] ?: ""
-            tvNoticeActivityContent.text = Html.fromHtml(paramMap[CONTENT] ?: "")
+            tvNoticeActivityContent.text = (paramMap[CONTENT] ?: "").toHtml()
         }
     }
 

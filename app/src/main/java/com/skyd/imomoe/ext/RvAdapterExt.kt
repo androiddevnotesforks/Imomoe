@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.ext
 
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.bean.ResponseDataType

@@ -10,9 +10,9 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
-import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.visible
 import com.skyd.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
 

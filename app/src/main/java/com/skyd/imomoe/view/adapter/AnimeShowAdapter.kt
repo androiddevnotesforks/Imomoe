@@ -22,6 +22,8 @@ import com.skyd.imomoe.view.fragment.AnimeShowFragment
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
 import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable

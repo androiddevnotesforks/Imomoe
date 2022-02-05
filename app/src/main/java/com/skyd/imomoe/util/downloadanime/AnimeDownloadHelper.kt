@@ -9,7 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
-import com.skyd.imomoe.util.requestManageExternalStorage
+import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.util.showToast
 import org.w3c.dom.Element
 import org.w3c.dom.Node

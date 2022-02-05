@@ -45,7 +45,8 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
-import android.os.Looper
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
 
 
 object Util {

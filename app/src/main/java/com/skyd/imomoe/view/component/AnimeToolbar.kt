@@ -18,8 +18,8 @@ import androidx.core.graphics.drawable.toDrawable
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.sp
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 
 

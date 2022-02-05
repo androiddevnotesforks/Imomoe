@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util
+package com.skyd.imomoe.ext
 
 /**
  * 只拼接百分号%

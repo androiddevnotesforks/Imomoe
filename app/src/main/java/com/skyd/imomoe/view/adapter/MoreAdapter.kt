@@ -9,7 +9,7 @@ import com.skyd.imomoe.util.More1ViewHolder
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.clickScale
+import com.skyd.imomoe.ext.clickScale
 import com.skyd.imomoe.view.fragment.MoreFragment
 
 class MoreAdapter(

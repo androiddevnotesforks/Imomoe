@@ -7,6 +7,8 @@ import android.os.Message
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar

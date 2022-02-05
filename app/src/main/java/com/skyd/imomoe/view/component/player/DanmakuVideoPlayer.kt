@@ -24,6 +24,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuBean
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmakuService
 import com.skyd.imomoe.util.*

@@ -14,8 +14,8 @@ import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.ViewHolderUtil
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 
 /**
  * Created by Sky_D on 2021-02-08.

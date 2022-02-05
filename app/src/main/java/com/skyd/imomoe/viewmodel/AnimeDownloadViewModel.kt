@@ -2,7 +2,6 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
@@ -11,10 +10,9 @@ import com.skyd.imomoe.util.comparator.EpisodeTitleComparator
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
-import com.skyd.imomoe.util.formatSize
-import com.skyd.imomoe.util.toMD5
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.skyd.imomoe.ext.formatSize
+import com.skyd.imomoe.ext.request
+import com.skyd.imomoe.ext.toMD5
 import java.io.File
 
 
@@ -23,7 +21,7 @@ class AnimeDownloadViewModel : ViewModel() {
     var mldAnimeCoverList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAnimeCover() {
-        viewModelScope.launch(Dispatchers.IO) {
+        request(request = {
             val files = arrayOf(File(Const.DownloadAnime.animeFilePath).listFiles(),
                 Const.DownloadAnime.run {
                     new = false
@@ -57,13 +55,12 @@ class AnimeDownloadViewModel : ViewModel() {
                     }
                 }
             }
-            mldAnimeCoverList.postValue(true)
-        }
+        }, success = { mldAnimeCoverList.postValue(true) })
     }
 
     fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
         //不支持重命名文件
-        viewModelScope.launch(Dispatchers.IO) {
+        request(request = {
             val animeFilePath = if (path == 0) Const.DownloadAnime.animeFilePath
             else {
                 Const.DownloadAnime.new = false
@@ -140,8 +137,7 @@ class AnimeDownloadViewModel : ViewModel() {
                 }
                 animeCoverList.sortWith(EpisodeTitleComparator())
             }
-            mldAnimeCoverList.postValue(true)
-        }
+        }, success = { mldAnimeCoverList.postValue(true) })
     }
 
     companion object {

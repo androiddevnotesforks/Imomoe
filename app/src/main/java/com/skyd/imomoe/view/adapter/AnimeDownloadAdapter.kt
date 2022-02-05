@@ -9,9 +9,9 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.invisible
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.invisible
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
 
 class AnimeDownloadAdapter(

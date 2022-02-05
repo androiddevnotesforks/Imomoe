@@ -2,7 +2,7 @@ package com.skyd.imomoe.view.component.player.danmaku.anime
 
 import android.graphics.Color
 import com.kuaishou.akdanmaku.data.DanmakuItemData
-import com.skyd.imomoe.util.Text.shield
+import com.skyd.imomoe.ext.shield
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

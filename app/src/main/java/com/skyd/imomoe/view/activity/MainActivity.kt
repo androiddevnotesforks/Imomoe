@@ -6,7 +6,6 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import com.afollestad.materialdialogs.MaterialDialog
@@ -23,11 +22,12 @@ import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.clickScale
+import com.skyd.imomoe.ext.clickScale
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
+import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
@@ -60,7 +60,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
                 title(res = R.string.user_notice_update)
-                message(text = Html.fromHtml(getUserNoticeContent()))
+                message(text = getUserNoticeContent().toHtml())
                 cancelable(false)
                 positiveButton(res = R.string.ok) {
                     setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)

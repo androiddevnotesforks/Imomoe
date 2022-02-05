@@ -2,7 +2,6 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import coil.util.CoilUtils
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -10,9 +9,8 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.database.getOfflineDatabase
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.coil.CoilUtil
-import com.skyd.imomoe.util.formatSize
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.skyd.imomoe.ext.formatSize
+import com.skyd.imomoe.ext.request
 
 
 class SettingViewModel : ViewModel() {
@@ -22,62 +20,48 @@ class SettingViewModel : ViewModel() {
     var mldCacheSize: MutableLiveData<String> = MutableLiveData()
 
     fun deleteAllHistory() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                getAppDataBase().historyDao().deleteAllHistory()
-                getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
-                getOfflineDatabase().playRecordDao().deleteAll()
-                mldDeleteAllHistory.postValue(true)
-                getAllHistoryCount()
-            } catch (e: Exception) {
-                mldDeleteAllHistory.postValue(false)
-                e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
-            }
-        }
+        request(request = {
+            getAppDataBase().historyDao().deleteAllHistory()
+            getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
+            getOfflineDatabase().playRecordDao().deleteAll()
+        }, success = {
+            mldDeleteAllHistory.postValue(true)
+            getAllHistoryCount()
+        }, error = {
+            mldDeleteAllHistory.postValue(false)
+            "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
+        })
     }
 
-    // 获取Glide磁盘缓存大小
+    // 获取Coil磁盘缓存大小
     fun getCacheSize() {
-        viewModelScope.launch(Dispatchers.IO) {
-            mldCacheSize.postValue(
-                try {
-                    CoilUtils.createDefaultCache(App.context).directory.formatSize()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    "获取缓存大小失败"
-                }
-            )
-        }
+        request(request = {
+            CoilUtils.createDefaultCache(App.context).directory.formatSize()
+        }, success = {
+            mldCacheSize.postValue(it)
+        }, error = {
+            mldCacheSize.postValue(App.context.getString(R.string.get_cache_size_failed))
+        })
     }
 
 
     fun clearAllCache() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                // Glide
-                CoilUtil.clearMemoryDiskCache()
-                mldClearAllCache.postValue(true)
-            } catch (e: Exception) {
-                mldClearAllCache.postValue(false)
-                e.printStackTrace()
-                (App.context.getString(R.string.delete_failed) + "\n" + e.message).showToast()
-            }
-        }
+        request(request = { CoilUtil.clearMemoryDiskCache() }, success = {
+            mldClearAllCache.postValue(true)
+        }, error = {
+            mldClearAllCache.postValue(false)
+            "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
+        })
     }
 
     fun getAllHistoryCount() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val count = getAppDataBase().historyDao().getHistoryCount() +
-                        getAppDataBase().searchHistoryDao().getSearchHistoryCount() +
-                        getOfflineDatabase().playRecordDao().getPlayRecordCount()
-                mldAllHistoryCount.postValue(count)
-            } catch (e: Exception) {
-                mldAllHistoryCount.postValue(-1)
-                e.printStackTrace()
-            }
-        }
+        request(request = {
+            getAppDataBase().historyDao().getHistoryCount() +
+                    getAppDataBase().searchHistoryDao().getSearchHistoryCount() +
+                    getOfflineDatabase().playRecordDao().getPlayRecordCount()
+        }, success = { mldAllHistoryCount.postValue(it) }, error = {
+            mldAllHistoryCount.postValue(-1)
+        })
     }
 
     companion object {

@@ -9,9 +9,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.gone
-import com.skyd.imomoe.util.requestManageExternalStorage
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 

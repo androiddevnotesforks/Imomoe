@@ -1,8 +1,7 @@
 package com.skyd.imomoe.view.component.player.danmaku.bili
 
 import com.kuaishou.akdanmaku.data.DanmakuItemData
-import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.string
+import com.skyd.imomoe.ext.string
 import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException

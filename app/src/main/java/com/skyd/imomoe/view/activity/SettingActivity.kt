@@ -17,10 +17,10 @@ import com.skyd.imomoe.net.DnsServer.selectDnsServer
 import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.gone
+import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
-import com.skyd.imomoe.util.visible
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.viewmodel.SettingViewModel
 import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*

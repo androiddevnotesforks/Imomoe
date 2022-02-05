@@ -13,7 +13,7 @@ import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.util.smartNotifyDataSetChanged
+import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize

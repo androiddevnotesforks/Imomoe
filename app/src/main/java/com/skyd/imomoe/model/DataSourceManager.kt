@@ -6,9 +6,9 @@ import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.util.editor
+import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.util.sharedPreferences
+import com.skyd.imomoe.ext.sharedPreferences
 import dalvik.system.DexClassLoader
 import java.io.File
 

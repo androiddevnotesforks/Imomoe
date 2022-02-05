@@ -2,18 +2,16 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import com.skyd.imomoe.util.showToast
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class AnimeDetailViewModel : ViewModel() {
@@ -29,77 +27,57 @@ class AnimeDetailViewModel : ViewModel() {
     var mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAnimeDetailData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                queryFavorite()
-                animeDetailModel.getAnimeDetailData(partUrl).apply {
-                    cover = first
-                    title = second
-                    mldAnimeDetailList.postValue(Pair(ResponseDataType.REFRESH, third))
-                }
-                refreshAnimeCover()     // 更新数据库中番剧封面地址
-            } catch (e: Exception) {
-                mldAnimeDetailList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
-                e.printStackTrace()
-                (App.context.getString(R.string.get_data_failed) + "\n" + e.message).showToast()
-            }
-        }
+        queryFavorite()
+        request(request = { animeDetailModel.getAnimeDetailData(partUrl) }, success = {
+            cover = it.first
+            title = it.second
+            mldAnimeDetailList.postValue(Pair(ResponseDataType.REFRESH, it.third))
+            refreshAnimeCover()     // 更新数据库中番剧封面地址
+        }, error = {
+            mldAnimeDetailList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
     }
 
     // 查询是否追番
     fun queryFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
-                mldFavorite.postValue(favoriteAnime != null)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
+        }, success = { mldFavorite.postValue(it != null) })
     }
 
     // 取消追番
     fun deleteFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
-                App.context.getString(R.string.remove_favorite_succeed).showToast()
-                mldFavorite.postValue(false)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
+        }, success = {
+            App.context.getString(R.string.remove_favorite_succeed).showToast()
+            mldFavorite.postValue(false)
+        })
     }
 
     // 追番
     fun insertFavorite() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                    FavoriteAnimeBean(
-                        Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                        partUrl,
-                        title,
-                        System.currentTimeMillis(),
-                        cover
-                    )
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                FavoriteAnimeBean(
+                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                    partUrl,
+                    title,
+                    System.currentTimeMillis(),
+                    cover
                 )
-                App.context.getString(R.string.favorite_succeed).showToast()
-                mldFavorite.postValue(true)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+            )
+        }, success = {
+            App.context.getString(R.string.favorite_succeed).showToast()
+            mldFavorite.postValue(true)
+        })
     }
 
     fun refreshAnimeCover() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                getAppDataBase().favoriteAnimeDao().updateFavoriteAnimeCover(partUrl, cover)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().updateFavoriteAnimeCover(partUrl, cover)
+        })
     }
 
     companion object {
