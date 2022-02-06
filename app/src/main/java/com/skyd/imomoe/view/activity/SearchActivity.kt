@@ -1,12 +1,11 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.App
@@ -57,30 +56,17 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             rvSearchActivity.setHasFixedSize(true)
             setSearchAdapter()
 
-            etSearchActivitySearch.addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                }
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
-                        mLayoutCircleProgressTextTip1.gone()
-                    if (s == null || s.isEmpty()) {
-                        tvSearchActivityTip.text = getString(R.string.search_history)
-                        ivSearchActivityClearKeyWords.gone()
-                        viewModel.searchResultList.clear()
-                        setHistoryAdapter()
-                        historyAdapter.notifyDataSetChanged()
-                    } else ivSearchActivityClearKeyWords.visible()
-                }
-            })
+            etSearchActivitySearch.doOnTextChanged { text, _, _, _ ->
+                if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
+                    mLayoutCircleProgressTextTip1.gone()
+                if (text == null || text.isEmpty()) {
+                    tvSearchActivityTip.text = getString(R.string.search_history)
+                    ivSearchActivityClearKeyWords.gone()
+                    viewModel.searchResultList.clear()
+                    setHistoryAdapter()
+                    historyAdapter.notifyDataSetChanged()
+                } else ivSearchActivityClearKeyWords.visible()
+            }
 
             ivSearchActivityClearKeyWords.setOnClickListener {
                 etSearchActivitySearch.setText("")
@@ -133,8 +119,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (v.text.toString().isBlank()) {
-                        App.context.resources.getString(R.string.search_input_keywords_tips)
-                            .showToast()
+                        getString(R.string.search_input_keywords_tips).showToast()
                         return false
                     }
 

@@ -55,8 +55,4 @@ class HistoryViewModel : ViewModel() {
             "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }
-
-    companion object {
-        const val TAG = "HistoryViewModel"
-    }
 }

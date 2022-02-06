@@ -518,7 +518,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         val recyclerView = contentView.findViewById<RecyclerView>(R.id.rv_dialog_bottom_sheet_2)
         recyclerView.layoutManager = GridLayoutManager(this, 3)
         recyclerView.post {
-            recyclerView.setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+            recyclerView.setPadding(16.dp, 0, 16.dp, 16.dp)
             recyclerView.scrollToPosition(0)
         }
         if (recyclerView.itemDecorationCount == 0) {

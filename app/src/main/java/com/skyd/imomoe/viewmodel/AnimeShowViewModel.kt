@@ -23,7 +23,7 @@ class AnimeShowViewModel : ViewModel() {
     var viewPool: SerializableRecycledViewPool? = null
     var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
     var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeShowBean>>> =
-        MutableLiveData()   // value：-1错误；0重新获取；1刷新
+        MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 
     private var isRequesting = false
@@ -46,9 +46,5 @@ class AnimeShowViewModel : ViewModel() {
             isRequesting = false
             (App.context.getString(R.string.get_data_failed) + "\n" + it.message).showToast()
         })
-    }
-
-    companion object {
-        const val TAG = "AnimeShowViewModel"
     }
 }

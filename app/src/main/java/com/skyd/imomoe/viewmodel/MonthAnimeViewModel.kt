@@ -36,8 +36,4 @@ class MonthAnimeViewModel : ViewModel() {
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
-
-    companion object {
-        const val TAG = "MonthAnimeViewModel"
-    }
 }

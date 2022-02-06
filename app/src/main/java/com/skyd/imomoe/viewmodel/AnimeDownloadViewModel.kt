@@ -139,8 +139,4 @@ class AnimeDownloadViewModel : ViewModel() {
             }
         }, success = { mldAnimeCoverList.postValue(true) })
     }
-
-    companion object {
-        const val TAG = "AnimeDownloadViewModel"
-    }
 }

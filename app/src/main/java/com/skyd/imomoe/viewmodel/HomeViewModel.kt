@@ -34,8 +34,4 @@ class HomeViewModel : ViewModel() {
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast(Toast.LENGTH_LONG)
         })
     }
-
-    companion object {
-        const val TAG = "HomeViewModel"
-    }
 }

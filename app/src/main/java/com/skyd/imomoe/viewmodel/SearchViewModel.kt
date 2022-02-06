@@ -92,8 +92,4 @@ class SearchViewModel : ViewModel() {
             getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
         }, finish = { mldDeleteCompleted.postValue(itemPosition) })
     }
-
-    companion object {
-        const val TAG = "SearchViewModel"
-    }
 }

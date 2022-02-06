@@ -4,6 +4,7 @@ import android.graphics.Typeface
 import com.skyd.imomoe.App
 
 object TypefaceUtil {
+    const val NO_TYPEFACE = 0
     const val BPR_TYPEFACE = 1
 
     private var bPRTypeface: Typeface? = null

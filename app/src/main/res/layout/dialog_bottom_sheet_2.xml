@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/play_list"
         android:textColor="@color/foreground_main_color_2_skin"
         android:textSize="17sp"
@@ -20,5 +21,6 @@
     <com.skyd.imomoe.view.component.BottomSheetRecyclerView
         android:id="@+id/rv_dialog_bottom_sheet_2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false" />
 </LinearLayout>

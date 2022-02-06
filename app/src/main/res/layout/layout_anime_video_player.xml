@@ -47,7 +47,7 @@
         app:layout_constraintBottom_toTopOf="@id/layout_bottom"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
@@ -55,7 +55,7 @@
             android:text="@string/play_position_tip"
             android:textColor="@color/foreground_white_skin" />
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_play_position_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -268,7 +268,7 @@
         android:background="@drawable/shape_gray_transparent_angle_270"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_touch_down_high_speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

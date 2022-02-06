@@ -39,7 +39,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_control_bar_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_control_bar_everyday_anime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
+            <com.skyd.imomoe.view.component.textview.TypefaceTextView
                 android:id="@+id/tv_control_bar_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

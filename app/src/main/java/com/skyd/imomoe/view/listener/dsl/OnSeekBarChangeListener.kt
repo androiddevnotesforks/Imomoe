@@ -8,36 +8,36 @@ fun SeekBar.setOnSeekBarChangeListener(init: OnSeekBarChangeListener.() -> Unit)
     this.setOnSeekBarChangeListener(listener)
 }
 
-private typealias ProgressChanged = (seekBar: SeekBar?, progress: Int, fromUser: Boolean) -> Unit
-private typealias StartTrackingTouch = (seekBar: SeekBar?) -> Unit
-private typealias StopTrackingTouch = (seekBar: SeekBar?) -> Unit
+private typealias OnProgressChanged = (seekBar: SeekBar?, progress: Int, fromUser: Boolean) -> Unit
+private typealias OnStartTrackingTouch = (seekBar: SeekBar?) -> Unit
+private typealias OnStopTrackingTouch = (seekBar: SeekBar?) -> Unit
 
 class OnSeekBarChangeListener : SeekBar.OnSeekBarChangeListener {
-    private var progressChanged: ProgressChanged? = null
-    private var startTrackingTouch: StartTrackingTouch? = null
-    private var stopTrackingTouch: StopTrackingTouch? = null
+    private var onProgressChanged: OnProgressChanged? = null
+    private var onStartTrackingTouch: OnStartTrackingTouch? = null
+    private var onStopTrackingTouch: OnStopTrackingTouch? = null
 
-    fun onProgressChanged(progressChanged: ProgressChanged?) {
-        this.progressChanged = progressChanged
+    fun onProgressChanged(onProgressChanged: OnProgressChanged?) {
+        this.onProgressChanged = onProgressChanged
     }
 
-    fun onStartTrackingTouch(startTrackingTouch: StartTrackingTouch?) {
-        this.startTrackingTouch = startTrackingTouch
+    fun onStartTrackingTouch(onStartTrackingTouch: OnStartTrackingTouch?) {
+        this.onStartTrackingTouch = onStartTrackingTouch
     }
 
-    fun onStopTrackingTouch(stopTrackingTouch: StopTrackingTouch?) {
-        this.stopTrackingTouch = stopTrackingTouch
+    fun onStopTrackingTouch(onStopTrackingTouch: OnStopTrackingTouch?) {
+        this.onStopTrackingTouch = onStopTrackingTouch
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-        progressChanged?.invoke(seekBar, progress, fromUser)
+        onProgressChanged?.invoke(seekBar, progress, fromUser)
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        startTrackingTouch?.invoke(seekBar)
+        onStartTrackingTouch?.invoke(seekBar)
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
-        stopTrackingTouch?.invoke(seekBar)
+        onStopTrackingTouch?.invoke(seekBar)
     }
 }

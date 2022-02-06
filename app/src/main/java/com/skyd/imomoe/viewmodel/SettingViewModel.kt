@@ -63,8 +63,4 @@ class SettingViewModel : ViewModel() {
             mldAllHistoryCount.postValue(-1)
         })
     }
-
-    companion object {
-        const val TAG = "SettingViewModel"
-    }
 }

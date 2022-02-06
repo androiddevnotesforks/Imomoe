@@ -79,8 +79,4 @@ class AnimeDetailViewModel : ViewModel() {
             getAppDataBase().favoriteAnimeDao().updateFavoriteAnimeCover(partUrl, cover)
         })
     }
-
-    companion object {
-        const val TAG = "AnimeDetailViewModel"
-    }
 }

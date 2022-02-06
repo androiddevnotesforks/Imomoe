@@ -16,141 +16,111 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        list.add(LicenseBean(ViewHolderTypeString.LICENSE_HEADER_1, "", "", "", ""))
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/jhy/jsoup",
-                "jsoup",
-                "MIT License"
-            )
+        list += LicenseBean(ViewHolderTypeString.LICENSE_HEADER_1, "", "", "", "")
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/jhy/jsoup",
+            "jsoup",
+            "MIT License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/coil-kt/coil",
-                "coil",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/coil-kt/coil",
+            "coil",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/CarGuo/GSYVideoPlayer",
-                "GSYVideoPlayer",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/CarGuo/GSYVideoPlayer",
+            "GSYVideoPlayer",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/square/okhttp",
-                "okhttp",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/square/okhttp",
+            "okhttp",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/square/retrofit",
-                "retrofit",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/square/retrofit",
+            "retrofit",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/getActivity/XXPermissions",
-                "XXPermissions",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/getActivity/XXPermissions",
+            "XXPermissions",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/Kotlin/kotlinx.coroutines",
-                "kotlinx.coroutines",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/Kotlin/kotlinx.coroutines",
+            "kotlinx.coroutines",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/afollestad/material-dialogs",
-                "material-dialogs",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/afollestad/material-dialogs",
+            "material-dialogs",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/lingochamp/FileDownloader",
-                "FileDownloader",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/lingochamp/FileDownloader",
+            "FileDownloader",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/4thline/cling",
-                "cling",
-                "LGPL License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/4thline/cling",
+            "cling",
+            "LGPL License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/eclipse/jetty.project",
-                "jetty.project",
-                "EPL-2.0, Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/eclipse/jetty.project",
+            "jetty.project",
+            "EPL-2.0, Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/NanoHttpd/nanohttpd",
-                "nanohttpd",
-                "BSD-3-Clause License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/NanoHttpd/nanohttpd",
+            "nanohttpd",
+            "BSD-3-Clause License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/greenrobot/EventBus",
-                "EventBus",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/greenrobot/EventBus",
+            "EventBus",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/scwang90/SmartRefreshLayout",
-                "SmartRefreshLayout",
-                "Apache-2.0 License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/scwang90/SmartRefreshLayout",
+            "SmartRefreshLayout",
+            "Apache-2.0 License"
         )
-        list.add(
-            LicenseBean(
-                ViewHolderTypeString.LICENSE_1,
-                ActionUrl.ANIME_BROWSER,
-                "https://github.com/KwaiAppTeam/AkDanmaku",
-                "AkDanmaku",
-                "MIT License"
-            )
+        list += LicenseBean(
+            ViewHolderTypeString.LICENSE_1,
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/KwaiAppTeam/AkDanmaku",
+            "AkDanmaku",
+            "MIT License"
         )
 
         mBinding.run {

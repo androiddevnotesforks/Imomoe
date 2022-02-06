@@ -9,7 +9,7 @@
     android:paddingStart="13dp"
     android:paddingEnd="13dp">
 
-    <TextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="17dp"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_qq"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_qq_main_color_2_34_skin" />
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_wechat"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -50,7 +50,7 @@
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_wechat_main_color_2_34_skin" />
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_weibo"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -63,7 +63,7 @@
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_weibo_main_color_2_34_skin" />
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_copy_link"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -78,7 +78,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_cancel_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

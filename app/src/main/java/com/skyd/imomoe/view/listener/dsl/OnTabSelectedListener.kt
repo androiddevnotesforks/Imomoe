@@ -8,36 +8,36 @@ fun TabLayout.addOnTabSelectedListener(init: OnTabSelectedListener.() -> Unit) {
     this.addOnTabSelectedListener(listener)
 }
 
-private typealias TabSelected = (tab: TabLayout.Tab?) -> Unit
-private typealias TabUnselected = (tab: TabLayout.Tab?) -> Unit
-private typealias TabReselected = (tab: TabLayout.Tab?) -> Unit
+private typealias OnTabSelected = (tab: TabLayout.Tab?) -> Unit
+private typealias OnTabUnselected = (tab: TabLayout.Tab?) -> Unit
+private typealias OnTabReselected = (tab: TabLayout.Tab?) -> Unit
 
 class OnTabSelectedListener : TabLayout.OnTabSelectedListener {
-    private var tabSelected: TabSelected? = null
-    private var tabUnselected: TabUnselected? = null
-    private var tabReselected: TabReselected? = null
+    private var onTabSelected: OnTabSelected? = null
+    private var onTabUnselected: OnTabUnselected? = null
+    private var onTabReselected: OnTabReselected? = null
 
-    fun onTabSelected(tabSelected: TabSelected?) {
-        this.tabSelected = tabSelected
+    fun onTabSelected(onTabSelected: OnTabSelected?) {
+        this.onTabSelected = onTabSelected
     }
 
-    fun onTabUnselected(tabUnselected: TabUnselected?) {
-        this.tabUnselected = tabUnselected
+    fun onTabUnselected(onTabUnselected: OnTabUnselected?) {
+        this.onTabUnselected = onTabUnselected
     }
 
-    fun onTabReselected(tabReselected: TabReselected?) {
-        this.tabReselected = tabReselected
+    fun onTabReselected(onTabReselected: OnTabReselected?) {
+        this.onTabReselected = onTabReselected
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        tabSelected?.invoke(tab)
+        onTabSelected?.invoke(tab)
     }
 
     override fun onTabUnselected(tab: TabLayout.Tab?) {
-        tabUnselected?.invoke(tab)
+        onTabUnselected?.invoke(tab)
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?) {
-        tabReselected?.invoke(tab)
+        onTabReselected?.invoke(tab)
     }
 }

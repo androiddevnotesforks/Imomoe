@@ -6,8 +6,4 @@ import java.util.*
 
 class UpnpViewModel : ViewModel() {
     var deviceList: MutableList<Device<*, *, *>> = ArrayList()
-
-    companion object {
-        const val TAG = "UpnpViewModel"
-    }
 }

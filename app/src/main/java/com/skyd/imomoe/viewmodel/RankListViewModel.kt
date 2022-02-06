@@ -43,8 +43,4 @@ class RankListViewModel : ViewModel() {
             it.message?.showToast(Toast.LENGTH_LONG)
         })
     }
-
-    companion object {
-        const val TAG = "RankViewModel"
-    }
 }

@@ -10,26 +10,26 @@ fun AppCompatSpinner.setOnItemSelectedListener(init: OnItemSelectedListener.() -
     this.onItemSelectedListener = listener
 }
 
-private typealias ItemSelected = (parent: AdapterView<*>?, view: View?, position: Int, id: Long) -> Unit
-private typealias NothingSelected = (parent: AdapterView<*>?) -> Unit
+private typealias OnItemSelected = (parent: AdapterView<*>?, view: View?, position: Int, id: Long) -> Unit
+private typealias OnNothingSelected = (parent: AdapterView<*>?) -> Unit
 
 class OnItemSelectedListener : AdapterView.OnItemSelectedListener {
-    private var itemSelected: ItemSelected? = null
-    private var nothingSelected: NothingSelected? = null
+    private var onItemSelected: OnItemSelected? = null
+    private var onNothingSelected: OnNothingSelected? = null
 
-    fun onItemSelected(itemSelected: ItemSelected?) {
-        this.itemSelected = itemSelected
+    fun onItemSelected(itemSelected: OnItemSelected?) {
+        this.onItemSelected = itemSelected
     }
 
-    fun onNothingSelected(nothingSelected: NothingSelected?) {
-        this.nothingSelected = nothingSelected
+    fun onNothingSelected(nothingSelected: OnNothingSelected?) {
+        this.onNothingSelected = nothingSelected
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        itemSelected?.invoke(parent, view, position, id)
+        onItemSelected?.invoke(parent, view, position, id)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        nothingSelected?.invoke(parent)
+        onNothingSelected?.invoke(parent)
     }
 }

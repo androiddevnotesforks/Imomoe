@@ -62,3 +62,13 @@ fun logW(tag: String, msg: String) {
 fun logE(tag: String, msg: String) {
     Log.e(tag, msg)
 }
+
+fun Any.logV(msg: String) = logV(javaClass.simpleName, msg)
+
+fun Any.logD(msg: String) = logD(javaClass.simpleName, msg)
+
+fun Any.logI(msg: String) = logI(javaClass.simpleName, msg)
+
+fun Any.logW(msg: String) = logW(javaClass.simpleName, msg)
+
+fun Any.logE(msg: String) = logE(javaClass.simpleName, msg)

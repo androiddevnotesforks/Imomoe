@@ -14,50 +14,50 @@ fun XXPermissions.requestSinglePermission(init: OnSinglePermissionCallback.() ->
     this.request(listener)
 }
 
-private typealias Granted = (permissions: MutableList<String>?, all: Boolean) -> Unit
-private typealias Denied = (permissions: MutableList<String>?, never: Boolean) -> Unit
+private typealias OnGranted = (permissions: MutableList<String>?, all: Boolean) -> Unit
+private typealias OnDenied = (permissions: MutableList<String>?, never: Boolean) -> Unit
 
 class OnPermissionsCallback : com.hjq.permissions.OnPermissionCallback {
-    private var granted: Granted? = null
-    private var denied: Denied? = null
+    private var onGranted: OnGranted? = null
+    private var onDenied: OnDenied? = null
 
-    fun onGranted(granted: Granted?) {
-        this.granted = granted
+    fun onGranted(onGranted: OnGranted?) {
+        this.onGranted = onGranted
     }
 
-    fun onDenied(denied: Denied?) {
-        this.denied = denied
+    fun onDenied(denied: OnDenied?) {
+        this.onDenied = denied
     }
 
     override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-        granted?.invoke(permissions, all)
+        onGranted?.invoke(permissions, all)
     }
 
     override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-        denied?.invoke(permissions, never)
+        onDenied?.invoke(permissions, never)
     }
 }
 
-private typealias SingleGranted = () -> Unit
-private typealias SingleDenied = (never: Boolean) -> Unit
+private typealias OnSingleGranted = () -> Unit
+private typealias OnSingleDenied = (never: Boolean) -> Unit
 
 class OnSinglePermissionCallback : com.hjq.permissions.OnPermissionCallback {
-    private var singleGranted: SingleGranted? = null
-    private var singleDenied: SingleDenied? = null
+    private var onSingleGranted: OnSingleGranted? = null
+    private var onSingleDenied: OnSingleDenied? = null
 
-    fun onGranted(singleGranted: SingleGranted?) {
-        this.singleGranted = singleGranted
+    fun onGranted(onSingleGranted: OnSingleGranted?) {
+        this.onSingleGranted = onSingleGranted
     }
 
-    fun onDenied(singleDenied: SingleDenied?) {
-        this.singleDenied = singleDenied
+    fun onDenied(onSingleDenied: OnSingleDenied?) {
+        this.onSingleDenied = onSingleDenied
     }
 
     override fun onGranted(permissions: MutableList<String>?, all: Boolean) {
-        singleGranted?.invoke()
+        onSingleGranted?.invoke()
     }
 
     override fun onDenied(permissions: MutableList<String>?, never: Boolean) {
-        singleDenied?.invoke(never)
+        onSingleDenied?.invoke(never)
     }
 }

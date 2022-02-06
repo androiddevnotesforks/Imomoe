@@ -72,7 +72,7 @@ class App : Application() {
         init {
             // 防止内存泄漏
             // 设置全局默认配置（优先级最低，会被其他设置覆盖）
-            SmartRefreshLayout.setDefaultRefreshInitializer { context, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
+            SmartRefreshLayout.setDefaultRefreshInitializer { _, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
                 layout.setReboundDuration(150)
                 layout.setFooterHeight(100f)
                 layout.setHeaderTriggerRate(0.5f)

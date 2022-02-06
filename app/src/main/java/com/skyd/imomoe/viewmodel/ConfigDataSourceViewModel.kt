@@ -59,8 +59,4 @@ class ConfigDataSourceViewModel : ViewModel() {
             }
         }, error = { mldDataSourceList.postValue(ResponseDataType.FAILED to ArrayList()) })
     }
-
-    companion object {
-        const val TAG = "ConfigDataSourceViewModel"
-    }
 }

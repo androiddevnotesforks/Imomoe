@@ -9,7 +9,7 @@
     android:paddingStart="13dp"
     android:paddingEnd="13dp">
 
-    <TextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="17dp"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_dlna"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
             android:textSize="12sp"
             app:drawableTopCompat="@drawable/ic_live_tv_main_color_2_24_skin" />
 
-        <TextView
+        <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_open_in_other_player"
             android:layout_width="0px"
             android:layout_height="match_parent"
@@ -52,7 +52,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_cancel_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
