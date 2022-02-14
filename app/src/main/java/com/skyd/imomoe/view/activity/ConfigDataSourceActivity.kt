@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
-import com.skyd.imomoe.view.adapter.ConfigDataSourceAdapter
 import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
 import android.content.Intent
 import android.net.Uri
@@ -15,18 +14,30 @@ import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.DataSource1Proxy
 import java.io.File
 
 
 class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>() {
     private lateinit var viewModel: ConfigDataSourceViewModel
-    private lateinit var adapter: ConfigDataSourceAdapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(ConfigDataSourceViewModel::class.java)
-        adapter = ConfigDataSourceAdapter(this, viewModel.dataSourceList)
+        adapter = VarietyAdapter(mutableListOf(DataSource1Proxy(
+            onClickListener = { _, data, _ ->
+                if (data.selected) {
+                    getString(R.string.the_data_source_is_using_now).showSnackbar(this)
+                } else setDataSource(data.file.name)
+            },
+            onLongClickListener = { _, data, _ ->
+                deleteDataSource(data)
+                true
+            }
+        )), viewModel.dataSourceList)
 
         callToImport(intent)
         mBinding.apply {

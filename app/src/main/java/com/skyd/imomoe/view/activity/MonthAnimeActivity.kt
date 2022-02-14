@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.view.adapter.SearchAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
 class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: MonthAnimeViewModel
-    private lateinit var adapter: SearchAdapter
+    private lateinit var adapter: VarietyAdapter
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,7 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
         partUrl = intent.getStringExtra("partUrl") ?: ""
 
         viewModel = ViewModelProvider(this).get(MonthAnimeViewModel::class.java)
-        adapter = SearchAdapter(this, viewModel.monthAnimeList)
+        adapter = VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.monthAnimeList)
 
         mBinding.run {
             atbMonthAnimeActivity.titleText = getString(R.string.year_month_anime, partUrl)

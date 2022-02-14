@@ -1,17 +1,16 @@
 package com.skyd.imomoe.view.adapter.spansize
 
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.config.Const.ViewHolderTypeInt
+import com.skyd.imomoe.bean.Header1Bean
+import com.skyd.imomoe.bean.HorizontalRecyclerView1Bean
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
-class PlaySpanSize(val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) :
+class PlaySpanSize(val adapter: VarietyAdapter) :
     GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
-        return when(adapter.getItemViewType(position)) {
-            ViewHolderTypeInt.HEADER_1 -> 4
-            ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> 4
-            ViewHolderTypeInt.ANIME_EPISODE_FLOW_LAYOUT_1 -> 4
-            ViewHolderTypeInt.HORIZONTAL_RECYCLER_VIEW_1 -> 4
+        return when(adapter.dataList[position]) {
+            is Header1Bean -> 4
+            is HorizontalRecyclerView1Bean -> 4
             else -> 1
         }
     }

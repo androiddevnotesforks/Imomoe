@@ -17,7 +17,7 @@ class CustomHomeModel : IHomeModel {
             val dmx_l: Elements = menu.select("[class=dmx l]").select("li")
             for (i in dmx_l.indices) {
                 val url = dmx_l[i].select("a").attr("href")
-                add(TabBean("", url, Api.MAIN_URL + url, dmx_l[i].text()))
+                add(TabBean(url, Api.MAIN_URL + url, dmx_l[i].text()))
                 UnknownActionUrl.actionMap[url] = object : UnknownActionUrl.Action {
                     override fun action() {
                         EventBus.getDefault().post(SelectHomeTabEvent(url))
@@ -27,7 +27,7 @@ class CustomHomeModel : IHomeModel {
             val dme_r: Elements = menu.select("[class=dme r]").select("li")
             for (i in dme_r.indices) {
                 val url = dme_r[i].select("a").attr("href")
-                add(TabBean("", url, Api.MAIN_URL + url, dme_r[i].text()))
+                add(TabBean(url, Api.MAIN_URL + url, dme_r[i].text()))
                 UnknownActionUrl.actionMap[url] = object : UnknownActionUrl.Action {
                     override fun action() {
                         EventBus.getDefault().post(SelectHomeTabEvent(url))

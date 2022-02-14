@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
@@ -12,10 +11,10 @@ class CustomSearchModel : ISearchModel {
     override suspend fun getSearchData(
         keyWord: String,
         partUrl: String
-    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
+    ): Pair<ArrayList<Any>, PageNumberBean?> {
         val const = CustomConst()
         var pageNumberBean: PageNumberBean? = null
-        val searchResultList: ArrayList<AnimeCoverBean> = ArrayList()
+        val searchResultList: ArrayList<Any> = ArrayList()
         val url = if (partUrl.isBlank())
             "${Api.MAIN_URL}${const.actionUrl.ANIME_SEARCH()}?kw=${Util.getEncodedUrl(keyWord)}"
         else Api.MAIN_URL + partUrl

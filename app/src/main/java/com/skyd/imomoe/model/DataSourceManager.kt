@@ -1,16 +1,24 @@
 package com.skyd.imomoe.model
 
 import android.util.LruCache
+import android.widget.Toast
 import com.skyd.imomoe.App
 import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.R
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.string
+//import com.skyd.imomoe.model.impls.custom.TestClass
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.model.interfaces.interfaceVersion
+import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.util.showToast
 import dalvik.system.DexClassLoader
 import java.io.File
+import java.util.jar.JarFile
 
 
 object DataSourceManager {
@@ -33,9 +41,31 @@ object DataSourceManager {
             App.context.sharedPreferences().editor { putString("dataSourceName", value) }
         }
 
+    private var showInterfaceVersionTip: Boolean = false
+
     // 第一个是传入的接口，第二个是实现类
     private val cache: LruCache<Class<*>, Class<*>> = LruCache(10)
     private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
+    private var customDataSourceInfo: HashMap<String, String>? = null
+        get() {
+            if (dataSourceName == DEFAULT_DATA_SOURCE) return null
+            if (field == null) {
+                val map: HashMap<String, String> = HashMap()
+                runCatching {
+                    val jar = JarFile(getJarPath())
+                    jar.getInputStream(jar.getEntry("com/skyd/imomoe/model/impls/custom/CustomInfo"))
+                        .string().split("\n").forEach {
+                            it.split("=").let { kv ->
+                                if (kv.size == 2) map[kv[0].trim()] = kv[1].trim()
+                            }
+                        }
+                }.onFailure {
+                    it.printStackTrace()
+                }
+                field = map
+            }
+            return field
+        }
 
     fun getJarPath(): String =
         "${getJarDirectory()}/${dataSourceName}"
@@ -84,15 +114,29 @@ object DataSourceManager {
     fun clearCache() {
         cache.evictAll()
         singletonCache.evictAll()
+        showInterfaceVersionTip = false
+        customDataSourceInfo = null
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (dataSourceName == DEFAULT_DATA_SOURCE/* && !BuildConfig.DEBUG*/) return null
+        if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
+        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !BuildConfig.DEBUG) {
+            if (!showInterfaceVersionTip)
+                App.context.getString(R.string.data_source_interface_version_not_match)
+                    .showToast(Toast.LENGTH_LONG)
+            showInterfaceVersionTip = true
+            return null
+        }
         cache[clazz]?.let {
             return it.newInstance() as T
         }
+        return innerCreate(clazz)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> innerCreate(clazz: Class<T>): T? {
         /**
          * 参数1 jarPath：待加载的jar文件路径，注意权限。jar必须是含dex的jar（dx --dex --output=dest.jar source.jar）
          * 参数2 optimizedDirectory：解压后的dex存放位置，此位置一定要是可读写且仅该应用可读写
@@ -135,5 +179,4 @@ object DataSourceManager {
 //        }
 //        return o
 //    }
-
 }

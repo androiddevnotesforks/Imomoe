@@ -1,14 +1,14 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.bean.AnimeCover10Bean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import org.jsoup.select.Elements
 
 class CustomEverydayAnimeWidgetModel : IEverydayAnimeWidgetModel {
-    override fun getEverydayAnimeData(): ArrayList<List<AnimeCoverBean>> {
-        val list: ArrayList<List<AnimeCoverBean>> = ArrayList()
+    override fun getEverydayAnimeData(): ArrayList<List<AnimeCover10Bean>> {
+        val list: ArrayList<List<AnimeCover10Bean>> = ArrayList()
         try {
             val document = JsoupUtil.getDocumentSynchronously(Api.MAIN_URL)
             val areaChildren: Elements = document.select("[class=area]")[0].children()

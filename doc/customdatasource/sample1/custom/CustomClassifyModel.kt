@@ -3,7 +3,6 @@ package com.skyd.imomoe.model.impls.custom
 import android.app.Activity
 import android.content.Intent
 import com.skyd.imomoe.App
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
@@ -14,8 +13,8 @@ import com.skyd.imomoe.view.activity.ClassifyActivity
 import org.jsoup.select.Elements
 
 class CustomClassifyModel : IClassifyModel {
-    override suspend fun getClassifyData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
-        val classifyList: ArrayList<AnimeCoverBean> = ArrayList()
+    override suspend fun getClassifyData(partUrl: String): Pair<ArrayList<Any>, PageNumberBean?> {
+        val classifyList: ArrayList<Any> = ArrayList()
         var pageNumberBean: PageNumberBean? = null
         val url = Api.MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)
@@ -30,10 +29,7 @@ class CustomClassifyModel : IClassifyModel {
                             when (fireLChildren[k].className()) {
                                 "lpic" -> {
                                     classifyList.addAll(
-                                        ParseHtmlUtil.parseLpic(
-                                            fireLChildren[k],
-                                            url
-                                        )
+                                        ParseHtmlUtil.parseLpic(fireLChildren[k], url)
                                     )
                                 }
                                 "pages" -> {

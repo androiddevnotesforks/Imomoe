@@ -18,9 +18,9 @@ class Const : IConst {
         else "$url/"
     }
 
-    override fun versionName(): String = "1.0.2"
+    override fun versionName(): String = "1.0.3"
 
-    override fun versionCode(): Int = 3
+    override fun versionCode(): Int = 4
 
     override fun about(): String {
         return "默认数据源，不提供任何数据，请在设置界面手动选择自定义数据源！"

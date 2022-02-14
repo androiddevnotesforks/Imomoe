@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
@@ -17,7 +16,7 @@ class MonthAnimeViewModel : ViewModel() {
     private val monthAnimeModel: IMonthAnimeModel by lazy {
         DataSourceManager.create(IMonthAnimeModel::class.java) ?: MonthAnimeModel()
     }
-    var monthAnimeList: MutableList<AnimeCoverBean> = ArrayList()
+    var monthAnimeList: MutableList<Any> = ArrayList()
     var mldMonthAnimeList: MutableLiveData<Boolean> = MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
     var newPageIndex: Pair<Int, Int>? = null

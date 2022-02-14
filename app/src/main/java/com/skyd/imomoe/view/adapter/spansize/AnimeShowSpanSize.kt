@@ -1,18 +1,18 @@
 package com.skyd.imomoe.view.adapter.spansize
 
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.config.Const.ViewHolderTypeInt
+import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
-class AnimeShowSpanSize(val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>) :
+class AnimeShowSpanSize(val adapter: VarietyAdapter) :
     GridLayoutManager.SpanSizeLookup() {
     override fun getSpanSize(position: Int): Int {
-        return when (adapter.getItemViewType(position)) {
-            ViewHolderTypeInt.GRID_RECYCLER_VIEW_1 -> 4
-            ViewHolderTypeInt.HEADER_1 -> 4
-            ViewHolderTypeInt.BANNER_1 -> 4
-            ViewHolderTypeInt.ANIME_COVER_3 -> 4
-            ViewHolderTypeInt.ANIME_COVER_5 -> 4
+        return when (adapter.dataList[position]) {
+            is Header1Bean -> 4
+            is Banner1Bean -> 4
+            is AnimeCover3Bean -> 4
+            is AnimeCover5Bean -> 4
+            is AnimeCover11Bean -> 4
             else -> 1
         }
     }

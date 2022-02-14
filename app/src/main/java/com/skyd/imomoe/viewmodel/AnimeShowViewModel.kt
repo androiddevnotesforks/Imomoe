@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
@@ -19,10 +18,9 @@ class AnimeShowViewModel : ViewModel() {
     private val animeShowModel: IAnimeShowModel by lazy {
         DataSourceManager.create(IAnimeShowModel::class.java) ?: AnimeShowModel()
     }
-    var childViewPool: SerializableRecycledViewPool? = null
     var viewPool: SerializableRecycledViewPool? = null
-    var animeShowList: MutableList<IAnimeShowBean> = ArrayList()
-    var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeShowBean>>> =
+    var animeShowList: MutableList<Any> = ArrayList()
+    var mldGetAnimeShowList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 

@@ -3,26 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:background="@color/foreground_black_skin">
+    android:layout_height="wrap_content">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_horizontal_recycler_view_1"
+        android:id="@+id/rv_horizontal_recycler_view_2"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:clipToPadding="false"
         android:orientation="horizontal"
-        android:paddingVertical="3dp"
+        android:paddingVertical="8dp"
         android:paddingStart="16dp"
         android:paddingEnd="0px"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ImageView
-        android:id="@+id/iv_horizontal_recycler_view_1_more"
+        android:id="@+id/iv_horizontal_recycler_view_2_more"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"
+        android:minHeight="50dp"
         android:padding="12dp"
-        tools:src="@drawable/ic_keyboard_arrow_down_main_color_2_24_skin" />
-
+        android:scaleType="center"
+        android:src="@drawable/ic_keyboard_arrow_down_white_24_skin" />
 </LinearLayout>

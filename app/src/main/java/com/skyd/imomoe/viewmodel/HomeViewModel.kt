@@ -18,7 +18,6 @@ class HomeViewModel : ViewModel() {
     private val homeModel: IHomeModel by lazy {
         DataSourceManager.create(IHomeModel::class.java) ?: HomeModel()
     }
-    val childViewPool = SerializableRecycledViewPool()
     val viewPool = SerializableRecycledViewPool()
     var allTabList: MutableList<TabBean> = ArrayList()
     var mldGetAllTabList: MutableLiveData<Boolean> = MutableLiveData()

@@ -10,18 +10,21 @@ import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.view.adapter.HistoryAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
 import com.skyd.imomoe.viewmodel.HistoryViewModel
 
 class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
     private lateinit var viewModel: HistoryViewModel
-    private lateinit var adapter: HistoryAdapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
-        adapter = HistoryAdapter(this, viewModel.historyList)
+        adapter = VarietyAdapter(mutableListOf(AnimeCover9Proxy(
+            onDeleteButtonClickListener = { _, data, _ -> deleteHistory(data) }
+        )), viewModel.historyList)
 
         mBinding.run {
             atbHistoryActivity.setBackButtonClickListener { finish() }

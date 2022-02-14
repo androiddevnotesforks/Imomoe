@@ -26,9 +26,7 @@ class CustomRankModel : IRankModel {
                 "gohome" -> {
                     tabList.add(
                         tabList.size, TabBean(
-                            "",
-                            const.actionUrl.ANIME_RANK(),
-                            "",
+                            const.actionUrl.ANIME_RANK(), "",
                             areaChildren[i].select("h1").text()
                         )
                     )
@@ -57,9 +55,7 @@ class CustomRankModel : IRankModel {
                                             tabList.add(
                                                 0,
                                                 TabBean(
-                                                    "",
-                                                    "/",
-                                                    "",
+                                                    "/", "",
                                                     CustomParseHtmlUtil.parseDtit(bgChildren[k])
                                                 )
                                             )

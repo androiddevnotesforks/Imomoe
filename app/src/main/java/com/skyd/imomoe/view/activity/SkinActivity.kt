@@ -4,18 +4,18 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.SkinBean
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
+import com.skyd.imomoe.bean.SkinCover1Bean
 import com.skyd.imomoe.databinding.ActivitySkinBinding
 import com.skyd.imomoe.util.Util.getDefaultResColor
-import com.skyd.imomoe.view.adapter.SkinAdapter
 import com.skyd.imomoe.view.adapter.decoration.SkinItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.SkinSpanSize
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.SkinCover1Proxy
 import com.skyd.skin.core.SkinResourceProcessor
 
 class SkinActivity : BaseActivity<ActivitySkinBinding>() {
-    private val list: MutableList<SkinBean> = ArrayList()
-    private val adapter: SkinAdapter = SkinAdapter(this, list)
+    private val list: MutableList<Any> = ArrayList()
+    private val adapter: VarietyAdapter = VarietyAdapter(mutableListOf(SkinCover1Proxy()), list)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +53,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
     private fun initSkinData() {
         list.clear()
         list.add(
-            SkinBean(
-                ViewHolderTypeString.SKIN_COVER_1,
+            SkinCover1Bean(
                 "",
                 getDefaultResColor(R.color.main_color_2_skin),
                 "粉色少女🎀",
@@ -64,8 +63,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             )
         )
         list.add(
-            SkinBean(
-                ViewHolderTypeString.SKIN_COVER_1,
+            SkinCover1Bean(
                 "",
                 getDefaultResColor(R.color.black),
                 "deep♂️dark♂️fantasy",
@@ -75,8 +73,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             )
         )
         list.add(
-            SkinBean(
-                ViewHolderTypeString.SKIN_COVER_1,
+            SkinCover1Bean(
                 "",
                 getDefaultResColor(R.color.main_color_2_skin_blue),
                 "♂️深蓝幻想",
@@ -86,8 +83,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             )
         )
         list.add(
-            SkinBean(
-                ViewHolderTypeString.SKIN_COVER_1,
+            SkinCover1Bean(
                 "",
                 getDefaultResColor(R.color.main_color_2_skin_lemon),
                 "柠檬酸🍋",
@@ -97,8 +93,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             )
         )
         list.add(
-            SkinBean(
-                ViewHolderTypeString.SKIN_COVER_1,
+            SkinCover1Bean(
                 "",
                 getDefaultResColor(R.color.main_color_2_skin_sweat_soybean),
                 "流汗黄豆😅",

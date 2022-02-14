@@ -43,8 +43,12 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             }
 
             tvAboutActivityVersion.text =
-                getString(R.string.app_version_name, getAppVersionName()) +
-                        "\n" + getString(R.string.app_version_code, getAppVersionCode())
+                getString(R.string.app_version_name, getAppVersionName()) + "\n" +
+                        getString(R.string.app_version_code, getAppVersionCode()) + "\n" +
+                        getString(
+                            R.string.data_source_interface_version,
+                            com.skyd.imomoe.model.interfaces.interfaceVersion
+                        )
 
             rlAboutActivityImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)

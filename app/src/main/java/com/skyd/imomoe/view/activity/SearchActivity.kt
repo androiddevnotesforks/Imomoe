@@ -8,35 +8,44 @@ import android.widget.TextView
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.SearchHistoryBean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.view.adapter.SearchAdapter
-import com.skyd.imomoe.view.adapter.SearchHistoryAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
+import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistory1Proxy
+import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistoryHeader1Proxy
 import com.skyd.imomoe.viewmodel.SearchViewModel
 
 class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     private lateinit var mLayoutCircleProgressTextTip1: RelativeLayout
     private lateinit var tvCircleProgressTextTip1: TextView
     private lateinit var viewModel: SearchViewModel
-    private lateinit var adapter: SearchAdapter
-    private lateinit var historyAdapter: SearchHistoryAdapter
+    private lateinit var adapter: VarietyAdapter
+    private lateinit var historyAdapter: VarietyAdapter
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        adapter = SearchAdapter(this, viewModel.searchResultList)
-        historyAdapter = SearchHistoryAdapter(this, viewModel.searchHistoryList)
+        adapter = VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.searchResultList)
+        historyAdapter = VarietyAdapter(
+            mutableListOf(SearchHistoryHeader1Proxy(), SearchHistory1Proxy(
+                onClickListener = { _, data, _ -> search(data.title) },
+                onDeleteButtonClickListener = { holder, _, _ ->
+                    // 用holder.bindingAdapterPosition代替position，因为在removed后position会变
+                    deleteSearchHistory(holder.bindingAdapterPosition)
+                }
+            )),
+            viewModel.searchHistoryList
+        )
 
         val pageNumber = intent.getStringExtra("pageNumber") ?: ""
         viewModel.keyWord = intent.getStringExtra("keyWord") ?: ""
@@ -160,10 +169,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             setSearchAdapter()
         }
         viewModel.insertSearchHistory(
-            SearchHistoryBean(
-                Const.ViewHolderTypeString.SEARCH_HISTORY_1,
-                "", System.currentTimeMillis(), key
-            )
+            SearchHistoryBean("", System.currentTimeMillis(), key)
         )
         viewModel.getSearchData(key, isRefresh = true, partUrl = partUrl)
     }

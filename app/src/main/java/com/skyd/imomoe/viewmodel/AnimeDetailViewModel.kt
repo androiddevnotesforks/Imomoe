@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
@@ -18,10 +17,10 @@ class AnimeDetailViewModel : ViewModel() {
     private val animeDetailModel: IAnimeDetailModel by lazy {
         DataSourceManager.create(IAnimeDetailModel::class.java) ?: AnimeDetailModel()
     }
-    var cover: ImageBean = ImageBean("", "", "", "")
+    var cover: ImageBean = ImageBean("", "", "")
     var title: String = ""
-    var animeDetailList: MutableList<IAnimeDetailBean> = ArrayList()
-    var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, MutableList<IAnimeDetailBean>>> =
+    var animeDetailList: MutableList<Any> = ArrayList()
+    var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
         MutableLiveData()
     var partUrl: String = ""
     var mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
@@ -61,7 +60,7 @@ class AnimeDetailViewModel : ViewModel() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                 FavoriteAnimeBean(
-                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
+                    "",
                     partUrl,
                     title,
                     System.currentTimeMillis(),

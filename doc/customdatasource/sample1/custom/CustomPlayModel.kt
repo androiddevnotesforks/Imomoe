@@ -36,10 +36,10 @@ class CustomPlayModel : IPlayModel {
     override suspend fun getPlayData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
-        val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
+    ): Triple<ArrayList<Any>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
+        val playBeanDataList: ArrayList<Any> = ArrayList()
         val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
-        val title = AnimeTitleBean("", "", "")
+        val title = AnimeTitleBean("", "")
         val episode =
             AnimeEpisodeDataBean(
                 "", "",
@@ -68,11 +68,8 @@ class CustomPlayModel : IPlayModel {
                             }
                             "botit" -> {
                                 playBeanDataList.add(
-                                    AnimeDetailBean(
-                                        Const.ViewHolderTypeString.HEADER_1,
-                                        "",
-                                        ParseHtmlUtil.parseBotit(areaChildren[j]),
-                                        ""
+                                    Header1Bean(
+                                        "", ParseHtmlUtil.parseBotit(areaChildren[j])
                                     )
                                 )
                             }
@@ -84,13 +81,7 @@ class CustomPlayModel : IPlayModel {
                                     )
                                 )
                                 playBeanDataList.add(
-                                    AnimeDetailBean(
-                                        Const.ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
-                                        "",
-                                        "",
-                                        "",
-                                        episodesList
-                                    )
+                                    HorizontalRecyclerView1Bean("", episodesList)
                                 )
                             }
                             "imgs" -> {
@@ -103,26 +94,39 @@ class CustomPlayModel : IPlayModel {
                 }
             }
         }
-        val playBean = PlayBean("", "", title, episode, playBeanDataList)
+        val playBean = PlayBean("", title, episode, playBeanDataList)
         return Triple(playBeanDataList, episodesList, playBean)
     }
 
-    override suspend fun refreshAnimeEpisodeData(
-        partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Boolean {
+    override suspend fun playAnotherEpisode(
+        partUrl: String
+    ): AnimeEpisodeDataBean? {
+        var actionUrl = ""
+        var videoUrl = ""
+        var title = ""
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {
             when (children[i].className()) {
                 "play" -> {
-                    animeEpisodeDataBean.actionUrl = partUrl
-                    animeEpisodeDataBean.videoUrl = getVideoRawUrl(children[i])
-                    return true
+                    actionUrl = partUrl
+                    videoUrl = getVideoRawUrl(children[i])
+                }
+                "area" -> {
+                    val areaChildren = children[i].children()
+                    for (j in areaChildren.indices) {
+                        when (areaChildren[j].className()) {
+                            "gohome l" -> {        //标题
+                                title = areaChildren[j].select("h1")
+                                    .select("span").text().replace("：", "")
+                            }
+                        }
+                    }
                 }
             }
         }
-        return false
+        return if (actionUrl.isNotBlank() && videoUrl.isNotBlank() && title.isNotBlank())
+            AnimeEpisodeDataBean(actionUrl, title, videoUrl) else null
     }
 
     override suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
@@ -141,7 +145,7 @@ class CustomPlayModel : IPlayModel {
                             for (k in fireLChildren.indices) {
                                 if (fireLChildren[k].className() == "thumb l") {
                                     return ImageBean(
-                                        "", "",
+                                        "",
                                         ParseHtmlUtil.getCoverUrl(
                                             fireLChildren[k].select("img").attr("src"),
                                             url
@@ -167,7 +171,7 @@ class CustomPlayModel : IPlayModel {
         mActivity = null
     }
 
-    override suspend fun getAnimeEpisodeUrlData(partUrl: String): String? {
+    override suspend fun getAnimeDownloadUrl(partUrl: String): String? {
         val document = JsoupUtil.getDocument(Api.MAIN_URL + partUrl)
         val children: Elements = document.select("body")[0].children()
         for (i in children.indices) {

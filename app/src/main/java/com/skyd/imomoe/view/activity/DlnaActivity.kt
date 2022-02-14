@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -12,14 +13,15 @@ import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListenerDsl
 import com.skyd.imomoe.util.dlna.dmc.registerDeviceListener
 import com.skyd.imomoe.util.dlna.dmc.unregisterListener
 import com.skyd.imomoe.util.logI
-import com.skyd.imomoe.view.adapter.UpnpAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.UpnpDevice1Proxy
 import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     private lateinit var viewModel: UpnpViewModel
-    private lateinit var adapter: UpnpAdapter
+    private lateinit var adapter: VarietyAdapter
     lateinit var title: String
     lateinit var url: String
     private val deviceRegistryListener: OnDeviceRegistryListenerDsl.() -> Unit = {
@@ -53,7 +55,18 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
         logI(TAG, url)
 
         viewModel = ViewModelProvider(this).get(UpnpViewModel::class.java)
-        adapter = UpnpAdapter(this, viewModel.deviceList)
+        adapter = VarietyAdapter(mutableListOf(UpnpDevice1Proxy(
+            onClickListener = { _, data, _ ->
+                val key = System.currentTimeMillis().toString()
+                DlnaControlActivity.deviceHashMap[key] = data
+                startActivity(
+                    Intent(this, DlnaControlActivity::class.java)
+                        .putExtra("url", url)
+                        .putExtra("title", title)
+                        .putExtra("deviceKey", key)
+                )
+            }
+        )), viewModel.deviceList)
 
         mBinding.run {
             atbDlnaActivity.setBackButtonClickListener { finish() }

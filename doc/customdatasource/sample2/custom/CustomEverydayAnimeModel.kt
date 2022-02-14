@@ -8,13 +8,10 @@ import org.jsoup.select.Elements
 
 class CustomEverydayAnimeModel : IEverydayAnimeModel {
     override suspend fun getEverydayAnimeData()
-            : Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean> {
+            : Triple<ArrayList<TabBean>, ArrayList<List<Any>>, String> {
         val tabList = ArrayList<TabBean>()
-        val header = AnimeShowBean(
-            "", "", "", "",
-            "", null, "", null
-        )
-        val everydayAnimeList: ArrayList<List<AnimeCoverBean>> = ArrayList()
+        var header = ""
+        val everydayAnimeList: ArrayList<List<Any>> = ArrayList()
         val document = JsoupUtil.getDocument(Api.MAIN_URL)
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
@@ -28,26 +25,21 @@ class CustomEverydayAnimeModel : IEverydayAnimeModel {
                                 for (k in bgChildren.indices) {
                                     when (bgChildren[k].className()) {
                                         "dtit" -> {
-                                            header.title = CustomParseHtmlUtil.parseDtit(bgChildren[k])
+                                            header = CustomParseHtmlUtil.parseDtit(bgChildren[k])
                                         }
                                         "tag" -> {
                                             val tagChildren = bgChildren[k].children()
                                             for (l in tagChildren.indices) {
                                                 tabList.add(
                                                     TabBean(
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        tagChildren[l].text()
+                                                        "", "", tagChildren[l].text()
                                                     )
                                                 )
                                             }
                                         }
                                         "tlist" -> {
                                             everydayAnimeList.addAll(
-                                                CustomParseHtmlUtil.parseTlist(
-                                                    bgChildren[k]
-                                                )
+                                                CustomParseHtmlUtil.parseTlist2(bgChildren[k])
                                             )
                                         }
                                     }

@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
@@ -21,16 +19,13 @@ class EverydayAnimeViewModel : ViewModel() {
     private val everydayAnimeModel: IEverydayAnimeModel by lazy {
         DataSourceManager.create(IEverydayAnimeModel::class.java) ?: EverydayAnimeModel()
     }
-    var header: AnimeShowBean = AnimeShowBean(
-        "", "", "", "",
-        "", null, "", null
-    )
+    var header: String = ""
     var selectedTabIndex = -1
-    var mldHeader: MutableLiveData<AnimeShowBean> = MutableLiveData()
+    var mldHeader: MutableLiveData<String> = MutableLiveData()
     var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
-    var everydayAnimeList: MutableList<List<AnimeCoverBean>> = ArrayList()
-    var mldEverydayAnimeList: MutableLiveData<MutableList<List<AnimeCoverBean>>?> =
+    var everydayAnimeList: MutableList<List<Any>> = ArrayList()
+    var mldEverydayAnimeList: MutableLiveData<MutableList<List<Any>>?> =
         MutableLiveData()
 
     fun getEverydayAnimeData() {

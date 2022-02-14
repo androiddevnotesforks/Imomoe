@@ -6,7 +6,7 @@ import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 class AnimeDetailModel : IAnimeDetailModel {
     override suspend fun getAnimeDetailData(
         partUrl: String
-    ): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>> {
-        return Triple(ImageBean("", "", "", ""), "", ArrayList())
+    ): Triple<ImageBean, String, ArrayList<Any>> {
+        return Triple(ImageBean("", "", ""), "", ArrayList())
     }
 }

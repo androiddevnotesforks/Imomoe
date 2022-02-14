@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.skyd.imomoe.config.Const
 
+typealias SearchHistory1Bean = SearchHistoryBean
+
 @Entity(tableName = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME)
 class SearchHistoryBean(
-    @ColumnInfo(name = "type")
-    override var type: String,
     @ColumnInfo(name = "actionUrl")
     override var actionUrl: String,
     @PrimaryKey

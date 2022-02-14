@@ -5,6 +5,6 @@ import com.skyd.imomoe.model.interfaces.IHomeModel
 
 class HomeModel : IHomeModel {
     override suspend fun getAllTabData(): ArrayList<TabBean> {
-        return arrayListOf(TabBean("", "", "", "请设置自定义数据源"))
+        return arrayListOf(TabBean("", "", "请设置自定义数据源"))
     }
 }

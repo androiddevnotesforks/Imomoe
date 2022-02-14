@@ -28,7 +28,7 @@
 
 ### 一 使用已有的自定义数据源
 
-### **>>已有的ads包可从[此处](#例子)找到<<**
+### **>>已有的ads包可从[此处](https://github.com/SkyD666/Imomoe/releases)找到，请下载相应版本的ads包<<**
 
 #### 1.将ads包放入手机
 
@@ -109,19 +109,31 @@
 
 确保所有实现类的**包**为**com.skyd.imomoe.model.impls.custom**
 
-#### 4.将实现类打包为普通的jar文件
+#### 4.在上述包下创建名为“CustomInfo”的文本文件（没有后缀名）
 
-#### 5.生成含dex的jar文件
+文件记录了数据源的基本信息。
+
+目前含有以下信息：
+
+| 名称             | 描述                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| interfaceVersion | 此数据源实现接口的版本号。必须与APP内接口的一致，APP才能应用。 |
+
+每一行记录一条信息，使用“=”将名称与值分隔开，例如：interfaceVersion=202202121320
+
+#### 5.将实现类打包为普通的jar文件
+
+#### 6.生成含dex的jar文件
 
 通过普通的jar文件生成含dex的jar文件，参考指令：dx --dex --output=G:\CustomDataSource.jar E:\Android\Imomoe\app\build\libs\CustomDataSource.jar
 
-#### 6.将jar包后缀名改为ads
+#### 7.将jar包后缀名改为ads
 
 例如CustomDataSource.jar改名为CustomDataSource.ads
 
 ## 例子
 
-详细代码和**ads包**见下方链接内容。注：此ads包可直接导入（步骤6）供APP使用。**请自行在此仓库检查ads包更新**。
+详细代码见下方链接内容，**[点击此处下载相应版本的ads包](https://github.com/SkyD666/Imomoe/releases)**。注：此ads包可直接导入（步骤6）供APP使用。**请自行在此仓库检查ads包更新**。
 
 **[示例1 (版本: 1.0.3)](sample1)       [示例2 (版本: 1.0.2)](sample1)**
 

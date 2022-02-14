@@ -8,8 +8,6 @@ import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)
 class HistoryBean(      //下面的url都是partUrl
-    @ColumnInfo(name = "type")
-    override var type: String,
     @ColumnInfo(name = "actionUrl")
     override var actionUrl: String,
     @PrimaryKey

@@ -9,22 +9,19 @@ class PlayModel : IPlayModel {
     override suspend fun getPlayData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
+    ): Triple<ArrayList<Any>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
         return Triple(
             ArrayList(), ArrayList(), PlayBean(
-                "", "",
-                AnimeTitleBean("", "", ""),
-                AnimeEpisodeDataBean("", "", ""),
+                "",
+                AnimeTitleBean("", ""),
+                AnimeEpisodeDataBean("", ""),
                 ArrayList()
             )
         )
     }
 
-    override suspend fun refreshAnimeEpisodeData(
-        partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Boolean {
-        return true
+    override suspend fun playAnotherEpisode(partUrl: String): AnimeEpisodeDataBean? {
+        return null
     }
 
     override suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
@@ -37,7 +34,7 @@ class PlayModel : IPlayModel {
     override fun clearActivity() {
     }
 
-    override suspend fun getAnimeEpisodeUrlData(partUrl: String): String? {
+    override suspend fun getAnimeDownloadUrl(partUrl: String): String? {
         return null
     }
 

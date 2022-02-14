@@ -3,16 +3,12 @@ package com.skyd.imomoe.model.impls.custom
 import android.app.Activity
 import android.view.View
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.web.GettingUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import java.lang.ref.SoftReference
@@ -44,21 +40,17 @@ class CustomPlayModel : IPlayModel {
     override suspend fun getPlayData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
+    ): Triple<ArrayList<Any>, ArrayList<AnimeEpisodeDataBean>, PlayBean> {
         var resultVideoUrl = false
         var resultData = false
-        val playBeanDataList: ArrayList<IAnimeDetailBean> = ArrayList()
+        val playBeanDataList: ArrayList<Any> = ArrayList()
         val episodesList: ArrayList<AnimeEpisodeDataBean> = ArrayList()
-        val title = AnimeTitleBean("", "", "")
-        val episode =
-            AnimeEpisodeDataBean(
-                "", "",
-                ""
-            )
-        val playBean = PlayBean("", "", title, episode, playBeanDataList)
+        val title = AnimeTitleBean("", "")
+        val episode = AnimeEpisodeDataBean("", "")
+        val playBean = PlayBean("", title, episode, playBeanDataList)
         val url = MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)
-        return suspendCancellableCoroutine{ cancellableContinuation ->
+        return suspendCancellableCoroutine { cancellableContinuation ->
             val activity = mActivity?.get()
             if (activity == null || activity.isDestroyed) throw Exception("activity不存在或状态错误")
             activity.runOnUiThread {
@@ -69,6 +61,7 @@ class CustomPlayModel : IPlayModel {
                             val document = Jsoup.parse(html)
                             val children: Elements = document.body().children()
                             for (i in children.indices) {
+
                                 when (children[i].className()) {
                                     "play", "player" -> {
                                         var iframeSrc = children[i]
@@ -82,11 +75,7 @@ class CustomPlayModel : IPlayModel {
                                             animeEpisodeDataBean.videoUrl = videoUrl
                                             resultVideoUrl = true
                                             if (resultData) cancellableContinuation.resume(
-                                                Triple(
-                                                    playBeanDataList,
-                                                    episodesList,
-                                                    playBean
-                                                )
+                                                Triple(playBeanDataList, episodesList, playBean)
                                             )
                                             continue
                                         } else if (iframeSrc.startsWith("/")) iframeSrc =
@@ -103,11 +92,7 @@ class CustomPlayModel : IPlayModel {
                                                 animeEpisodeDataBean.videoUrl = videoUrl
                                                 resultVideoUrl = true
                                                 if (resultData) cancellableContinuation.resume(
-                                                    Triple(
-                                                        playBeanDataList,
-                                                        episodesList,
-                                                        playBean
-                                                    )
+                                                    Triple(playBeanDataList, episodesList, playBean)
                                                 )
                                             }
 
@@ -162,38 +147,21 @@ class CustomPlayModel : IPlayModel {
                                         movurl = main0.select("[class=movurl movurl_pan]")
                                     for (l: Int in li.indices) {
                                         if (movurl[l].select("ul").select("li").size == 0) continue
-                                        playBeanDataList.add(
-                                            AnimeDetailBean(
-                                                Const.ViewHolderTypeString.HEADER_1, "",
-                                                li[l].text(),
-                                                "",
-                                                null
-                                            )
-                                        )
+                                        playBeanDataList.add(Header1Bean("", li[l].text()))
 
                                         val list = CustomParseHtmlUtil.parseMovurls(
                                             movurl[l],
                                             animeEpisodeDataBean
                                         )
                                         episodesList.addAll(list)
-                                        playBeanDataList.add(
-                                            AnimeDetailBean(
-                                                Const.ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
-                                                "",
-                                                "",
-                                                "",
-                                                list
-                                            )
-                                        )
+                                        playBeanDataList.add(HorizontalRecyclerView1Bean("", list))
                                     }
                                 }
                                 "botit" -> {
                                     playBeanDataList.add(
-                                        AnimeDetailBean(
-                                            Const.ViewHolderTypeString.HEADER_1,
+                                        Header1Bean(
                                             "",
                                             CustomParseHtmlUtil.parseBotit(areaChildren[j]),
-                                            ""
                                         )
                                     )
                                 }
@@ -205,13 +173,7 @@ class CustomPlayModel : IPlayModel {
                                         )
                                     )
                                     playBeanDataList.add(
-                                        AnimeDetailBean(
-                                            Const.ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
-                                            "",
-                                            "",
-                                            "",
-                                            episodesList
-                                        )
+                                        HorizontalRecyclerView1Bean("", episodesList)
                                     )
                                 }
                                 "imgs" -> {
@@ -239,10 +201,10 @@ class CustomPlayModel : IPlayModel {
         mActivity = null
     }
 
-    override suspend fun refreshAnimeEpisodeData(
-        partUrl: String,
-        animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Boolean = suspendCancellableCoroutine { cancellableContinuation ->
+    override suspend fun playAnotherEpisode(
+        partUrl: String
+    ): AnimeEpisodeDataBean = suspendCancellableCoroutine { cancellableContinuation ->
+        val animeEpisodeDataBean = AnimeEpisodeDataBean("", "")
         val url = MAIN_URL + partUrl
         val activity = mActivity?.get()
         if (activity == null || activity.isDestroyed) throw Exception("activity不存在或状态错误")
@@ -255,6 +217,11 @@ class CustomPlayModel : IPlayModel {
                         val children: Elements = document.body().children()
                         for (i in children.indices) {
                             when (children[i].className()) {
+                                "tit" -> {
+                                    val titChildren = children[i].children()
+                                    animeEpisodeDataBean.title =
+                                        titChildren.select("span").text().replace("：", "")
+                                }
                                 "player" -> {
                                     var iframeSrc = children[i]
                                         .select("[class=bofang]").select("iframe")[0].attr("src")
@@ -268,7 +235,7 @@ class CustomPlayModel : IPlayModel {
                                             val videoUrl = iframe.body().getElementById("video")!!
                                                 .select("video").attr("src")
                                             animeEpisodeDataBean.videoUrl = videoUrl
-                                            cancellableContinuation.resume(true)
+                                            cancellableContinuation.resume(animeEpisodeDataBean)
                                         }
 
                                         override fun onGettingError(
@@ -311,7 +278,7 @@ class CustomPlayModel : IPlayModel {
                                 when (fireLChildren[k].className()) {
                                     "thumb l" -> {
                                         return ImageBean(
-                                            "", "", CustomParseHtmlUtil.getCoverUrl(
+                                            "", CustomParseHtmlUtil.getCoverUrl(
                                                 fireLChildren[k].select("img").attr("src"),
                                                 url
                                             ), url
@@ -333,7 +300,7 @@ class CustomPlayModel : IPlayModel {
         mActivity = SoftReference(activity)
     }
 
-    override suspend fun getAnimeEpisodeUrlData(partUrl: String): String? =
+    override suspend fun getAnimeDownloadUrl(partUrl: String): String? =
         suspendCancellableCoroutine { cancellableContinuation ->
             val url = MAIN_URL + partUrl
             val activity = mActivity?.get()

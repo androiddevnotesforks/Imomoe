@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
@@ -9,12 +8,12 @@ import org.jsoup.select.Elements
 
 class CustomRankListModel : IRankListModel {
     private var bgTimes = 0
-    var rankList: MutableList<AnimeCoverBean> = ArrayList()
+    var rankList: MutableList<Any> = ArrayList()
     var pageNumberBean: PageNumberBean? = null
 
     override suspend fun getRankListData(
         partUrl: String
-    ): Pair<MutableList<AnimeCoverBean>, PageNumberBean?> {
+    ): Pair<MutableList<Any>, PageNumberBean?> {
         rankList.clear()
         if (partUrl == "/" || partUrl == "") getWeekRankData()
         else getAllRankData(partUrl)
@@ -68,10 +67,7 @@ class CustomRankListModel : IRankListModel {
                                     when (bgChildren[k].className()) {
                                         "pics" -> {
                                             rankList.addAll(
-                                                CustomParseHtmlUtil.parsePics(
-                                                    bgChildren[k],
-                                                    url
-                                                )
+                                                CustomParseHtmlUtil.parsePics(bgChildren[k], url)
                                             )
                                         }
                                     }

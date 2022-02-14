@@ -2,26 +2,22 @@ package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
-import com.skyd.imomoe.bean.ClassifyDataBean
+import com.skyd.imomoe.bean.ClassifyTab1Bean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.smartNotifyDataSetChanged
-import com.skyd.imomoe.view.adapter.BaseRvAdapter
-import com.skyd.imomoe.view.adapter.SearchAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
+import com.skyd.imomoe.view.adapter.variety.proxy.ClassifyTab1Proxy
 import com.skyd.imomoe.view.listener.dsl.setOnItemSelectedListener
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
 
@@ -30,9 +26,9 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private lateinit var viewModel: ClassifyViewModel
     private var lastRefreshTime: Long = System.currentTimeMillis() - 500
     private lateinit var spinnerAdapter: ArrayAdapter<ClassifyBean>
-    private lateinit var classifyTabAdapter: ClassifyTabAdapter
-    private val classifyTabList: MutableList<ClassifyDataBean> = ArrayList()
-    private lateinit var classifyAdapter: SearchAdapter
+    private lateinit var classifyTabAdapter: VarietyAdapter
+    private val classifyTabList: MutableList<Any> = ArrayList()
+    private lateinit var classifyAdapter: VarietyAdapter
     private var classifyTabTitle: String = ""       //如 地区
     private var classifyTitle: String = ""          //如 大陆
     private var currentPartUrl: String = ""
@@ -50,8 +46,10 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         mBinding.atbClassifyActivityToolbar.setBackButtonClickListener { finish() }
 
         spinnerAdapter = ArrayAdapter(this, R.layout.item_spinner_item_1)
-        classifyTabAdapter = ClassifyTabAdapter(this, classifyTabList)
-        classifyAdapter = SearchAdapter(this, viewModel.classifyList)
+        classifyTabAdapter = VarietyAdapter(mutableListOf(ClassifyTab1Proxy(
+            onClickListener = { _, data, _ -> classifyTabClicked(data) }
+        )), classifyTabList)
+        classifyAdapter = VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.classifyList)
 
         mBinding.run {
             srlClassifyActivity.setOnRefreshListener {
@@ -184,50 +182,11 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         mBinding.srlClassifyActivity.autoRefresh()
     }
 
-    class ClassifyTabAdapter(
-        val activity: ClassifyActivity,
-        private val dataList: List<ClassifyDataBean>
-    ) : BaseRvAdapter(dataList) {
-
-        class ClassifyTab1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val textView = view.findViewById<TextView>(R.id.text_view_1)
-        }
-
-        override fun getItemViewType(position: Int): Int = 0
-
-        fun getItem(position: Int): ClassifyDataBean {
-            return dataList[position]
-        }
-
-        override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
-        ): RecyclerView.ViewHolder {
-            return ClassifyTab1ViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_text_view_1, parent, false)
-            )
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val item = dataList[position]
-
-            when (holder) {
-                is ClassifyTab1ViewHolder -> {
-                    holder.textView.text = item.title
-                    holder.itemView.setOnClickListener {
-                        activity.classifyTabTitle = activity.spinnerAdapter.getItem(
-                            activity.mBinding.spinnerClassifyActivity.selectedItemPosition
-                        ).toString()
-                        activity.classifyTitle = item.title
-                        activity.tabSelected(item.actionUrl)
-                    }
-                }
-                else -> {
-                    holder.itemView.visibility = View.GONE
-                    (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
-                }
-            }
-        }
+    private fun classifyTabClicked(data: ClassifyTab1Bean) {
+        classifyTabTitle = spinnerAdapter.getItem(
+            mBinding.spinnerClassifyActivity.selectedItemPosition
+        ).toString()
+        classifyTitle = data.title
+        tabSelected(data.actionUrl)
     }
 }

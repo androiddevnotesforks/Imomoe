@@ -12,7 +12,8 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.view.adapter.AnimeDownloadAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover7Proxy
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 
 class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
@@ -21,7 +22,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
     private var directoryName = ""
     private var path = 0
     private lateinit var viewModel: AnimeDownloadViewModel
-    private lateinit var adapter: AnimeDownloadAdapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         path = intent.getIntExtra("path", 0)
 
         viewModel = ViewModelProvider(this).get(AnimeDownloadViewModel::class.java)
-        adapter = AnimeDownloadAdapter(this, viewModel.animeCoverList)
+        adapter = VarietyAdapter(mutableListOf(AnimeCover7Proxy()), viewModel.animeCover7List)
 
         mBinding.run {
             atbAnimeDownloadActivityToolbar.titleText = actionBarTitle
@@ -60,7 +61,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         viewModel.mldAnimeCoverList.observe(this) {
             if (it) {
                 mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
-                if (viewModel.animeCoverList.size == 0) {
+                if (viewModel.animeCover7List.size == 0) {
                     showLoadFailedTip(getString(R.string.no_download_video), null)
                 }
                 adapter.notifyDataSetChanged()

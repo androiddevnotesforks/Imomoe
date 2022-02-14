@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.model.util.JsoupUtil
@@ -8,8 +7,8 @@ import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
 import org.jsoup.select.Elements
 
 class CustomMonthAnimeModel : IMonthAnimeModel {
-    override suspend fun getMonthAnimeData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
-        val monthAnimeList: ArrayList<AnimeCoverBean> = ArrayList()
+    override suspend fun getMonthAnimeData(partUrl: String): Pair<ArrayList<Any>, PageNumberBean?> {
+        val monthAnimeList: ArrayList<Any> = ArrayList()
         val url = Api.MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)
         val areaElements: Elements = document.getElementsByClass("area")

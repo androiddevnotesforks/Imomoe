@@ -2,7 +2,6 @@ package com.skyd.imomoe.model.interfaces
 
 import android.app.Activity
 import com.skyd.imomoe.bean.AnimeEpisodeDataBean
-import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.bean.PlayBean
 
@@ -38,31 +37,30 @@ interface IPlayModel : IBase {
      * @param partUrl              页面部分url，不为null
      * @param animeEpisodeDataBean 此集番剧数据，不为null，直接对此引用进行数据设置，不要更改此变量指向的对象
      * @return Triple，不可为null
-     * ArrayList<IAnimeDetailBean>：播放页下方数据ArrayList，不为null；
+     * ArrayList<Any>：播放页下方数据ArrayList，不为null；
      * ArrayList<AnimeEpisodeDataBean>：番剧集数列表，不为null；
      * PlayBean：此集番剧数据，不为null
      */
     suspend fun getPlayData(
         partUrl: String,
         animeEpisodeDataBean: AnimeEpisodeDataBean
-    ): Triple<ArrayList<IAnimeDetailBean>, ArrayList<AnimeEpisodeDataBean>, PlayBean>
+    ): Triple<ArrayList<Any>, ArrayList<AnimeEpisodeDataBean>, PlayBean>
 
     /**
-     * 获取当前页面播放视频的地址
+     * 获取partUrl页面对应番剧的下载地址
      *
      * @param partUrl  页面部分url，不为null
      * @return String，可为null。此页面播放的视频地址
      */
-    suspend fun getAnimeEpisodeUrlData(partUrl: String): String?
+    suspend fun getAnimeDownloadUrl(partUrl: String): String?
 
     /**
-     * 获取传入partUrl页面对应的视频的数据
+     * 播放另一集，获取传入partUrl页面对应的视频的数据
      *
-     * @param partUrl              页面部分url，不为null
-     * @param animeEpisodeDataBean partUrl页面对应的视频的数据Bean，不为null，直接对此变量设置数据，不要更改此变量指向的对象
-     * @return Boolean，不可为null。获取成功true，否则false
+     * @param partUrl 页面部分url，不为null
+     * @return AnimeEpisodeDataBean，可为null。partUrl页面对应的视频的数据Bean
      */
-    suspend fun refreshAnimeEpisodeData(partUrl: String, animeEpisodeDataBean: AnimeEpisodeDataBean): Boolean
+    suspend fun playAnotherEpisode(partUrl: String): AnimeEpisodeDataBean?
 
     companion object {
         const val implName = "PlayModel"

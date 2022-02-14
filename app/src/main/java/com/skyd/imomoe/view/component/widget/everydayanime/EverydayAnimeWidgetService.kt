@@ -8,15 +8,11 @@ import android.widget.RemoteViewsService
 import android.widget.RemoteViewsService.RemoteViewsFactory
 import com.google.gson.Gson
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.AnimeCover10Bean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.EverydayAnimeWidgetModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeWidgetModel
 import com.skyd.imomoe.util.Util
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 
 class EverydayAnimeService : RemoteViewsService() {
@@ -31,7 +27,7 @@ internal class EverydayAnimeRemoteViewsFactory(
 ) : RemoteViewsFactory {
     private val model = DataSourceManager.create(IEverydayAnimeWidgetModel::class.java)
         ?: EverydayAnimeWidgetModel()
-    private val mWidgetItems: MutableList<AnimeCoverBean> = ArrayList()
+    private val mWidgetItems: MutableList<AnimeCover10Bean> = ArrayList()
 
     override fun onCreate() {
 
@@ -92,7 +88,7 @@ internal class EverydayAnimeRemoteViewsFactory(
         )
     }
 
-    private fun getEverydayAnimeData(): MutableList<List<AnimeCoverBean>> {
+    private fun getEverydayAnimeData(): MutableList<List<AnimeCover10Bean>> {
         return model.getEverydayAnimeData()
     }
 }

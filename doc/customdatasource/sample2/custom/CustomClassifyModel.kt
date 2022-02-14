@@ -3,7 +3,6 @@ package com.skyd.imomoe.model.impls.custom
 import android.app.Activity
 import android.content.Intent
 import android.view.View
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
@@ -11,7 +10,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IClassifyModel
-import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.toEncodedUrl
 import com.skyd.imomoe.util.html.source.GettingCallback
 import com.skyd.imomoe.util.html.source.web.GettingUtil
 import com.skyd.imomoe.view.activity.ClassifyActivity
@@ -37,10 +36,10 @@ class CustomClassifyModel : IClassifyModel {
 
     override suspend fun getClassifyData(
         partUrl: String
-    ): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?> {
-        val classifyList: ArrayList<AnimeCoverBean> = ArrayList()
+    ): Pair<ArrayList<Any>, PageNumberBean?> {
+        val classifyList: ArrayList<Any> = ArrayList()
         var pageNumberBean: PageNumberBean? = null
-        val url: String = Util.getEncodedUrl(Api.MAIN_URL + partUrl)
+        val url: String = (Api.MAIN_URL + partUrl).toEncodedUrl()
         val document = JsoupUtil.getDocument(url)
         val areaElements: Elements = document.getElementsByClass("area")
         for (i in areaElements.indices) {
@@ -53,10 +52,7 @@ class CustomClassifyModel : IClassifyModel {
                             when (fireLChildren[k].className()) {
                                 "lpic" -> {
                                     classifyList.addAll(
-                                        CustomParseHtmlUtil.parseLpic(
-                                            fireLChildren[k],
-                                            url
-                                        )
+                                        CustomParseHtmlUtil.parseLpic(fireLChildren[k], url)
                                     )
                                 }
                                 "pages" -> {
@@ -91,9 +87,7 @@ class CustomClassifyModel : IClassifyModel {
                                     when (areaChildren[j].className()) {
                                         "search-list" -> {
                                             classifyTabList.addAll(
-                                                CustomParseHtmlUtil.parseSearchList(
-                                                    areaChildren[j]
-                                                )
+                                                CustomParseHtmlUtil.parseSearchList(areaChildren[j])
                                             )
                                         }
                                     }

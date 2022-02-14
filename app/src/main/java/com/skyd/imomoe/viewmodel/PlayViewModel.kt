@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Const.ViewHolderTypeString
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.showToast
 
 
@@ -21,16 +21,34 @@ class PlayViewModel : ViewModel() {
     }
     var playBean: PlayBean? = null
     var partUrl: String = ""
-    var animeCover: ImageBean = ImageBean("", "", "", "")
+    var detailPartUrl: String = ""
+        set(value) {
+            // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
+            field = if (value.isBlank() ||
+                value == (DataSourceManager.getConst()
+                    ?: com.skyd.imomoe.model.impls.Const()).actionUrl.ANIME_DETAIL() &&
+                partUrl.isNotBlank()
+            ) {
+                Util.getDetailLinkByEpisodeLink(partUrl)
+            } else {
+                value
+            }
+        }
+    var animeCover: ImageBean? = null
     var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
-    var mldPlayBean: MutableLiveData<PlayBean> = MutableLiveData()
-    var playBeanDataList: MutableList<IAnimeDetailBean> = ArrayList()
-    val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
+    var mldPlayBean: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> = MutableLiveData()
+    var playBeanDataList: MutableList<Any> = ArrayList()
+
+    // 当前播放集数的索引
     var currentEpisodeIndex = 0
+
+    // 当前播放的集数
+    val animeEpisodeDataBean = AnimeEpisodeDataBean("", "")
+    val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
     val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
-    val animeEpisodeDataBean = AnimeEpisodeDataBean("animeEpisode1", "", "")
-    val mldAnimeEpisodeDataRefreshed: MutableLiveData<Boolean> = MutableLiveData()
-    val mldGetAnimeEpisodeData: MutableLiveData<Int> = MutableLiveData()
+    val mldPlayAnotherEpisode: MutableLiveData<Boolean> = MutableLiveData()
+    val mldAnimeDownloadUrl: MutableLiveData<AnimeEpisodeDataBean> = MutableLiveData()
+    val mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
 
     fun setActivity(activity: Activity) {
         playModel.setActivity(activity)
@@ -40,49 +58,49 @@ class PlayViewModel : ViewModel() {
         playModel.clearActivity()
     }
 
-    fun refreshAnimeEpisodeData(partUrl: String, currentEpisodeIndex: Int, title: String = "") {
-        this@PlayViewModel.partUrl = partUrl
+    // 播放另一集（页面切换到另一集，因此partUrl要更新）
+    fun playAnotherEpisode(partUrl: String, currentEpisodeIndex: Int) {
+        this.partUrl = partUrl
         request(request = {
-            playModel.refreshAnimeEpisodeData(partUrl, animeEpisodeDataBean).also {
-                if (!it) throw RuntimeException("html play class not found")
+            playModel.playAnotherEpisode(partUrl).let {
+                it ?: throw RuntimeException("html play class not found")
             }
         }, success = {
-            if (it) {
-                animeEpisodeDataBean.title = title
-                mldAnimeEpisodeDataRefreshed.postValue(true)
-            }
+            animeEpisodeDataBean.actionUrl = it.actionUrl
+            animeEpisodeDataBean.title = it.title
+            animeEpisodeDataBean.videoUrl = it.videoUrl
+            mldPlayAnotherEpisode.postValue(true)
         }, error = {
             animeEpisodeDataBean.actionUrl = "animeEpisode1"
             animeEpisodeDataBean.title = ""
             animeEpisodeDataBean.videoUrl = ""
-            mldAnimeEpisodeDataRefreshed.postValue(false)
+            mldPlayAnotherEpisode.postValue(false)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { this.currentEpisodeIndex = currentEpisodeIndex })
     }
 
-    fun getAnimeEpisodeUrlData(partUrl: String, position: Int) {
+    fun getAnimeDownloadUrl(partUrl: String, position: Int) {
         request(request = {
-            playModel.getAnimeEpisodeUrlData(partUrl).let {
+            playModel.getAnimeDownloadUrl(partUrl).let {
                 it ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
             }
         }, success = {
             episodesList[position].videoUrl = it
             mldEpisodesList.postValue(true)
-            mldGetAnimeEpisodeData.postValue(position)
+            mldAnimeDownloadUrl.postValue(episodesList[position])
         }, error = {
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
-    fun getPlayData(partUrl: String) {
-        this@PlayViewModel.partUrl = partUrl
+    fun getPlayData() {
+        if (mldFavorite.value == null) queryFavorite()
+        if (animeCover == null) getAnimeCoverImageBean()
         request(request = { playModel.getPlayData(partUrl, animeEpisodeDataBean) }, success = {
-            playBeanDataList.clear()
             episodesList.clear()
-            playBeanDataList.addAll(it.first)
             episodesList.addAll(it.second)
             playBean = it.third
-            mldPlayBean.postValue(playBean)
+            mldPlayBean.postValue(ResponseDataType.REFRESH to it.first)
             mldEpisodesList.postValue(true)
         }, error = {
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
@@ -90,65 +108,110 @@ class PlayViewModel : ViewModel() {
     }
 
     // 更新追番集数数据
-    fun updateFavoriteData(
-        detailPartUrl: String,
-        lastEpisodeUrl: String,
-        lastEpisode: String,
-        time: Long
-    ) {
+    fun updateFavoriteData() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
         }, success = {
             it ?: return@request
-            it.lastEpisode = lastEpisode
-            it.lastEpisodeUrl = lastEpisodeUrl
-            it.time = time
+            it.lastEpisode = animeEpisodeDataBean.title
+            it.lastEpisodeUrl = partUrl
+            it.time = System.currentTimeMillis()
             request({ getAppDataBase().favoriteAnimeDao().updateFavoriteAnime(it) })
         })
     }
 
     // 插入观看历史记录
-    fun insertHistoryData(detailPartUrl: String) {
+    fun insertHistoryData() {
         request(request = {
-            if (animeCover.url.isBlank()) {
-                playModel.getAnimeCoverImageBean(detailPartUrl).run {
-                    this ?: return@run null
+            animeCover.let {
+                if (it == null) {
+                    playModel.getAnimeCoverImageBean(detailPartUrl).run {
+                        val cover = this ?: ImageBean("", "", "")
+                        HistoryBean(
+                            "", detailPartUrl,
+                            playBean?.title?.title ?: "",
+                            System.currentTimeMillis(),
+                            cover,
+                            partUrl,
+                            animeEpisodeDataBean.title
+                        )
+                    }
+                } else {
                     HistoryBean(
-                        ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
+                        "", detailPartUrl,
                         playBean?.title?.title ?: "",
                         System.currentTimeMillis(),
-                        this,
+                        it,
                         partUrl,
                         animeEpisodeDataBean.title
                     )
                 }
-            } else {
-                HistoryBean(
-                    ViewHolderTypeString.ANIME_COVER_9, "", detailPartUrl,
-                    playBean?.title?.title ?: "",
-                    System.currentTimeMillis(),
-                    animeCover,
-                    partUrl,
-                    animeEpisodeDataBean.title
-                )
             }
         }, success = {
-            it ?: return@request
             request(request = { getAppDataBase().historyDao().insertHistory(it) })
         })
     }
 
-    fun getAnimeCoverImageBean(detailPartUrl: String) {
+    fun getAnimeCoverImageBean() {
         request(request = {
             playModel.getAnimeCoverImageBean(detailPartUrl)
         }, success = {
             it ?: return@request
-            animeCover.url = it.url
-            animeCover.referer = it.referer
+            val cover = animeCover
+            if (cover == null) {
+                animeCover = ImageBean("", it.url, it.referer)
+            } else {
+                cover.url = it.url
+                cover.referer = it.referer
+            }
             mldAnimeCover.postValue(true)
         }, error = {
             mldAnimeCover.postValue(false)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
+    }
+
+
+    // 查询是否追番
+    fun queryFavorite() {
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
+        }, success = { mldFavorite.postValue(it != null) })
+    }
+
+    // 取消追番
+    fun deleteFavorite() {
+        request(request = {
+            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
+        }, success = {
+            App.context.getString(R.string.remove_favorite_succeed).showToast()
+            mldFavorite.postValue(false)
+        })
+    }
+
+    // 追番
+    fun insertFavorite() {
+        val cover = animeCover                  // 番剧封面
+        val title = playBean?.title?.title      // 番剧名，非集数名
+        if (cover != null && title != null) {
+            request(request = {
+                getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
+                    FavoriteAnimeBean(
+                        "",
+                        detailPartUrl,
+                        title,
+                        System.currentTimeMillis(),
+                        cover,
+                        lastEpisodeUrl = partUrl,
+                        lastEpisode = animeEpisodeDataBean.title
+                    )
+                )
+            }, success = {
+                App.context.getString(R.string.favorite_succeed).showToast()
+                mldFavorite.postValue(true)
+            })
+        } else {
+            App.context.getString(R.string.insert_favorite_failed_in_play_activity).showToast()
+        }
     }
 }

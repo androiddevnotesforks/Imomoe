@@ -260,7 +260,10 @@ task makeJar(type: Jar) {
     //要打成的包的名字
     baseName 'CustomDataSource'
     //选取要打包的文件夹
-    from('build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom')
+    from(
+         'build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom',
+         'src\\main\\java\\com\\skyd\\imomoe\\model\\impls\\custom\\CustomInfo'
+    )
     //需要跟实际类的包名路径一样
     into('com/skyd/imomoe/model/impls/custom')
     //排除在外的文件

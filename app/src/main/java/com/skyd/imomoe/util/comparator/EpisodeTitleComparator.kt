@@ -1,12 +1,12 @@
 package com.skyd.imomoe.util.comparator
 
-import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.AnimeCover7Bean
 
 /**
  * 比较集数名称(title)的字典序，数字按照从大到小，例如90小于100
  * 例：第10集<第11集<第11.5集<第90集<第100集
  */
-class EpisodeTitleComparator : Comparator<AnimeCoverBean> {
+class EpisodeTitleComparator : Comparator<AnimeCover7Bean> {
 
     // 计算出数字的结尾下标，可以包括一个小数点
     private fun findDigitEndIndex(arrChar: String, at: Int): Int {
@@ -22,7 +22,7 @@ class EpisodeTitleComparator : Comparator<AnimeCoverBean> {
         return k
     }
 
-    override fun compare(o1: AnimeCoverBean, o2: AnimeCoverBean): Int {
+    override fun compare(o1: AnimeCover7Bean, o2: AnimeCover7Bean): Int {
         val a: String = o1.title
         val b: String = o2.title
         var aIndex = 0

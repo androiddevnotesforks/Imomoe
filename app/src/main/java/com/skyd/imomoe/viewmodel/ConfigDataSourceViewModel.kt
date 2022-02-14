@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.bean.ResponseDataType
-import com.skyd.imomoe.config.Const.ViewHolderTypeString.Companion.DATA_SOURCE_1
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.RetrofitManager
@@ -13,8 +12,8 @@ import java.io.File
 
 
 class ConfigDataSourceViewModel : ViewModel() {
-    var dataSourceList: MutableList<DataSourceFileBean> = ArrayList()
-    var mldDataSourceList: MutableLiveData<Pair<ResponseDataType, MutableList<DataSourceFileBean>>> =
+    var dataSourceList: MutableList<Any> = ArrayList()
+    var mldDataSourceList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
         MutableLiveData()
 
     fun resetDataSource() = setDataSource(DataSourceManager.DEFAULT_DATA_SOURCE)
@@ -50,8 +49,7 @@ class ConfigDataSourceViewModel : ViewModel() {
                     ResponseDataType.REFRESH to (jarList ?: emptyArray())
                         .map {
                             DataSourceFileBean(
-                                DATA_SOURCE_1, "", it,
-                                it.name == DataSourceManager.dataSourceName
+                                "", it, it.name == DataSourceManager.dataSourceName
                             )
                         }
                         .toMutableList()

@@ -12,17 +12,19 @@ import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.smartNotifyDataSetChanged
-import com.skyd.imomoe.view.adapter.AnimeShowAdapter
+import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
 
 
 class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: AnimeShowViewModel
-    private lateinit var adapter: AnimeShowAdapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +33,9 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         val arguments = arguments
 
         runCatching {
-            partUrl = arguments?.getString("partUrl") ?: ""
+            partUrl = arguments?.getString("partUrl").orEmpty()
             viewModel.viewPool =
                 arguments?.getSerializable("viewPool") as SerializableRecycledViewPool
-            viewModel.childViewPool =
-                arguments.getSerializable("childViewPool") as SerializableRecycledViewPool
         }.onFailure {
             it.printStackTrace()
             it.message?.showToast(Toast.LENGTH_LONG)
@@ -56,11 +56,27 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     }
 
     private fun initData() {
-        val childViewPool = viewModel.childViewPool
-        adapter = if (childViewPool == null) {
-            AnimeShowAdapter(this, viewModel.animeShowList)
-        } else {
-            AnimeShowAdapter(this, viewModel.animeShowList, childViewPool)
+        adapter = VarietyAdapter(
+            mutableListOf(
+                AnimeCover1Proxy(),
+                AnimeCover3Proxy(),
+                AnimeCover4Proxy(),
+                AnimeCover5Proxy(),
+                Banner1Proxy(),
+                Header1Proxy()
+            ), viewModel.animeShowList
+        ).apply {
+            onViewAttachedToWindow = {
+                when (it) {
+                    is Banner1ViewHolder -> it.banner1.startPlay(5000)
+                }
+            }
+
+            onViewDetachedFromWindow = {
+                when (it) {
+                    is Banner1ViewHolder -> it.banner1.stopPlay()
+                }
+            }
         }
 
         mBinding.run {
@@ -110,8 +126,4 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeShowFragmentLoadFailed
-
-    companion object {
-        const val TAG = "AnimeShowFragment"
-    }
 }

@@ -1,7 +1,11 @@
 package com.skyd.imomoe.ext
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.view.View
 import android.view.animation.AlphaAnimation
+
 
 fun View.enable() {
     if (isEnabled) return
@@ -37,3 +41,15 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
             animate().scaleX(1f).scaleY(1f).setDuration(duration).start()
         }.start()
 }
+
+val View.activity: Activity?
+    get() {
+        var context: Context = context
+        while (context is ContextWrapper) {
+            if (context is Activity) {
+                return context
+            }
+            context = context.baseContext
+        }
+        return null
+    }

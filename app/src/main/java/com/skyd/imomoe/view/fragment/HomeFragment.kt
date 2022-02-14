@@ -52,7 +52,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
         super.onViewCreated(view, savedInstanceState)
 
         // 清除缓存，以免换肤后颜色错误
-        viewModel.childViewPool.clear()
         viewModel.viewPool.clear()
 
         mBinding.run {
@@ -123,7 +122,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                     val bundle = Bundle()
                     bundle.putString("partUrl", viewModel.allTabList[i].actionUrl)
                     bundle.putSerializable("viewPool", viewModel.viewPool)
-                    bundle.putSerializable("childViewPool", viewModel.childViewPool)
                     fragment.arguments = bundle
                     adapter.addFragment(fragment)
                 }
@@ -189,9 +187,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
         override fun getItemCount() = fragments.size
 
         override fun createFragment(position: Int) = fragments[position]
-    }
-
-    companion object {
-        const val TAG = "HomeFragment"
     }
 }

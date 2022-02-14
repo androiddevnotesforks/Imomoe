@@ -8,18 +8,19 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
-import com.skyd.imomoe.view.adapter.FavoriteAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover8Proxy
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
 
 class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     private lateinit var viewModel: FavoriteViewModel
-    private lateinit var adapter: FavoriteAdapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
-        adapter = FavoriteAdapter(this, viewModel.favoriteList)
+        adapter = VarietyAdapter(mutableListOf(AnimeCover8Proxy()), viewModel.favoriteList)
 
         mBinding.run {
             atbFavoriteActivity.setBackButtonClickListener { finish() }

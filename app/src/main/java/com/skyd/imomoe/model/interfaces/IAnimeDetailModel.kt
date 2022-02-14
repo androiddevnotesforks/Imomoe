@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.interfaces
 
-import com.skyd.imomoe.bean.IAnimeDetailBean
 import com.skyd.imomoe.bean.ImageBean
 import java.util.*
 
@@ -15,9 +14,9 @@ interface IAnimeDetailModel : IBase {
      * @return Triple，不可为null
      * ImageBean：番剧封面图片类，不可为null；
      * String：番剧名，不可为null；
-     * ArrayList<IAnimeDetailBean>：详情页数据List，不可为null
+     * ArrayList<Any>：详情页数据List，不可为null
      */
-    suspend fun getAnimeDetailData(partUrl: String): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>>
+    suspend fun getAnimeDetailData(partUrl: String): Triple<ImageBean, String, ArrayList<Any>>
 
     companion object {
         const val implName = "AnimeDetailModel"

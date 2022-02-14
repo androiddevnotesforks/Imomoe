@@ -8,8 +8,6 @@ import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME)
 class FavoriteAnimeBean(      //下面的url都是partUrl
-    @ColumnInfo(name = "type")
-    override var type: String,
     @ColumnInfo(name = "actionUrl")
     override var actionUrl: String,
     @PrimaryKey

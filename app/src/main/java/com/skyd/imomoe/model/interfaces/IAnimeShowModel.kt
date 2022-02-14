@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.interfaces
 
-import com.skyd.imomoe.bean.IAnimeShowBean
 import com.skyd.imomoe.bean.PageNumberBean
 
 /**
@@ -12,10 +11,10 @@ interface IAnimeShowModel : IBase {
      *
      * @param partUrl  页面部分url，不为null
      * @return Pair，不可为null
-     * ArrayList<IAnimeShowBean>：数据List，不可为null；
+     * ArrayList<Any>：数据List，不可为null；
      * PageNumberBean：下一页数据地址Bean，可为null，为空则没有下一页
      */
-    suspend fun getAnimeShowData(partUrl: String): Pair<ArrayList<IAnimeShowBean>, PageNumberBean?>
+    suspend fun getAnimeShowData(partUrl: String): Pair<ArrayList<Any>, PageNumberBean?>
 
     companion object {
         const val implName = "AnimeShowModel"

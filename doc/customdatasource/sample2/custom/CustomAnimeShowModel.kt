@@ -1,10 +1,9 @@
 package com.skyd.imomoe.model.impls.custom
 
-import com.skyd.imomoe.bean.AnimeShowBean
-import com.skyd.imomoe.bean.IAnimeShowBean
+import com.skyd.imomoe.bean.Banner1Bean
+import com.skyd.imomoe.bean.Header1Bean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import org.jsoup.select.Elements
@@ -12,11 +11,11 @@ import org.jsoup.select.Elements
 class CustomAnimeShowModel : IAnimeShowModel {
     override suspend fun getAnimeShowData(
         partUrl: String
-    ): Pair<ArrayList<IAnimeShowBean>, PageNumberBean?> {
+    ): Pair<ArrayList<Any>, PageNumberBean?> {
         val url = Api.MAIN_URL + partUrl
         var pageNumberBean: PageNumberBean? = null
         val document = JsoupUtil.getDocument(url)
-        val animeShowList: ArrayList<IAnimeShowBean> = ArrayList()
+        val animeShowList: ArrayList<Any> = ArrayList()
         //banner
         val foucsBgElements: Elements = document.getElementsByClass("foucs bg")
         for (i in foucsBgElements.indices) {
@@ -25,13 +24,9 @@ class CustomAnimeShowModel : IAnimeShowModel {
                 when (foucsBgChildren[j].className()) {
                     "hero-wrap" -> {
                         animeShowList.add(
-                            AnimeShowBean(
-                                Const.ViewHolderTypeString.BANNER_1, "",
-                                "", "", "", null, "",
-                                CustomParseHtmlUtil.parseHeroWrap(
-                                    foucsBgChildren[j],
-                                    url
-                                )
+                            Banner1Bean(
+                                "",
+                                CustomParseHtmlUtil.parseHeroWrap(foucsBgChildren[j], url)
                             )
                         )
                     }
@@ -50,37 +45,14 @@ class CustomAnimeShowModel : IAnimeShowModel {
                         val a = elements[j].select("h2").select("a")
                         if (a.size == 0) {      //只有一个标题
                             animeShowList.add(
-                                AnimeShowBean(
-                                    Const.ViewHolderTypeString.HEADER_1,
-                                    "",
-                                    "",
-                                    elements[j].select("h2").text(),
-                                    "",
-                                    null,
-                                    ""
-                                )
+                                Header1Bean("", elements[j].select("h2").text())
                             )
                         } else {        //有右侧“更多”
-                            animeShowList.add(
-                                AnimeShowBean(
-                                    Const.ViewHolderTypeString.HEADER_1,
-                                    a.attr("href"),
-                                    Api.MAIN_URL + a.attr("href"),
-                                    a.text(),
-                                    elements[j].select("span").select("a").text(),
-                                    null,
-                                    ""
-                                )
-                            )
+                            animeShowList.add(Header1Bean(a.attr("href"), a.text()))
                         }
                     }
                     "img", "imgs" -> {
-                        animeShowList.addAll(
-                            CustomParseHtmlUtil.parseImg(
-                                elements[j],
-                                url
-                            )
-                        )
+                        animeShowList.addAll(CustomParseHtmlUtil.parseImg(elements[j], url))
                     }
                     "fire l" -> {       //右侧前半tab内容
                         val firsLChildren = elements[j].children()
@@ -88,41 +60,24 @@ class CustomAnimeShowModel : IAnimeShowModel {
                             when (firsLChildren[k].className()) {
                                 "lpic" -> {
                                     animeShowList.addAll(
-                                        CustomParseHtmlUtil.parseLpic(
-                                            firsLChildren[k],
-                                            url
-                                        )
+                                        CustomParseHtmlUtil.parseLpic(firsLChildren[k], url)
                                     )
                                 }
                                 "pages" -> {
                                     pageNumberBean =
-                                        CustomParseHtmlUtil.parseNextPages(
-                                            firsLChildren[k]
-                                        )
+                                        CustomParseHtmlUtil.parseNextPages(firsLChildren[k])
                                 }
                             }
                         }
                     }
                     "dnews" -> {       //右侧后半tab内容，cover4
-                        animeShowList.addAll(
-                            CustomParseHtmlUtil.parseDnews(
-                                elements[j],
-                                url
-                            )
-                        )
+                        animeShowList.addAll(CustomParseHtmlUtil.parseDnews(elements[j], url))
                     }
                     "topli" -> {       //右侧后半tab内容，cover5
-                        animeShowList.addAll(
-                            CustomParseHtmlUtil.parseTopli(
-                                elements[j]
-                            )
-                        )
+                        animeShowList.addAll(CustomParseHtmlUtil.parseTopli(elements[j]))
                     }
                     "pages" -> {
-                        pageNumberBean =
-                            CustomParseHtmlUtil.parseNextPages(
-                                elements[j]
-                            )
+                        pageNumberBean = CustomParseHtmlUtil.parseNextPages(elements[j])
                     }
                 }
             }

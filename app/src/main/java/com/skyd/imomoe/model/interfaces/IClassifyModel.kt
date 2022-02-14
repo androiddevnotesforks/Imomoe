@@ -1,7 +1,6 @@
 package com.skyd.imomoe.model.interfaces
 
 import android.app.Activity
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 
@@ -26,10 +25,10 @@ interface IClassifyModel : IBase {
      *
      * @param partUrl  页面部分url
      * @return Pair，不可为null
-     * ArrayList<AnimeCoverBean>：数据List，不可为null；
+     * ArrayList<Any>：数据List，不可为null；
      * PageNumberBean：下一页地址数据，可为null
      */
-    suspend fun getClassifyData(partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>
+    suspend fun getClassifyData(partUrl: String): Pair<ArrayList<Any>, PageNumberBean?>
 
     companion object {
         const val implName = "ClassifyModel"

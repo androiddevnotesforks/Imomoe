@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.animation.ValueAnimator
-import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -13,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -25,21 +23,15 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
-import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.Util.getDetailLinkByEpisodeLink
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getSkinResourceId
@@ -47,12 +39,11 @@ import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
-import com.skyd.imomoe.util.html.SnifferVideo
-import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
-import com.skyd.imomoe.view.adapter.PlayAdapter
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.AnimeVideoPositionMemoryStore
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
@@ -60,7 +51,6 @@ import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
-import kotlinx.coroutines.*
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
@@ -68,19 +58,9 @@ import kotlin.math.abs
 
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
     override var statusBarSkin: Boolean = false
-    private var isFavorite: Boolean = false
-    private var favoriteBeanDataReady: Int = 0
-        set(value) {
-            field = value
-            if (value == 2) mBinding.ivPlayActivityFavorite.isEnabled = true
-        }
-    private var partUrl: String = ""
-    private var detailPartUrl: String = ""
     private lateinit var viewModel: PlayViewModel
-    private lateinit var adapter: PlayAdapter
+    private lateinit var adapter: VarietyAdapter
     private var isFirstTime = true
-    private var danmakuUrl: String = ""
-    private var danmakuParamMap: HashMap<String, String> = HashMap()
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
 
@@ -93,7 +73,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             supportActionBar?.setDisplayShowTitleEnabled(false)
 
             if (ctlPlayActivity != null && ablPlayActivity != null) {
-                ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+                ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     when {
                         abs(verticalOffset) > ctlPlayActivity.scrimVisibleHeightTrigger -> {
                             tvPlayActivityToolbarVideoTitle.gone()
@@ -161,88 +141,57 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         initView()
 
         viewModel.setActivity(this)
-        adapter = PlayAdapter(this, viewModel.playBeanDataList)
+        adapter = VarietyAdapter(
+            mutableListOf(
+                Header1Proxy(),
+                AnimeCover1Proxy(),
+                AnimeCover2Proxy(),
+                HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
+                    getSheetDialog("play").show()
+                }, onAnimeEpisodeClickListener = { _, data, index ->
+                    playAnotherEpisode(data.actionUrl, index)
+                })
+            ), viewModel.playBeanDataList
+        )
 
         initVideoBuilderMode()
 
-        partUrl = intent.getStringExtra("partUrl") ?: ""
-        detailPartUrl = intent.getStringExtra("detailPartUrl") ?: ""
-
-        // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
-        val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
-        if (detailPartUrl.isBlank() || detailPartUrl == const.actionUrl.ANIME_DETAIL())
-            detailPartUrl = getDetailLinkByEpisodeLink(partUrl)
+        viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
+        viewModel.detailPartUrl = intent.getStringExtra("detailPartUrl").orEmpty()
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
                 .apply { spanSizeLookup = PlaySpanSize(adapter) }
             // 复用AnimeShow的ItemDecoration
             rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
-            rvPlayActivity.setHasFixedSize(true)
             rvPlayActivity.adapter = adapter
 
-            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData(partUrl) }
+            srlPlayActivity.setOnRefreshListener { viewModel.getPlayData() }
             srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
 
             avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val favoriteAnime = getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-            runOnUiThread {
-                isFavorite = if (favoriteAnime == null) {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                    false
-                } else {
-                    mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                    true
-                }
-                mBinding.ivPlayActivityFavorite.setOnClickListener {
-                    if (isFavorite) {
-                        Thread {
-                            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-                        }.start()
-                        isFavorite = false
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin))
-                        getString(R.string.remove_favorite_succeed).showToast()
-                    } else {
-                        Thread {
-                            getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
-                                FavoriteAnimeBean(
-                                    Const.ViewHolderTypeString.ANIME_COVER_8, "",
-                                    detailPartUrl,
-                                    viewModel.playBean?.title?.title ?: "",
-                                    System.currentTimeMillis(),
-                                    viewModel.animeCover,
-                                    lastEpisodeUrl = viewModel.partUrl,
-                                    lastEpisode = viewModel.animeEpisodeDataBean.title
-                                )
-                            )
-                        }.start()
-                        isFavorite = true
-                        mBinding.ivPlayActivityFavorite.setImageDrawable(getResDrawable(R.drawable.ic_star_main_color_2_24_skin))
-                        getString(R.string.favorite_succeed).showToast()
-                    }
-                }
-            }
+        viewModel.mldFavorite.observe(this) {
+            mBinding.ivPlayActivityFavorite.setImageDrawable(
+                if (it) getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
+                else getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
+            )
         }
-        mBinding.ivPlayActivityFavorite.isEnabled = false
 
-        viewModel.mldAnimeCover.observe(this) {
-            if (it) {
-                favoriteBeanDataReady++
+        mBinding.ivPlayActivityFavorite.setOnClickListener {
+            when (viewModel.mldFavorite.value) {
+                true -> viewModel.deleteFavorite()
+                false -> viewModel.insertFavorite()
             }
         }
 
         viewModel.mldPlayBean.observe(this) {
             mBinding.srlPlayActivity.isRefreshing = false
 
-            val title = viewModel.playBean?.title?.title
-            mBinding.tvPlayActivityTitle.text = title
+            mBinding.tvPlayActivityTitle.text = viewModel.playBean?.title?.title
 
-            adapter.notifyDataSetChanged()
-
-            favoriteBeanDataReady++
+            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.playBeanDataList)
 
             if (isFirstTime) {
                 mBinding.avpPlayActivity.startPlay()
@@ -250,42 +199,53 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             }
         }
 
-        //缓存番剧调用getAnimeEpisodeData()来获取视频url
-        viewModel.mldGetAnimeEpisodeData.observe(this, Observer {
-            val url = viewModel.episodesList[it].videoUrl
-            if (url.endsWith("\$qzz", true)) {
-                SnifferVideo.getQzzVideoUrl(
-                    this@PlayActivity, viewModel.episodesList[it].actionUrl, detailPartUrl
-                ) { videoUrl, paramMap ->
-//                    danmuUrl = danMuUrl
-//                    danmuParamMap.clear()
-//                    danmuParamMap.putAll(paramMap)
-                    runOnUiThread {
-                        AnimeDownloadHelper.instance.downloadAnime(
-                            this, videoUrl, videoUrl.toMD5(),
-                            viewModel.playBean?.title?.title + "/" +
-                                    viewModel.episodesList[it].title
-                        )
-                    }
-                }
-                return@Observer
-            } else {
-                AnimeDownloadHelper.instance.downloadAnime(
-                    this, url, url.toMD5(),
-                    viewModel.playBean?.title?.title + "/" +
-                            viewModel.episodesList[it].title
-                )
-            }
-        })
+        viewModel.mldAnimeDownloadUrl.observe(this) {
+            AnimeDownloadHelper.instance.downloadAnime(
+                this, it.videoUrl, it.videoUrl.toMD5(),
+                "${viewModel.playBean?.title?.title}/${it.title}"
+            )
+        }
 
-        viewModel.mldAnimeEpisodeDataRefreshed.observe(this) {
-            if (it) mBinding.avpPlayActivity.currentPlayer
-                .startPlay(partUrl = viewModel.animeEpisodeDataBean.actionUrl)
+        viewModel.mldPlayAnotherEpisode.observe(this) {
+            if (it) mBinding.avpPlayActivity.currentPlayer.startPlay()
+        }
+
+        viewModel.mldEpisodesList.observe(this) {
+            adapter.notifyDataSetChanged()
+            mBinding.avpPlayActivity.setEpisodeAdapter(
+                VarietyAdapter(mutableListOf(PlayerEpisode1Proxy(
+                    onBindViewHolder = { holder, data, index, _ ->
+                        holder.tvTitle.setTextColor(
+                            getResColor(
+                                if (data.title == viewModel.animeEpisodeDataBean.title)
+                                    R.color.unchanged_main_color_2_skin
+                                else R.color.foreground_white_skin
+                            )
+                        )
+                        holder.tvTitle.text = data.title
+                        if (index == viewModel.currentEpisodeIndex) {
+                            (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
+                                .rvEpisode?.scrollToPosition(index)
+                        }
+                        holder.itemView.setOnClickListener {
+                            mBinding.avpPlayActivity.currentPlayer.run {
+                                if (this is AnimeVideoPlayer) {
+                                    getRightContainer()?.gone()
+                                    // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
+                                    enableDismissControlViewTimer(true)
+                                }
+                            }
+                            playAnotherEpisode(data.actionUrl, index)
+                        }
+                        true
+                    })
+                ), viewModel.episodesList.toMutableList()
+                )
+            )
         }
 
         mBinding.srlPlayActivity.isRefreshing = true
-        viewModel.getPlayData(partUrl)
-        viewModel.getAnimeCoverImageBean(detailPartUrl)
+        viewModel.getPlayData()
 
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
@@ -294,77 +254,24 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     override fun getBinding() = ActivityPlayBinding.inflate(layoutInflater)
 
-    fun startPlay(url: String, currentEpisodeIndex: Int, title: String) {
-        viewModel.refreshAnimeEpisodeData(url, currentEpisodeIndex, title)
+    // 播放另一集
+    fun playAnotherEpisode(url: String, currentEpisodeIndex: Int) {
+        viewModel.playAnotherEpisode(url, currentEpisodeIndex)
     }
 
-    private fun GSYBaseVideoPlayer.startPlay(
-        episodeDataBean: AnimeEpisodeDataBean? = null,
-        partUrl: String = this@PlayActivity.partUrl
-    ) {
-        mBinding.tvPlayActivityToolbarVideoTitle.text =
-            episodeDataBean?.title ?: viewModel.animeEpisodeDataBean.title
+    private fun GSYBaseVideoPlayer.startPlay() {
+        if (isDestroyed) return
+        mBinding.tvPlayActivityToolbarVideoTitle.text = viewModel.animeEpisodeDataBean.title
         PlayerFactory.setPlayManager(Exo2PlayerManager().javaClass)
         GSYVideoType.disableMediaCodec()        // 关闭硬解码
-        //设置播放URL
-        if (episodeDataBean == null) {
-            if (!isDestroyed) {
-                viewModel.updateFavoriteData(
-                    detailPartUrl,
-                    viewModel.partUrl,
-                    viewModel.animeEpisodeDataBean.title,
-                    System.currentTimeMillis()
-                )
-                viewModel.insertHistoryData(detailPartUrl)
-            }
-            if (!viewModel.animeEpisodeDataBean.videoUrl.endsWith("\$qzz", true)) {
-                danmakuUrl = ""
-                setUp(
-                    viewModel.animeEpisodeDataBean.videoUrl,
-                    false, viewModel.animeEpisodeDataBean.title
-                )
-            } else {
-                SnifferVideo.getQzzVideoUrl(
-                    this@PlayActivity,
-                    partUrl,
-                    detailPartUrl
-                ) { videoUrl, paramMap ->
-                    danmakuParamMap.clear()
-                    danmakuParamMap.putAll(paramMap)
-                    danmakuUrl = paramMap[SnifferVideo.DANMU_URL] ?: ""
-                    runOnUiThread {
-                        setUp(videoUrl, false, viewModel.animeEpisodeDataBean.title)
-                        //开始播放
-                        startPlayLogic()
-                    }
-                }
-                return
-            }
-        } else {
-            if (!isDestroyed) {
-                viewModel.updateFavoriteData(
-                    detailPartUrl, viewModel.partUrl, episodeDataBean.title,
-                    System.currentTimeMillis()
-                )
-                viewModel.insertHistoryData(detailPartUrl)
-            }
-            if (!episodeDataBean.videoUrl.endsWith("\$qzz", true)) {
-                danmakuUrl = ""
-                setUp(episodeDataBean.videoUrl, false, episodeDataBean.title)
-            } else {
-                SnifferVideo.getQzzVideoUrl(this@PlayActivity, partUrl, detailPartUrl)
-                { videoUrl, paramMap ->
-                    danmakuParamMap.clear()
-                    danmakuParamMap.putAll(paramMap)
-                    danmakuUrl = paramMap[SnifferVideo.DANMU_URL] ?: ""
-                    setUp(videoUrl, false, episodeDataBean.title)
-                    // 开始播放
-                    startPlayLogic()
-                }
-                return
-            }
-        }
-        //开始播放
+        // 设置播放URL
+        viewModel.updateFavoriteData()
+        viewModel.insertHistoryData()
+        setUp(
+            viewModel.animeEpisodeDataBean.videoUrl,
+            false, viewModel.animeEpisodeDataBean.title
+        )
+        // 开始播放
         startPlayLogic()
     }
 
@@ -432,10 +339,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         //毫秒,刚好划一屏1分35秒
         mBinding.avpPlayActivity.currentPlayer.apply {
             seekRatio = duration / 90_000f
-            if (danmakuUrl.isNotBlank() && this is DanmakuVideoPlayer && !this@PlayActivity.isDestroyed) {
-                this@PlayActivity.getString(R.string.the_video_has_danmaku).showToast()
-                this.setDanmakuUrl(danmakuUrl, paramMap = danmakuParamMap)
-            }
         }
     }
 
@@ -504,7 +407,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     override val detailOrientationRotateAuto = true
 
-    fun getSheetDialog(action: String): BottomSheetDialog {
+    private fun getSheetDialog(action: String): BottomSheetDialog {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
         val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_2, null)
         bottomSheetDialog.setContentView(contentView)
@@ -524,23 +427,26 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         if (recyclerView.itemDecorationCount == 0) {
             recyclerView.addItemDecoration(AnimeEpisodeItemDecoration())
         }
-        val adapter = EpisodeRecyclerViewAdapter(
-            this,
-            viewModel.episodesList,
-            bottomSheetDialog,
-            1,
-            action
+        @Suppress("UNCHECKED_CAST") val adapter = VarietyAdapter(
+            mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, index ->
+                if (action == "play") {
+                    playAnotherEpisode(data.actionUrl, index)
+                    bottomSheetDialog.dismiss()
+                } else if (action == "download") {
+                    getString(R.string.parsing_video).showToast()
+                    viewModel.getAnimeDownloadUrl(data.actionUrl, index)
+                }
+            }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
+            viewModel.episodesList as MutableList<Any>
         )
-        recyclerView.adapter = adapter
-        viewModel.mldEpisodesList.observe(this) {
+        val observer = Observer<Boolean> {
             adapter.notifyDataSetChanged()
-            mBinding.avpPlayActivity.setEpisodeAdapter(
-                PlayerEpisodeRecyclerViewAdapter(
-                    this,
-                    viewModel.episodesList
-                )
-            )
         }
+        viewModel.mldEpisodesList.observe(this, observer)
+        bottomSheetDialog.setOnDismissListener {
+            viewModel.mldEpisodesList.removeObserver(observer)
+        }
+        recyclerView.adapter = adapter
         return bottomSheetDialog
     }
 
@@ -551,7 +457,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
                 mBinding.ivPlayActivityFavorite.setImageDrawable(
-                    if (isFavorite) {
+                    if (viewModel.mldFavorite.value == true) {
                         getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
                     } else {
                         getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
@@ -559,98 +465,5 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 )
             }
         }
-    }
-
-    class EpisodeRecyclerViewAdapter(
-        private val activity: PlayActivity,
-        private val dataList: List<AnimeEpisodeDataBean>,
-        private val dialog: Dialog? = null,
-        private val showType: Int = 0,    //0是横向，1是三列
-        private val action: String = "play"
-    ) : AnimeDetailAdapter.EpisodeRecyclerView1Adapter(activity, dataList, dialog, showType) {
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val item = dataList[position]
-
-            when (holder) {
-                is AnimeEpisode2ViewHolder -> {
-                    holder.tvAnimeEpisode2.text = item.title
-                    holder.tvAnimeEpisode2.setTextColor(
-                        activity.getResColor(R.color.foreground_main_color_2_skin)
-                    )
-                    val layoutParams = holder.itemView.layoutParams
-                    if (showType == 0) {
-                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                        if (layoutParams is ViewGroup.MarginLayoutParams) {
-                            layoutParams.setMargins(0, 5.dp, 10.dp, 5.dp)
-                        }
-                        holder.itemView.layoutParams = layoutParams
-                    } else {
-                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                        holder.itemView.setPadding(0, 10.dp, 0, 10.dp)
-                        holder.itemView.layoutParams = layoutParams
-                    }
-                    if (action == "play") {
-                        holder.itemView.setOnClickListener {
-                            activity.startPlay(item.actionUrl, position, item.title)
-                            dialog?.dismiss()
-                        }
-                    } else if (action == "download") {
-                        holder.itemView.setOnClickListener {
-                            activity.getString(R.string.parsing_video).showToast()
-                            activity.viewModel.getAnimeEpisodeUrlData(item.actionUrl, position)
-                        }
-                    }
-                }
-                else -> {
-                    holder.itemView.visibility = View.GONE
-                    (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
-                }
-            }
-        }
-    }
-
-    class PlayerEpisodeRecyclerViewAdapter(
-        private val activity: PlayActivity,
-        private val dataList: List<AnimeEpisodeDataBean>,
-    ) : AnimeVideoPlayer.EpisodeRecyclerViewAdapter(activity, dataList) {
-
-        override val currentIndex: Int
-            get() = activity.viewModel.currentEpisodeIndex
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val item = dataList[position]
-
-            when (holder) {
-                is AnimeVideoPlayer.RightRecyclerViewViewHolder -> {
-                    holder.tvTitle.setTextColor(
-                        activity.getResColor(
-                            if (item.title == activity.viewModel.animeEpisodeDataBean.title)
-                                R.color.unchanged_main_color_2_skin
-                            else R.color.foreground_white_skin
-                        )
-                    )
-                    holder.tvTitle.text = item.title
-                    holder.itemView.setOnClickListener {
-                        activity.mBinding.avpPlayActivity.currentPlayer.run {
-                            if (this is AnimeVideoPlayer) {
-                                getRightContainer()?.gone()
-                                // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
-                                enableDismissControlViewTimer(true)
-                            }
-                        }
-                        activity.startPlay(item.actionUrl, position, item.title)
-                    }
-                }
-                else -> {
-                    holder.itemView.visibility = View.GONE
-                    (App.context.resources.getString(R.string.unknown_view_holder) + position).showToast()
-                }
-            }
-        }
-    }
-
-    companion object {
-        const val TAG = "PlayActivity"
     }
 }

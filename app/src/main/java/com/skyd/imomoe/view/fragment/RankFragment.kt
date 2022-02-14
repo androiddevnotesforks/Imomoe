@@ -9,17 +9,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentRankBinding
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.smartNotifyDataSetChanged
-import com.skyd.imomoe.view.adapter.AnimeShowAdapter
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover11Proxy
+import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.RankListViewModel
 
 class RankFragment : BaseFragment<FragmentRankBinding>() {
     private var partUrl: String = ""
     private lateinit var viewModel: RankListViewModel
-    private lateinit var adapter: AnimeShowAdapter.GridRecyclerView1Adapter
+    private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +40,15 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = AnimeShowAdapter.GridRecyclerView1Adapter(requireActivity(), viewModel.rankList)
-        adapter.showRankNumber = true
+        adapter = VarietyAdapter(
+            mutableListOf(
+                AnimeCover3Proxy(),
+                AnimeCover11Proxy()
+            ), viewModel.rankList
+        )
         mBinding.run {
             rvRankFragment.layoutManager = GridLayoutManager(activity, 4)
-                .apply {
-                    spanSizeLookup = AnimeShowSpanSize(adapter)
-                }
+                .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
             rvRankFragment.setHasFixedSize(true)
             rvRankFragment.adapter = adapter

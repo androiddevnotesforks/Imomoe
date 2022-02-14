@@ -12,7 +12,7 @@ import android.widget.RemoteViews
 import com.google.gson.Gson
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.AnimeCover10Bean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.util.Util.getWeekday
@@ -28,7 +28,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == VIEW_CLICK_ACTION) {
-            val item = Gson().fromJson(intent.getStringExtra(ITEM), AnimeCoverBean::class.java)
+            val item = Gson().fromJson(intent.getStringExtra(ITEM), AnimeCover10Bean::class.java)
             if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
                 startPlayActivity(context, item.episodeClickable?.actionUrl)
             else startPlayActivity(context, item.episodeClickable?.actionUrl + item.actionUrl)

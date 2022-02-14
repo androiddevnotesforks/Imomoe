@@ -7,7 +7,7 @@
     <string name="unknown_route">未知跳转：%s</string>
     <string name="website_format_error">网址格式错误，请输入完整的网址</string>
     <string name="anime_detail_alias">别名：</string>
-    <string name="anime_detail_index">索引：</string>
+    <string name="anime_detail_index">索引：%s</string>
     <string name="anime_detail_type">类型：</string>
     <string name="anime_detail_tag">标签：</string>
     <string name="get_data_failed">获取数据失败！</string>
@@ -166,7 +166,7 @@
     <string name="data_source_jar_version_name">版本：%s</string>
     <string name="data_source_jar_version_code">版本代号：%s</string>
     <string name="app_version_name">%s</string>
-    <string name="app_version_code">代码：%d</string>
+    <string name="app_version_code">代号: %d</string>
     <string name="user_notice_update">使用须知更新！</string>
     <string name="user_notice">使用须知</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -218,4 +218,8 @@
     <string name="no_storage_permission_can_not_olay_local_video">无存储权限，无法播放本地缓存视频</string>
     <string name="confirm_delete_all_watch_history">确定要删除所有观看历史记录？</string>
     <string name="get_cache_size_failed">获取缓存大小失败</string>
+    <string name="play_last_time_episode">续播 %s</string>
+    <string name="insert_favorite_failed_in_play_activity">数据获取失败，无法追番，请刷新后重试…</string>
+    <string name="data_source_interface_version_not_match">数据源版本与APP版本不匹配，请更新数据源！</string>
+    <string name="data_source_interface_version">数据源接口版本: %s</string>
 </resources>

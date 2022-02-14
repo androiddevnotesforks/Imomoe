@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
@@ -24,8 +23,8 @@ class ClassifyViewModel : ViewModel() {
     var classifyTabList: MutableList<ClassifyBean> = ArrayList()        //上方分类数据
     var mldClassifyTabList: MutableLiveData<Pair<MutableList<ClassifyBean>, ResponseDataType>> =
         MutableLiveData()
-    var classifyList: MutableList<AnimeCoverBean> = ArrayList()       //下方tv数据
-    var mldClassifyList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
+    var classifyList: MutableList<Any> = ArrayList()       //下方tv数据
+    var mldClassifyList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
         MutableLiveData()
     var pageNumberBean: PageNumberBean? = null
 

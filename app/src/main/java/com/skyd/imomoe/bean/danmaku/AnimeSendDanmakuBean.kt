@@ -1,7 +1,6 @@
 package com.skyd.imomoe.bean.danmaku
 
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 class AnimeSendDanmakuBean(
     @SerializedName("author")

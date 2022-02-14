@@ -2,7 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.bean.AnimeCoverBean
+import com.skyd.imomoe.bean.AnimeCover7Bean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
@@ -17,7 +17,7 @@ import java.io.File
 
 
 class AnimeDownloadViewModel : ViewModel() {
-    var animeCoverList: MutableList<AnimeCoverBean> = ArrayList()
+    var animeCover7List: MutableList<Any> = ArrayList()
     var mldAnimeCoverList: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getAnimeCover() {
@@ -29,7 +29,7 @@ class AnimeDownloadViewModel : ViewModel() {
                     new = true
                     f
                 })
-            animeCoverList.clear()
+            animeCover7List.clear()
             for (i: Int in 0..1) {
                 files[i]?.let {
                     for (file in it) {
@@ -38,14 +38,10 @@ class AnimeDownloadViewModel : ViewModel() {
                                 //查找文件名不以.temp结尾的文件
                                 !s.endsWith(".temp") && !s.endsWith(".xml")
                             }?.size
-                            animeCoverList.add(
-                                animeCoverList.size, AnimeCoverBean(
-                                    Const.ViewHolderTypeString.ANIME_COVER_7,
+                            animeCover7List.add(
+                                animeCover7List.size, AnimeCover7Bean(
                                     Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
-                                    "",
-                                    file.name,
-                                    null,
-                                    "",
+                                    title = file.name,
                                     size = file.formatSize(),
                                     episodeCount = episodeCount.toString() + "P",
                                     path = if (i == 0) 0 else 1
@@ -69,7 +65,6 @@ class AnimeDownloadViewModel : ViewModel() {
                 p
             }
             val files = File(animeFilePath + directoryName).listFiles()
-            animeCoverList.clear()
             files?.let {
                 val animeList = getAnimeFromXml(directoryName, animeFilePath)
 
@@ -115,27 +110,26 @@ class AnimeDownloadViewModel : ViewModel() {
                     }
                 }
 
+                val list: MutableList<AnimeCover7Bean> = ArrayList()
                 for (anime in animeList) {
                     val fileName =
                         animeFilePath + directoryName.substring(1, directoryName.length) +
                                 "/" + anime.fileName
-                    animeCoverList.add(
-                        AnimeCoverBean(
-                            Const.ViewHolderTypeString.ANIME_COVER_7,
+                    list.add(
+                        AnimeCover7Bean(
                             (if (fileName.endsWith(".m3u8", true))
                                 Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
                             else Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)
                                     + "/" + fileName,
-                            "",
-                            anime.title,
-                            null,
-                            "",
+                            title = anime.title,
                             size = File(animeFilePath + directoryName + "/" + anime.fileName).formatSize(),
                             path = path
                         )
                     )
                 }
-                animeCoverList.sortWith(EpisodeTitleComparator())
+                list.sortWith(EpisodeTitleComparator())
+                animeCover7List.clear()
+                animeCover7List.addAll(list)
             }
         }, success = { mldAnimeCoverList.postValue(true) })
     }

@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
@@ -21,11 +20,11 @@ class SearchViewModel : ViewModel() {
         DataSourceManager.create(ISearchModel::class.java) ?: SearchModel()
     }
 
-    var searchResultList: MutableList<AnimeCoverBean> = ArrayList()
-    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, MutableList<AnimeCoverBean>>> =
+    var searchResultList: MutableList<Any> = ArrayList()
+    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
         MutableLiveData()
     var keyWord = ""
-    var searchHistoryList: MutableList<SearchHistoryBean> = ArrayList()
+    var searchHistoryList: MutableList<Any> = ArrayList()
     var mldSearchHistoryList: MutableLiveData<Boolean> = MutableLiveData()
     var mldInsertCompleted: MutableLiveData<Boolean> = MutableLiveData()
     var mldUpdateCompleted: MutableLiveData<Int> = MutableLiveData()
@@ -89,7 +88,8 @@ class SearchViewModel : ViewModel() {
     fun deleteSearchHistory(itemPosition: Int) {
         request(request = {
             val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
-            getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
+            if (searchHistoryBean is SearchHistoryBean)
+                getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
         }, finish = { mldDeleteCompleted.postValue(itemPosition) })
     }
 }

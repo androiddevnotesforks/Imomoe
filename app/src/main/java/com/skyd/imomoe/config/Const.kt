@@ -2,7 +2,6 @@ package com.skyd.imomoe.config
 
 import android.os.Environment
 import com.skyd.imomoe.App
-import com.skyd.imomoe.R
 
 interface Const {
     interface Common {
@@ -50,71 +49,6 @@ interface Const {
         object OfflineDataBase {
             const val OFFLINE_DATA_BASE_FILE_NAME = "offline_data.db"
             const val PLAY_RECORD_TABLE_NAME = "playRecord"
-        }
-    }
-
-    interface ViewHolderTypeInt {
-        companion object {
-            const val UNKNOWN = -1              //未知类型，使用EmptyViewHolder容错处理。
-            const val HEADER_1 = R.layout.item_header_1
-            const val ANIME_COVER_1 = R.layout.item_anime_cover_1
-            const val ANIME_COVER_2 = R.layout.item_anime_cover_2
-            const val ANIME_COVER_3 = R.layout.item_anime_cover_3
-            const val ANIME_COVER_4 = R.layout.item_anime_cover_4
-            const val ANIME_COVER_5 = R.layout.item_anime_cover_5
-            const val ANIME_COVER_6 = R.layout.item_anime_cover_6
-            const val ANIME_COVER_7 = R.layout.item_anime_cover_7
-            const val ANIME_COVER_8 = R.layout.item_anime_cover_8
-            const val ANIME_COVER_9 = R.layout.item_anime_cover_9
-            const val GRID_RECYCLER_VIEW_1 = R.layout.item_grid_recycler_view_1
-            const val BANNER_1 = R.layout.item_banner_1
-            const val LICENSE_HEADER_1 = R.layout.item_license_header_1
-            const val LICENSE_1 = R.layout.item_license_1
-            const val SEARCH_HISTORY_HEADER_1 = R.layout.item_search_history_header_1
-            const val SEARCH_HISTORY_1 = R.layout.item_search_history_1
-            const val ANIME_EPISODE_FLOW_LAYOUT_1 = R.layout.item_anime_episode_flow_layout_1
-            const val ANIME_EPISODE_FLOW_LAYOUT_2 = R.layout.item_anime_episode_flow_layout_2
-            const val ANIME_DESCRIBE_1 = R.layout.item_anime_describe_1
-            const val ANIME_INFO_1 = R.layout.item_anime_info_1
-            const val HORIZONTAL_RECYCLER_VIEW_1 = R.layout.item_horizontal_recycler_view_1
-            const val ANIME_EPISODE_2 = R.layout.item_anime_episode_2
-            const val UPNP_DEVICE_1 = R.layout.item_dlna_device_1
-            const val MORE_1 = R.layout.item_more_1
-            const val SKIN_COVER_1 = R.layout.item_skin_cover_1
-            const val DATA_SOURCE_1 = R.layout.item_data_source_1
-        }
-    }
-
-    interface ViewHolderTypeString {
-        companion object {
-            const val EMPTY_STRING = ""               //未知类型，使用EmptyViewHolder容错处理。
-            const val UNKNOWN = "unknown"               //未知类型，使用EmptyViewHolder容错处理。
-            const val ANIME_COVER_1 = "animeCover1"
-            const val ANIME_COVER_2 = "animeCover2"
-            const val ANIME_COVER_3 = "animeCover3"
-            const val ANIME_COVER_4 = "animeCover4"
-            const val ANIME_COVER_5 = "animeCover5"
-            const val ANIME_COVER_6 = "animeCover6"
-            const val ANIME_COVER_7 = "animeCover7"
-            const val ANIME_COVER_8 = "animeCover8"
-            const val ANIME_COVER_9 = "animeCover9"
-            const val HEADER_1 = "header1"
-            const val ANIME_EPISODE_FLOW_LAYOUT_1 = "animeEpisodeFlowLayout1"
-            const val ANIME_EPISODE_FLOW_LAYOUT_2 = "animeEpisodeFlowLayout2"
-            const val ANIME_DESCRIBE_1 = "animeDescribe1"
-            const val GRID_RECYCLER_VIEW_1 = "gridRecyclerView1"
-            const val BANNER_1 = "banner1"
-            const val LICENSE_HEADER_1 = "licenseHeader1"
-            const val LICENSE_1 = "license1"
-            const val SEARCH_HISTORY_HEADER_1 = "searchHistoryHeader1"
-            const val SEARCH_HISTORY_1 = "searchHistory1"
-            const val ANIME_INFO_1 = "animeInfo1"
-            const val HORIZONTAL_RECYCLER_VIEW_1 = "horizontalRecyclerView1"
-            const val ANIME_EPISODE_2 = "animeEpisode2"
-            const val UPNP_DEVICE_1 = "upnpDevice1"
-            const val MORE_1 = "More1"
-            const val SKIN_COVER_1 = "skinCover1"
-            const val DATA_SOURCE_1 = "dataSource1"
         }
     }
 

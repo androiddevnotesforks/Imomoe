@@ -1,10 +1,9 @@
 package com.skyd.imomoe.bean
 
 class ClassifyBean(
-    override var type: String,
     override var actionUrl: String,
     var name: String,
-    var classifyDataList: ArrayList<ClassifyDataBean>
+    var classifyDataList: ArrayList<ClassifyTab1Bean>
 ) : BaseBean {
     override fun toString(): String {
         return name.replace("：", "").replace(":", "")
@@ -12,8 +11,7 @@ class ClassifyBean(
 }
 
 //每个分类子项，如字母的A，地区的大陆
-class ClassifyDataBean(
-    override var type: String,
+class ClassifyTab1Bean(
     override var actionUrl: String,
     var url: String,
     var title: String

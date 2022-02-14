@@ -15,9 +15,9 @@ class CustomConst : IConst {
 
     override fun MAIN_URL(): String = BuildConfig.MAIN_URL
 
-    override fun versionName(): String = "1.0.3"
+    override fun versionName(): String = "1.0.4"
 
-    override fun versionCode(): Int = 4
+    override fun versionCode(): Int = 5
 
     override fun about(): String {
         return "数据来源：${MAIN_URL()}"

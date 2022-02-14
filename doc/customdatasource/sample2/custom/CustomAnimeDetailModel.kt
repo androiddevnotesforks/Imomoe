@@ -2,7 +2,6 @@ package com.skyd.imomoe.model.impls.custom
 
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.model.util.JsoupUtil
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import org.jsoup.select.Elements
@@ -10,9 +9,9 @@ import org.jsoup.select.Elements
 class CustomAnimeDetailModel : IAnimeDetailModel {
     override suspend fun getAnimeDetailData(
         partUrl: String
-    ): Triple<ImageBean, String, ArrayList<IAnimeDetailBean>> {
-        val animeDetailList: ArrayList<IAnimeDetailBean> = ArrayList()
-        val cover = ImageBean("", "", "", "")
+    ): Triple<ImageBean, String, ArrayList<Any>> {
+        val animeDetailList: ArrayList<Any> = ArrayList()
+        val cover = ImageBean("", "", "")
         var title = ""
         val url = Api.MAIN_URL + partUrl
         val document = JsoupUtil.getDocument(url)
@@ -37,8 +36,7 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                             when (fireLChildren[k].className()) {
                                 "thumb l" -> {
                                     cover.url = CustomParseHtmlUtil.getCoverUrl(
-                                        fireLChildren[k].select("img").attr("src")
-                                        , url
+                                        fireLChildren[k].select("img").attr("src"), url
                                     )
                                     cover.referer = url
                                 }
@@ -61,7 +59,6 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                                     for (l in typeElements.indices) {
                                         animeType.add(
                                             AnimeTypeBean(
-                                                "",
                                                 typeElements[l].attr("href"),
                                                 Api.MAIN_URL + typeElements[l].attr("href"),
                                                 typeElements[l].text()
@@ -72,7 +69,6 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                                     for (l in tagElements.indices) {
                                         tag.add(
                                             AnimeTypeBean(
-                                                "",
                                                 tagElements[l].attr("href"),
                                                 Api.MAIN_URL + tagElements[l].attr("href"),
                                                 tagElements[l].text()
@@ -89,20 +85,10 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                                         movurl = main0.select("[class=movurl movurl_pan]")
                                     for (l: Int in li.indices) {
                                         if (movurl[l].select("ul").select("li").size == 0) continue
-                                        animeDetailList.add(
-                                            AnimeDetailBean(
-                                                Const.ViewHolderTypeString.HEADER_1, "",
-                                                li[l].text(),
-                                                "",
-                                                null
-                                            )
-                                        )
+                                        animeDetailList.add(Header1Bean("", li[l].text()))
 
                                         animeDetailList.add(
-                                            AnimeDetailBean(
-                                                Const.ViewHolderTypeString.HORIZONTAL_RECYCLER_VIEW_1,
-                                                "",
-                                                "",
+                                            HorizontalRecyclerView1Bean(
                                                 "",
                                                 CustomParseHtmlUtil.parseMovurls(movurl[l])
                                             )
@@ -111,32 +97,25 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                                 }
                                 "botit" -> {     //其它header
                                     animeDetailList.add(
-                                        AnimeDetailBean(
-                                            Const.ViewHolderTypeString.HEADER_1, "",
-                                            CustomParseHtmlUtil.parseBotit(fireLChildren[k]),
+                                        Header1Bean(
                                             "",
-                                            null
+                                            CustomParseHtmlUtil.parseBotit(fireLChildren[k])
                                         )
                                     )
                                 }
                                 "dtit" -> {     //其它header
                                     animeDetailList.add(
-                                        AnimeDetailBean(
-                                            Const.ViewHolderTypeString.HEADER_1, "",
-                                            CustomParseHtmlUtil.parseDtit(fireLChildren[k]),
+                                        Header1Bean(
                                             "",
-                                            null
+                                            CustomParseHtmlUtil.parseDtit(fireLChildren[k])
                                         )
                                     )
                                 }
                                 "info" -> {         //动漫介绍
                                     animeDetailList.add(
-                                        AnimeDetailBean(
-                                            Const.ViewHolderTypeString.ANIME_DESCRIBE_1, "",
+                                        AnimeDescribe1Bean(
                                             "",
-                                            fireLChildren[k]
-                                                .select("[class=info]").text(),
-                                            null
+                                            fireLChildren[k].select("[class=info]").text()
                                         )
                                     )
                                 }
@@ -147,26 +126,19 @@ class CustomAnimeDetailModel : IAnimeDetailModel {
                                 }
                             }
                         }
-                        val animeInfoBean = AnimeInfoBean(
-                            "",
-                            "",
-                            title,
-                            ImageBean("", "", cover.url, url),
-                            alias,
-                            animeArea,
-                            year,
-                            index,
-                            animeType,
-                            tag,
-                            info
-                        )
                         animeDetailList.add(
                             0,
-                            AnimeDetailBean(
-                                Const.ViewHolderTypeString.ANIME_INFO_1, "",
+                            AnimeInfo1Bean(
                                 "",
-                                "",
-                                headerInfo = animeInfoBean
+                                title,
+                                ImageBean("", cover.url, url),
+                                alias,
+                                animeArea,
+                                year,
+                                index,
+                                animeType,
+                                tag,
+                                info
                             )
                         )
                     }

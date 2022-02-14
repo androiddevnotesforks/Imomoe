@@ -2,21 +2,34 @@ package com.skyd.imomoe.view.activity
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
+import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.ext.smartNotifyDataSetChanged
-import com.skyd.imomoe.view.adapter.AnimeDetailAdapter
+import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.dp
+import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.*
+import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import java.net.URL
@@ -25,7 +38,7 @@ import kotlin.random.Random
 
 class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     private lateinit var viewModel: AnimeDetailViewModel
-    private lateinit var adapter: AnimeDetailAdapter
+    private lateinit var adapter: VarietyAdapter
     override var statusBarSkin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +47,53 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         setTransparentStatusBar(window, isDark = false)
 
         viewModel = ViewModelProvider(this).get(AnimeDetailViewModel::class.java)
-        adapter = AnimeDetailAdapter(this, viewModel.animeDetailList)
+        adapter = VarietyAdapter(
+            mutableListOf(
+                Header1Proxy(color = Header1Proxy.WHITE),
+                AnimeDescribe1Proxy(),
+                AnimeInfo1Proxy(onBindViewHolder = { holder, _, _ ->
+                    // 查找番剧播放历史决定是否可续播
+                    holder.tvAnimeInfoContinuePlay.apply {
+                        gone()
+                        getAppDataBase().historyDao().getHistoryLiveData(viewModel.partUrl).also {
+                            setOnClickListener { v ->
+                                val url = v.tag
+                                if (url is String) {
+                                    val const = DataSourceManager.getConst()
+                                    if (const != null && url.startsWith(const.actionUrl.ANIME_PLAY()))
+                                        Util.process(
+                                            this@AnimeDetailActivity,
+                                            url + viewModel.partUrl, url
+                                        )
+                                    else Util.process(this@AnimeDetailActivity, url, url)
+                                }
+                            }
+                            visible()
+                        }.observe(this@AnimeDetailActivity) { hb ->
+                            //FIX_TODO 2022/1/22 14:53 0 这里没有在打开播放后更新，原因未知，所以暂时只能手动刷新
+                            if (hb != null) {
+                                text = getString(R.string.play_last_time_episode, hb.lastEpisode)
+                                tag = hb.lastEpisodeUrl
+                            } else gone()       // 小心复用，所以主要主动隐藏
+                        }
+                    }
+                    false
+                }),
+                AnimeCover1Proxy(color = AnimeCover1Proxy.WHITE),
+                HorizontalRecyclerView1Proxy(
+                    color = HorizontalRecyclerView1Proxy.WHITE,
+                    onMoreButtonClickListener = { _, data, _ ->
+                        showEpisodeSheetDialog(data.episodeList).show()
+                    },
+                    onAnimeEpisodeClickListener = { _, data, _ ->
+                        val const = DataSourceManager.getConst()
+                        if (const != null && data.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
+                            Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
+                        else Util.process(this, data.actionUrl, data.actionUrl)
+                    })
+            ),
+            viewModel.animeDetailList
+        )
 
         viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
 
@@ -55,8 +114,10 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             }
             setButtonEnable(1, false)
             setButtonClickListener(1) {
-                if (viewModel.mldFavorite.value == true) viewModel.deleteFavorite()
-                else viewModel.insertFavorite()
+                when (viewModel.mldFavorite.value) {
+                    true -> viewModel.deleteFavorite()
+                    false -> viewModel.insertFavorite()
+                }
             }
         }
 
@@ -99,8 +160,6 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
 
-    fun getPartUrl(): String = viewModel.partUrl
-
     override fun onChangeSkin() {
         super.onChangeSkin()
         adapter.notifyDataSetChanged()
@@ -109,5 +168,32 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun showEpisodeSheetDialog(dataList: List<AnimeEpisodeDataBean>): BottomSheetDialog {
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_2, null)
+        bottomSheetDialog.setContentView(contentView)
+        val recyclerView =
+            contentView.findViewById<BottomSheetRecyclerView>(R.id.rv_dialog_bottom_sheet_2)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
+        recyclerView.post {
+            recyclerView.setPadding(16.dp, 0, 16.dp, 16.dp)
+            recyclerView.scrollToPosition(0)
+        }
+        if (recyclerView.itemDecorationCount == 0) {
+            recyclerView.addItemDecoration(AnimeEpisodeItemDecoration())
+        }
+        recyclerView.adapter = VarietyAdapter(
+            mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, _ ->
+                val const = DataSourceManager.getConst()
+                if (const != null && data.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
+                    Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
+                else Util.process(this, data.actionUrl, data.actionUrl)
+                bottomSheetDialog.dismiss()
+            }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
+            dataList.toMutableList()
+        )
+        return bottomSheetDialog
     }
 }

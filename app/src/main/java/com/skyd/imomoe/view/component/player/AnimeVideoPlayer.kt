@@ -23,9 +23,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
@@ -37,11 +35,11 @@ import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.invisible
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.activity.DlnaActivity
-import com.skyd.imomoe.view.adapter.SkinRvAdapter
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.view.adapter.variety.proxy.VideoSpeed1Proxy
 import com.skyd.imomoe.view.component.ZoomView
 import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
-import com.skyd.skin.SkinManager
 import kotlinx.coroutines.*
 import java.io.File
 import java.io.Serializable
@@ -127,8 +125,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var tvEpisode: TextView? = null
     private var mEpisodeTextViewVisibility: Int = View.VISIBLE
     private var mEpisodeButtonOnClickListener: OnClickListener? = null
-    private var rvEpisode: RecyclerView? = null
-    private var mEpisodeAdapter: EpisodeRecyclerViewAdapter? = null
+    var rvEpisode: RecyclerView? = null
+    private var mEpisodeAdapter: VarietyAdapter? = null
 
     // 设置
     protected var vgSettingContainer: ViewGroup? = null
@@ -202,7 +200,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun getLayoutId() = if (mIfCurrentIsFullscreen)
         R.layout.layout_anime_video_player_land else R.layout.layout_anime_video_player
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun init(context: Context?) {
         super.init(context)
 
@@ -269,14 +267,33 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
         tvSpeed?.setOnClickListener {
             vgRightContainer?.let {
-                val adapter = SpeedAdapter(
-                    listOf(
-                        SpeedBean("speed", "", "0.5"),
-                        SpeedBean("speed", "", "0.75"),
-                        SpeedBean("speed", "", "1"),
-                        SpeedBean("speed", "", "1.25"),
-                        SpeedBean("speed", "", "1.5"),
-                        SpeedBean("speed", "", "2")
+                val adapter = VarietyAdapter(
+                    mutableListOf(VideoSpeed1Proxy(onBindViewHolder = { holder, data, _, _ ->
+                        if (data.title.toFloat() == speed) {
+                            holder.tvTitle.setTextColor(getResColor(R.color.unchanged_main_color_2_skin))
+                        }
+                        holder.tvTitle.text = data.title
+                        holder.tvTitle.setOnClickListener {
+                            if (data.title == "1") {
+                                tvSpeed?.text = mContext.getString(R.string.play_speed)
+                            } else {
+                                tvSpeed?.text = "${data.title}X"
+                            }
+                            mPlaySpeed = data.title.toFloat()
+                            setSpeed(mPlaySpeed, true)
+                            vgRightContainer?.gone()
+                            //因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
+                            startDismissControlViewTimer()
+                        }
+                        true
+                    })),
+                    mutableListOf(
+                        Speed1Bean("", "0.5"),
+                        Speed1Bean("", "0.75"),
+                        Speed1Bean("", "1"),
+                        Speed1Bean("", "1.25"),
+                        Speed1Bean("", "1.5"),
+                        Speed1Bean("", "2")
                     )
                 )
                 rvSpeed?.layoutManager = LinearLayoutManager(context)
@@ -289,7 +306,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 rvEpisode?.layoutManager = LinearLayoutManager(context)
                 rvEpisode?.adapter = mEpisodeAdapter
                 mEpisodeAdapter?.notifyDataSetChanged()
-                rvEpisode?.scrollToPosition(mEpisodeAdapter?.currentIndex ?: 0)
             }
             showRightContainer()
         }
@@ -297,7 +313,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mReverseValue = rgReverse?.getChildAt(0)?.id
         rgReverse?.children?.forEach {
             (it as RadioButton).apply {
-                setOnCheckedChangeListener { buttonView, isChecked ->
+                setOnCheckedChangeListener { _, isChecked ->
                     if (!isChecked) return@setOnCheckedChangeListener
                     mReverseValue = id
                     when (id) {
@@ -1063,7 +1079,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mEpisodeButtonOnClickListener = listener
     }
 
-    fun setEpisodeAdapter(adapter: EpisodeRecyclerViewAdapter) {
+    fun setEpisodeAdapter(adapter: VarietyAdapter) {
         mEpisodeAdapter = adapter
     }
 
@@ -1093,69 +1109,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         else super.cancelDismissControlViewTimer()
     }
 
-    class SpeedBean(
-        override var type: String,
+    class Speed1Bean(
         override var actionUrl: String,
         var title: String
     ) : BaseBean, Serializable
-
-    inner class SpeedAdapter(val list: List<SpeedBean>) : SkinRvAdapter() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return RightRecyclerViewViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_player_list_item_1, parent, false)
-            ).apply { SkinManager.setSkin(itemView) }
-        }
-
-        @SuppressLint("SetTextI18n")
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            super.onBindViewHolder(holder, position)
-            val item = list[position]
-
-            when (holder) {
-                is RightRecyclerViewViewHolder -> {
-                    if (item.type == "speed") {
-                        if (item.title.toFloat() == speed) {
-                            holder.tvTitle.setTextColor(context.getResColor(R.color.unchanged_main_color_2_skin))
-                        }
-                        holder.tvTitle.text = item.title
-                        holder.itemView.setOnClickListener {
-                            if (item.title == "1") {
-                                tvSpeed?.text = App.context.getString(R.string.play_speed)
-                            } else {
-                                tvSpeed?.text = item.title + "X"
-                            }
-                            mPlaySpeed = item.title.toFloat()
-                            setSpeed(mPlaySpeed, true)
-                            vgRightContainer?.gone()
-                            //因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
-                            startDismissControlViewTimer()
-                        }
-                    }
-                }
-            }
-        }
-
-        override fun getItemCount(): Int = list.size
-    }
-
-    abstract class EpisodeRecyclerViewAdapter(
-        private val activity: Activity,
-        private val dataList: List<AnimeEpisodeDataBean>,
-    ) : SkinRvAdapter() {
-
-        abstract val currentIndex: Int
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            return RightRecyclerViewViewHolder(
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_player_list_item_1, parent, false)
-            ).apply { SkinManager.setSkin(itemView) }
-        }
-
-        override fun getItemCount(): Int = dataList.size
-    }
 
     class RightRecyclerViewViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvTitle = view as TextView

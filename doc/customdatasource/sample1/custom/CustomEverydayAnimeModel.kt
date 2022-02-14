@@ -7,13 +7,10 @@ import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
 import org.jsoup.select.Elements
 
 class CustomEverydayAnimeModel : IEverydayAnimeModel {
-    override suspend fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean> {
+    override suspend fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<Any>>, String> {
         val tabList = ArrayList<TabBean>()
-        val header = AnimeShowBean(
-            "", "", "", "",
-            "", null, "", null
-        )
-        val everydayAnimeList: ArrayList<List<AnimeCoverBean>> = ArrayList()
+        var header = ""
+        val everydayAnimeList: ArrayList<List<Any>> = ArrayList()
         val document = JsoupUtil.getDocument(Api.MAIN_URL)
         val areaChildren: Elements = document.select("[class=area]")[0].children()
         for (i in areaChildren.indices) {
@@ -27,14 +24,13 @@ class CustomEverydayAnimeModel : IEverydayAnimeModel {
                                 for (k in bgChildren.indices) {
                                     when (bgChildren[k].className()) {
                                         "dtit" -> {
-                                            header.title = ParseHtmlUtil.parseDtit(bgChildren[k])
+                                            header = ParseHtmlUtil.parseDtit(bgChildren[k])
                                         }
                                         "tag" -> {
                                             val tagChildren = bgChildren[k].children()
                                             for (l in tagChildren.indices) {
                                                 tabList.add(
                                                     TabBean(
-                                                        "",
                                                         "",
                                                         "",
                                                         tagChildren[l].text()
@@ -44,9 +40,7 @@ class CustomEverydayAnimeModel : IEverydayAnimeModel {
                                         }
                                         "tlist" -> {
                                             everydayAnimeList.addAll(
-                                                ParseHtmlUtil.parseTlist(
-                                                    bgChildren[k]
-                                                )
+                                                ParseHtmlUtil.parseTlist2(bgChildren[k])
                                             )
                                         }
                                     }

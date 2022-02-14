@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model.interfaces
 
-import com.skyd.imomoe.bean.AnimeCoverBean
 import com.skyd.imomoe.bean.PageNumberBean
 
 /**
@@ -13,10 +12,10 @@ interface ISearchModel : IBase {
      * @param keyWord  搜索关键词，不为null
      * @param partUrl  搜索页面部分url，不为null
      * @return Pair，不可为null
-     * ArrayList<AnimeCoverBean>：搜索结果ArrayList，不为null
+     * ArrayList<Any>：搜索结果ArrayList，不为null
      * PageNumberBean：下一页数据地址Bean，可为null
      */
-    suspend fun getSearchData(keyWord: String, partUrl: String): Pair<ArrayList<AnimeCoverBean>, PageNumberBean?>
+    suspend fun getSearchData(keyWord: String, partUrl: String): Pair<ArrayList<Any>, PageNumberBean?>
 
     companion object {
         const val implName = "SearchModel"

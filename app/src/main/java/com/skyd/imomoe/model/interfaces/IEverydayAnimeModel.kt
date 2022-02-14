@@ -1,7 +1,5 @@
 package com.skyd.imomoe.model.interfaces
 
-import com.skyd.imomoe.bean.AnimeCoverBean
-import com.skyd.imomoe.bean.AnimeShowBean
 import com.skyd.imomoe.bean.TabBean
 
 /**
@@ -14,9 +12,9 @@ interface IEverydayAnimeModel : IBase {
      * @return Triple，不可为null
      * ArrayList<TabBean>：Tab信息ArrayList，不可为null；
      * ArrayList<List<AnimeCoverBean>>：每个Tab内容的ArrayList，不可为null；
-     * AnimeShowBean：标题，例如：日更动漫，不可为null
+     * String：标题，例如：日更动漫，不可为null
      */
-    suspend fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<AnimeCoverBean>>, AnimeShowBean>
+    suspend fun getEverydayAnimeData(): Triple<ArrayList<TabBean>, ArrayList<List<Any>>, String>
 
     companion object {
         const val implName = "EverydayAnimeModel"

@@ -3,8 +3,6 @@ package com.skyd.imomoe.model.impls.custom
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.skyd.imomoe.App
-import com.skyd.imomoe.R
 import com.skyd.imomoe.model.interfaces.IRouteProcessor
 import com.skyd.imomoe.util.Util.getSubString
 import com.skyd.imomoe.util.Util.isYearMonth
