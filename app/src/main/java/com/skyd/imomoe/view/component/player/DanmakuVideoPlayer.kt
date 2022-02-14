@@ -55,7 +55,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         dataFilter = createDataFilters()
         dataFilters = dataFilter.associateBy { it.filterParams }
         layoutFilter = createLayoutFilters()
-        textSizeScale = 0.8f
     }
 
     // 是否在显示弹幕

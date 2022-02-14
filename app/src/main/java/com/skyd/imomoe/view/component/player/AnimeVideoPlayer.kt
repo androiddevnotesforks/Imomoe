@@ -1054,7 +1054,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      * 注意：记忆单位是每个视频而不是一部番剧；一部番剧里面的每集都有记录，并非只记录最后看的那一集
      */
     private fun storePlayPosition(position: Long = gsyVideoManager.currentPosition) {
-        val url = mOriginUrl
+        val url = mOriginUrl ?: return
         val duration = gsyVideoManager.duration
         var newPosition = position
         // 若还剩10s结束，则直接标记为“看完”

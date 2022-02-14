@@ -36,8 +36,8 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>() {
                 setBackButtonClickListener { finish() }
                 titleText = paramMap[TOOLBAR_TITLE] ?: "通知"
             }
-            tvNoticeActivityTitle.text = paramMap[TITLE] ?: ""
-            tvNoticeActivityContent.text = (paramMap[CONTENT] ?: "").toHtml()
+            tvNoticeActivityTitle.text = paramMap[TITLE].orEmpty()
+            tvNoticeActivityContent.text = (paramMap[CONTENT].orEmpty()).toHtml()
         }
     }
 

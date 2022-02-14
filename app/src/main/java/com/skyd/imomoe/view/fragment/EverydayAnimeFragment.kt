@@ -1,12 +1,12 @@
 package com.skyd.imomoe.view.fragment
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
@@ -24,19 +24,11 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), EventBusSubscriber {
-    private lateinit var viewModel: EverydayAnimeViewModel
+    private val viewModel: EverydayAnimeViewModel by viewModels()
     private lateinit var adapter: VarietyAdapter
     private var offscreenPageLimit = 1
     private var selectedTabIndex = -1
     private var lastRefreshTime: Long = System.currentTimeMillis()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this).get(EverydayAnimeViewModel::class.java)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 
     override fun getBinding(
         inflater: LayoutInflater,
@@ -168,4 +160,10 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutEverydayAnimeFragmentLoadFailed
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
+    }
 }

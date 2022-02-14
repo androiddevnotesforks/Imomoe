@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
-import android.util.LruCache
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,9 @@ import com.skyd.imomoe.databinding.FragmentMoreDialogBinding
 open class MoreDialogFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentMoreDialogBinding? = null
     private val mBinding get() = _binding!!
-    private lateinit var listeners: Array<View.OnClickListener>
+    private var onCancelButtonClick: ((v: View) -> Unit)? = null
+    private var onDlnaButtonClick: ((v: View) -> Unit)? = null
+    private var onOpenInOtherPlayerButtonClick: ((v: View) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,11 @@ open class MoreDialogFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMoreDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentMoreDialogBinding.inflate(inflater, container, false).apply {
+            tvCancelMore.setOnClickListener { onCancelButtonClick?.invoke(it) }
+            tvDlna.setOnClickListener { onDlnaButtonClick?.invoke(it) }
+            tvOpenInOtherPlayer.setOnClickListener { onOpenInOtherPlayerButtonClick?.invoke(it) }
+        }
         return mBinding.root
     }
 
@@ -33,17 +38,15 @@ open class MoreDialogFragment : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        mBinding.run {
-            tvCancelMore.setOnClickListener(listeners[0])
-            tvDlna.setOnClickListener(listeners[1])
-            tvOpenInOtherPlayer.setOnClickListener(listeners[2])
-        }
+    fun onCancelButtonClick(listener: ((v: View) -> Unit)? = null) {
+        onCancelButtonClick = listener
     }
 
-    fun setOnClickListener(listeners: Array<View.OnClickListener>): BottomSheetDialogFragment {
-        this.listeners = listeners
-        return this
+    fun onDlnaButtonClick(listener: ((v: View) -> Unit)? = null) {
+        onDlnaButtonClick = listener
+    }
+
+    fun onOpenInOtherPlayerButtonClick(listener: ((v: View) -> Unit)? = null) {
+        onOpenInOtherPlayerButtonClick = listener
     }
 }

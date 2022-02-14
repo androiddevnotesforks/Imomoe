@@ -9,7 +9,7 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
@@ -32,18 +32,9 @@ import org.greenrobot.eventbus.ThreadMode
 
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
-    private lateinit var viewModel: HomeViewModel
-    private lateinit var adapter: VpAdapter
+    private val viewModel: HomeViewModel by viewModels()
+    private val adapter: VpAdapter by lazy { VpAdapter(this) }
     private var currentTab = -1
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        adapter = VpAdapter(this)
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding =
         FragmentHomeBinding.inflate(inflater, container, false)

@@ -1,12 +1,13 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
@@ -26,26 +27,26 @@ import com.skyd.imomoe.viewmodel.SearchViewModel
 class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     private lateinit var mLayoutCircleProgressTextTip1: RelativeLayout
     private lateinit var tvCircleProgressTextTip1: TextView
-    private lateinit var viewModel: SearchViewModel
-    private lateinit var adapter: VarietyAdapter
-    private lateinit var historyAdapter: VarietyAdapter
-    private var lastRefreshTime: Long = System.currentTimeMillis()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.searchResultList)
-        historyAdapter = VarietyAdapter(
+    private val viewModel: SearchViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.searchResultList)
+    }
+    private val historyAdapter: VarietyAdapter by lazy {
+        VarietyAdapter(
             mutableListOf(SearchHistoryHeader1Proxy(), SearchHistory1Proxy(
                 onClickListener = { _, data, _ -> search(data.title) },
                 onDeleteButtonClickListener = { holder, _, _ ->
                     // 用holder.bindingAdapterPosition代替position，因为在removed后position会变
-                    deleteSearchHistory(holder.bindingAdapterPosition)
+                    viewModel.deleteSearchHistory(holder.bindingAdapterPosition)
                 }
             )),
             viewModel.searchHistoryList
         )
+    }
+    private var lastRefreshTime: Long = System.currentTimeMillis()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         val pageNumber = intent.getStringExtra("pageNumber") ?: ""
         viewModel.keyWord = intent.getStringExtra("keyWord") ?: ""
@@ -174,10 +175,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         viewModel.getSearchData(key, isRefresh = true, partUrl = partUrl)
     }
 
-    fun deleteSearchHistory(position: Int) {
-        viewModel.deleteSearchHistory(position)
-    }
-
     private fun setSearchAdapter() {
         mBinding.apply {
             if (rvSearchActivity.adapter != adapter)
@@ -197,5 +194,14 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     override fun finish() {
         super.finish()
         overridePendingTransition(0, R.anim.anl_push_top_out)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        when (mBinding.rvSearchActivity.adapter) {
+            adapter -> adapter.notifyDataSetChanged()
+            historyAdapter -> historyAdapter.notifyDataSetChanged()
+        }
     }
 }

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0px"
         android:layout_marginStart="16dp"
+        android:importantForAccessibility="no"
         android:paddingVertical="7dp"
         android:src="@drawable/ic_access_time_main_color_24_skin"
         app:layout_constraintBottom_toBottomOf="parent"

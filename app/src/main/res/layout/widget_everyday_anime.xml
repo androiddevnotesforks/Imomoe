@@ -30,6 +30,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:background="?android:selectableItemBackground"
+            android:contentDescription="@string/refresh_everyday_anime_widget"
             android:paddingHorizontal="13dp"
             android:src="@drawable/ic_widget_everyday_anime_refresh" />
     </LinearLayout>

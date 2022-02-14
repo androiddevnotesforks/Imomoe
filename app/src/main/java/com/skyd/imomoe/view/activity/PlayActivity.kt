@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -10,8 +11,8 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -58,8 +59,21 @@ import kotlin.math.abs
 
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
     override var statusBarSkin: Boolean = false
-    private lateinit var viewModel: PlayViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: PlayViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(
+            mutableListOf(
+                Header1Proxy(),
+                AnimeCover1Proxy(),
+                AnimeCover2Proxy(),
+                HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
+                    getSheetDialog("play").show()
+                }, onAnimeEpisodeClickListener = { _, data, index ->
+                    viewModel.playAnotherEpisode(data.actionUrl, index)
+                })
+            ), viewModel.playBeanDataList
+        )
+    }
     private var isFirstTime = true
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
@@ -104,31 +118,30 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             }
             // 更多按钮
             ivPlayActivityToolbarMore.setOnClickListener {
-                MoreDialogFragment().run {
-                    setOnClickListener(
-                        arrayOf(View.OnClickListener { dismiss() },
-                            View.OnClickListener {
-                                val url = avpPlayActivity.getUrl()
-                                if (url == null) {
-                                    getString(R.string.please_wait_video_loaded).showToast()
-                                    return@OnClickListener
-                                }
-                                startActivity(
-                                    Intent(this@PlayActivity, DlnaActivity::class.java)
-                                        .putExtra("url", url)
-                                        .putExtra("title", avpPlayActivity.getTitle())
-                                )
-                                dismiss()
-                            }, View.OnClickListener {
-                                if (!openVideoByExternalPlayer(
-                                        this@PlayActivity,
-                                        viewModel.animeEpisodeDataBean.videoUrl
-                                    )
-                                ) getString(R.string.matched_app_not_found).showToast()
-                                dismiss()
-                            })
-                    )
+                MoreDialogFragment().apply {
                     show(supportFragmentManager, "more_dialog")
+                    onCancelButtonClick { dismiss() }
+                    onDlnaButtonClick {
+                        val url = avpPlayActivity.getUrl()
+                        if (url == null) {
+                            getString(R.string.please_wait_video_loaded).showToast()
+                            return@onDlnaButtonClick
+                        }
+                        startActivity(
+                            Intent(this@PlayActivity, DlnaActivity::class.java)
+                                .putExtra("url", url)
+                                .putExtra("title", avpPlayActivity.getTitle())
+                        )
+                        dismiss()
+                    }
+                    onOpenInOtherPlayerButtonClick {
+                        if (!openVideoByExternalPlayer(
+                                this@PlayActivity,
+                                viewModel.animeEpisodeDataBean.videoUrl
+                            )
+                        ) getString(R.string.matched_app_not_found).showToast()
+                        dismiss()
+                    }
                 }
             }
         }
@@ -136,23 +149,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PlayViewModel::class.java)
 
         initView()
 
         viewModel.setActivity(this)
-        adapter = VarietyAdapter(
-            mutableListOf(
-                Header1Proxy(),
-                AnimeCover1Proxy(),
-                AnimeCover2Proxy(),
-                HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
-                    getSheetDialog("play").show()
-                }, onAnimeEpisodeClickListener = { _, data, index ->
-                    playAnotherEpisode(data.actionUrl, index)
-                })
-            ), viewModel.playBeanDataList
-        )
 
         initVideoBuilderMode()
 
@@ -213,33 +213,35 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         viewModel.mldEpisodesList.observe(this) {
             adapter.notifyDataSetChanged()
             mBinding.avpPlayActivity.setEpisodeAdapter(
-                VarietyAdapter(mutableListOf(PlayerEpisode1Proxy(
-                    onBindViewHolder = { holder, data, index, _ ->
-                        holder.tvTitle.setTextColor(
-                            getResColor(
-                                if (data.title == viewModel.animeEpisodeDataBean.title)
-                                    R.color.unchanged_main_color_2_skin
-                                else R.color.foreground_white_skin
-                            )
-                        )
-                        holder.tvTitle.text = data.title
-                        if (index == viewModel.currentEpisodeIndex) {
-                            (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
-                                .rvEpisode?.scrollToPosition(index)
-                        }
-                        holder.itemView.setOnClickListener {
-                            mBinding.avpPlayActivity.currentPlayer.run {
-                                if (this is AnimeVideoPlayer) {
-                                    getRightContainer()?.gone()
-                                    // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
-                                    enableDismissControlViewTimer(true)
+                VarietyAdapter(
+                    mutableListOf(
+                        PlayerEpisode1Proxy(
+                            onBindViewHolder = { holder, data, index, _ ->
+                                holder.tvTitle.setTextColor(
+                                    getResColor(
+                                        if (data.title == viewModel.animeEpisodeDataBean.title)
+                                            R.color.unchanged_main_color_2_skin
+                                        else R.color.foreground_white_skin
+                                    )
+                                )
+                                holder.tvTitle.text = data.title
+                                if (index == viewModel.currentEpisodeIndex) {
+                                    (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
+                                        .rvEpisode?.scrollToPosition(index)
                                 }
-                            }
-                            playAnotherEpisode(data.actionUrl, index)
-                        }
-                        true
-                    })
-                ), viewModel.episodesList.toMutableList()
+                                holder.itemView.setOnClickListener {
+                                    mBinding.avpPlayActivity.currentPlayer.run {
+                                        if (this is AnimeVideoPlayer) {
+                                            getRightContainer()?.gone()
+                                            // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
+                                            enableDismissControlViewTimer(true)
+                                        }
+                                    }
+                                    viewModel.playAnotherEpisode(data.actionUrl, index)
+                                }
+                                true
+                            })
+                    ), viewModel.episodesList.toMutableList()
                 )
             )
         }
@@ -253,11 +255,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     }
 
     override fun getBinding() = ActivityPlayBinding.inflate(layoutInflater)
-
-    // 播放另一集
-    fun playAnotherEpisode(url: String, currentEpisodeIndex: Int) {
-        viewModel.playAnotherEpisode(url, currentEpisodeIndex)
-    }
 
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
@@ -430,7 +427,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         @Suppress("UNCHECKED_CAST") val adapter = VarietyAdapter(
             mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, index ->
                 if (action == "play") {
-                    playAnotherEpisode(data.actionUrl, index)
+                    viewModel.playAnotherEpisode(data.actionUrl, index)
                     bottomSheetDialog.dismiss()
                 } else if (action == "download") {
                     getString(R.string.parsing_video).showToast()
@@ -465,5 +462,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 )
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
     }
 }

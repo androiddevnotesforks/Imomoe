@@ -18,6 +18,7 @@
             android:id="@+id/iv_skin_cover_1_cover"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:importantForAccessibility="no"
             android:scaleType="fitXY"
             app:layout_constraintDimensionRatio="2:1.4"
             app:layout_constraintStart_toStartOf="parent"

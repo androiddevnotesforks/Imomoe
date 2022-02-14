@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
@@ -35,13 +36,13 @@ class AnimeToolbar : LinearLayout {
             field = value
         }
     private var buttonDrawables: MutableList<Drawable?> = ArrayList()
-    private var buttons: MutableList<ImageView> = ArrayList()
+    private var buttons: MutableList<ImageButton> = ArrayList()
     private val buttonLayoutParams = LayoutParams(
         ViewGroup.LayoutParams.WRAP_CONTENT,
         ViewGroup.LayoutParams.WRAP_CONTENT
     )
     private lateinit var titleTextView: TextView
-    private lateinit var backButton: ImageView
+    private lateinit var backButton: ImageButton
     private var backDrawableTitlePadding: Int = 10.dp
 
     constructor(context: Context) : super(context) {
@@ -85,7 +86,7 @@ class AnimeToolbar : LinearLayout {
             )
             setTypeface(a.getInt(R.styleable.AnimeToolbar_typeface, 0))
         }
-        backButton = ImageView(context, attrs).apply {
+        backButton = ImageButton(context, attrs).apply {
             this.layoutParams = buttonLayoutParams
             adjustViewBounds = true
             minimumHeight = BUTTON_MIN_HEIGHT.dp
@@ -153,7 +154,7 @@ class AnimeToolbar : LinearLayout {
         params: ViewGroup.LayoutParams = buttonLayoutParams
     ) {
         buttonDrawables.add(drawable)
-        addView(ImageView(context).apply {
+        addView(ImageButton(context).apply {
             layoutParams = params
             adjustViewBounds = true
             minimumHeight = BUTTON_MIN_HEIGHT.dp

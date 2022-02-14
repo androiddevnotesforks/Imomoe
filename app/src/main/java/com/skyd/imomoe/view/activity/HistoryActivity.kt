@@ -1,12 +1,12 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
@@ -15,16 +15,15 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
 import com.skyd.imomoe.viewmodel.HistoryViewModel
 
 class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
-    private lateinit var viewModel: HistoryViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: HistoryViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover9Proxy(
+            onDeleteButtonClickListener = { _, data, _ -> viewModel.deleteHistory(data) }
+        )), viewModel.historyList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(AnimeCover9Proxy(
-            onDeleteButtonClickListener = { _, data, _ -> deleteHistory(data) }
-        )), viewModel.historyList)
 
         mBinding.run {
             atbHistoryActivity.setBackButtonClickListener { finish() }
@@ -83,9 +82,11 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
     override fun getBinding(): ActivityHistoryBinding =
         ActivityHistoryBinding.inflate(layoutInflater)
 
-    fun deleteHistory(historyBean: HistoryBean) {
-        viewModel.deleteHistory(historyBean)
-    }
-
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutHistoryActivityNoHistory
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }

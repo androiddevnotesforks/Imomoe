@@ -12,6 +12,7 @@
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/bg_circle_main_color_2_50_skin"
+        android:importantForAccessibility="no"
         android:padding="13dp"
         tools:src="@drawable/ic_settings_white_24" />
 

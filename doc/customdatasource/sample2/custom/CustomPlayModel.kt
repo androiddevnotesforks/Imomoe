@@ -61,13 +61,23 @@ class CustomPlayModel : IPlayModel {
                             val document = Jsoup.parse(html)
                             val children: Elements = document.body().children()
                             for (i in children.indices) {
-
                                 when (children[i].className()) {
                                     "play", "player" -> {
                                         var iframeSrc = children[i]
                                             .select("[class=bofang]")
                                             .select("iframe")[0].attr("src")
                                         if (iframeSrc.startsWith("/yxsf/player/ckx1")) {
+                                            val videoUrl = URLDecoder.decode(
+                                                iframeSrc.substringAfter("url=")
+                                                    .substringBefore("&"), "UTF-8"
+                                            )
+                                            animeEpisodeDataBean.videoUrl = videoUrl
+                                            resultVideoUrl = true
+                                            if (resultData) cancellableContinuation.resume(
+                                                Triple(playBeanDataList, episodesList, playBean)
+                                            )
+                                            continue
+                                        } else if (iframeSrc.startsWith("/yxsf/player/dpx2")) {
                                             val videoUrl = URLDecoder.decode(
                                                 iframeSrc.substringAfter("url=")
                                                     .substringBefore("&"), "UTF-8"
@@ -106,7 +116,6 @@ class CustomPlayModel : IPlayModel {
                                             }
 
                                         })
-
                                     }
                                 }
                             }
@@ -221,11 +230,32 @@ class CustomPlayModel : IPlayModel {
                                     val titChildren = children[i].children()
                                     animeEpisodeDataBean.title =
                                         titChildren.select("span").text().replace("：", "")
+                                    if (animeEpisodeDataBean.videoUrl.isNotBlank())
+                                        cancellableContinuation.resume(animeEpisodeDataBean)
                                 }
                                 "player" -> {
                                     var iframeSrc = children[i]
                                         .select("[class=bofang]").select("iframe")[0].attr("src")
-                                    if (iframeSrc.startsWith("/")) iframeSrc = MAIN_URL + iframeSrc
+                                    if (iframeSrc.startsWith("/yxsf/player/ckx1")) {
+                                        val videoUrl = URLDecoder.decode(
+                                            iframeSrc.substringAfter("url=")
+                                                .substringBefore("&"), "UTF-8"
+                                        )
+                                        animeEpisodeDataBean.videoUrl = videoUrl
+                                        if (animeEpisodeDataBean.title.isNotBlank())
+                                            cancellableContinuation.resume(animeEpisodeDataBean)
+                                        continue
+                                    } else if (iframeSrc.startsWith("/yxsf/player/dpx2")) {
+                                        val videoUrl = URLDecoder.decode(
+                                            iframeSrc.substringAfter("url=")
+                                                .substringBefore("&"), "UTF-8"
+                                        )
+                                        animeEpisodeDataBean.videoUrl = videoUrl
+                                        if (animeEpisodeDataBean.title.isNotBlank())
+                                            cancellableContinuation.resume(animeEpisodeDataBean)
+                                        continue
+                                    } else if (iframeSrc.startsWith("/")) iframeSrc =
+                                        MAIN_URL + iframeSrc
                                     getVideoUrl(iframeSrc, object : GettingCallback {
                                         override fun onGettingSuccess(
                                             webView: View?, html: String
@@ -318,7 +348,21 @@ class CustomPlayModel : IPlayModel {
                                         var iframeSrc = children[i]
                                             .select("[class=bofang]")
                                             .select("iframe")[0].attr("src")
-                                        if (iframeSrc.startsWith("/")) iframeSrc =
+                                        if (iframeSrc.startsWith("/yxsf/player/ckx1")) {
+                                            val videoUrl = URLDecoder.decode(
+                                                iframeSrc.substringAfter("url=")
+                                                    .substringBefore("&"), "UTF-8"
+                                            )
+                                            cancellableContinuation.resume(videoUrl)
+                                            continue
+                                        } else if (iframeSrc.startsWith("/yxsf/player/dpx2")) {
+                                            val videoUrl = URLDecoder.decode(
+                                                iframeSrc.substringAfter("url=")
+                                                    .substringBefore("&"), "UTF-8"
+                                            )
+                                            cancellableContinuation.resume(videoUrl)
+                                            continue
+                                        } else if (iframeSrc.startsWith("/")) iframeSrc =
                                             MAIN_URL + iframeSrc
                                         getVideoUrl(iframeSrc, object : GettingCallback {
                                             override fun onGettingSuccess(

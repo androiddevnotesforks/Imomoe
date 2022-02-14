@@ -22,6 +22,7 @@
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"
+        android:contentDescription="@string/more"
         android:minHeight="50dp"
         android:padding="12dp"
         android:scaleType="center"

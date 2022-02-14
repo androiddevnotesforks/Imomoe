@@ -1,9 +1,10 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
@@ -21,8 +22,10 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
     private var actionBarTitle = ""
     private var directoryName = ""
     private var path = 0
-    private lateinit var viewModel: AnimeDownloadViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: AnimeDownloadViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover7Proxy()), viewModel.animeCover7List)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +33,8 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         mode = intent.getIntExtra("mode", 0)
         actionBarTitle =
             intent.getStringExtra("actionBarTitle") ?: getString(R.string.download_anime)
-        directoryName = intent.getStringExtra("directoryName") ?: ""
+        directoryName = intent.getStringExtra("directoryName").orEmpty()
         path = intent.getIntExtra("path", 0)
-
-        viewModel = ViewModelProvider(this).get(AnimeDownloadViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(AnimeCover7Proxy()), viewModel.animeCover7List)
 
         mBinding.run {
             atbAnimeDownloadActivityToolbar.titleText = actionBarTitle
@@ -87,4 +87,10 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         ActivityAnimeDownloadBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeDownloadNoDownload
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }

@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.bean.License1Bean
@@ -119,4 +120,10 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
 
     override fun getBinding(): ActivityLicenseBinding =
         ActivityLicenseBinding.inflate(layoutInflater)
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }

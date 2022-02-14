@@ -137,11 +137,12 @@ dependencies {
     implementation deps.support.material
     implementation deps.support.swiperefreshlayout
     implementation deps.support.constraintlayout
+    implementation deps.support.fragment_ktx
+    implementation deps.support.viewpager2
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_livedata_ktx
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
-    implementation deps.support.viewpager2
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
     implementation deps.retrofit2.retrofit

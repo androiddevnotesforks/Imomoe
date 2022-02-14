@@ -45,9 +45,9 @@ class AnimeDownloadService : Service() {
             "取消下载".showToast()
             return START_NOT_STICKY
         }
-        val url = intent.getStringExtra("url") ?: ""
-        val key = intent.getStringExtra("key") ?: ""
-        val folderAndFileName = intent.getStringExtra("folderAndFileName") ?: ""
+        val url = intent.getStringExtra("url").orEmpty()
+        val key = intent.getStringExtra("key").orEmpty()
+        val folderAndFileName = intent.getStringExtra("folderAndFileName").orEmpty()
         folderAndFileNameHashMap[key] = folderAndFileName
         downloadServiceHashMap[key] = AnimeDownloadServiceDataBean(url, totalNotificationId++)
         if (isNetWorkAvailable()) {
@@ -215,7 +215,7 @@ class AnimeDownloadService : Service() {
                 }
 
                 override fun completed(task: BaseDownloadTask?) {
-                    listener.complete(task?.filename ?: "")
+                    listener.complete(task?.filename.orEmpty())
                 }
 
                 override fun paused(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {

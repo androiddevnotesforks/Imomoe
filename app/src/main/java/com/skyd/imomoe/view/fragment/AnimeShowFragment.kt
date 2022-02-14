@@ -1,11 +1,12 @@
 package com.skyd.imomoe.view.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
@@ -23,13 +24,12 @@ import com.skyd.imomoe.viewmodel.AnimeShowViewModel
 
 class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     private var partUrl: String = ""
-    private lateinit var viewModel: AnimeShowViewModel
+    private val viewModel: AnimeShowViewModel by viewModels()
     private lateinit var adapter: VarietyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(AnimeShowViewModel::class.java)
         val arguments = arguments
 
         runCatching {
@@ -126,4 +126,10 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeShowFragmentLoadFailed
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
+    }
 }

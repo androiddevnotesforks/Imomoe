@@ -1,8 +1,9 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
@@ -13,14 +14,13 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover8Proxy
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
 
 class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
-    private lateinit var viewModel: FavoriteViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: FavoriteViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover8Proxy()), viewModel.favoriteList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(AnimeCover8Proxy()), viewModel.favoriteList)
 
         mBinding.run {
             atbFavoriteActivity.setBackButtonClickListener { finish() }
@@ -53,5 +53,11 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         ActivityFavoriteBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutFavoriteActivityNoFavorite
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }
 

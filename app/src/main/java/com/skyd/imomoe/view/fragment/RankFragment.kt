@@ -1,10 +1,11 @@
 package com.skyd.imomoe.view.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ResponseDataType
@@ -20,17 +21,17 @@ import com.skyd.imomoe.viewmodel.RankListViewModel
 
 class RankFragment : BaseFragment<FragmentRankBinding>() {
     private var partUrl: String = ""
-    private lateinit var viewModel: RankListViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: RankListViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover3Proxy(), AnimeCover11Proxy()), viewModel.rankList)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(RankListViewModel::class.java)
-        val arguments = arguments
-
         try {
-            partUrl = arguments?.getString("partUrl") ?: ""
+            val arguments = arguments
+            partUrl = arguments?.getString("partUrl").orEmpty()
         } catch (e: Exception) {
             e.printStackTrace()
             e.message?.showToast(Toast.LENGTH_LONG)
@@ -40,12 +41,6 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        adapter = VarietyAdapter(
-            mutableListOf(
-                AnimeCover3Proxy(),
-                AnimeCover11Proxy()
-            ), viewModel.rankList
-        )
         mBinding.run {
             rvRankFragment.layoutManager = GridLayoutManager(activity, 4)
                 .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
@@ -86,4 +81,9 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRankBinding =
         FragmentRankBinding.inflate(inflater, container, false)
 
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }

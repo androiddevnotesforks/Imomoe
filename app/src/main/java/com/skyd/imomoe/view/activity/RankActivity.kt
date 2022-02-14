@@ -2,9 +2,9 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.ViewStub
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
@@ -14,17 +14,14 @@ import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.RankViewModel
 
 class RankActivity : BaseActivity<ActivityRankBinding>() {
-    private lateinit var viewModel: RankViewModel
-    private lateinit var adapter: VpAdapter
+    private val viewModel: RankViewModel by viewModels()
+    private val adapter: VpAdapter by lazy { VpAdapter(this) }
     private var offscreenPageLimit = 1
     private var selectedTabIndex = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(RankViewModel::class.java)
-
-        adapter = VpAdapter(this)
         mBinding.run {
             atbRankActivityToolbar.setBackButtonClickListener { finish() }
 

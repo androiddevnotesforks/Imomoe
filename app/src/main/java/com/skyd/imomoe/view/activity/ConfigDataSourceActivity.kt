@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
@@ -10,6 +9,7 @@ import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
@@ -20,14 +20,9 @@ import java.io.File
 
 
 class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>() {
-    private lateinit var viewModel: ConfigDataSourceViewModel
-    private lateinit var adapter: VarietyAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(ConfigDataSourceViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(DataSource1Proxy(
+    private val viewModel: ConfigDataSourceViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(DataSource1Proxy(
             onClickListener = { _, data, _ ->
                 if (data.selected) {
                     getString(R.string.the_data_source_is_using_now).showSnackbar(this)
@@ -38,6 +33,10 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                 true
             }
         )), viewModel.dataSourceList)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         callToImport(intent)
         mBinding.apply {

@@ -42,6 +42,7 @@
             android:id="@+id/iv_search_activity_clear_key_words"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:contentDescription="@string/clear_keywords"
             android:paddingVertical="15dp"
             android:paddingStart="7dp"
             android:paddingEnd="10dp"

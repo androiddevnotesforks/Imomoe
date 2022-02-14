@@ -16,10 +16,10 @@ class AnimeDownloadNotificationReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val action = intent?.action ?: ""
+        val action = intent?.action.orEmpty()
 
         val notificationId = intent?.getIntExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, -1) ?: -1
-        val key = intent?.getStringExtra("key") ?: ""
+        val key = intent?.getStringExtra("key").orEmpty()
 
         when (action) {
             "notification_canceled" -> {

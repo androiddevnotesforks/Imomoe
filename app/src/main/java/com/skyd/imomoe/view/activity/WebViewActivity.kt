@@ -17,7 +17,7 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        url = intent.getStringExtra("url") ?: ""
+        url = intent.getStringExtra("url").orEmpty()
         intent.getSerializableExtra("headers").let {
             headers = if (it == null) {
                 HashMap()

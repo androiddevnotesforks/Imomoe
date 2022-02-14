@@ -1,8 +1,9 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.databinding.ActivityDlnaBinding
@@ -20,8 +21,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
-    private lateinit var viewModel: UpnpViewModel
-    private lateinit var adapter: VarietyAdapter
+    private val viewModel: UpnpViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(UpnpDevice1Proxy(
+            onClickListener = { _, data, _ ->
+                val key = System.currentTimeMillis().toString()
+                DlnaControlActivity.deviceHashMap[key] = data
+                startActivity(
+                    Intent(this, DlnaControlActivity::class.java)
+                        .putExtra("url", url)
+                        .putExtra("title", title)
+                        .putExtra("deviceKey", key)
+                )
+            }
+        )), viewModel.deviceList)
+    }
     lateinit var title: String
     lateinit var url: String
     private val deviceRegistryListener: OnDeviceRegistryListenerDsl.() -> Unit = {
@@ -49,24 +63,10 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        url = intent.getStringExtra("url") ?: ""
-        title = intent.getStringExtra("title") ?: ""
+        url = intent.getStringExtra("url").orEmpty()
+        title = intent.getStringExtra("title").orEmpty()
 
         logI(TAG, url)
-
-        viewModel = ViewModelProvider(this).get(UpnpViewModel::class.java)
-        adapter = VarietyAdapter(mutableListOf(UpnpDevice1Proxy(
-            onClickListener = { _, data, _ ->
-                val key = System.currentTimeMillis().toString()
-                DlnaControlActivity.deviceHashMap[key] = data
-                startActivity(
-                    Intent(this, DlnaControlActivity::class.java)
-                        .putExtra("url", url)
-                        .putExtra("title", title)
-                        .putExtra("deviceKey", key)
-                )
-            }
-        )), viewModel.deviceList)
 
         mBinding.run {
             atbDlnaActivity.setBackButtonClickListener { finish() }
@@ -102,4 +102,10 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     }
 
     override fun getBinding(): ActivityDlnaBinding = ActivityDlnaBinding.inflate(layoutInflater)
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        adapter.notifyDataSetChanged()
+    }
 }

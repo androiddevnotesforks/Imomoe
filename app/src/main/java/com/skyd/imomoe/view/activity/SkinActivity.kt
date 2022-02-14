@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.activity
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -38,6 +39,7 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
                 SkinResourceProcessor.instance.skinSuffix == skinSuffix
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onChangeSkin() {
         super.onChangeSkin()
         initSkinData()
@@ -52,55 +54,45 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
 
     private fun initSkinData() {
         list.clear()
-        list.add(
-            SkinCover1Bean(
-                "",
-                getDefaultResColor(R.color.main_color_2_skin),
-                "粉色少女🎀",
-                usingSkin("", ""),
-                "",
-                ""
-            )
+        list += SkinCover1Bean(
+            "",
+            getDefaultResColor(R.color.main_color_2_skin),
+            "粉色少女🎀",
+            usingSkin("", ""),
+            "",
+            ""
         )
-        list.add(
-            SkinCover1Bean(
-                "",
-                getDefaultResColor(R.color.black),
-                "deep♂️dark♂️fantasy",
-                usingSkin("", "_dark"),
-                "",
-                "_dark"
-            )
+        list += SkinCover1Bean(
+            "",
+            getDefaultResColor(R.color.black),
+            "deep♂️dark♂️fantasy",
+            usingSkin("", "_dark"),
+            "",
+            "_dark"
         )
-        list.add(
-            SkinCover1Bean(
-                "",
-                getDefaultResColor(R.color.main_color_2_skin_blue),
-                "♂️深蓝幻想",
-                usingSkin("", "_blue"),
-                "",
-                "_blue"
-            )
+        list += SkinCover1Bean(
+            "",
+            getDefaultResColor(R.color.main_color_2_skin_blue),
+            "♂️深蓝幻想",
+            usingSkin("", "_blue"),
+            "",
+            "_blue"
         )
-        list.add(
-            SkinCover1Bean(
-                "",
-                getDefaultResColor(R.color.main_color_2_skin_lemon),
-                "柠檬酸🍋",
-                usingSkin("", "_lemon"),
-                "",
-                "_lemon"
-            )
+        list += SkinCover1Bean(
+            "",
+            getDefaultResColor(R.color.main_color_2_skin_lemon),
+            "柠檬酸🍋",
+            usingSkin("", "_lemon"),
+            "",
+            "_lemon"
         )
-        list.add(
-            SkinCover1Bean(
-                "",
-                getDefaultResColor(R.color.main_color_2_skin_sweat_soybean),
-                "流汗黄豆😅",
-                usingSkin("", "_sweat_soybean"),
-                "",
-                "_sweat_soybean"
-            )
+        list += SkinCover1Bean(
+            "",
+            getDefaultResColor(R.color.main_color_2_skin_sweat_soybean),
+            "流汗黄豆😅",
+            usingSkin("", "_sweat_soybean"),
+            "",
+            "_sweat_soybean"
         )
     }
 }

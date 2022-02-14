@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
@@ -23,12 +23,20 @@ import com.skyd.imomoe.viewmodel.ClassifyViewModel
 
 
 class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
-    private lateinit var viewModel: ClassifyViewModel
+    private val viewModel: ClassifyViewModel by viewModels()
     private var lastRefreshTime: Long = System.currentTimeMillis() - 500
-    private lateinit var spinnerAdapter: ArrayAdapter<ClassifyBean>
-    private lateinit var classifyTabAdapter: VarietyAdapter
+    private val spinnerAdapter: ArrayAdapter<ClassifyBean> by lazy {
+        ArrayAdapter(this, R.layout.item_spinner_item_1)
+    }
+    private val classifyTabAdapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(ClassifyTab1Proxy(
+            onClickListener = { _, data, _ -> classifyTabClicked(data) }
+        )), classifyTabList)
+    }
     private val classifyTabList: MutableList<Any> = ArrayList()
-    private lateinit var classifyAdapter: VarietyAdapter
+    private val classifyAdapter: VarietyAdapter by lazy {
+        VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.classifyList)
+    }
     private var classifyTabTitle: String = ""       //如 地区
     private var classifyTitle: String = ""          //如 大陆
     private var currentPartUrl: String = ""
@@ -37,19 +45,11 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(ClassifyViewModel::class.java)
-
-        currentPartUrl = intent.getStringExtra("partUrl") ?: ""
-        classifyTabTitle = intent.getStringExtra("classifyTabTitle") ?: ""
-        classifyTitle = intent.getStringExtra("classifyTitle") ?: ""
+        currentPartUrl = intent.getStringExtra("partUrl").orEmpty()
+        classifyTabTitle = intent.getStringExtra("classifyTabTitle").orEmpty()
+        classifyTitle = intent.getStringExtra("classifyTitle").orEmpty()
 
         mBinding.atbClassifyActivityToolbar.setBackButtonClickListener { finish() }
-
-        spinnerAdapter = ArrayAdapter(this, R.layout.item_spinner_item_1)
-        classifyTabAdapter = VarietyAdapter(mutableListOf(ClassifyTab1Proxy(
-            onClickListener = { _, data, _ -> classifyTabClicked(data) }
-        )), classifyTabList)
-        classifyAdapter = VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.classifyList)
 
         mBinding.run {
             srlClassifyActivity.setOnRefreshListener {
@@ -83,7 +83,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
             spinnerClassifyActivity.adapter = spinnerAdapter
             spinnerClassifyActivity.setOnItemSelectedListener {
-                onItemSelected { parent, view, position, id ->
+                onItemSelected { _, view, position, _ ->
                     if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2_skin))
                     // 为什么下面注释的代码不能替代以下三行呢？？
 //                    classifyTabAdapter.smartNotifyDataSetChanged(
@@ -188,5 +188,12 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         ).toString()
         classifyTitle = data.title
         tabSelected(data.actionUrl)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onChangeSkin() {
+        super.onChangeSkin()
+        classifyAdapter.notifyDataSetChanged()
+        classifyTabAdapter.notifyDataSetChanged()
     }
 }

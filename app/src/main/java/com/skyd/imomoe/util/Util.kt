@@ -52,10 +52,15 @@ import com.skyd.imomoe.ext.sharedPreferences
 object Util {
 
     fun openBrowser(url: String) {
-        val uri: Uri = Uri.parse(url)
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        intent.flags = FLAG_ACTIVITY_NEW_TASK
-        App.context.startActivity(intent)
+        try {
+            val uri: Uri = Uri.parse(url)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            intent.flags = FLAG_ACTIVITY_NEW_TASK
+            App.context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+            App.context.getString(R.string.no_browser_found, url).showToast(Toast.LENGTH_LONG)
+        }
     }
 
     fun String.toEncodedUrl(): String {

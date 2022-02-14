@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
@@ -27,7 +27,7 @@ import kotlinx.coroutines.*
 
 
 class SettingActivity : BaseActivity<ActivitySettingBinding>() {
-    private val viewModel: SettingViewModel by lazy { ViewModelProvider(this).get(SettingViewModel::class.java) }
+    private val viewModel: SettingViewModel by viewModels()
     private var selfUpdateCheck = false
 
     @SuppressLint("SetTextI18n")

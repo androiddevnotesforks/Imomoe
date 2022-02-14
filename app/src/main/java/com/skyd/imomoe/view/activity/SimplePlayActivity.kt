@@ -31,8 +31,8 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
 
         setFullScreen(window)
 
-        url = intent.getStringExtra("url") ?: ""
-        title = intent.getStringExtra("title") ?: ""
+        url = intent.getStringExtra("url").orEmpty()
+        title = intent.getStringExtra("title").orEmpty()
 
         init()
 

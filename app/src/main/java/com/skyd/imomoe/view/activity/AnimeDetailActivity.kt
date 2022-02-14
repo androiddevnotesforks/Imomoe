@@ -1,11 +1,11 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.res.Configuration
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
@@ -37,17 +37,9 @@ import kotlin.random.Random
 
 
 class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
-    private lateinit var viewModel: AnimeDetailViewModel
-    private lateinit var adapter: VarietyAdapter
-    override var statusBarSkin: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setTransparentStatusBar(window, isDark = false)
-
-        viewModel = ViewModelProvider(this).get(AnimeDetailViewModel::class.java)
-        adapter = VarietyAdapter(
+    private val viewModel: AnimeDetailViewModel by viewModels()
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(
             mutableListOf(
                 Header1Proxy(color = Header1Proxy.WHITE),
                 AnimeDescribe1Proxy(),
@@ -91,11 +83,17 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                             Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
                         else Util.process(this, data.actionUrl, data.actionUrl)
                     })
-            ),
-            viewModel.animeDetailList
+            ), viewModel.animeDetailList
         )
+    }
+    override var statusBarSkin: Boolean = false
 
-        viewModel.partUrl = intent.getStringExtra("partUrl") ?: ""
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setTransparentStatusBar(window, isDark = false)
+
+        viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
 
         mBinding.atbAnimeDetailActivityToolbar.run {
             setBackButtonClickListener { finish() }
@@ -160,13 +158,9 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onChangeSkin() {
         super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
         adapter.notifyDataSetChanged()
     }
 

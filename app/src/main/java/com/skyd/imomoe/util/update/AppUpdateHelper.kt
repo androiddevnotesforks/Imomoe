@@ -3,6 +3,7 @@ package com.skyd.imomoe.util.update
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import com.afollestad.materialdialogs.MaterialDialog
+import com.skyd.imomoe.R
 import com.skyd.imomoe.model.AppUpdateModel
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.ext.formatSize
@@ -70,13 +71,13 @@ class AppUpdateHelper private constructor() {
                     text = this.toString().toHtml()
                 )
             }
-            positiveButton(text = "下载更新") {
+            positiveButton(res = R.string.download_update) {
                 openBrowser(
                     AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl
                         ?: return@positiveButton
                 )
             }
-            negativeButton(text = "取消") {
+            negativeButton(res = R.string.cancel) {
                 dismiss()
                 AppUpdateModel.status.value = AppUpdateStatus.LATER
             }
