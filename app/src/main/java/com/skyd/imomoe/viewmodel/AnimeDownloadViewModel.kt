@@ -2,6 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.skyd.imomoe.App
+import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover7Bean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
@@ -13,12 +15,12 @@ import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.ext.toMD5
+import com.skyd.imomoe.util.showToast
 import java.io.File
 
 
 class AnimeDownloadViewModel : ViewModel() {
-    var animeCover7List: MutableList<Any> = ArrayList()
-    var mldAnimeCoverList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldAnimeCoverList: MutableLiveData<List<Any>?> = MutableLiveData()
 
     fun getAnimeCover() {
         request(request = {
@@ -29,7 +31,7 @@ class AnimeDownloadViewModel : ViewModel() {
                     new = true
                     f
                 })
-            animeCover7List.clear()
+            val list: MutableList<Any> = ArrayList()
             for (i: Int in 0..1) {
                 files[i]?.let {
                     for (file in it) {
@@ -38,8 +40,8 @@ class AnimeDownloadViewModel : ViewModel() {
                                 //查找文件名不以.temp结尾的文件
                                 !s.endsWith(".temp") && !s.endsWith(".xml")
                             }?.size
-                            animeCover7List.add(
-                                animeCover7List.size, AnimeCover7Bean(
+                            list.add(
+                                AnimeCover7Bean(
                                     Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
                                     title = file.name,
                                     size = file.formatSize(),
@@ -51,7 +53,13 @@ class AnimeDownloadViewModel : ViewModel() {
                     }
                 }
             }
-        }, success = { mldAnimeCoverList.postValue(true) })
+            list
+        }, success = {
+            mldAnimeCoverList.postValue(it)
+        }, error = {
+            mldAnimeCoverList.postValue(null)
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
     }
 
     fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
@@ -128,9 +136,13 @@ class AnimeDownloadViewModel : ViewModel() {
                     )
                 }
                 list.sortWith(EpisodeTitleComparator())
-                animeCover7List.clear()
-                animeCover7List.addAll(list)
+                list
             }
-        }, success = { mldAnimeCoverList.postValue(true) })
+        }, success = {
+            mldAnimeCoverList.postValue(it)
+        }, error = {
+            mldAnimeCoverList.postValue(null)
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
     }
 }

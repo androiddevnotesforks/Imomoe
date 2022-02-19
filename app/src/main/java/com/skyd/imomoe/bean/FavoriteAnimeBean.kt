@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.view.adapter.variety.Diff
 import java.io.Serializable
 
 @Entity(tableName = Const.Database.AppDataBase.FAVORITE_ANIME_TABLE_NAME)
@@ -23,4 +24,12 @@ class FavoriteAnimeBean(      //下面的url都是partUrl
     var lastEpisodeUrl: String? = null,        //上次看到哪一集
     @ColumnInfo(name = "lastEpisode")
     var lastEpisode: String? = null
-) : BaseBean, Serializable
+) : BaseBean, Serializable, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is FavoriteAnimeBean -> false
+        actionUrl == o.actionUrl && animeUrl == o.animeUrl && animeTitle == o.animeTitle &&
+                time == o.time && cover == o.cover && lastEpisodeUrl == o.lastEpisodeUrl &&
+                lastEpisode == o.lastEpisode -> true
+        else -> false
+    }
+}

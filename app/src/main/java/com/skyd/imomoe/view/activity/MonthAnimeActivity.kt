@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
@@ -15,9 +14,7 @@ import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
     private var partUrl: String = ""
     private val viewModel: MonthAnimeViewModel by viewModels()
-    private val adapter: VarietyAdapter by lazy {
-        VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.monthAnimeList)
-    }
+    private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover3Proxy())) }
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,27 +38,28 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
                     srlMonthAnimeActivity.closeHeaderOrFooter()
                 }
             }
-            srlMonthAnimeActivity.setOnLoadMoreListener {
-                viewModel.pageNumberBean?.let {
-                    viewModel.getMonthAnimeData(it.actionUrl, isRefresh = false)
-                    return@setOnLoadMoreListener
-                }
-                mBinding.srlMonthAnimeActivity.finishLoadMore()
-                getString(R.string.no_more_info).showToast()
-            }
+            srlMonthAnimeActivity.setOnLoadMoreListener { viewModel.loadMoreMonthAnimeData() }
         }
 
         viewModel.mldMonthAnimeList.observe(this) {
             mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
-            if (it) {
-                hideLoadFailedTip()
-            } else {
+            if (it == null) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
                     viewModel.getMonthAnimeData(partUrl)
                     hideLoadFailedTip()
                 }
+            } else {
+                hideLoadFailedTip()
             }
-            adapter.notifyDataSetChanged()
+            adapter.dataList = it ?: emptyList()
+        }
+
+        viewModel.mldLoadMoreMonthAnimeList.observe(this) {
+            mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
+            if (it != null) {
+                hideLoadFailedTip()
+                adapter.dataList += it
+            }
         }
 
         mBinding.srlMonthAnimeActivity.autoRefresh()

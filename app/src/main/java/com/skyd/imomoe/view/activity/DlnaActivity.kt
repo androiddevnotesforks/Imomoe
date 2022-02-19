@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.databinding.ActivityDlnaBinding
@@ -13,15 +12,12 @@ import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.OnDeviceRegistryListenerDsl
 import com.skyd.imomoe.util.dlna.dmc.registerDeviceListener
 import com.skyd.imomoe.util.dlna.dmc.unregisterListener
-import com.skyd.imomoe.util.logI
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.UpnpDevice1Proxy
-import com.skyd.imomoe.viewmodel.UpnpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
-    private val viewModel: UpnpViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(UpnpDevice1Proxy(
             onClickListener = { _, data, _ ->
@@ -34,30 +30,22 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
                         .putExtra("deviceKey", key)
                 )
             }
-        )), viewModel.deviceList)
+        )))
     }
     lateinit var title: String
     lateinit var url: String
     private val deviceRegistryListener: OnDeviceRegistryListenerDsl.() -> Unit = {
         onDeviceRemoved { device ->
-            val index = viewModel.deviceList.indexOf(device)
-            if (index != -1) {
-                viewModel.deviceList.removeAt(index)
-                adapter.notifyItemRemoved(index)
+            if (adapter.dataList.contains(device)) {
+                adapter.dataList -= device
             }
         }
 
         onDeviceAdded { device ->
-            val index = viewModel.deviceList.indexOf(device)
-            if (index == -1) {
-                viewModel.deviceList.add(device)
-                adapter.notifyItemInserted(viewModel.deviceList.size - 1)
+            if (!adapter.dataList.contains(device)) {
+                adapter.dataList += device
             }
         }
-    }
-
-    companion object {
-        const val TAG = "DlnaActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,8 +53,6 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
 
         url = intent.getStringExtra("url").orEmpty()
         title = intent.getStringExtra("title").orEmpty()
-
-        logI(TAG, url)
 
         mBinding.run {
             atbDlnaActivity.setBackButtonClickListener { finish() }

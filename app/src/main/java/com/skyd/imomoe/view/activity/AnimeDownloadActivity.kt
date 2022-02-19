@@ -23,9 +23,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
     private var directoryName = ""
     private var path = 0
     private val viewModel: AnimeDownloadViewModel by viewModels()
-    private val adapter: VarietyAdapter by lazy {
-        VarietyAdapter(mutableListOf(AnimeCover7Proxy()), viewModel.animeCover7List)
-    }
+    private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover7Proxy())) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,12 +57,10 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         }
 
         viewModel.mldAnimeCoverList.observe(this) {
-            if (it) {
-                mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
-                if (viewModel.animeCover7List.size == 0) {
-                    showLoadFailedTip(getString(R.string.no_download_video), null)
-                }
-                adapter.notifyDataSetChanged()
+            mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
+            if (it != null) {
+                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_download_video))
+                adapter.dataList = it
             }
         }
 

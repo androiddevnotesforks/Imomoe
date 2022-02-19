@@ -3,7 +3,6 @@ package com.skyd.imomoe.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.bean.DataSourceFileBean
-import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.RetrofitManager
@@ -12,9 +11,7 @@ import java.io.File
 
 
 class ConfigDataSourceViewModel : ViewModel() {
-    var dataSourceList: MutableList<Any> = ArrayList()
-    var mldDataSourceList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
-        MutableLiveData()
+    var mldDataSourceList: MutableLiveData<List<Any>?> = MutableLiveData()
 
     fun resetDataSource() = setDataSource(DataSourceManager.DEFAULT_DATA_SOURCE)
 
@@ -39,22 +36,20 @@ class ConfigDataSourceViewModel : ViewModel() {
         request(request = {
             val directory = File(directoryPath)
             if (!directory.isDirectory) {
-                mldDataSourceList.postValue(ResponseDataType.FAILED to ArrayList())
+                mldDataSourceList.postValue(ArrayList())
             } else {
                 val jarList = directory.listFiles { _, name ->
                     name.endsWith(".ads", true) ||
                             name.endsWith(".jar", true)
                 }
-                mldDataSourceList.postValue(
-                    ResponseDataType.REFRESH to (jarList ?: emptyArray())
-                        .map {
-                            DataSourceFileBean(
-                                "", it, it.name == DataSourceManager.dataSourceName
-                            )
-                        }
-                        .toMutableList()
+                mldDataSourceList.postValue((jarList ?: emptyArray())
+                    .map {
+                        DataSourceFileBean(
+                            "", it, it.name == DataSourceManager.dataSourceName
+                        )
+                    }.toList()
                 )
             }
-        }, error = { mldDataSourceList.postValue(ResponseDataType.FAILED to ArrayList()) })
+        }, error = { mldDataSourceList.postValue(null) })
     }
 }

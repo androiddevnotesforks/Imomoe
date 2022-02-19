@@ -16,7 +16,7 @@ import com.skyd.skin.core.SkinResourceProcessor
 
 class SkinActivity : BaseActivity<ActivitySkinBinding>() {
     private val list: MutableList<Any> = ArrayList()
-    private val adapter: VarietyAdapter = VarietyAdapter(mutableListOf(SkinCover1Proxy()), list)
+    private val adapter: VarietyAdapter = VarietyAdapter(mutableListOf(SkinCover1Proxy()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,5 +94,6 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             "",
             "_sweat_soybean"
         )
+        adapter.dataList = list
     }
 }

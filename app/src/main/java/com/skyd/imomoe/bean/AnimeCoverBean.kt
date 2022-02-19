@@ -1,5 +1,8 @@
 package com.skyd.imomoe.bean
 
+import com.skyd.imomoe.view.adapter.variety.Diff
+
+
 class AnimeCover1Bean(
     override var actionUrl: String,
     // 网页地址
@@ -7,12 +10,25 @@ class AnimeCover1Bean(
     var title: String,
     var cover: ImageBean,
     var episode: String
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover1Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title &&
+                cover == o.cover && episode == o.episode -> true
+        else -> false
+    }
+}
 
 class AnimeCover2Bean(
     override var actionUrl: String,
     var title: String
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover2Bean -> false
+        actionUrl == o.actionUrl && title == o.title -> true
+        else -> false
+    }
+}
 
 class AnimeCover3Bean(
     override var actionUrl: String,
@@ -23,7 +39,14 @@ class AnimeCover3Bean(
     var episode: String,
     var describe: String,
     var animeType: List<AnimeTypeBean>
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover3Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title && cover == o.cover &&
+                episode == o.episode && describe == o.describe && animeType == o.animeType -> true
+        else -> false
+    }
+}
 
 class AnimeCover4Bean(
     override var actionUrl: String,
@@ -31,7 +54,13 @@ class AnimeCover4Bean(
     var url: String,
     var title: String,
     var cover: ImageBean
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover4Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title && cover == o.cover -> true
+        else -> false
+    }
+}
 
 class AnimeCover5Bean(
     override var actionUrl: String,
@@ -41,7 +70,14 @@ class AnimeCover5Bean(
     var area: AnimeAreaBean,
     var date: String,
     var episodeClickable: AnimeEpisodeDataBean
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover5Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title && area == o.area &&
+                date == o.date && episodeClickable == o.episodeClickable -> true
+        else -> false
+    }
+}
 
 class AnimeCover6Bean(
     override var actionUrl: String,
@@ -49,7 +85,14 @@ class AnimeCover6Bean(
     var cover: ImageBean,
     var describe: String,
     var episodeClickable: AnimeEpisodeDataBean?
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover6Bean -> false
+        actionUrl == o.actionUrl && title == o.title && cover == o.cover &&
+                describe == o.describe && episodeClickable == o.episodeClickable -> true
+        else -> false
+    }
+}
 
 class AnimeCover7Bean(
     override var actionUrl: String,
@@ -59,7 +102,14 @@ class AnimeCover7Bean(
     // 0：/storage/emulated/0/Android/data/packagename/files
     // 1：/storage/emulated/0/
     var path: Int = 0
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover7Bean -> false
+        actionUrl == o.actionUrl && title == o.title && size == o.size &&
+                episodeCount == o.episodeCount && path == o.path -> true
+        else -> false
+    }
+}
 
 typealias AnimeCover8Bean = FavoriteAnimeBean
 
@@ -70,14 +120,27 @@ class AnimeCover10Bean(
     var url: String,
     var title: String,
     var episodeClickable: AnimeEpisodeDataBean?
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover10Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title &&
+                episodeClickable == o.episodeClickable -> true
+        else -> false
+    }
+}
 
 class AnimeCover11Bean(
     override var actionUrl: String,
     // 网页地址
     var url: String,
     var title: String
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover11Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title -> true
+        else -> false
+    }
+}
 
 class AnimeCover12Bean(
     override var actionUrl: String,
@@ -85,4 +148,11 @@ class AnimeCover12Bean(
     var url: String,
     var title: String,
     var episodeClickable: AnimeEpisodeDataBean
-) : BaseBean
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean = when {
+        o !is AnimeCover12Bean -> false
+        actionUrl == o.actionUrl && url == o.url && title == o.title &&
+                episodeClickable == o.episodeClickable -> true
+        else -> false
+    }
+}

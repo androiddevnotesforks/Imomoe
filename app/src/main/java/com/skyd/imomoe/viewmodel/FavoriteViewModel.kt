@@ -10,8 +10,7 @@ import com.skyd.imomoe.util.showToast
 
 
 class FavoriteViewModel : ViewModel() {
-    var favoriteList: MutableList<Any> = ArrayList()
-    var mldFavoriteList: MutableLiveData<Boolean> = MutableLiveData()
+    var mldFavoriteList: MutableLiveData<List<Any>?> = MutableLiveData()
 
     fun getFavoriteData() {
         request(request = {
@@ -21,12 +20,9 @@ class FavoriteViewModel : ViewModel() {
                 // 负数表示按时间戳从大到小排列
                 -o1.time.compareTo(o2.time)
             }
-            favoriteList.clear()
-            favoriteList.addAll(it)
-            mldFavoriteList.postValue(true)
+            mldFavoriteList.postValue(it)
         }, error = {
-            favoriteList.clear()
-            mldFavoriteList.postValue(false)
+            mldFavoriteList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }

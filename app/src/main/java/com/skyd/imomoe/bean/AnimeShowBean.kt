@@ -23,4 +23,19 @@ class ImageBean(       //图片bean，带有referer信息
 
     @SerializedName("referer")
     var referer: String
-) : BaseBean
+) : BaseBean {
+    override fun equals(other: Any?): Boolean {
+        return when {
+            other !is ImageBean -> false
+            actionUrl == other.actionUrl && url == other.url && referer == other.referer -> true
+            else -> false
+        }
+    }
+
+    override fun hashCode(): Int {
+        var result = actionUrl.hashCode()
+        result = 31 * result + url.hashCode()
+        result = 31 * result + referer.hashCode()
+        return result
+    }
+}

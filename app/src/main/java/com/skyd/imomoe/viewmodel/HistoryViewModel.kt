@@ -11,10 +11,9 @@ import com.skyd.imomoe.util.showToast
 
 
 class HistoryViewModel : ViewModel() {
-    var historyList: MutableList<Any> = ArrayList()
-    var mldHistoryList: MutableLiveData<Boolean> = MutableLiveData()
-    var mldDeleteHistory: MutableLiveData<Int> = MutableLiveData()
-    var mldDeleteAllHistory: MutableLiveData<Int> = MutableLiveData()
+    var mldHistoryList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var mldDeleteHistory: MutableLiveData<HistoryBean?> = MutableLiveData()
+    var mldDeleteAllHistory: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getHistoryList() {
         request(request = { getAppDataBase().historyDao().getHistoryList() }, success = {
@@ -22,12 +21,9 @@ class HistoryViewModel : ViewModel() {
                 // 负数表示按时间戳从大到小排列
                 -o1.time.compareTo(o2.time)
             }
-            historyList.clear()
-            historyList.addAll(it)
-            mldHistoryList.postValue(true)
+            mldHistoryList.postValue(it)
         }, error = {
-            historyList.clear()
-            mldHistoryList.postValue(false)
+            mldHistoryList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -36,22 +32,18 @@ class HistoryViewModel : ViewModel() {
         request(request = {
             getAppDataBase().historyDao().deleteHistory(historyBean.animeUrl)
         }, success = {
-            val index = historyList.indexOf(historyBean)
-            historyList.removeAt(index)
-            mldDeleteHistory.postValue(index)
+            mldDeleteHistory.postValue(historyBean)
         }, error = {
-            mldDeleteHistory.postValue(-1)
+            mldDeleteHistory.postValue(null)
             "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }
 
     fun deleteAllHistory() {
         request(request = { getAppDataBase().historyDao().deleteAllHistory() }, success = {
-            val itemCount: Int = historyList.size
-            historyList.clear()
-            mldDeleteAllHistory.postValue(itemCount)
+            mldDeleteAllHistory.postValue(true)
         }, error = {
-            mldDeleteAllHistory.postValue(0)
+            mldDeleteAllHistory.postValue(false)
             "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }

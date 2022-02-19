@@ -19,7 +19,7 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(AnimeCover9Proxy(
             onDeleteButtonClickListener = { _, data, _ -> viewModel.deleteHistory(data) }
-        )), viewModel.historyList)
+        )))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,32 +39,32 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
 
 
         viewModel.mldHistoryList.observe(this) {
-            adapter.notifyDataSetChanged()
             mBinding.srlHistoryActivity.isRefreshing = false
-            if (it) {
-                if (viewModel.historyList.isEmpty()) showLoadFailedTip(
-                    getString(R.string.no_history),
-                    null
-                )
+            if (it != null) {
+                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_history))
+                adapter.dataList = it
             }
         }
 
         viewModel.mldDeleteHistory.observe(this) {
-            if (viewModel.historyList.isEmpty()) showLoadFailedTip(
-                getString(R.string.no_history),
-                null
-            )
-            if (it >= 0) adapter.notifyItemRemoved(it)
+            if (it != null) {
+                adapter.dataList.let { list ->
+                    if (list.contains(it) && list.size == 1) {
+                        showLoadFailedTip(getString(R.string.no_history))
+                    }
+                    adapter.dataList -= it
+                }
+            }
         }
 
         viewModel.mldDeleteAllHistory.observe(this) {
-            showLoadFailedTip(getString(R.string.no_history), null)
-            if (it > 0) adapter.notifyItemRangeRemoved(0, it)
+            showLoadFailedTip(getString(R.string.no_history))
+            adapter.dataList = emptyList()
         }
 
         mBinding.atbHistoryActivity.run {
             setButtonClickListener(0) {
-                if (viewModel.historyList.isEmpty()) return@setButtonClickListener
+                if (adapter.dataList.isEmpty()) return@setButtonClickListener
                 MaterialDialog(this@HistoryActivity).show {
                     icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
                     title(res = R.string.warning)

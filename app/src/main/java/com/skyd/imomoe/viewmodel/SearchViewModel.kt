@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
@@ -20,29 +19,38 @@ class SearchViewModel : ViewModel() {
         DataSourceManager.create(ISearchModel::class.java) ?: SearchModel()
     }
 
-    var searchResultList: MutableList<Any> = ArrayList()
-    var mldSearchResultList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
-        MutableLiveData()
+    var searchHistoryList: List<Any> = ArrayList()
+    var mldSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var mldLoadMoreSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()
     var keyWord = ""
-    var searchHistoryList: MutableList<Any> = ArrayList()
-    var mldSearchHistoryList: MutableLiveData<Boolean> = MutableLiveData()
-    var mldInsertCompleted: MutableLiveData<Boolean> = MutableLiveData()
-    var mldUpdateCompleted: MutableLiveData<Int> = MutableLiveData()
-    var mldDeleteCompleted: MutableLiveData<Int> = MutableLiveData()
-    var pageNumberBean: PageNumberBean? = null
+    var mldSearchHistoryList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var mldInsertCompleted: MutableLiveData<List<SearchHistoryBean>?> = MutableLiveData()
+    var mldDeleteCompleted: MutableLiveData<SearchHistoryBean> = MutableLiveData()
+    private var pageNumberBean: PageNumberBean? = null
 
-    fun getSearchData(keyWord: String, isRefresh: Boolean = true, partUrl: String = "") {
+    fun getSearchData(keyWord: String, partUrl: String = "") {
         request(request = { searchModel.getSearchData(keyWord, partUrl) }, success = {
             pageNumberBean = it.second
             this@SearchViewModel.keyWord = keyWord
-            mldSearchResultList.postValue(
-                Pair(
-                    if (isRefresh) ResponseDataType.REFRESH
-                    else ResponseDataType.LOAD_MORE, it.first
-                )
-            )
+            mldSearchResultList.postValue(it.first)
         }, error = {
-            mldSearchResultList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
+            mldSearchResultList.postValue(null)
+            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+        })
+    }
+
+    fun loadMoreSearchData() {
+        val partUrl = pageNumberBean?.actionUrl
+        if (partUrl == null) {
+            App.context.getString(R.string.no_more_info).showToast()
+            mldLoadMoreSearchResultList.postValue(ArrayList())
+            return
+        }
+        request(request = { searchModel.getSearchData(keyWord, partUrl) }, success = {
+            pageNumberBean = it.second
+            mldLoadMoreSearchResultList.postValue(it.first)
+        }, error = {
+            mldLoadMoreSearchResultList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -51,45 +59,46 @@ class SearchViewModel : ViewModel() {
         request(request = {
             getAppDataBase().searchHistoryDao().getSearchHistoryList()
         }, success = {
-            searchHistoryList.clear()
-            searchHistoryList.addAll(it)
+            searchHistoryList = it
+            mldSearchHistoryList.postValue(it)
         }, error = {
+            mldSearchHistoryList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
-        }, finish = { mldSearchHistoryList.postValue(true) })
+        })
     }
 
     fun insertSearchHistory(searchHistoryBean: SearchHistoryBean) {
         request(request = {
-            if (searchHistoryList.isEmpty()) searchHistoryList.addAll(
-                getAppDataBase().searchHistoryDao().getSearchHistoryList()
-            )
-            val index = searchHistoryList.indexOf(searchHistoryBean)
+            val list = getAppDataBase().searchHistoryDao().getSearchHistoryList().toMutableList()
+            val index = list.indexOf(searchHistoryBean)
             if (index != -1) {
-                searchHistoryList.removeAt(index)
-                searchHistoryList.add(0, searchHistoryBean)
+                list.removeAt(index)
+                list.add(0, searchHistoryBean)
                 getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.title)
                 getAppDataBase().searchHistoryDao().insertSearchHistory(searchHistoryBean)
             } else {
-                searchHistoryList.add(0, searchHistoryBean)
+                list.add(0, searchHistoryBean)
                 getAppDataBase().searchHistoryDao().insertSearchHistory(searchHistoryBean)
             }
-        }, finish = { mldInsertCompleted.postValue(true) })
-    }
-
-    fun updateSearchHistory(searchHistoryBean: SearchHistoryBean, itemPosition: Int) {
-        request(request = {
-            searchHistoryList[itemPosition] = searchHistoryBean
-            getAppDataBase().searchHistoryDao().updateSearchHistory(searchHistoryBean)
-        }, finish = {
-            mldUpdateCompleted.postValue(itemPosition)
+            list
+        }, success = {
+            searchHistoryList = it
+            mldInsertCompleted.postValue(it)
+        }, error = {
+            searchHistoryList = emptyList()
+            mldInsertCompleted.postValue(null)
         })
     }
 
-    fun deleteSearchHistory(itemPosition: Int) {
+    fun deleteSearchHistory(searchHistoryBean: SearchHistoryBean) {
         request(request = {
-            val searchHistoryBean = searchHistoryList.removeAt(itemPosition)
-            if (searchHistoryBean is SearchHistoryBean)
-                getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
-        }, finish = { mldDeleteCompleted.postValue(itemPosition) })
+            getAppDataBase().searchHistoryDao().deleteSearchHistory(searchHistoryBean.timeStamp)
+        }, success = {
+            searchHistoryList =
+                searchHistoryList.toMutableList().apply { remove(searchHistoryBean) }
+            mldDeleteCompleted.postValue(searchHistoryBean)
+        }, error = {
+            mldDeleteCompleted.postValue(null)
+        })
     }
 }

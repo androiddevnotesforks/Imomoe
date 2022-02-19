@@ -68,9 +68,8 @@ class HorizontalRecyclerView1Proxy(
                             height = animeEpisodeHeight,
                             width = animeEpisodeWidth
                         )
-                    ),
-                    data.episodeList.toMutableList()
-                )
+                    )
+                ).apply { dataList = data.episodeList }
             } else adapter?.notifyDataSetChanged()
         }
         holder.ivHorizontalRecyclerView1More.setOnClickListener {

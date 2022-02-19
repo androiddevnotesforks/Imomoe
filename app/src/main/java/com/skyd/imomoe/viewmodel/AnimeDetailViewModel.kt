@@ -19,9 +19,7 @@ class AnimeDetailViewModel : ViewModel() {
     }
     var cover: ImageBean = ImageBean("", "", "")
     var title: String = ""
-    var animeDetailList: MutableList<Any> = ArrayList()
-    var mldAnimeDetailList: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> =
-        MutableLiveData()
+    var mldAnimeDetailList: MutableLiveData<List<Any>?> = MutableLiveData()
     var partUrl: String = ""
     var mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -30,10 +28,10 @@ class AnimeDetailViewModel : ViewModel() {
         request(request = { animeDetailModel.getAnimeDetailData(partUrl) }, success = {
             cover = it.first
             title = it.second
-            mldAnimeDetailList.postValue(Pair(ResponseDataType.REFRESH, it.third))
+            mldAnimeDetailList.postValue(it.third)
             refreshAnimeCover()     // 更新数据库中番剧封面地址
         }, error = {
-            mldAnimeDetailList.postValue(Pair(ResponseDataType.FAILED, ArrayList()))
+            mldAnimeDetailList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }

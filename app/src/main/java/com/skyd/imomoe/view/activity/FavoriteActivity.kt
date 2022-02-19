@@ -15,9 +15,7 @@ import com.skyd.imomoe.viewmodel.FavoriteViewModel
 
 class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
     private val viewModel: FavoriteViewModel by viewModels()
-    private val adapter: VarietyAdapter by lazy {
-        VarietyAdapter(mutableListOf(AnimeCover8Proxy()), viewModel.favoriteList)
-    }
+    private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover8Proxy())) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +34,9 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
 
         viewModel.mldFavoriteList.observe(this) {
             mBinding.srlFavoriteActivity.isRefreshing = false
-            if (it) {
-                if (viewModel.favoriteList.isEmpty()) showLoadFailedTip(
-                    getString(R.string.no_favorite),
-                    null
-                )
-                adapter.notifyDataSetChanged()
+            if (it != null) {
+                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_favorite))
+                adapter.dataList = it
             }
         }
 

@@ -9,6 +9,7 @@ import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
@@ -25,7 +26,28 @@ import org.greenrobot.eventbus.ThreadMode
 
 class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), EventBusSubscriber {
     private val viewModel: EverydayAnimeViewModel by viewModels()
-    private lateinit var adapter: VarietyAdapter
+    private val adapter: VarietyAdapter by lazy {
+        VarietyAdapter(
+            mutableListOf(
+                GridRecyclerView1Proxy(
+                    onBindViewHolder = { holder, data, _ ->
+                        val rvLayoutParams = holder.rvGridRecyclerView1.layoutParams
+                        rvLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                        holder.rvGridRecyclerView1.layoutManager =
+                            WrapLinearLayoutManager(requireActivity())
+                        holder.rvGridRecyclerView1.layoutParams = rvLayoutParams
+                        holder.rvGridRecyclerView1.isNestedScrollingEnabled = true
+                        val adapter = VarietyAdapter(
+                            mutableListOf(AnimeCover12Proxy())
+                        ).apply { dataList = data }
+                        holder.rvGridRecyclerView1.adapter = adapter
+                    },
+                    height = ViewGroup.LayoutParams.MATCH_PARENT,
+                    width = ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            )
+        )
+    }
     private var offscreenPageLimit = 1
     private var selectedTabIndex = -1
     private var lastRefreshTime: Long = System.currentTimeMillis()
@@ -46,6 +68,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             tlEverydayAnimeFragment.addOnTabSelectedListener {
                 onTabSelected { tab -> selectedTabIndex = tab?.position ?: return@onTabSelected }
             }
+            mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
         }
 
         viewModel.mldHeader.observe(viewLifecycleOwner) {
@@ -56,49 +79,17 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             mBinding.srlEverydayAnimeFragment.isRefreshing = false
 
             if (it != null) {
-                viewModel.everydayAnimeList.apply {
-                    clear()
-                    if (this@EverydayAnimeFragment::adapter.isInitialized)
-                        adapter.notifyDataSetChanged()
-                    addAll(it)
-                    if (this@EverydayAnimeFragment::adapter.isInitialized)
-                        adapter.notifyDataSetChanged()
-                }
                 val selectedTabIndex = this.selectedTabIndex
                 activity?.let { _ ->
                     //先隐藏
                     ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 1f, 0f)
                         .setDuration(270).start()
-                    //添加rv
-                    if (!this::adapter.isInitialized) {
-                        adapter = VarietyAdapter(
-                            mutableListOf(
-                                GridRecyclerView1Proxy(
-                                    onBindViewHolder = { holder, data, _ ->
-                                        val rvLayoutParams = holder.rvGridRecyclerView1.layoutParams
-                                        rvLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                                        holder.rvGridRecyclerView1.layoutManager =
-                                            WrapLinearLayoutManager(requireActivity())
-                                        holder.rvGridRecyclerView1.layoutParams = rvLayoutParams
-                                        holder.rvGridRecyclerView1.isNestedScrollingEnabled = true
-                                        val adapter = VarietyAdapter(
-                                            mutableListOf(AnimeCover12Proxy()),
-                                            data.toMutableList()
-                                        )
-                                        holder.rvGridRecyclerView1.adapter = adapter
-                                    },
-                                    height = ViewGroup.LayoutParams.MATCH_PARENT,
-                                    width = ViewGroup.LayoutParams.MATCH_PARENT
-                                )
-                            ), viewModel.everydayAnimeList.toMutableList()
-                        )
-                        mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
-                    }
+                    adapter.dataList = it
                     val tabLayoutMediator = TabLayoutMediator(
                         mBinding.tlEverydayAnimeFragment,
                         mBinding.vp2EverydayAnimeFragment.getViewPager()
                     ) { tab, position ->
-                        tab.text = viewModel.tabList[position].title
+                        tab.text = viewModel.mldTabList.value?.get(position)?.title
                     }
                     tabLayoutMediator.attach()
 
@@ -122,12 +113,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                 }
                 hideLoadFailedTip()
             } else {
-                viewModel.everydayAnimeList.apply {
-                    val count = size
-                    clear()
-                    if (this@EverydayAnimeFragment::adapter.isInitialized)
-                        adapter.notifyItemRangeRemoved(0, count)
-                }
+                adapter.dataList = emptyList()
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
                     viewModel.getEverydayAnimeData()
                     hideLoadFailedTip()
@@ -164,6 +150,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     @SuppressLint("NotifyDataSetChanged")
     override fun onChangeSkin() {
         super.onChangeSkin()
-        if (this::adapter.isInitialized) adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
     }
 }

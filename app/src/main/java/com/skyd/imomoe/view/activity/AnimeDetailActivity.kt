@@ -19,7 +19,6 @@ import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
-import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
@@ -83,7 +82,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                             Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
                         else Util.process(this, data.actionUrl, data.actionUrl)
                     })
-            ), viewModel.animeDetailList
+            )
         )
     }
     override var statusBarSkin: Boolean = false
@@ -132,7 +131,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
         viewModel.mldAnimeDetailList.observe(this, Observer {
             mBinding.srlAnimeDetailActivity.isRefreshing = false
-            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.animeDetailList)
+            adapter.dataList = it ?: emptyList()
             mBinding.atbAnimeDetailActivityToolbar.setButtonEnable(1, true)
 
             if (viewModel.cover.url.isBlank()) return@Observer
@@ -186,8 +185,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 else Util.process(this, data.actionUrl, data.actionUrl)
                 bottomSheetDialog.dismiss()
             }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
-            dataList.toMutableList()
-        )
+        ).apply { this.dataList = dataList }
         return bottomSheetDialog
     }
 }

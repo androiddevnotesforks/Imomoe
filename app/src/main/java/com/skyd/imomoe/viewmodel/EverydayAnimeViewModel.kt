@@ -22,11 +22,8 @@ class EverydayAnimeViewModel : ViewModel() {
     var header: String = ""
     var selectedTabIndex = -1
     var mldHeader: MutableLiveData<String> = MutableLiveData()
-    var tabList: MutableList<TabBean> = ArrayList()
     var mldTabList: MutableLiveData<List<TabBean>> = MutableLiveData()
-    var everydayAnimeList: MutableList<List<Any>> = ArrayList()
-    var mldEverydayAnimeList: MutableLiveData<MutableList<List<Any>>?> =
-        MutableLiveData()
+    var mldEverydayAnimeList: MutableLiveData<List<List<Any>>?> = MutableLiveData()
 
     fun getEverydayAnimeData() {
         request(request = {
@@ -38,14 +35,11 @@ class EverydayAnimeViewModel : ViewModel() {
                 Calendar.getInstance(Locale.getDefault()).get(Calendar.DAY_OF_WEEK)
             ) - 1
             header = it.third
-            tabList.clear()
-            tabList.addAll(it.first)
-            mldTabList.postValue(tabList)
+            mldTabList.postValue(it.first)
             mldEverydayAnimeList.postValue(it.second)
             mldHeader.postValue(header)
         }, error = {
             selectedTabIndex = -1
-            tabList.clear()
             mldEverydayAnimeList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast(Toast.LENGTH_LONG)
         })

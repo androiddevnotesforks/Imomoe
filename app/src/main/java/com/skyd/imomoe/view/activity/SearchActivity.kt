@@ -10,13 +10,11 @@ import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.util.Util.showKeyboard
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -29,42 +27,29 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     private lateinit var tvCircleProgressTextTip1: TextView
     private val viewModel: SearchViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
-        VarietyAdapter(mutableListOf(AnimeCover3Proxy()), viewModel.searchResultList)
-    }
-    private val historyAdapter: VarietyAdapter by lazy {
         VarietyAdapter(
-            mutableListOf(SearchHistoryHeader1Proxy(), SearchHistory1Proxy(
+            mutableListOf(AnimeCover3Proxy(), SearchHistoryHeader1Proxy(), SearchHistory1Proxy(
                 onClickListener = { _, data, _ -> search(data.title) },
-                onDeleteButtonClickListener = { holder, _, _ ->
-                    // 用holder.bindingAdapterPosition代替position，因为在removed后position会变
-                    viewModel.deleteSearchHistory(holder.bindingAdapterPosition)
-                }
-            )),
-            viewModel.searchHistoryList
+                onDeleteButtonClickListener = { _, data, _ -> viewModel.deleteSearchHistory(data) }
+            ))
         )
     }
+    private var searchHistoryListShow: Boolean = true
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val pageNumber = intent.getStringExtra("pageNumber") ?: ""
-        viewModel.keyWord = intent.getStringExtra("keyWord") ?: ""
+        val pageNumber = intent.getStringExtra("pageNumber").orEmpty()
+        viewModel.keyWord = intent.getStringExtra("keyWord").orEmpty()
 
         mBinding.run {
             srlSearchActivity.setEnableRefresh(false)
-            srlSearchActivity.setOnLoadMoreListener {
-                viewModel.pageNumberBean?.let {
-                    viewModel.getSearchData(viewModel.keyWord, isRefresh = false, it.actionUrl)
-                    return@setOnLoadMoreListener
-                }
-                mBinding.srlSearchActivity.finishLoadMore()
-                getString(R.string.no_more_info).showToast()
-            }
+            srlSearchActivity.setOnLoadMoreListener { viewModel.loadMoreSearchData() }
 
             rvSearchActivity.layoutManager = LinearLayoutManager(this@SearchActivity)
-            rvSearchActivity.setHasFixedSize(true)
-            setSearchAdapter()
+            rvSearchActivity.adapter = adapter
+            showSearchHistory()
 
             etSearchActivitySearch.doOnTextChanged { text, _, _, _ ->
                 if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
@@ -72,9 +57,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 if (text == null || text.isEmpty()) {
                     tvSearchActivityTip.text = getString(R.string.search_history)
                     ivSearchActivityClearKeyWords.gone()
-                    viewModel.searchResultList.clear()
-                    setHistoryAdapter()
-                    historyAdapter.notifyDataSetChanged()
+                    showSearchHistory()
                 } else ivSearchActivityClearKeyWords.visible()
             }
 
@@ -85,39 +68,45 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
 
         viewModel.mldSearchResultList.observe(this) {
             mBinding.srlSearchActivity.closeHeaderOrFooter()
-            if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
-            // 仅在搜索框不为“”时展示搜索结果
-            if (mBinding.etSearchActivitySearch.text.toString().isNotEmpty()) {
-                if (mBinding.rvSearchActivity.adapter != adapter) setSearchAdapter()
-                adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.searchResultList)
-                when (it.first) {
-                    ResponseDataType.REFRESH, ResponseDataType.LOAD_MORE -> {
-                        mBinding.tvSearchActivityTip.text = getString(
-                            R.string.search_activity_tip, viewModel.keyWord,
-                            viewModel.searchResultList.size
-                        )
-                    }
-                    ResponseDataType.FAILED -> {
-                        mBinding.tvSearchActivityTip.text =
-                            getString(R.string.search_activity_failed)
-                    }
+            if (!searchHistoryListShow) {
+                if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
+                if (it != null) {
+                    mBinding.tvSearchActivityTip.text = getString(
+                        R.string.search_activity_tip, viewModel.keyWord, it.size
+                    )
+                    adapter.dataList = it
+                }
+            }
+        }
+
+        viewModel.mldLoadMoreSearchResultList.observe(this) {
+            mBinding.srlSearchActivity.closeHeaderOrFooter()
+            if (!searchHistoryListShow) {
+                if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
+                if (it != null) {
+                    mBinding.tvSearchActivityTip.text = getString(
+                        R.string.search_activity_tip,
+                        viewModel.keyWord,
+                        adapter.dataList.size + it.size
+                    )
+                    adapter.dataList += it
                 }
             }
         }
 
         viewModel.mldSearchHistoryList.observe(this) {
-            if (viewModel.searchResultList.size == 0) {
+            if (searchHistoryListShow) {
                 mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
-                setHistoryAdapter()
-                historyAdapter.notifyDataSetChanged()
+                adapter.dataList = it ?: emptyList()
             }
         }
 
         viewModel.mldDeleteCompleted.observe(this) {
-            if (viewModel.searchResultList.size == 0) {
-                setHistoryAdapter()
-                historyAdapter.notifyItemRemoved(it)
-            }
+            if (searchHistoryListShow && adapter.dataList.contains(it)) adapter.dataList -= it
+        }
+
+        viewModel.mldInsertCompleted.observe(this) {
+            if (searchHistoryListShow) adapter.dataList = it ?: emptyList()
         }
 
         mBinding.tvSearchActivityCancel.setOnClickListener { finish() }
@@ -165,30 +154,26 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 tvCircleProgressTextTip1 =
                     mLayoutCircleProgressTextTip1.findViewById(R.id.tv_circle_progress_text_tip_1)
             }
-            viewModel.searchResultList.clear()
             if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) tvCircleProgressTextTip1.gone()
-            setSearchAdapter()
+            showSearchResult()
+            adapter.dataList = emptyList()
         }
         viewModel.insertSearchHistory(
             SearchHistoryBean("", System.currentTimeMillis(), key)
         )
-        viewModel.getSearchData(key, isRefresh = true, partUrl = partUrl)
+        viewModel.getSearchData(key, partUrl = partUrl)
     }
 
-    private fun setSearchAdapter() {
-        mBinding.apply {
-            if (rvSearchActivity.adapter != adapter)
-                rvSearchActivity.adapter = adapter
-            srlSearchActivity.setEnableLoadMore(true)
-        }
+    private fun showSearchResult() {
+        searchHistoryListShow = false
+        adapter.dataList = emptyList()
+        mBinding.srlSearchActivity.setEnableLoadMore(true)
     }
 
-    private fun setHistoryAdapter() {
-        mBinding.apply {
-            if (rvSearchActivity.adapter != historyAdapter)
-                rvSearchActivity.adapter = historyAdapter
-            srlSearchActivity.setEnableLoadMore(false)
-        }
+    private fun showSearchHistory() {
+        searchHistoryListShow = true
+        adapter.dataList = viewModel.searchHistoryList.toList()
+        mBinding.srlSearchActivity.setEnableLoadMore(false)
     }
 
     override fun finish() {
@@ -199,9 +184,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onChangeSkin() {
         super.onChangeSkin()
-        when (mBinding.rvSearchActivity.adapter) {
-            adapter -> adapter.notifyDataSetChanged()
-            historyAdapter -> historyAdapter.notifyDataSetChanged()
-        }
+        adapter.notifyDataSetChanged()
     }
 }

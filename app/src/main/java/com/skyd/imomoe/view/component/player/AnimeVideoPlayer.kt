@@ -286,8 +286,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                             startDismissControlViewTimer()
                         }
                         true
-                    })),
-                    mutableListOf(
+                    }))
+                ).apply {
+                    dataList = mutableListOf(
                         Speed1Bean("", "0.5"),
                         Speed1Bean("", "0.75"),
                         Speed1Bean("", "1"),
@@ -295,7 +296,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                         Speed1Bean("", "1.5"),
                         Speed1Bean("", "2")
                     )
-                )
+                }
                 rvSpeed?.layoutManager = LinearLayoutManager(context)
                 rvSpeed?.adapter = adapter
             }

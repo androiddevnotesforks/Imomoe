@@ -1,10 +1,20 @@
 package com.skyd.imomoe.bean
 
+import com.skyd.imomoe.view.adapter.variety.Diff
+
 class ClassifyBean(
     override var actionUrl: String,
     var name: String,
     var classifyDataList: ArrayList<ClassifyTab1Bean>
-) : BaseBean {
+) : BaseBean, Diff {
+    override fun contentSameAs(o: Any?): Boolean {
+        return when {
+            o !is ClassifyBean -> false
+            actionUrl == o.actionUrl && name == o.name && classifyDataList == o.classifyDataList -> true
+            else -> false
+        }
+    }
+
     override fun toString(): String {
         return name.replace("：", "").replace(":", "")
     }

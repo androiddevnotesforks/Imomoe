@@ -8,9 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.ResponseDataType
 import com.skyd.imomoe.databinding.FragmentRankBinding
-import com.skyd.imomoe.ext.smartNotifyDataSetChanged
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
@@ -23,7 +21,7 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
     private var partUrl: String = ""
     private val viewModel: RankListViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
-        VarietyAdapter(mutableListOf(AnimeCover3Proxy(), AnimeCover11Proxy()), viewModel.rankList)
+        VarietyAdapter(mutableListOf(AnimeCover3Proxy(), AnimeCover11Proxy()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,31 +45,29 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
             rvRankFragment.setHasFixedSize(true)
             rvRankFragment.adapter = adapter
-            srlRankFragment.setOnRefreshListener {
-                viewModel.getRankListData(partUrl)
-            }
-            srlRankFragment.setOnLoadMoreListener {
-                viewModel.pageNumberBean?.let {
-                    viewModel.getRankListData(it.actionUrl, isRefresh = false)
-                    return@setOnLoadMoreListener
-                }
-                mBinding.srlRankFragment.finishLoadMore()
-                getString(R.string.no_more_info).showToast()
-            }
+            srlRankFragment.setOnRefreshListener { viewModel.getRankListData(partUrl) }
+            srlRankFragment.setOnLoadMoreListener { viewModel.loadMoreRankListData() }
         }
 
         viewModel.mldRankData.observe(viewLifecycleOwner) {
             mBinding.srlRankFragment.closeHeaderOrFooter()
-            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.rankList)
-
-            when (it.first) {
-                ResponseDataType.REFRESH, ResponseDataType.LOAD_MORE -> hideLoadFailedTip()
-                ResponseDataType.FAILED -> {
-                    showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                        viewModel.getRankListData(partUrl)
-                        hideLoadFailedTip()
-                    }
+            if (it == null) {
+                adapter.dataList = emptyList()
+                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
+                    viewModel.getRankListData(partUrl)
+                    hideLoadFailedTip()
                 }
+            } else {
+                adapter.dataList = it
+                hideLoadFailedTip()
+            }
+        }
+
+        viewModel.mldLoadMoreRankData.observe(viewLifecycleOwner) {
+            mBinding.srlRankFragment.closeHeaderOrFooter()
+            if (it != null) {
+                adapter.dataList += it
+                hideLoadFailedTip()
             }
         }
 

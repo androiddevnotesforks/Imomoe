@@ -19,7 +19,7 @@ import com.skyd.imomoe.view.adapter.variety.proxy.More1Proxy
 
 class MoreFragment : BaseFragment<FragmentMoreBinding>() {
     private val list: MutableList<Any> = ArrayList()
-    private val adapter: VarietyAdapter = VarietyAdapter(mutableListOf(More1Proxy()), list)
+    private val adapter: VarietyAdapter = VarietyAdapter(mutableListOf(More1Proxy()))
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMoreBinding =
         FragmentMoreBinding.inflate(inflater, container, false)
@@ -56,6 +56,7 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         mBinding.run {
             rvMoreFragment.layoutManager = GridLayoutManager(activity, 2)
             rvMoreFragment.adapter = adapter
+            adapter.dataList = list
         }
     }
 

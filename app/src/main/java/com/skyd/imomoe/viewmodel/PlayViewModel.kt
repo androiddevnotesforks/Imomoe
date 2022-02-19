@@ -36,8 +36,7 @@ class PlayViewModel : ViewModel() {
         }
     var animeCover: ImageBean? = null
     var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
-    var mldPlayBean: MutableLiveData<Pair<ResponseDataType, MutableList<Any>>> = MutableLiveData()
-    var playBeanDataList: MutableList<Any> = ArrayList()
+    var mldPlayDataList: MutableLiveData<List<Any>?> = MutableLiveData()
 
     // 当前播放集数的索引
     var currentEpisodeIndex = 0
@@ -100,9 +99,10 @@ class PlayViewModel : ViewModel() {
             episodesList.clear()
             episodesList.addAll(it.second)
             playBean = it.third
-            mldPlayBean.postValue(ResponseDataType.REFRESH to it.first)
+            mldPlayDataList.postValue(it.first)
             mldEpisodesList.postValue(true)
         }, error = {
+            mldPlayDataList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }

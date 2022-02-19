@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.bean.License1Bean
+import com.skyd.imomoe.bean.LicenseHeader1Bean
 import com.skyd.imomoe.config.Const.ActionUrl
 import com.skyd.imomoe.databinding.ActivityLicenseBinding
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -14,12 +15,12 @@ import com.skyd.imomoe.view.adapter.variety.proxy.LicenseHeader1Proxy
 class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
     private val list: MutableList<Any> = ArrayList()
     private val adapter: VarietyAdapter =
-        VarietyAdapter(mutableListOf(LicenseHeader1Proxy(), License1Proxy()), list)
+        VarietyAdapter(mutableListOf(LicenseHeader1Proxy(), License1Proxy()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        list += License1Bean("", "", "", "")
+        list += LicenseHeader1Bean()
         list += License1Bean(
             ActionUrl.ANIME_BROWSER,
             "https://github.com/jhy/jsoup",
@@ -110,6 +111,7 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             "AkDanmaku",
             "MIT License"
         )
+        adapter.dataList = list
 
         mBinding.run {
             atbLicenseActivity.setBackButtonClickListener { finish() }

@@ -2,17 +2,29 @@ package com.skyd.imomoe.view.adapter.variety
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.util.EmptyViewHolder
 import com.skyd.skin.SkinManager
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import java.lang.reflect.ParameterizedType
 
 class VarietyAdapter(
     private var proxyList: MutableList<Proxy<*, *>> = mutableListOf(),
-    var dataList: MutableList<Any> = mutableListOf()
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RecyclerView.Adapter<ViewHolder>() {
+    private val dataDiffer = AsyncListDiffer(AdapterListUpdateCallback(this), dispatcher)
+
+    // 一定要保证set时传入的List是新的List，与旧的引用不能相同，里面的Item引用最好也不要相同
+    var dataList: List<Any>
+        set(value) {
+            dataDiffer.submitList(value)
+        }
+        get() = dataDiffer.oldList
 
     var action: ((Any?) -> Unit)? = null
     var onAttachedToRecyclerView: ((recyclerView: RecyclerView) -> Unit)? = null
@@ -43,6 +55,7 @@ class VarietyAdapter(
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        dataDiffer.cancel()
         onDetachedFromRecyclerView?.invoke(recyclerView)
     }
 

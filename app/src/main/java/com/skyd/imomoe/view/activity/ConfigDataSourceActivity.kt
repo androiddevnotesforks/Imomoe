@@ -32,7 +32,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                 deleteDataSource(data)
                 true
             }
-        )), viewModel.dataSourceList)
+        )))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,9 +47,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             atbDataSourceConfigActivity.setButtonClickListener(0) { resetDataSource() }
         }
 
-        viewModel.mldDataSourceList.observe(this) {
-            adapter.smartNotifyDataSetChanged(it.first, it.second, viewModel.dataSourceList)
-        }
+        viewModel.mldDataSourceList.observe(this) { adapter.dataList = (it ?: emptyList()) }
 
         viewModel.getDataSourceList()
     }
@@ -87,7 +85,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
     }
 
-    fun resetDataSource(runBeforeReset: (() -> Unit)? = null) {
+    private fun resetDataSource(runBeforeReset: (() -> Unit)? = null) {
         MaterialDialog(this).show {
             icon(drawable = Util.getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
             title(res = R.string.warning)
@@ -102,7 +100,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
     }
 
-    fun setDataSource(name: String, showDialog: Boolean = true) {
+    private fun setDataSource(name: String, showDialog: Boolean = true) {
         if (!showDialog) {
             viewModel.setDataSource(name)
             return
@@ -121,7 +119,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
     }
 
-    fun deleteDataSource(bean: DataSourceFileBean) {
+    private fun deleteDataSource(bean: DataSourceFileBean) {
         MaterialDialog(this).show {
             icon(drawable = Util.getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
             title(res = R.string.warning)
@@ -139,7 +137,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
     }
 
-    fun askOverwriteFile(needRestartApp: Boolean = false, callback: (Boolean) -> Unit) {
+    private fun askOverwriteFile(needRestartApp: Boolean = false, callback: (Boolean) -> Unit) {
         MaterialDialog(this).show {
             icon(drawable = Util.getResDrawable(R.drawable.ic_insert_drive_file_main_color_2_24_skin))
             title(res = R.string.warning)
@@ -153,7 +151,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
     }
 
-    fun importDataSource(
+    private fun importDataSource(
         uri: Uri,
         onSuccess: ((File) -> Unit)? = null,
         onFailed: ((Exception) -> Unit)? = null
@@ -171,8 +169,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             cancelable(false)
             positiveButton(res = R.string.ok) {
                 try {
-                    val sourceFileName = uri.getPathFromURI(this@ConfigDataSourceActivity)!!
-                        .substringAfterLast("/")
+                    val sourceFileName = uri.path!!.substringAfterLast("/")
                     val directory = File(DataSourceManager.getJarDirectory())
                     if (!directory.exists()) directory.mkdirs()
                     val target = File(
