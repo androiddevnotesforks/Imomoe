@@ -80,13 +80,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_gray_transparent_angle_90"
         android:orientation="horizontal"
-        android:paddingTop="20dp"
+        android:paddingTop="17dp"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller">
 
         <SeekBar
             android:id="@+id/progress"
             android:layout_width="0px"
-            android:layout_height="17dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
@@ -114,7 +114,7 @@
             android:layout_gravity="center_vertical"
             android:text="/"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/total"
@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="12sp"
+            android:textSize="14sp"
             app:typeface="bPRTypeface"
             tools:text="00:00" />
 
@@ -136,13 +136,13 @@
             android:paddingEnd="8dp"
             android:text="@string/play_speed"
             android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textSize="14sp"
             app:typeface="bPRTypeface" />
 
         <ImageView
             android:id="@+id/fullscreen"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:adjustViewBounds="true"
             android:paddingStart="6dp"

@@ -1,21 +1,24 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
-import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
-import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
-import android.content.Intent
-import android.net.Uri
-import android.widget.Toast
-import androidx.activity.viewModels
 import com.skyd.imomoe.bean.DataSourceFileBean
-import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
+import com.skyd.imomoe.ext.copyTo
+import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.ext.showSnackbar
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.util.*
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.DataSource1Proxy
+import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
 import java.io.File
 
 
@@ -71,10 +74,15 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                             viewModel.getDataSourceList()
                         },
                         onFailed = {
-                            getString(
-                                R.string.import_data_source_failed,
-                                it.message
-                            ).showSnackbar(this@ConfigDataSourceActivity)
+                            val msg =
+                                "建议更换其他文件管理器后重试。" + (if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
+                                    "Android 6及以下，请勿使用MT管理器打开ads文件，失败原因未知！若有解决方案，欢迎到Github仓库提PR"
+                                else "") + "\n\n" + it.message
+                            MaterialDialog(this@ConfigDataSourceActivity).show {
+                                title(res = R.string.import_data_source_failed)
+                                message(text = msg)
+                                positiveButton(res = R.string.ok)
+                            }
                         }
                     )
                 }
@@ -186,7 +194,12 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                             )
                             else {
                                 Thread {
-                                    uri.copyTo(target)
+                                    try {
+                                        uri.copyTo(target)
+                                    } catch (e: Exception) {
+                                        runOnUiThread { onFailed?.invoke(e) }
+                                        return@Thread
+                                    }
                                     if (needRestartApp) {
                                         viewModel.clearDataSourceCache()
                                         Util.restartApp()
@@ -199,7 +212,12 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                     } else {
                         target.createNewFile()
                         Thread {
-                            uri.copyTo(target)
+                            try {
+                                uri.copyTo(target)
+                            } catch (e: Exception) {
+                                runOnUiThread { onFailed?.invoke(e) }
+                                return@Thread
+                            }
                             runOnUiThread { onSuccess?.invoke(target) }
                         }.start()
                     }

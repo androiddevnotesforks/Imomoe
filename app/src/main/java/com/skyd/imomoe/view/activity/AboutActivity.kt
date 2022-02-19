@@ -109,13 +109,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             rlAboutActivityTestDevice.setOnClickListener {
                 MaterialDialog(this@AboutActivity).show {
                     title(res = R.string.test_device)
-                    message(
-                        text = "Physical Device: \nAndroid 10\n" +
-                                "OPPO A57 Android 6.0.1\n\n" +
-                                "Virtual Machine: \nPixel Android 5\n" +
-                                "Pixel 4 Android 7\n" +
-                                "Pixel 2 Android 12\n"
-                    )
+                    message(text = "Physical Device: \nAndroid 10")
                     positiveButton(res = R.string.ok) { dismiss() }
                 }
             }

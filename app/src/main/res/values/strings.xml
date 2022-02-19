@@ -158,7 +158,7 @@
     <string name="do_not_overwrite_file">不要覆盖，取消导入</string>
     <string name="default_data_source">默认数据源</string>
     <string name="import_data_source">确认导入数据源？</string>
-    <string name="import_data_source_failed">导入数据源失败：%s</string>
+    <string name="import_data_source_failed">导入数据源失败</string>
     <string name="import_data_source_success">导入数据源成功：%s</string>
     <string name="ask_delete_data_source">确认删除此数据源？</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
