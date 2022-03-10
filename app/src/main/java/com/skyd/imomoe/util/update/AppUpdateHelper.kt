@@ -1,6 +1,6 @@
 package com.skyd.imomoe.util.update
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import androidx.lifecycle.LiveData
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
@@ -35,7 +35,7 @@ class AppUpdateHelper private constructor() {
         AppUpdateModel.checkUpdate()
     }
 
-    fun noticeUpdate(activity: AppCompatActivity) {
+    fun noticeUpdate(activity: Activity) {
         listOf<Function<Unit>> { checkUpdate() }
         val updateBean = AppUpdateModel.updateBean ?: return
         MaterialDialog(activity).show {

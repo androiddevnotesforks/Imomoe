@@ -34,11 +34,10 @@ import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
-import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
@@ -166,7 +165,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             rvPlayActivity.adapter = adapter
 
             srlPlayActivity.setOnRefreshListener { viewModel.getPlayData() }
-            srlPlayActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
 
             avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
         }

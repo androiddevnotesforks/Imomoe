@@ -3,6 +3,7 @@ package com.skyd.imomoe
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import com.efs.sdk.launch.LaunchManager
 import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
@@ -24,6 +25,13 @@ import com.umeng.message.entity.UMessage
 
 
 class App : Application() {
+
+    override fun attachBaseContext(base: Context?) {
+        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, true)
+        super.attachBaseContext(base)
+        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, false)
+    }
+
     override fun onCreate() {
         super.onCreate()
         context = this
@@ -63,6 +71,8 @@ class App : Application() {
 
         // 初始化自定义皮肤属性
         SkinUtil.initCustomAttrIds()
+
+        LaunchManager.onTraceApp(this, LaunchManager.APP_ON_CREATE, false)
     }
 
     companion object {

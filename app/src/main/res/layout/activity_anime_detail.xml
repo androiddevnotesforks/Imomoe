@@ -28,17 +28,18 @@
         app:titleColor="@color/foreground_white_skin"
         app:toolBarBackground="@color/foreground_transparent_skin" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_anime_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/atb_anime_detail_activity_toolbar"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        app:colorScheme="@color/main_color_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_anime_detail_activity_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 </RelativeLayout>

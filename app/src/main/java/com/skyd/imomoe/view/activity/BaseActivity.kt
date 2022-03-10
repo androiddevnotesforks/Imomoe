@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
 import androidx.viewbinding.ViewBinding
+import com.efs.sdk.launch.LaunchManager
 import com.skyd.skin.core.SkinBaseActivity
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.Util.getResColor
@@ -26,7 +27,8 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
         setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
         mBinding = getBinding()
         setContentView(mBinding.root)
-        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
+
+        LaunchManager.onTraceApp(application, LaunchManager.PAGE_ON_CREATE, false)
     }
 
     override fun onChangeSkin() {
@@ -43,12 +45,26 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
     override fun onStart() {
         super.onStart()
         if (this is EventBusSubscriber) EventBus.getDefault().register(this)
+
+        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_START, true)
     }
 
     override fun onStop() {
         super.onStop()
         if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this)
+
+        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_STOP, true)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RE_START, true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RESUME, false)
     }
 
     protected open fun getLoadFailedTipView(): ViewStub? = null

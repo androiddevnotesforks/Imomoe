@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util.downloadanime
+package com.skyd.imomoe.util.download.downloadanime
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +10,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.util.download.DownloadStatus
 import com.skyd.imomoe.util.showToast
 import org.w3c.dom.Element
 import org.w3c.dom.Node
@@ -26,7 +27,7 @@ import javax.xml.transform.stream.StreamResult
 class AnimeDownloadHelper private constructor() {
 
     companion object {
-        val downloadHashMap: HashMap<String, MutableLiveData<AnimeDownloadStatus>> = HashMap()
+        val downloadHashMap: HashMap<String, MutableLiveData<DownloadStatus>> = HashMap()
         val instance: AnimeDownloadHelper by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
             AnimeDownloadHelper()
         }
@@ -229,7 +230,7 @@ class AnimeDownloadHelper private constructor() {
         }
     }
 
-    fun getDownloadStatus(key: String): LiveData<AnimeDownloadStatus>? = downloadHashMap[key]
+    fun getDownloadStatus(key: String): LiveData<DownloadStatus>? = downloadHashMap[key]
 
     fun downloadAnime(
         activity: AppCompatActivity,
@@ -244,12 +245,12 @@ class AnimeDownloadHelper private constructor() {
         }
         activity.requestManageExternalStorage {
             onGranted {
-                if (downloadHashMap[key]?.value == AnimeDownloadStatus.DOWNLOADING) {
+                if (downloadHashMap[key]?.value == DownloadStatus.DOWNLOADING) {
                     "已经在下载啦...".showToast()
                     return@onGranted
                 }
-                val status = MutableLiveData<AnimeDownloadStatus>()
-                status.value = AnimeDownloadStatus.DOWNLOADING
+                val status = MutableLiveData<DownloadStatus>()
+                status.value = DownloadStatus.DOWNLOADING
                 downloadHashMap[key] = status
                 activity.startService(
                     Intent(activity, AnimeDownloadService::class.java)

@@ -17,18 +17,19 @@
         app:titleColor="@color/foreground_white_skin"
         app:toolBarBackground="@color/main_color_2_skin" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_history_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/atb_history_activity">
+        android:layout_below="@id/atb_history_activity"
+        app:colorScheme="@color/main_color_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_history_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_history_activity_no_history"

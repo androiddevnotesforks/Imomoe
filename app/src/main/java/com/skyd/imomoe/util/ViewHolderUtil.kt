@@ -18,6 +18,15 @@ class DataSource1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivDataSource1Selected: ImageView = view.findViewById(R.id.iv_data_source_1_selected)
 }
 
+class DataSource2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvDataSource2Name: TextView = view.findViewById(R.id.tv_data_source_2_name)
+    val tvDataSource2Author: TextView = view.findViewById(R.id.tv_data_source_2_author)
+    val ivDataSource2Icon: ImageView = view.findViewById(R.id.iv_data_source_2_icon)
+    val tvDataSource2Describe: TextView = view.findViewById(R.id.tv_data_source_2_describe)
+    val tvDataSource2PublishAt: TextView = view.findViewById(R.id.tv_data_source_2_publish_at)
+    val tvDataSource2Version: TextView = view.findViewById(R.id.tv_data_source_2_version)
+}
+
 class GridRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rvGridRecyclerView1: RecyclerView = view.findViewById(R.id.rv_grid_recycler_view_1)
 }

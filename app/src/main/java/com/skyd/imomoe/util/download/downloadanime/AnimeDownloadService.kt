@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util.downloadanime
+package com.skyd.imomoe.util.download.downloadanime
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -21,10 +21,12 @@ import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.save2Xml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.skyd.imomoe.ext.toMD5
+import com.skyd.imomoe.util.download.DownloadStatus
+import com.skyd.imomoe.util.download.DownloadListener
 import com.skyd.imomoe.view.activity.MainActivity
 import kotlinx.coroutines.*
 import java.io.File
@@ -59,7 +61,7 @@ class AnimeDownloadService : Service() {
                     val title = folderAndFileName.split("/").last()
                     val file = File("$animeFilePath$animeDir/$fileName")
                     if (file.exists()) {
-                        downloadHashMap[key]?.postValue(AnimeDownloadStatus.COMPLETE)
+                        downloadHashMap[key]?.postValue(DownloadStatus.COMPLETE)
                         GlobalScope.launch(Dispatchers.IO) {
                             file.toMD5()?.let {
                                 val entity = AnimeDownloadEntity(it, title, fileName)
@@ -69,9 +71,9 @@ class AnimeDownloadService : Service() {
                         }
                         "${folderAndFileName}下载完成".showToast()
                     } else {
-                        if (downloadHashMap[key]?.value != AnimeDownloadStatus.CANCEL) {
+                        if (downloadHashMap[key]?.value != DownloadStatus.CANCEL) {
                             downloadHashMap[key]?.postValue(
-                                AnimeDownloadStatus.ERROR
+                                DownloadStatus.ERROR
                             )
                         }
                         "文件未找到，下载失败".showToast()
@@ -81,7 +83,7 @@ class AnimeDownloadService : Service() {
                 override fun error() {
                     super.error()
                     deleteNotification(key)
-                    downloadHashMap[key]?.postValue(AnimeDownloadStatus.ERROR)
+                    downloadHashMap[key]?.postValue(DownloadStatus.ERROR)
                 }
             })
             "开始下载${folderAndFileName}...".showToast()
@@ -107,7 +109,7 @@ class AnimeDownloadService : Service() {
         super.onDestroy()
         coroutineScope.cancel()
         for (key in downloadServiceHashMap.keys) {
-            downloadHashMap[key]?.postValue(AnimeDownloadStatus.CANCEL)
+            downloadHashMap[key]?.postValue(DownloadStatus.CANCEL)
             val file = File(animeFilePath + key)
             if (file.exists()) {
                 file.delete()
@@ -197,7 +199,7 @@ class AnimeDownloadService : Service() {
         listener: DownloadListener
     ) {
         val animeDir = folderAndFileNameHashMap[key]?.split("/")?.first()
-        downloadHashMap[key]?.postValue(AnimeDownloadStatus.DOWNLOADING)
+        downloadHashMap[key]?.postValue(DownloadStatus.DOWNLOADING)
         FileDownloader.getImpl().create(param)
             .setPath(animeFilePath + animeDir, true)
             .setListener(object : FileDownloadListener() {
@@ -205,7 +207,7 @@ class AnimeDownloadService : Service() {
                 }
 
                 override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                    if (downloadHashMap[key]?.value == AnimeDownloadStatus.CANCEL) {
+                    if (downloadHashMap[key]?.value == DownloadStatus.CANCEL) {
                         task?.let {
                             FileDownloader.getImpl().pause(it.id)
                         }
@@ -223,7 +225,7 @@ class AnimeDownloadService : Service() {
                 }
 
                 override fun error(task: BaseDownloadTask?, e: Throwable?) {
-                    downloadHashMap[key]?.postValue(AnimeDownloadStatus.ERROR)
+                    downloadHashMap[key]?.postValue(DownloadStatus.ERROR)
                     e?.printStackTrace()
                     e?.message?.showToast(Toast.LENGTH_LONG)
                     listener.error()

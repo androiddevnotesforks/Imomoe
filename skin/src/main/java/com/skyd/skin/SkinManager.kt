@@ -18,15 +18,9 @@ import android.view.Window
 import android.widget.*
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.tabs.TabLayout
-import com.scwang.smart.refresh.footer.BallPulseFooter
-import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.skin.core.SkinAttrsSet
 import com.skyd.skin.core.SkinPreferenceUtil
@@ -35,9 +29,7 @@ import com.skyd.skin.core.attrs.*
 import com.skyd.skin.core.listeners.ChangeCustomSkinListener
 import com.skyd.skin.core.listeners.ChangeSkinListener
 import java.lang.reflect.Constructor
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+
 
 object SkinManager {
     var KEY_SKIN_PATH = "skin_path"
@@ -426,9 +418,7 @@ object SkinManager {
     }
 
     fun setNavigation(activity: Activity, @ColorRes navigationBarColor: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.window.navigationBarColor = getColor(navigationBarColor)
-        }
+        activity.window.navigationBarColor = getColor(navigationBarColor)
     }
 
     fun setActionBar(activity: AppCompatActivity, @ColorRes actionBarColor: Int) {

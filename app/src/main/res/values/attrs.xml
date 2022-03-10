@@ -38,4 +38,9 @@
         <attr name="backTint" format="color" />
         <attr name="typeface" />
     </declare-styleable>
+
+    <declare-styleable name="VpSwipeRefreshLayout">
+        <!--圆圈颜色-->
+        <attr name="colorScheme" format="reference|color" />
+    </declare-styleable>
 </resources>

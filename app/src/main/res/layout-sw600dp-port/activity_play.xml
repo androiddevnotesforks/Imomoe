@@ -135,10 +135,11 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_play_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:colorScheme="@color/main_color_skin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.core.widget.NestedScrollView
@@ -211,5 +212,5 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

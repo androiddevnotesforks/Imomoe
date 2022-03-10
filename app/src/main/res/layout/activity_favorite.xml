@@ -16,11 +16,12 @@
         app:titleColor="@color/foreground_white_skin"
         app:toolBarBackground="@color/main_color_2_skin" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_favorite_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/atb_favorite_activity">
+        android:layout_below="@id/atb_favorite_activity"
+        app:colorScheme="@color/main_color_skin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_favorite_activity"
@@ -31,7 +32,7 @@
             android:paddingHorizontal="16dp"
             android:paddingTop="6dp"
             android:paddingBottom="6dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_favorite_activity_no_favorite"

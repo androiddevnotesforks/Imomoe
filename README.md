@@ -30,6 +30,8 @@
 
 ## [>>必看使用说明(自定义数据源)<<](doc/customdatasource/README.md)
 
+### 可以选择将自制数据源共享到[DataSourceRepository](https://github.com/SkyD666/DataSourceRepository)仓库
+
 ## [>>必看安全说明<<](#安全说明)
 
 ## [>>关于http网站或数据源的安全问题<<](doc/about_http_security.md)

@@ -25,9 +25,12 @@
     <string name="get_home_tab_data_failed">获取首页标签信息失败:(</string>
     <string name="setting">设置</string>
     <string name="about">关于</string>
+    <string name="uncheck_update">未检查</string>
     <string name="check_update">检查更新</string>
     <string name="current_version">当前版本 %s</string>
     <string name="check_update_failed">检查更新失败</string>
+    <string name="update_failed">更新失败</string>
+    <string name="delay_update">暂不更新</string>
     <string name="checking_update">正在检查更新…</string>
     <string name="find_new_version">发现新版本</string>
     <string name="is_latest_version">已是最新版本</string>
@@ -103,7 +106,7 @@
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>
-    <string name="night_mode_follow_system">跟随系统</string>
+    <string name="dark_mode_follow_system">深色模式跟随系统</string>
     <string name="light">浅色</string>
     <string name="dark">深色</string>
     <string name="follow_system">跟随系统</string>
@@ -195,6 +198,7 @@
     <string name="config_data_source_tip">点击数据源条目可使用数据源，点击右上角按钮可恢复默认数据源，长按数据源条目可删除数据源</string>
     <string name="invalid_data_source_suffix">无效数据源文件后缀：%s</string>
     <string name="the_data_source_is_using_now">正在使用此数据源！</string>
+    <string name="activity_is_not_config_data_source_activity">activity is not ConfigDataSourceActivity</string>
     <string name="close">关闭</string>
     <string name="danmaku_text_size_scale">弹幕字号</string>
     <string name="please_wait_video_loaded">请等待视频加载完毕…</string>
@@ -226,4 +230,7 @@
     <string name="download_update">下载更新</string>
     <string name="clear_keywords">清除搜索输入框</string>
     <string name="refresh_everyday_anime_widget">刷新每日番剧小组件</string>
+    <string name="local_data_source">本地数据源</string>
+    <string name="data_source_market">数据源商店</string>
+    <string name="basic_settings">基本设置</string>
 </resources>

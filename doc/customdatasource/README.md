@@ -72,6 +72,8 @@
 
 自己编写ads包(熟悉**Kotlin**，最好能够了解Android的基础知识)
 
+可以选择将自制数据源共享到[DataSourceRepository](https://github.com/SkyD666/DataSourceRepository)仓库。
+
 #### 1.实现您想要自定义数据的Kotlin接口
 
 包：**com.skyd.imomoe.model.interfaces**

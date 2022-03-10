@@ -1,6 +1,6 @@
 package com.skyd.imomoe.net
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.list.listItemsSingleChoice
@@ -63,7 +63,7 @@ object DnsServer {
                 .getString("dnsServer", null).apply { field = this }
         }
 
-    fun AppCompatActivity.selectDnsServer() {
+    fun Activity.selectDnsServer() {
         var initialSelection = -1
         defaultDnsServer.forEachIndexed { index, s ->
             if (s.equals(dnsServer)) initialSelection = index
@@ -82,7 +82,7 @@ object DnsServer {
         }
     }
 
-    fun AppCompatActivity.customDnsServer() {
+    fun Activity.customDnsServer() {
         MaterialDialog(this).input(hintRes = R.string.custom_dns_server_describe) { _, text ->
             val url = text.toString()
             runCatching {

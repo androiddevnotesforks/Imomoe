@@ -9,9 +9,9 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.util.comparator.EpisodeTitleComparator
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
-import com.skyd.imomoe.util.downloadanime.AnimeDownloadHelper.Companion.save2Xml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.ext.toMD5

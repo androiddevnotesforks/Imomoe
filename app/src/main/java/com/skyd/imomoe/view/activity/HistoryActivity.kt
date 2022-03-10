@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
-import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
@@ -28,9 +27,6 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
         mBinding.run {
             atbHistoryActivity.setBackButtonClickListener { finish() }
 
-            srlHistoryActivity.setColorSchemeColors(
-                this@HistoryActivity.getResColor(R.color.main_color_skin)
-            )
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 
             rvHistoryActivity.layoutManager = LinearLayoutManager(this@HistoryActivity)

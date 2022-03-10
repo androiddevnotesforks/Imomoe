@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
-import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover8Proxy
@@ -23,9 +22,6 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         mBinding.run {
             atbFavoriteActivity.setBackButtonClickListener { finish() }
 
-            srlFavoriteActivity.setColorSchemeColors(
-                this@FavoriteActivity.getResColor(R.color.main_color_skin)
-            )
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
             rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)
             rvFavoriteActivity.adapter = adapter

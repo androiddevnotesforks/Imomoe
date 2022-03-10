@@ -1,6 +1,7 @@
 package com.skyd.imomoe.util.skin
 
 import com.skyd.imomoe.R
+import com.skyd.imomoe.util.skin.attrs.ColorSchemeAttr
 import com.skyd.imomoe.util.skin.attrs.TitleColorAttr
 import com.skyd.imomoe.util.skin.attrs.ToolBarBackgroundAttr
 import com.skyd.skin.SkinManager
@@ -23,6 +24,16 @@ object SkinUtil {
             object : SkinManager.CustomSetSkinTagListener {
                 override fun setSkinTag(attrId: Int, resId: Int): Pair<String, SkinAttr>? {
                     if (resId != -1) return ToolBarBackgroundAttr().run {
+                        attrResourceRefId = resId
+                        Pair(tag(), this)
+                    }
+                    return null
+                }
+            })
+        SkinManager.addCustomAttrId(R.attr.colorScheme,
+            object : SkinManager.CustomSetSkinTagListener {
+                override fun setSkinTag(attrId: Int, resId: Int): Pair<String, SkinAttr>? {
+                    if (resId != -1) return ColorSchemeAttr().run {
                         attrResourceRefId = resId
                         Pair(tag(), this)
                     }

@@ -15,7 +15,6 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
@@ -126,7 +125,6 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             rvAnimeDetailActivityInfo.adapter = adapter
 
             srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData() }
-            srlAnimeDetailActivity.setColorSchemeResources(getSkinResourceId(R.color.main_color_skin))
         }
 
         viewModel.mldAnimeDetailList.observe(this, Observer {

@@ -27,6 +27,7 @@ dependencies {
     compileOnly deps.support.appcompat
     compileOnly deps.support.material
     compileOnly deps.support.swiperefreshlayout
+    compileOnly deps.support.preference
     compileOnly deps.smart.refresh_layout_kernel
     compileOnly deps.smart.refresh_header_material
     compileOnly deps.smart.refresh_footer_ball

@@ -1,4 +1,4 @@
-package com.skyd.imomoe.util.downloadanime
+package com.skyd.imomoe.util.download
 
 interface DownloadListener {
     fun complete(fileName: String)

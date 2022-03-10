@@ -185,11 +185,12 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
             android:id="@+id/srl_play_activity"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            app:colorScheme="@color/main_color_skin">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_play_activity"
@@ -199,6 +200,6 @@
                 android:paddingTop="7dp"
                 app:layout_constraintTop_toBottomOf="@id/view_play_activity_line_1" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
     </LinearLayout>
 </FrameLayout>

@@ -139,11 +139,19 @@
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />
         <service
-            android:name=".util.downloadanime.AnimeDownloadService"
+            android:name="com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
         <receiver
-            android:name=".util.downloadanime.AnimeDownloadNotificationReceiver"
+            android:name="com.skyd.imomoe.util.download.downloadanime.AnimeDownloadNotificationReceiver"
+            android:exported="false" />
+
+        <service
+            android:name="com.skyd.imomoe.util.download.datasource.DataSourceDownloadService"
+            android:enabled="true" />
+
+        <receiver
+            android:name="com.skyd.imomoe.util.download.datasource.DataSourceDownloadNotificationReceiver"
             android:exported="false" />
 
         <provider
