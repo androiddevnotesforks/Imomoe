@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
@@ -24,10 +25,12 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.*
@@ -50,6 +53,9 @@ import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
@@ -211,32 +217,27 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             mBinding.avpPlayActivity.setEpisodeAdapter(
                 VarietyAdapter(
                     mutableListOf(
-                        PlayerEpisode1Proxy(
-                            onBindViewHolder = { holder, data, index, _ ->
-                                holder.tvTitle.setTextColor(
-                                    getResColor(
-                                        if (data.title == viewModel.animeEpisodeDataBean.title)
-                                            R.color.unchanged_main_color_2_skin
-                                        else R.color.foreground_white_skin
-                                    )
-                                )
-                                holder.tvTitle.text = data.title
-                                if (index == viewModel.currentEpisodeIndex) {
-                                    (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
-                                        .rvEpisode?.scrollToPosition(index)
-                                }
-                                holder.itemView.setOnClickListener {
-                                    mBinding.avpPlayActivity.currentPlayer.run {
-                                        if (this is AnimeVideoPlayer) {
-                                            getRightContainer()?.gone()
-                                            // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
-                                            enableDismissControlViewTimer(true)
-                                        }
+                        PlayerEpisode1Proxy(onBindViewHolder = { holder, data, index, _ ->
+                            holder.tvTitle.text = data.title
+                            if (data.actionUrl == viewModel.animeEpisodeDataBean.actionUrl) {
+                                holder.tvTitle.setTextColor(getResColor(R.color.unchanged_main_color_2_skin))
+                                (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
+                                    .rvEpisode?.scrollToPosition(index)
+                            } else {
+                                holder.tvTitle.setTextColor(getResColor(R.color.foreground_white_skin))
+                            }
+                            holder.itemView.setOnClickListener {
+                                mBinding.avpPlayActivity.currentPlayer.run {
+                                    if (this is AnimeVideoPlayer) {
+                                        getRightContainer()?.gone()
+                                        // 因为右侧界面显示时，不在xx秒后隐藏界面，所以要恢复xx秒后隐藏控制界面
+                                        enableDismissControlViewTimer(true)
                                     }
-                                    viewModel.playAnotherEpisode(data.actionUrl, index)
                                 }
-                                true
-                            })
+                                viewModel.playAnotherEpisode(data.actionUrl, index)
+                            }
+                            true
+                        })
                     )
                 ).apply { dataList = viewModel.episodesList }
             )
@@ -255,17 +256,22 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
         mBinding.tvPlayActivityToolbarVideoTitle.text = viewModel.animeEpisodeDataBean.title
-        PlayerFactory.setPlayManager(Exo2PlayerManager().javaClass)
-        GSYVideoType.disableMediaCodec()        // 关闭硬解码
         // 设置播放URL
         viewModel.updateFavoriteData()
         viewModel.insertHistoryData()
-        setUp(
-            viewModel.animeEpisodeDataBean.videoUrl,
-            false, viewModel.animeEpisodeDataBean.title
-        )
-        // 开始播放
-        startPlayLogic()
+        val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
+        currentPlayer.setUp(videoUrl, false, viewModel.animeEpisodeDataBean.title)
+        lifecycleScope.launch {
+            val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
+            // 若用户设置了自动跳转 且 没有播放完
+            if (playPosition != null && playPosition != -1L && App.context.sharedPreferences()
+                    .getBoolean("auto_jump_to_last_position", false)
+            ) currentPlayer.seekOnStart = playPosition
+            withContext(Dispatchers.Main) {
+                // 开始播放
+                currentPlayer.startPlayLogic()
+            }
+        }
     }
 
     override fun onDestroy() {

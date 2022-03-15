@@ -1,6 +1,5 @@
 package com.skyd.imomoe.bean
 
-import com.badlogic.gdx.utils.Json
 import com.google.gson.annotations.SerializedName
 import com.skyd.imomoe.view.adapter.variety.Diff
 import java.io.File

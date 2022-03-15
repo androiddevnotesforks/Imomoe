@@ -65,7 +65,7 @@ class PlayViewModel : ViewModel() {
                 it ?: throw RuntimeException("html play class not found")
             }
         }, success = {
-            animeEpisodeDataBean.actionUrl = it.actionUrl
+            animeEpisodeDataBean.actionUrl = it.actionUrl.ifBlank { partUrl }
             animeEpisodeDataBean.title = it.title
             animeEpisodeDataBean.videoUrl = it.videoUrl
             mldPlayAnotherEpisode.postValue(true)
@@ -96,6 +96,9 @@ class PlayViewModel : ViewModel() {
         if (mldFavorite.value == null) queryFavorite()
         if (animeCover == null) getAnimeCoverImageBean()
         request(request = { playModel.getPlayData(partUrl, animeEpisodeDataBean) }, success = {
+            if (animeEpisodeDataBean.actionUrl.isBlank()) {
+                animeEpisodeDataBean.actionUrl = partUrl
+            }
             episodesList.clear()
             episodesList.addAll(it.second)
             playBean = it.third

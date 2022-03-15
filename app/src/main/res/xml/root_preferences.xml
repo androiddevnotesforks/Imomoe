@@ -25,6 +25,7 @@
         <com.skyd.imomoe.view.component.preference.CheckBoxPreference
             app:icon="@drawable/ic_nights_stay_main_color_2_24_skin"
             app:key="dark_mode_follow_system"
+            app:persistent="false"
             app:title="@string/dark_mode_follow_system" />
 
         <com.skyd.imomoe.view.component.preference.Preference
@@ -38,6 +39,33 @@
             app:key="custom_data_source"
             app:summary="@string/custom_data_source_describe"
             app:title="@string/custom_data_source" />
+    </com.skyd.imomoe.view.component.preference.PreferenceCategory>
+
+    <com.skyd.imomoe.view.component.preference.PreferenceCategory app:title="@string/play_settings">
+        <com.skyd.imomoe.view.component.preference.CheckBoxPreference
+            app:icon="@drawable/ic_progress_main_color_2_24_skin"
+            app:key="show_player_bottom_progressbar"
+            app:persistent="false"
+            app:title="@string/show_player_bottom_progressbar" />
+
+        <com.skyd.imomoe.view.component.preference.CheckBoxPreference
+            app:icon="@drawable/ic_east_main_color_2_24_skin"
+            app:key="auto_jump_to_last_position"
+            app:persistent="false"
+            app:summary="@string/auto_jump_to_last_position_summary"
+            app:title="@string/auto_jump_to_last_position" />
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_developer_board_main_color_2_24_skin"
+            app:key="player_core"
+            app:title="@string/switch_player_core" />
+
+        <com.skyd.imomoe.view.component.preference.CheckBoxPreference
+            app:icon="@drawable/ic_memory_main_color_2_24_skin"
+            app:key="media_codec"
+            app:persistent="false"
+            app:summary="@string/only_ijk_support_disable_media_codec"
+            app:title="@string/media_codec" />
     </com.skyd.imomoe.view.component.preference.PreferenceCategory>
 
     <com.skyd.imomoe.view.component.preference.PreferenceCategory app:title="@string/advanced">

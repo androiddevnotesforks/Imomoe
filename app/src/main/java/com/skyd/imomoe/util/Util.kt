@@ -306,7 +306,7 @@ object Util {
             version != currentVersion
         } catch (e: Exception) {
             e.printStackTrace()
-            "检查版本号失败，建议手动到Github查看是否有更新\n当前版本代码：$currentVersion".showToast(Toast.LENGTH_LONG)
+            "检查版本号失败，建议手动到GitHub查看是否有更新\n当前版本代码：$currentVersion".showToast(Toast.LENGTH_LONG)
             false
         }
     }
@@ -318,7 +318,7 @@ object Util {
                     version.replaceFirst("v", "", true) != currentVersion
         } catch (e: Exception) {
             e.printStackTrace()
-            "检查版本号失败，建议手动到Github查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
+            "检查版本号失败，建议手动到GitHub查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
             false
         }
     }

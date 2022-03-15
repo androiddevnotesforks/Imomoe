@@ -23,17 +23,17 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.invisible
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.VideoSpeed1Proxy
@@ -140,7 +140,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     // 底部进度条CheckBox
     private var cbBottomProgress: CheckBox? = null
-    private var mBottomProgressCheckBoxValue: Boolean = true
 
     //底部进度调
     private var pbBottomProgress: ProgressBar? = null
@@ -325,22 +324,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 }
             }
         }
-        cbBottomProgress?.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                pbBottomProgress?.let {
-                    mBottomProgressBar = it
-                    it.visible()
-                }
-            } else {
-                mBottomProgressBar?.let {
-                    pbBottomProgress = it
-                    it.gone()
-                    mBottomProgressBar = null
-                }
+        cbBottomProgress?.setOnCheckedChangeListener { _, isChecked ->
+            setBottomProgressBarVisibility(isChecked)
+            App.context.sharedPreferences().editor {
+                putBoolean("show_player_bottom_progressbar", isChecked)
             }
-            mBottomProgressCheckBoxValue = isChecked
         }
-        cbBottomProgress?.isChecked = mBottomProgressBar != null
+        cbBottomProgress?.isChecked = App.context.sharedPreferences()
+            .getBoolean("show_player_bottom_progressbar", false)
 
         //重置视频比例
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
@@ -399,6 +390,21 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     fun getTitle(): String = mTitle
 
+    private fun setBottomProgressBarVisibility(show: Boolean) {
+        if (show) {
+            pbBottomProgress?.let {
+                mBottomProgressBar = it
+                it.visible()
+            }
+        } else {
+            mBottomProgressBar?.let {
+                pbBottomProgress = it
+                it.gone()
+                mBottomProgressBar = null
+            }
+        }
+    }
+
     private fun showSettingContainer() {
         vgSettingContainer?.let {
             hideAllWidget()
@@ -413,7 +419,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             cancelDismissControlViewTimer()
             if (mReverseValue == null) mReverseValue = rgReverse?.getChildAt(0)?.id
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
-            cbBottomProgress?.isChecked = mBottomProgressCheckBoxValue
+            cbBottomProgress?.isChecked = App.context.sharedPreferences()
+                .getBoolean("show_player_bottom_progressbar", false)
 
 //            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
 //            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -497,6 +504,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             actionBar,
             statusBar
         ) as AnimeVideoPlayer
+        player.seekOnStart = seekOnStart
         player.mScaleIndex = mScaleIndex
         player.tvSpeed?.text = tvSpeed?.text
         player.mFullscreenButton.visibility = mFullscreenButton.visibility
@@ -505,11 +513,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.mEpisodeAdapter = mEpisodeAdapter
         player.mTextureViewTransform = mTextureViewTransform
         player.mReverseValue = mReverseValue
-        player.mBottomProgressCheckBoxValue = mBottomProgressCheckBoxValue
         player.mPlaySpeed = mPlaySpeed
         player.sbNightScreen?.progress = mNightScreenSeekBarProgress
         if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
-        if (!player.mBottomProgressCheckBoxValue) player.mBottomProgressBar = null
+        player.setBottomProgressBarVisibility(
+            App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
+        )
         touchSurfaceUp()
         player.setRestoreScreenTextViewVisibility()
         player.resolveTypeUI()
@@ -540,6 +549,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
         if (gsyVideoPlayer != null) {
             val player = gsyVideoPlayer as AnimeVideoPlayer
+            seekOnStart = player.seekOnStart
             mScaleIndex = player.mScaleIndex
             mFullscreenButton.visibility = player.mFullscreenButton.visibility
             tvSpeed?.text = player.tvSpeed?.text
@@ -548,11 +558,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mEpisodeAdapter = player.mEpisodeAdapter
             mTextureViewTransform = player.mTextureViewTransform
             mReverseValue = player.mReverseValue
-            mBottomProgressCheckBoxValue = player.mBottomProgressCheckBoxValue
             mPlaySpeed = player.mPlaySpeed
             mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
             if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
-            if (!mBottomProgressCheckBoxValue) mBottomProgressBar = null
+            setBottomProgressBarVisibility(
+                App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
+            )
             player.touchSurfaceUp()
             setRestoreScreenTextViewVisibility()
             resolveTypeUI()
@@ -1009,11 +1020,16 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 getPlayPosition(mOriginUrl)?.also {
                     preSeekPlayPosition = it
                     playPositionViewJob = launch(Dispatchers.Main) {
-                        tvPlayPosition?.text = positionFormat(it)
-                        vgPlayPosition?.visible()
-                        //展示5秒
-                        delay(5000)
-                        vgPlayPosition?.gone(true, 200L)
+                        // 若用户没有设置自动跳转 或者 看完了，才显示提示
+                        if (!App.context.sharedPreferences()
+                                .getBoolean("auto_jump_to_last_position", false) || it == -1L
+                        ) {
+                            tvPlayPosition?.text = positionFormat(it)
+                            vgPlayPosition?.visible()
+                            //展示5秒
+                            delay(5000)
+                            vgPlayPosition?.gone(true, 200L)
+                        }
                     }
                 }
             }

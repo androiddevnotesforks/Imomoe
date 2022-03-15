@@ -33,8 +33,8 @@ class CrashActivity : AppCompatActivity() {
         val message = "CrashInfo:\n$crashInfo"
         AlertDialog.Builder(this).apply {
             setMessage(message)
-            setTitle("哦呼，樱花动漫崩溃了！快去Github提Issue吧")
-            setPositiveButton("复制信息打开Github") { _: DialogInterface, i: Int ->
+            setTitle("哦呼，樱花动漫崩溃了！快去GitHub提Issue吧")
+            setPositiveButton("复制信息打开GitHub") { _: DialogInterface, i: Int ->
                 val cm =
                     this@CrashActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cm.setPrimaryClip(ClipData.newPlainText("exception trace stack", message))

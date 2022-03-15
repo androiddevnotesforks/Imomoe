@@ -16,6 +16,7 @@ import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.release
 import com.skyd.imomoe.util.skin.SkinUtil
+import com.skyd.imomoe.view.component.player.PlayerCore
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -71,6 +72,8 @@ class App : Application() {
 
         // 初始化自定义皮肤属性
         SkinUtil.initCustomAttrIds()
+
+        PlayerCore.onAppCreate()
 
         LaunchManager.onTraceApp(this, LaunchManager.APP_ON_CREATE, false)
     }

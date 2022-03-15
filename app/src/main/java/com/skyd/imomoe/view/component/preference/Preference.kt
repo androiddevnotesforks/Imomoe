@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.component.preference
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.preference.Preference
@@ -12,14 +13,11 @@ import com.skyd.skin.core.attrs.SrcAttr
 
 
 open class Preference(context: Context, attrs: AttributeSet) : Preference(context, attrs) {
-    var tvText1: TextView? = null
-    var imageView: ImageView? = null
-
-    private var needUpdateText1 = false
+    private var imageViewSrcAttr: SrcAttr = SrcAttr()
+    private var textView: TextView? = null
     var text1: CharSequence? = null
         set(value) {
-            if (tvText1 == null) needUpdateText1 = true
-            else tvText1?.text = value
+            textView?.text = value
             field = value
         }
 
@@ -30,19 +28,14 @@ open class Preference(context: Context, attrs: AttributeSet) : Preference(contex
     override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
 
-        if (imageView == null) {
-            imageView = (holder.findViewById(android.R.id.icon) as? ImageView)?.also {
-                val field = Preference::class.java.getDeclaredField("mIconResId")
-                field.isAccessible = true
-                SkinManager.setCustomViewAttrs(it,
-                    SrcAttr().apply { attrResourceRefId = field.getInt(this@Preference) }
-                )
-            }
+        (holder.findViewById(android.R.id.icon) as? ImageView)?.also {
+            val field = Preference::class.java.getDeclaredField("mIconResId")
+            field.isAccessible = true
+            imageViewSrcAttr.attrResourceRefId = field.getInt(this)
+            SkinManager.setCustomViewAttrs(it, imageViewSrcAttr)
         }
-        if (tvText1 == null) tvText1 = holder.findViewById(android.R.id.text1) as? TextView
-        tvText1?.let {
-            if (needUpdateText1) it.text = text1
-            needUpdateText1 = false
+        textView = (holder.findViewById(android.R.id.text1) as? TextView)?.also {
+            it.text = text1
         }
 
         SkinManager.applyViews(holder.itemView)

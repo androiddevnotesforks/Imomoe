@@ -8,8 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
+import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
+import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.DnsServer.selectDnsServer
 import com.skyd.imomoe.util.Util
@@ -17,6 +21,8 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
+import com.skyd.imomoe.view.component.player.PlayerCore
+import com.skyd.imomoe.view.component.player.PlayerCore.selectPlayerCore
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.view.component.preference.CheckBoxPreference
 import com.skyd.imomoe.view.component.preference.Preference
@@ -63,7 +69,7 @@ class SettingFragment : BasePreferenceFragment() {
         })
         viewModel.getCacheSize()
 
-        appUpdateHelper.getUpdateStatus().observe(viewLifecycleOwner, Observer {
+        appUpdateHelper.getUpdateStatus().observe(viewLifecycleOwner) {
             val text1: String = when (it) {
                 AppUpdateStatus.UNCHECK -> {
                     getString(R.string.uncheck_update)
@@ -92,7 +98,7 @@ class SettingFragment : BasePreferenceFragment() {
                 else -> ""
             }
             findPreference<Preference>("update")?.text1 = text1
-        })
+        }
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -186,6 +192,48 @@ class SettingFragment : BasePreferenceFragment() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 isVisible = false
             }
+        }
+
+        findPreference<CheckBoxPreference>("show_player_bottom_progressbar")?.apply {
+            isChecked = App.context.sharedPreferences()
+                .getBoolean("show_player_bottom_progressbar", false)
+            setOnPreferenceChangeListener { _, newValue ->
+                App.context.sharedPreferences().editor {
+                    putBoolean("show_player_bottom_progressbar", newValue as? Boolean ?: false)
+                }
+                true
+            }
+        }
+
+        findPreference<CheckBoxPreference>("auto_jump_to_last_position")?.apply {
+            isChecked = App.context.sharedPreferences()
+                .getBoolean("auto_jump_to_last_position", false)
+            setOnPreferenceChangeListener { _, newValue ->
+                App.context.sharedPreferences().editor {
+                    putBoolean("auto_jump_to_last_position", newValue as? Boolean ?: false)
+                }
+                true
+            }
+        }
+
+        findPreference<Preference>("player_core")?.apply {
+            summary = getString(R.string.current_player_core, PlayerCore.playerCore.coreName)
+            setOnPreferenceClickListener {
+                activity?.selectPlayerCore {
+                    summary = getString(R.string.current_player_core, it.coreName)
+                    findPreference<CheckBoxPreference>("media_codec")?.isVisible =
+                        PlayerCore.playerCore.playManager == IjkPlayerManager::class.java
+                }
+                false
+            }
+        }
+
+        findPreference<CheckBoxPreference>("media_codec")?.apply {
+            setOnPreferenceChangeListener { _, newValue ->
+                PlayerCore.setMediaCodec(newValue as? Boolean ?: false)
+                true
+            }
+            isVisible = PlayerCore.playerCore.playManager == IjkPlayerManager::class.java
         }
     }
 }

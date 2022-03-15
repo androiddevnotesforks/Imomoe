@@ -61,6 +61,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         viewModel.mldDeleteSource.observe(this) {
             localDataSourceFragment.getDataSourceList()
         }
+
+        intent?.let { callToImport(it) }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -84,7 +86,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                         onFailed = {
                             val msg =
                                 "建议更换其他文件管理器后重试。" + (if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
-                                    "Android 6及以下，请勿使用MT管理器打开ads文件，失败原因未知！若有解决方案，欢迎到Github仓库提PR"
+                                    "Android 6及以下，请勿使用MT管理器打开ads文件，失败原因未知！若有解决方案，欢迎到GitHub仓库提PR"
                                 else "") + "\n\n" + it.message
                             MaterialDialog(this@ConfigDataSourceActivity).show {
                                 title(res = R.string.import_data_source_failed)

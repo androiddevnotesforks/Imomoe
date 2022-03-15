@@ -27,6 +27,7 @@ abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
         setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
         mBinding = getBinding()
         setContentView(mBinding.root)
+        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
 
         LaunchManager.onTraceApp(application, LaunchManager.PAGE_ON_CREATE, false)
     }
