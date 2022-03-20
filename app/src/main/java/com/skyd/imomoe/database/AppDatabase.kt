@@ -34,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun animeDownloadDao(): AnimeDownloadDao
     abstract fun favoriteAnimeDao(): FavoriteAnimeDao
     abstract fun historyDao(): HistoryDao
+    abstract fun utilDao(): UtilDao
 
     companion object {
         private var instance: AppDatabase? = null

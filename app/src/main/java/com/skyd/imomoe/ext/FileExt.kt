@@ -74,6 +74,10 @@ fun Double.formatSize(newScale: Int = 2): String {
         .toString() + "T"
 }
 
+fun Long.formatSize(newScale: Int = 2): String {
+    return this.toDouble().formatSize(newScale)
+}
+
 /**
  * 获取规整的文件大小
  * @param newScale 精确到小数点几位

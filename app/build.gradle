@@ -122,6 +122,10 @@ android {
         exclude 'org/fourthline/cling/**'
         exclude 'okhttp3/internal/publicsuffix/NOTICE'
         exclude 'com/badlogic/**'
+        exclude 'XPP3_1.1.3.2_VERSION'
+        exclude 'XPP3_1.1.3.3_VERSION'
+        exclude 'kotlin-tooling-metadata.json'
+        exclude 'build-data.properties'
     }
 
     buildFeatures {
@@ -140,6 +144,7 @@ dependencies {
     implementation deps.support.fragment_ktx
     implementation deps.support.viewpager2
     implementation deps.support.preference
+    implementation deps.support.security_crypto
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_livedata_ktx
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
@@ -175,6 +180,7 @@ dependencies {
     implementation deps.coil_kt.coil
     implementation deps.kuaishou.akdanmaku
     implementation deps.okhttp3.okhttp_dnsoverhttps
+    implementation deps.thegrizzlylabs.sardine_android
     implementation project(':skin')
     implementation project(':skin_blue')
     implementation project(':skin_dark')
@@ -210,7 +216,8 @@ efs {
             "DetailPlayerActivity",
             "WebViewActivity",
             "SkinActivity",
-            "NoticeActivity"
+            "NoticeActivity",
+            "BackupRestoreActivity"
     ]
 }
 

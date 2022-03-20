@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.skyd.imomoe.view.component.preference.PreferenceCategory app:title="@string/webdav_credential_settings">
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_storage_main_color_2_24_skin"
+            app:key="webdav_server_address"
+            app:title="@string/webdav_server_address" />
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_supervisor_account_main_color_2_24_skin"
+            app:key="webdav_account"
+            app:title="@string/webdav_account" />
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_vpn_key_main_color_2_24_skin"
+            app:key="webdav_password"
+            app:title="@string/webdav_password" />
+    </com.skyd.imomoe.view.component.preference.PreferenceCategory>
+
+    <com.skyd.imomoe.view.component.preference.PreferenceCategory app:title="@string/backup_to_cloud">
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_cloud_upload_main_color_2_24_skin"
+            app:key="backup_app_database_to_cloud"
+            app:summary="@string/backup_app_database_to_cloud_summary"
+            app:title="@string/backup_app_database_to_cloud" />
+    </com.skyd.imomoe.view.component.preference.PreferenceCategory>
+
+    <com.skyd.imomoe.view.component.preference.PreferenceCategory app:title="@string/restore_from_cloud">
+
+        <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_cloud_download_main_color_2_24_skin"
+            app:key="restore_app_database_from_cloud"
+            app:summary="@string/restore_app_database_summary"
+            app:title="@string/restore_app_database_from_cloud" />
+
+    </com.skyd.imomoe.view.component.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

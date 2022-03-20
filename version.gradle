@@ -26,6 +26,7 @@ support.swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1
 support.viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 support.fragment_ktx = "androidx.fragment:fragment-ktx:1.4.1"
 support.preference = "androidx.preference:preference:1.2.0"
+support.security_crypto = "androidx.security:security-crypto:1.1.0-alpha03"
 deps.support = support
 
 def retrofit2 = [:]
@@ -111,5 +112,9 @@ deps.umsdk = umsdk
 def kuaishou = [:]
 kuaishou.akdanmaku = "com.kuaishou:akdanmaku:1.0.3"
 deps.kuaishou = kuaishou
+
+def thegrizzlylabs = [:]
+thegrizzlylabs.sardine_android = "com.github.thegrizzlylabs:sardine-android:0.8"
+deps.thegrizzlylabs = thegrizzlylabs
 
 ext.deps = deps

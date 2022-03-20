@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
+import com.skyd.imomoe.ext.warningDialog
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
@@ -61,13 +62,11 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
         mBinding.atbHistoryActivity.run {
             setButtonClickListener(0) {
                 if (adapter.dataList.isEmpty()) return@setButtonClickListener
-                MaterialDialog(this@HistoryActivity).show {
-                    icon(drawable = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin))
-                    title(res = R.string.warning)
-                    message(res = R.string.confirm_delete_all_watch_history)
-                    positiveButton(res = R.string.delete) { viewModel.deleteAllHistory() }
-                    negativeButton(res = R.string.cancel) { dismiss() }
-                }
+                warningDialog(
+                    onPositive = { viewModel.deleteAllHistory() },
+                    icon = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin),
+                    positiveRes = R.string.delete
+                ).message(res = R.string.confirm_delete_all_watch_history).show()
             }
         }
 

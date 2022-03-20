@@ -191,3 +191,11 @@ class SkinCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class ClassifyTab1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val textView = view.findViewById<TextView>(R.id.text_view_1)
 }
+
+class RestoreFile1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val ivRestoreFile1Icon = view.findViewById<ImageView>(R.id.iv_restore_file_1_icon)
+    val tvRestoreFile1Title = view.findViewById<TextView>(R.id.tv_restore_file_1_title)
+    val tvRestoreFile1Size = view.findViewById<TextView>(R.id.tv_restore_file_1_size)
+    val tvRestoreFile1LastModified =
+        view.findViewById<TextView>(R.id.tv_restore_file_1_last_modified)
+}

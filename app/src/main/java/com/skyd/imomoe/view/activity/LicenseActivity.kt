@@ -23,6 +23,12 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         list += LicenseHeader1Bean()
         list += License1Bean(
             ActionUrl.ANIME_BROWSER,
+            "https://source.android.com/",
+            "Android Open Source Project",
+            "Apache-2.0 License"
+        )
+        list += License1Bean(
+            ActionUrl.ANIME_BROWSER,
             "https://github.com/jhy/jsoup",
             "jsoup",
             "MIT License"
@@ -110,6 +116,12 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             "https://github.com/KwaiAppTeam/AkDanmaku",
             "AkDanmaku",
             "MIT License"
+        )
+        list += License1Bean(
+            ActionUrl.ANIME_BROWSER,
+            "https://github.com/thegrizzlylabs/sardine-android",
+            "sardine-android",
+            "Apache-2.0 License"
         )
         adapter.dataList = list
 

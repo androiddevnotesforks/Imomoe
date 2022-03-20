@@ -15,6 +15,7 @@ import com.skyd.imomoe.util.Util.getAppVersionName
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.warningDialog
 import java.net.URL
 import java.util.*
 
@@ -56,12 +57,10 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     warningString =
                         getString(R.string.jump_to_browser_http_warning) + "\n" + warningString
                 }
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.warning)
-                    message(text = warningString)
-                    positiveButton(res = R.string.still_to_visit) { openBrowser(Api.MAIN_URL) }
-                    negativeButton { dismiss() }
-                }
+                warningDialog(
+                    onPositive = { openBrowser(Api.MAIN_URL) },
+                    positiveRes = R.string.still_to_visit
+                ).message(text = warningString).show()
             }
 
             ivAboutActivityCustomDataSourceAbout.setOnClickListener {

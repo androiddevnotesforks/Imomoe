@@ -12,6 +12,7 @@
     <string name="anime_detail_tag">标签：</string>
     <string name="get_data_failed">获取数据失败！</string>
     <string name="delete_failed">刪除失败！</string>
+    <string name="delete_succeed">刪除成功！</string>
     <string name="search_activity_cancel">取消</string>
     <string name="search_activity_tip">“%1$s”搜索结果，加载了%2$d条</string>
     <string name="search_activity_failed">搜索失败</string>
@@ -242,4 +243,30 @@
     <string name="current_player_core">当前内核: %s</string>
     <string name="select_player_core">选择播放器内核</string>
     <string name="only_ijk_support_disable_media_codec">仅ijk内核支持关闭硬解</string>
+    <string name="backup_and_restore">备份与恢复(BETA)</string>
+    <string name="wrong_webdav_server_address_format">服务器地址格式不正确！\n正确格式至少包括协议、主机名或IP地址。\n例如：protocol://hostname[:port]/path/</string>
+    <string name="webdav_server_address">WebDAV服务器地址</string>
+    <string name="webdav_password">WebDAV密码</string>
+    <string name="webdav_account">WebDAV账户</string>
+    <string name="backup_to_cloud">备份至云端</string>
+    <string name="backup_app_database_to_cloud">备份主数据库至云端</string>
+    <string name="backup_app_database_to_cloud_summary">包括我的追番、观看历史、搜索历史和缓存记录（非缓存视频）</string>
+    <string name="restore_from_cloud">从云端恢复</string>
+    <string name="restore_app_database_from_cloud">从云端恢复主数据库</string>
+    <string name="restore_app_database_bottom_sheet_dialog_tip">(已隐藏不兼容的高版本备份，长按可删除)</string>
+    <string name="restore_app_database_succeed">恢复主数据库成功，正在重启</string>
+    <string name="restore_app_database_summary">当前我的追番、观看历史、搜索历史和缓存记录（非缓存视频）将被覆盖，此操作不可逆</string>
+    <string name="restore_app_database_warning">当前我的追番、观看历史、搜索历史和缓存记录（非缓存视频）将被覆盖，此操作不可逆，是否继续？
+        \n\n恢复成功后APP将自动重启，若未自动重启，手动打开即可</string>
+    <string name="delete_remote_file_warning">确定要删除服务器端文件？</string>
+    <string name="webdav_server_file_list">远端文件列表</string>
+    <string name="webdav_password_set">已设置WebDAV密码</string>
+    <string name="webdav_password_not_set">未设置WebDAV密码</string>
+    <string name="webdav_server_not_set">未设置WebDAV服务器</string>
+    <string name="webdav_account_not_set">未设置WebDAV账户</string>
+    <string name="restoring_data">正在恢复，请稍等</string>
+    <string name="backing_up">备份中…</string>
+    <string name="backup_succeed">备份成功</string>
+    <string name="backup_failed">备份失败</string>
+    <string name="webdav_credential_settings">WebDAV认证设置</string>
 </resources>

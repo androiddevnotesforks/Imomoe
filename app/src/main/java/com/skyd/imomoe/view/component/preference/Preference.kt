@@ -31,7 +31,8 @@ open class Preference(context: Context, attrs: AttributeSet) : Preference(contex
         (holder.findViewById(android.R.id.icon) as? ImageView)?.also {
             val field = Preference::class.java.getDeclaredField("mIconResId")
             field.isAccessible = true
-            imageViewSrcAttr.attrResourceRefId = field.getInt(this)
+            val resInt = field.getInt(this)
+            imageViewSrcAttr.attrResourceRefId = if (resInt == 0) -1 else resInt
             SkinManager.setCustomViewAttrs(it, imageViewSrcAttr)
         }
         textView = (holder.findViewById(android.R.id.text1) as? TextView)?.also {

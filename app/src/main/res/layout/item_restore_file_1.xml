@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_restore_file_1_icon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_database_main_color_2_24_skin" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_restore_file_1_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@id/iv_restore_file_1_icon"
+        android:textColor="@color/foreground_main_color_2_skin"
+        android:textSize="16sp"
+        app:typeface="bPRTypeface"
+        tools:text="app.db" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_restore_file_1_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_restore_file_1_title"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
+        android:layout_toEndOf="@id/iv_restore_file_1_icon"
+        android:textColor="@color/main_color_skin"
+        android:textSize="13sp"
+        app:typeface="bPRTypeface"
+        tools:text="30K" />
+
+    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        android:id="@+id/tv_restore_file_1_last_modified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_restore_file_1_title"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:layout_toEndOf="@id/tv_restore_file_1_size"
+        android:textColor="@color/main_color_skin"
+        android:textSize="13sp"
+        app:typeface="bPRTypeface"
+        tools:text="30K" />
+</RelativeLayout>

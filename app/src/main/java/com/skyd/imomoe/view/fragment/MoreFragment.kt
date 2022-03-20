@@ -10,10 +10,7 @@ import com.skyd.imomoe.bean.More1Bean
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_LAUNCH_ACTIVITY
 import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_SKIP_BY_WEBSITE
 import com.skyd.imomoe.databinding.FragmentMoreBinding
-import com.skyd.imomoe.view.activity.AboutActivity
-import com.skyd.imomoe.view.activity.HistoryActivity
-import com.skyd.imomoe.view.activity.SettingActivity
-import com.skyd.imomoe.view.activity.SkinActivity
+import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.More1Proxy
 
@@ -46,6 +43,11 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             "$ANIME_LAUNCH_ACTIVITY/${SettingActivity::class.qualifiedName}",
             getString(R.string.setting),
             R.drawable.ic_settings_white_24
+        )
+        list += More1Bean(
+            "$ANIME_LAUNCH_ACTIVITY/${BackupRestoreActivity::class.qualifiedName}",
+            getString(R.string.backup_and_restore),
+            R.drawable.ic_cloud_done_white_24_skin
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${AboutActivity::class.qualifiedName}",
