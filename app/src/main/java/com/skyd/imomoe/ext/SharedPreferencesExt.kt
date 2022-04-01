@@ -15,6 +15,8 @@ fun Context.sharedPreferences(name: String = "App"): SharedPreferences =
 fun SharedPreferences.editor(editorBuilder: SharedPreferences.Editor.() -> Unit) =
     edit().apply(editorBuilder).apply()
 
+fun sharedPreferences(name: String = "App"): SharedPreferences = App.context.sharedPreferences(name)
+
 @RequiresApi(Build.VERSION_CODES.M)
 fun secretSharedPreferences(name: String = "Secret"): SharedPreferences {
     val masterKey = MasterKey.Builder(App.context)

@@ -10,7 +10,6 @@ import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.PushHelper
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getSkinResourceId
@@ -18,11 +17,7 @@ import com.skyd.imomoe.util.release
 import com.skyd.imomoe.util.skin.SkinUtil
 import com.skyd.imomoe.view.component.player.PlayerCore
 import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
-import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
-import com.umeng.message.PushAgent
-import com.umeng.message.UmengNotificationClickHandler
-import com.umeng.message.entity.UMessage
 
 
 class App : Application() {
@@ -43,29 +38,15 @@ class App : Application() {
 
             // 友盟
             // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
-            UMConfigure.init(
+            UMConfigure.preInit(
                 this,
                 getManifestMetaValue("UMENG_APPKEY"),
-                getManifestMetaValue("UMENG_CHANNEL"),
-                UMConfigure.DEVICE_TYPE_PHONE,
-                BuildConfig.UMENG_MESSAGE_SECRET
+                getManifestMetaValue("UMENG_CHANNEL")
             )
+
             UMConfigure.setLogEnabled(BuildConfig.DEBUG)
 
-            // 选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
-            MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO)
-
-            PushAgent.getInstance(context).apply {
-                resourcePackageName = BuildConfig.APPLICATION_ID
-                notificationClickHandler = object : UmengNotificationClickHandler() {
-                    override fun dealWithCustomAction(context: Context, msg: UMessage) {
-                        super.dealWithCustomAction(context, msg)
-                        Util.process(context, msg.custom)
-                    }
-                }
-            }
-            PushHelper.init(applicationContext)
-            Thread { PushHelper.init(applicationContext) }.start()
+            PushHelper.preInit(applicationContext)
         }
 
         FileDownloader.setup(this)

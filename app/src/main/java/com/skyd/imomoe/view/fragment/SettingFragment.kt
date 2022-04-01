@@ -23,6 +23,8 @@ import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
 import com.skyd.imomoe.view.component.player.PlayerCore
 import com.skyd.imomoe.view.component.player.PlayerCore.selectPlayerCore
+import com.skyd.imomoe.util.compare.EpisodeTitleSort
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.selectEpisodeTitleSortMode
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.view.component.preference.CheckBoxPreference
 import com.skyd.imomoe.view.component.preference.Preference
@@ -213,6 +215,19 @@ class SettingFragment : BasePreferenceFragment() {
                     putBoolean("auto_jump_to_last_position", newValue as? Boolean ?: false)
                 }
                 true
+            }
+        }
+
+        findPreference<Preference>("episode_title_sort_mode")?.apply {
+            summary = getString(
+                R.string.episode_title_sort_mode_summary,
+                EpisodeTitleSort.episodeTitleSortMode
+            )
+            setOnPreferenceClickListener {
+                activity?.selectEpisodeTitleSortMode {
+                    summary = getString(R.string.episode_title_sort_mode_summary, it)
+                }
+                false
             }
         }
 

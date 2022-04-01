@@ -23,6 +23,7 @@ import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.clickScale
+import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
@@ -33,7 +34,6 @@ import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
-import com.umeng.message.PushAgent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -50,23 +50,26 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        action = intent.action ?: ""
-
-        PushAgent.getInstance(this).onAppStart()
-
-        if (DataSourceManager.dataSourceName != DataSourceManager.DEFAULT_DATA_SOURCE)
-            getString(R.string.using_custom_data_source).showToast(Toast.LENGTH_LONG)
-
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             MaterialDialog(this).show {
                 title(res = R.string.user_notice_update)
                 message(text = getUserNoticeContent().toHtml())
                 cancelable(false)
-                positiveButton(res = R.string.ok) {
+                positiveButton(res = R.string.agree) {
                     setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
+                    initUM()
+                    initData(savedInstanceState)
                 }
+                negativeButton(res = R.string.disagree_and_exit) { finish() }
             }
-        }
+        } else initData(savedInstanceState)
+    }
+
+    private fun initData(savedInstanceState: Bundle?) {
+        action = intent.action.orEmpty()
+
+        if (DataSourceManager.dataSourceName != DataSourceManager.DEFAULT_DATA_SOURCE)
+            getString(R.string.using_custom_data_source).showToast(Toast.LENGTH_LONG)
 
         //检查更新
         val appUpdateHelper = AppUpdateHelper.instance

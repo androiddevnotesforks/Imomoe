@@ -56,6 +56,11 @@
             app:title="@string/auto_jump_to_last_position" />
 
         <com.skyd.imomoe.view.component.preference.Preference
+            app:icon="@drawable/ic_sort_main_color_2_24_skin"
+            app:key="episode_title_sort_mode"
+            app:title="@string/episode_title_sort_mode" />
+
+        <com.skyd.imomoe.view.component.preference.Preference
             app:icon="@drawable/ic_developer_board_main_color_2_24_skin"
             app:key="player_core"
             app:title="@string/switch_player_core" />

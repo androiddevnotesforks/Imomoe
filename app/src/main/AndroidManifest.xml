@@ -40,6 +40,7 @@
             android:name=".view.activity.ConfigDataSourceActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true"
+            android:label="@string/import_data_source_label"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -48,7 +49,7 @@
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:pathPattern=".*\\.ads" />
-                <data android:mimeType="*/*" />
+                <data android:mimeType="application/octet-stream" />
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.NoticeActivity" />
@@ -142,19 +143,19 @@
             android:name=".util.dlna.dmc.DLNACastService"
             android:exported="false" />
         <service
-            android:name="com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService"
+            android:name=".util.download.downloadanime.AnimeDownloadService"
             android:enabled="true" />
 
         <receiver
-            android:name="com.skyd.imomoe.util.download.downloadanime.AnimeDownloadNotificationReceiver"
+            android:name=".util.download.downloadanime.AnimeDownloadNotificationReceiver"
             android:exported="false" />
 
         <service
-            android:name="com.skyd.imomoe.util.download.datasource.DataSourceDownloadService"
+            android:name=".util.download.datasource.DataSourceDownloadService"
             android:enabled="true" />
 
         <receiver
-            android:name="com.skyd.imomoe.util.download.datasource.DataSourceDownloadNotificationReceiver"
+            android:name=".util.download.datasource.DataSourceDownloadNotificationReceiver"
             android:exported="false" />
 
         <provider

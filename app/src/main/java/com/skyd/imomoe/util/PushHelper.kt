@@ -1,10 +1,22 @@
 package com.skyd.imomoe.util
 
 import android.content.Context
+import com.skyd.imomoe.BuildConfig
 import com.umeng.message.PushAgent
 import com.umeng.message.api.UPushRegisterCallback
 
 object PushHelper {
+    /**
+     * 预初始化
+     */
+    fun preInit(context: Context?) {
+        //解决厂商通知点击时乱码等问题
+        PushAgent.setup(
+            context, Util.getManifestMetaValue("UMENG_APPKEY"),
+            BuildConfig.UMENG_MESSAGE_SECRET
+        )
+    }
+
     fun init(context: Context) {
         //获取消息推送实例
         val pushAgent = PushAgent.getInstance(context)

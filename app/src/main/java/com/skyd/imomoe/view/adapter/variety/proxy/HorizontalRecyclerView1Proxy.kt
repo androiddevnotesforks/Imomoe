@@ -13,6 +13,7 @@ import com.skyd.imomoe.util.HorizontalRecyclerView1ViewHolder
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.HorizontalRecyclerViewDecoration
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 
 class HorizontalRecyclerView1Proxy(
     @IntRange(from = 0, to = 1) private val color: Int = MAIN_COLOR_2,
@@ -69,7 +70,7 @@ class HorizontalRecyclerView1Proxy(
                             width = animeEpisodeWidth
                         )
                     )
-                ).apply { dataList = data.episodeList }
+                ).apply { dataList = data.episodeList.toMutableList().sortEpisodeTitle() }
             } else adapter?.notifyDataSetChanged()
         }
         holder.ivHorizontalRecyclerView1More.setOnClickListener {

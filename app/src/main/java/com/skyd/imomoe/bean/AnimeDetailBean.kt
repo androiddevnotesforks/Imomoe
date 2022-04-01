@@ -1,5 +1,6 @@
 package com.skyd.imomoe.bean
 
+import com.skyd.imomoe.util.compare.EpisodeTitleCompareUtil
 import com.skyd.imomoe.view.adapter.variety.Diff
 
 class AnimeInfo1Bean(
@@ -28,10 +29,13 @@ class AnimeEpisodeDataBean(
     override var actionUrl: String,
     var title: String,
     var videoUrl: String = ""
-) : BaseBean, Diff {
+) : BaseBean, Diff, Comparable<AnimeEpisodeDataBean> {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeEpisodeDataBean -> false
         actionUrl == o.actionUrl && title == o.title && videoUrl == o.videoUrl -> true
         else -> false
     }
+
+    override fun compareTo(other: AnimeEpisodeDataBean): Int =
+        EpisodeTitleCompareUtil.compare(title, other.title)
 }

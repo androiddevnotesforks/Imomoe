@@ -1,5 +1,6 @@
 package com.skyd.imomoe.bean
 
+import com.skyd.imomoe.util.compare.EpisodeTitleCompareUtil
 import com.skyd.imomoe.view.adapter.variety.Diff
 
 
@@ -102,13 +103,16 @@ class AnimeCover7Bean(
     // 0：/storage/emulated/0/Android/data/packagename/files
     // 1：/storage/emulated/0/
     var path: Int = 0
-) : BaseBean, Diff {
+) : BaseBean, Diff, Comparable<AnimeCover7Bean> {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeCover7Bean -> false
         actionUrl == o.actionUrl && title == o.title && size == o.size &&
                 episodeCount == o.episodeCount && path == o.path -> true
         else -> false
     }
+
+    override fun compareTo(other: AnimeCover7Bean): Int =
+        EpisodeTitleCompareUtil.compare(title, other.title)
 }
 
 typealias AnimeCover8Bean = FavoriteAnimeBean

@@ -28,6 +28,7 @@ import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.view.fragment.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import java.net.URL
@@ -183,7 +184,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 else Util.process(this, data.actionUrl, data.actionUrl)
                 bottomSheetDialog.dismiss()
             }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
-        ).apply { this.dataList = dataList }
+        ).apply { this.dataList = dataList.toMutableList().sortEpisodeTitle() }
         return bottomSheetDialog
     }
 }

@@ -112,6 +112,8 @@
     <string name="dark">深色</string>
     <string name="follow_system">跟随系统</string>
     <string name="ok">确定</string>
+    <string name="agree">同意</string>
+    <string name="disagree_and_exit">不同意并退出</string>
     <string name="no_more_info">没有更多了</string>
     <string name="warning">警告</string>
     <string name="delete">删除</string>
@@ -164,6 +166,7 @@
     <string name="import_data_source">确认导入数据源？</string>
     <string name="import_data_source_failed">导入数据源失败</string>
     <string name="import_data_source_success">导入数据源成功：%s</string>
+    <string name="import_data_source_label">导入数据源</string>
     <string name="ask_delete_data_source">确认删除此数据源？</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
     <string name="skin_center">皮肤中心</string>
@@ -269,4 +272,10 @@
     <string name="backup_succeed">备份成功</string>
     <string name="backup_failed">备份失败</string>
     <string name="webdav_credential_settings">WebDAV认证设置</string>
+    <string name="select_episode_title_sort_mode">选择播放列表排序方式</string>
+    <string name="episode_title_sort_mode">播放列表排序方式</string>
+    <string name="episode_title_sort_mode_summary">当前方式: %s</string>
+    <string name="episode_title_sort_default">由数据源决定</string>
+    <string name="episode_title_sort_descending">降序</string>
+    <string name="episode_title_sort_ascending">升序</string>
 </resources>

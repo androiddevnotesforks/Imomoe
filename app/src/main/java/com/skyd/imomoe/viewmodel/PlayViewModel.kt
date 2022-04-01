@@ -13,6 +13,7 @@ import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.showToast
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 
 
 class PlayViewModel : ViewModel() {
@@ -101,6 +102,7 @@ class PlayViewModel : ViewModel() {
             }
             episodesList.clear()
             episodesList.addAll(it.second)
+            episodesList.sortEpisodeTitle()
             playBean = it.third
             mldPlayDataList.postValue(it.first)
             mldEpisodesList.postValue(true)
