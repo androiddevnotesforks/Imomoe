@@ -58,6 +58,20 @@ class PlayViewModel : ViewModel() {
         playModel.clearActivity()
     }
 
+    /**
+     * @return true if has next episode, false else.
+     */
+    fun playNextEpisode(): Boolean {
+        if (currentEpisodeIndex + 1 in episodesList.indices) {
+            playAnotherEpisode(
+                episodesList[currentEpisodeIndex + 1].actionUrl,
+                currentEpisodeIndex + 1
+            )
+            return true
+        }
+        return false
+    }
+
     // 播放另一集（页面切换到另一集，因此partUrl要更新）
     fun playAnotherEpisode(partUrl: String, currentEpisodeIndex: Int) {
         this.partUrl = partUrl

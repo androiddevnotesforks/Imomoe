@@ -278,4 +278,6 @@
     <string name="episode_title_sort_default">由数据源决定</string>
     <string name="episode_title_sort_descending">降序</string>
     <string name="episode_title_sort_ascending">升序</string>
+    <string name="have_no_next_episode">当前已经是最后一集了</string>
+    <string name="auto_play_next_episode">自动播放下一集</string>
 </resources>

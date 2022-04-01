@@ -83,7 +83,6 @@
             android:layout_height="0px"
             android:paddingHorizontal="5dp"
             android:src="@drawable/ic_skip_next_white_24"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start"
             app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -393,6 +392,16 @@
                 android:textColor="@color/foreground_white_skin"
                 android:textSize="12sp" />
 
+            <CheckBox
+                android:id="@+id/cb_auto_play_next_episode"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:buttonTint="@color/foreground_main_color_2_skin"
+                android:text="@string/auto_play_next_episode"
+                android:textColor="@color/foreground_white_skin"
+                android:textSize="12sp" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -619,13 +628,6 @@
                     android:textSize="12sp"
                     app:drawableTopCompat="@drawable/selector_vertical_reverse_button_skin" />
             </RadioGroup>
-            <!--            <CheckBox-->
-            <!--                android:id="@+id/cb_media_codec"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="35dp"-->
-            <!--                android:layout_marginTop="12dp"-->
-            <!--                android:text="@string/media_codec"-->
-            <!--                android:textColor="@color/foreground_white" />-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

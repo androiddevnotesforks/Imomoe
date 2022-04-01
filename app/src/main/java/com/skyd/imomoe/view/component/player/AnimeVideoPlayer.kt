@@ -33,7 +33,6 @@ import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.VideoSpeed1Proxy
@@ -112,6 +111,13 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     //下一集按钮
     private var ivNextEpisode: ImageView? = null
 
+    // 如何播放下一集
+    var onPlayNextEpisode: () -> Unit = {}
+        set(value) {
+            ivNextEpisode?.setOnClickListener { value() }
+            field = value
+        }
+
     // 进度记忆组
     private var vgPlayPosition: ViewGroup? = null
 
@@ -141,14 +147,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 底部进度条CheckBox
     private var cbBottomProgress: CheckBox? = null
 
+    // 自动播放下一集CheckBox
+    private var cbAutoPlayNextEpisode: CheckBox? = null
+
     //底部进度调
     private var pbBottomProgress: ProgressBar? = null
 
     // 外部播放器打开
     private var tvOpenByExternalPlayer: TextView? = null
-
-    // 硬解码CheckBox
-    private var cbMediaCodec: CheckBox? = null
 
     // 右侧弹出栏
     protected var vgRightContainer: ViewGroup? = null
@@ -217,10 +223,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         vgSettingContainer = findViewById(R.id.layout_setting)
         rgReverse = findViewById(R.id.rg_reverse)
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
+        cbAutoPlayNextEpisode = findViewById(R.id.cb_auto_play_next_episode)
         pbBottomProgress = super.mBottomProgressBar
         ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
-//        mMediaCodecCheckBox = findViewById(R.id.cb_media_codec)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
         tvTouchDownHighSpeed = findViewById(R.id.tv_touch_down_high_speed)
         vgBiggerSurface = findViewById(R.id.bigger_surface)
@@ -326,12 +332,20 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
         cbBottomProgress?.setOnCheckedChangeListener { _, isChecked ->
             setBottomProgressBarVisibility(isChecked)
-            App.context.sharedPreferences().editor {
+            sharedPreferences().editor {
                 putBoolean("show_player_bottom_progressbar", isChecked)
             }
         }
-        cbBottomProgress?.isChecked = App.context.sharedPreferences()
+        cbBottomProgress?.isChecked = sharedPreferences()
             .getBoolean("show_player_bottom_progressbar", false)
+
+        cbAutoPlayNextEpisode?.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences().editor {
+                putString("switchVideoMode", if (isChecked) "AutoPlayNextEpisode" else "StopPlay")
+            }
+        }
+        cbAutoPlayNextEpisode?.isChecked = sharedPreferences()
+            .getString("switchVideoMode", "StopPlay") == "AutoPlayNextEpisode"
 
         //重置视频比例
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
@@ -515,6 +529,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.mReverseValue = mReverseValue
         player.mPlaySpeed = mPlaySpeed
         player.sbNightScreen?.progress = mNightScreenSeekBarProgress
+        player.onPlayNextEpisode = onPlayNextEpisode
         if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
         player.setBottomProgressBarVisibility(
             App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
@@ -560,6 +575,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mReverseValue = player.mReverseValue
             mPlaySpeed = player.mPlaySpeed
             mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
+            onPlayNextEpisode = player.onPlayNextEpisode
             if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
             setBottomProgressBarVisibility(
                 App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
@@ -1090,6 +1106,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         super.onAutoCompletion()
         // 播放完毕
         storePlayPosition(-1L)
+        if (
+            sharedPreferences().getString("switchVideoMode", "StopPlay") ==
+            "AutoPlayNextEpisode"
+        ) onPlayNextEpisode()
     }
 
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {
@@ -1111,8 +1131,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     fun getBottomContainer() = mBottomContainer
 
     fun getClingButton() = ivCling
-
-    fun getNextButton() = ivNextEpisode
 
     fun getRightContainer() = vgRightContainer
 

@@ -21,8 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
-import com.shuyu.gsyvideoplayer.player.PlayerFactory
-import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.App
@@ -56,7 +54,6 @@ import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
 
@@ -241,6 +238,12 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     )
                 ).apply { dataList = viewModel.episodesList }
             )
+        }
+
+        mBinding.avpPlayActivity.onPlayNextEpisode = {
+            if (!viewModel.playNextEpisode()) {
+                getString(R.string.have_no_next_episode).showToast()
+            }
         }
 
         mBinding.srlPlayActivity.isRefreshing = true
