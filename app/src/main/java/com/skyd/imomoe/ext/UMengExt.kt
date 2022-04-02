@@ -1,7 +1,6 @@
 package com.skyd.imomoe.ext
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.util.PushHelper
@@ -16,7 +15,7 @@ var uMengInitialized: Boolean = false
     private set
 
 fun Activity.initUM() {
-    if (uMengInitialized) return
+    if (uMengInitialized || BuildConfig.DEBUG) return
     uMengInitialized = false
     UMConfigure.init(
         this,

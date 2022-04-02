@@ -31,6 +31,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.model.DataSourceManager
@@ -531,6 +532,9 @@ object Util {
         // 没有处理跳转，则进入if体
         if (!routerProcessor.process(activity, actionUrl)) {
             when {
+                decodeUrl.startsWith(Api.MAIN_URL) -> {     // 打开网页对应页面
+                    process(activity, actionUrl.replaceFirst(Api.MAIN_URL, ""))
+                }
                 decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
                     openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
                 }

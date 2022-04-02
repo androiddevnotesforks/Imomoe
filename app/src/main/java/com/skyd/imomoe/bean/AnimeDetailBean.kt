@@ -36,6 +36,10 @@ class AnimeEpisodeDataBean(
         else -> false
     }
 
-    override fun compareTo(other: AnimeEpisodeDataBean): Int =
-        EpisodeTitleCompareUtil.compare(title, other.title)
+    // actionUrl相同的排序到一块
+    override fun compareTo(other: AnimeEpisodeDataBean): Int {
+        val actionUrlComp = EpisodeTitleCompareUtil.compare(actionUrl, other.actionUrl)
+        if (actionUrlComp != 0) return actionUrlComp
+        return EpisodeTitleCompareUtil.compare(title, other.title)
+    }
 }
