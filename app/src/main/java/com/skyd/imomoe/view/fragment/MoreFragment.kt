@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -27,32 +26,32 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${HistoryActivity::class.qualifiedName}",
             getString(R.string.watch_history),
-            R.drawable.ic_history_white_24
+            R.drawable.ic_history_24
         )
         list += More1Bean(
             ANIME_SKIP_BY_WEBSITE,
             getString(R.string.skip_by_website),
-            R.drawable.ic_insert_link_white_24
+            R.drawable.ic_insert_link_24
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${SkinActivity::class.qualifiedName}",
             getString(R.string.skin_center),
-            R.drawable.ic_skin_white_32_skin
+            R.drawable.ic_skin_32
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${SettingActivity::class.qualifiedName}",
             getString(R.string.setting),
-            R.drawable.ic_settings_white_24
+            R.drawable.ic_settings_24
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${BackupRestoreActivity::class.qualifiedName}",
             getString(R.string.backup_and_restore),
-            R.drawable.ic_cloud_done_white_24_skin
+            R.drawable.ic_cloud_done_24
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${AboutActivity::class.qualifiedName}",
             getString(R.string.about),
-            R.drawable.ic_info_white_24
+            R.drawable.ic_info_24
         )
 
         mBinding.run {
@@ -60,11 +59,5 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             rvMoreFragment.adapter = adapter
             adapter.dataList = list
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
     }
 }

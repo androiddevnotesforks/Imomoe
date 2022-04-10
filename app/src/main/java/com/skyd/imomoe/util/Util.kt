@@ -20,24 +20,25 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.AnyRes
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.UnknownActionUrl
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.showInputDialog
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
 import com.skyd.imomoe.view.activity.*
-import com.skyd.skin.SkinManager
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -45,9 +46,6 @@ import java.net.URLDecoder
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import com.skyd.imomoe.ext.editor
-import com.skyd.imomoe.ext.sharedPreferences
 
 
 object Util {
@@ -57,10 +55,10 @@ object Util {
             val uri: Uri = Uri.parse(url)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             intent.flags = FLAG_ACTIVITY_NEW_TASK
-            App.context.startActivity(intent)
+            appContext.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             e.printStackTrace()
-            App.context.getString(R.string.no_browser_found, url).showToast(Toast.LENGTH_LONG)
+            appContext.getString(R.string.no_browser_found, url).showToast(Toast.LENGTH_LONG)
         }
     }
 
@@ -86,20 +84,20 @@ object Util {
     }
 
     fun restartApp() {
-        val i = App.context.packageManager.getLaunchIntentForPackage(App.context.packageName)
+        val i = appContext.packageManager.getLaunchIntentForPackage(appContext.packageName)
         i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        App.context.startActivity(i)
+        appContext.startActivity(i)
     }
 
     /**
      * 上次读过的用户须知的版本号
      */
-    fun lastReadUserNoticeVersion(): Int = App.context.sharedPreferences().getInt("userNotice", 0)
+    fun lastReadUserNoticeVersion(): Int = sharedPreferences().getInt("userNotice", 0)
 
     /**
      * @param version 用户须知版本号
      */
-    fun setReadUserNoticeVersion(version: Int) = App.context.sharedPreferences().editor {
+    fun setReadUserNoticeVersion(version: Int) = sharedPreferences().editor {
         putInt("userNotice", version)
     }
 
@@ -109,7 +107,7 @@ object Util {
     fun getUserNoticeContent(): String {
         val sb = StringBuffer()
         try {
-            val inputStream = App.context.resources.openRawResource(R.raw.notice)
+            val inputStream = appContext.resources.openRawResource(R.raw.notice)
             val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
             var out: String?
             while (reader.readLine().also { out = it } != null) {
@@ -122,13 +120,11 @@ object Util {
     }
 
     fun getWebsiteLinkSuffix(): String {
-        return App.context.sharedPreferences().getString("websiteLinkSuffix", ".html") ?: ".html"
+        return sharedPreferences().getString("websiteLinkSuffix", ".html") ?: ".html"
     }
 
     fun setWebsiteLinkSuffix(suffix: String) {
-        App.context.sharedPreferences().editor {
-            putString("websiteLinkSuffix", suffix)
-        }
+        sharedPreferences().editor { putString("websiteLinkSuffix", suffix) }
     }
 
     fun openVideoByExternalPlayer(context: Context, url: String): Boolean {
@@ -197,15 +193,6 @@ object Util {
     }
 
     /**
-     * 更改Drawable颜色
-     */
-    fun tintDrawable(drawable: Drawable, color: Int): Drawable {
-        val wrappedDrawable: Drawable = DrawableCompat.wrap(drawable)
-        DrawableCompat.setTint(wrappedDrawable, color)
-        return wrappedDrawable
-    }
-
-    /**
      * 获取重定向最终的地址
      * @param path
      */
@@ -232,34 +219,14 @@ object Util {
     }
 
     /**
-     * 通过原始id获取当前皮肤的id
-     */
-    fun getSkinResourceId(@AnyRes id: Int) = SkinManager.getSkinResourceId(id)
-
-    /**
      * 通过id获取drawable
      */
-    fun getResDrawable(@DrawableRes id: Int) = SkinManager.getDrawableOrMipMap(id)
+    fun getResDrawable(@DrawableRes id: Int) = AppCompatResources.getDrawable(appContext, id)
 
     /**
      * 通过id获取颜色
      */
-    fun getColorStateList(@ColorRes id: Int) = SkinManager.getColorStateList(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色
-     */
-    fun Context.getResColor(@ColorRes id: Int) = SkinManager.getColor(id)
-
-    /**
-     * 通过id获取颜色，不随皮肤更改，使用默认的
-     */
-    fun Context.getDefaultResColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+    fun getResColor(@ColorRes id: Int) = ContextCompat.getColor(appContext, id)
 
     /**
      * 计算距今时间
@@ -312,24 +279,12 @@ object Util {
         }
     }
 
-    fun isNewVersion(version: String): Boolean {
-        val currentVersion = getAppVersionName()
-        return try {
-            version != currentVersion &&
-                    version.replaceFirst("v", "", true) != currentVersion
-        } catch (e: Exception) {
-            e.printStackTrace()
-            "检查版本号失败，建议手动到GitHub查看是否有更新\n当前版本：$currentVersion".showToast(Toast.LENGTH_LONG)
-            false
-        }
-    }
-
     fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
         try {
-            val packageInfo = App.context.applicationContext
+            val packageInfo = appContext.applicationContext
                 .packageManager
-                .getPackageInfo(App.context.packageName, 0)
+                .getPackageInfo(appContext.packageName, 0)
             appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
@@ -344,9 +299,9 @@ object Util {
     fun getAppVersionName(): String {
         var appVersionName = ""
         try {
-            val packageInfo = App.context.applicationContext
+            val packageInfo = appContext.applicationContext
                 .packageManager
-                .getPackageInfo(App.context.packageName, 0)
+                .getPackageInfo(appContext.packageName, 0)
             appVersionName = packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
@@ -356,12 +311,12 @@ object Util {
 
     fun getAppName(): String? {
         return try {
-            val packageManager = App.context.packageManager
+            val packageManager = appContext.packageManager
             val packageInfo: PackageInfo = packageManager.getPackageInfo(
-                App.context.packageName, 0
+                appContext.packageName, 0
             )
             val labelRes: Int = packageInfo.applicationInfo.labelRes
-            App.context.resources.getString(labelRes)
+            appContext.getString(labelRes)
         } catch (e: Exception) {
             e.printStackTrace()
             null
@@ -371,11 +326,11 @@ object Util {
     fun getManifestMetaValue(name: String): String {
         var metaValue = ""
         try {
-            val packageManager = App.context.packageManager
+            val packageManager = appContext.packageManager
             if (packageManager != null) {
                 // 注意此处为ApplicationInfo 而不是 ActivityInfo,因为友盟设置的meta-data是在application标签中，而不是某activity标签中，所以用ApplicationInfo
                 val applicationInfo = packageManager.getApplicationInfo(
-                    App.context.packageName,
+                    appContext.packageName,
                     PackageManager.GET_META_DATA
                 )
                 if (applicationInfo.metaData != null) {
@@ -386,21 +341,6 @@ object Util {
             e.printStackTrace()
         }
         return metaValue
-    }
-
-    fun EditText.showKeyboard() {
-        isFocusable = true
-        isFocusableInTouchMode = true
-        requestFocus()
-        val inputManager =
-            App.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.showSoftInput(this, 0)
-    }
-
-    fun EditText.hideKeyboard() {
-        val inputManager =
-            App.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputManager.hideSoftInputFromWindow(this.windowToken, 0)
     }
 
     fun String.getSubString(s: String, e: String): List<String> {
@@ -442,26 +382,6 @@ object Util {
             Resources.getSystem().displayMetrics
         ).toInt()
 
-    fun setTransparentStatusBar(
-        window: Window,
-        isDark: Boolean = true
-    ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (isDark) window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR //实现状态栏图标和文字颜色为暗色
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.clearFlags(
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                        or WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-            )
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            window.statusBarColor = Color.TRANSPARENT
-        }
-    }
-
     fun setFullScreen(window: Window) {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -475,9 +395,12 @@ object Util {
         darkTextColor: Boolean = false
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.statusBarColor = statusBarColor //设置状态栏颜色
-            if (darkTextColor) window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            val decorView = window.decorView
+            val wic = WindowInsetsControllerCompat(window, decorView)
+            wic.isAppearanceLightStatusBars = darkTextColor
+            window.statusBarColor = statusBarColor
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -486,18 +409,17 @@ object Util {
     }
 
     fun getStatusBarHeight(): Int {
-        val resourceId: Int =
-            App.context.resources
-                .getIdentifier("status_bar_height", "dimen", "android")
+        val resourceId: Int = appContext.resources
+            .getIdentifier("status_bar_height", "dimen", "android")
         if (resourceId > 0) {
-            return App.context.resources.getDimensionPixelSize(resourceId)
+            return appContext.resources.getDimensionPixelSize(resourceId)
         }
         return 0
     }
 
     fun getScreenHeight(includeVirtualKey: Boolean): Int {
         val display =
-            (App.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+            (appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         val outPoint = Point()
         // 可能有虚拟按键的情况
         if (includeVirtualKey) display.getRealSize(outPoint)
@@ -507,7 +429,7 @@ object Util {
 
     fun getScreenWidth(includeVirtualKey: Boolean): Int {
         val display =
-            (App.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+            (appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
         val outPoint = Point()
         // 可能有虚拟按键的情况
         if (includeVirtualKey) display.getRealSize(outPoint)
@@ -579,23 +501,24 @@ object Util {
                 decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
                     var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
                     if (website.isBlank() || website == "/") {
-                        MaterialDialog(activity).input(hintRes = R.string.input_a_website) { dialog, text ->
+                        activity.showInputDialog(
+                            hint = activity.getString(R.string.input_a_website)
+                        ) { _, _, text ->
                             try {
                                 var url = text.toString()
                                 if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
                                 process(activity, URL(url).file)
                             } catch (e: Exception) {
-                                App.context.resources.getString(R.string.website_format_error)
-                                    .showToast()
+                                appContext.getString(R.string.website_format_error).showToast()
                                 e.printStackTrace()
                             }
-                        }.positiveButton(R.string.ok).show()
+                        }
                     } else {
                         try {
                             if (!website.matches(Regex("^.+://.*"))) website = "http://$website"
                             process(activity, URL(website).file)
                         } catch (e: Exception) {
-                            App.context.resources.getString(R.string.website_format_error)
+                            appContext.getString(R.string.website_format_error)
                                 .showToast()
                             e.printStackTrace()
                         }
@@ -608,9 +531,9 @@ object Util {
                     } else {
                         // 空内容
                         if (decodeUrl.isBlank()) return
-                        App.context.resources.getString(
+                        appContext.getString(
                             R.string.unknown_route,
-                            if (toastTitle.isBlank()) actionUrl else toastTitle
+                            toastTitle.ifBlank { actionUrl }
                         ).showToast()
                     }
                 }
@@ -643,7 +566,7 @@ object Util {
                                 else ""
                             }
                     if (paramString.isBlank()) {
-                        App.context.getString(R.string.notice_activity_error_param).showToast()
+                        appContext.getString(R.string.notice_activity_error_param).showToast()
                         return
                     }
                     context.startActivity(
@@ -654,9 +577,9 @@ object Util {
                 }
                 else -> {
                     if (decodeUrl.isBlank()) return
-                    App.context.resources.getString(
+                    appContext.getString(
                         R.string.unknown_route,
-                        if (toastTitle.isBlank()) actionUrl else toastTitle
+                        toastTitle.ifBlank { actionUrl }
                     ).showToast()
                 }
             }

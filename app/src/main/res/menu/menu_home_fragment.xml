@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_home_fragment_classify"
+        android:icon="@drawable/ic_format_list_bulleted_24"
+        android:title="@string/home_fragment_menu_classify"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_item_home_fragment_download"
+        android:icon="@drawable/ic_arrow_circle_down_24"
+        android:title="@string/home_fragment_menu_download"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_item_home_fragment_favorite"
+        android:icon="@drawable/ic_star_24"
+        android:title="@string/home_fragment_menu_favorite"
+        app:showAsAction="ifRoom" />
+</menu>

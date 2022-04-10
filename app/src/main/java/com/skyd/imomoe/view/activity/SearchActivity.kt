@@ -1,18 +1,15 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.widget.doOnTextChanged
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.databinding.ActivitySearchBinding
-import com.skyd.imomoe.util.Util.showKeyboard
+import com.skyd.imomoe.ext.fixKeyboardFitsSystemWindows
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
@@ -51,19 +48,36 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             rvSearchActivity.adapter = adapter
             showSearchHistory()
 
-            etSearchActivitySearch.doOnTextChanged { text, _, _, _ ->
-                if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
-                    mLayoutCircleProgressTextTip1.gone()
-                if (text == null || text.isEmpty()) {
-                    tvSearchActivityTip.text = getString(R.string.search_history)
-                    ivSearchActivityClearKeyWords.gone()
-                    showSearchHistory()
-                } else ivSearchActivityClearKeyWords.visible()
-            }
+            tbSearchActivity.fixKeyboardFitsSystemWindows()
+            svSearchActivity.isSubmitButtonEnabled = true
+            svSearchActivity.requestFocus()
+            svSearchActivity.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return if (query.isNullOrBlank()) {
+                        getString(R.string.search_input_keywords_tips).showToast()
+                        false
+                    } else {
+                        // 避免刷新间隔太短
+                        if (System.currentTimeMillis() - lastRefreshTime > 500) {
+                            lastRefreshTime = System.currentTimeMillis()
+                            search(query)
+                            true
+                        } else {
+                            false
+                        }
+                    }
+                }
 
-            ivSearchActivityClearKeyWords.setOnClickListener {
-                etSearchActivitySearch.setText("")
-            }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized)
+                        mLayoutCircleProgressTextTip1.gone()
+                    if (newText.isNullOrEmpty()) {
+                        tvSearchActivityTip.text = getString(R.string.search_history)
+                        showSearchHistory()
+                    }
+                    return true
+                }
+            })
         }
 
         viewModel.mldSearchResultList.observe(this) {
@@ -109,43 +123,29 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             if (searchHistoryListShow) adapter.dataList = it ?: emptyList()
         }
 
-        mBinding.tvSearchActivityCancel.setOnClickListener { finish() }
-
-        mBinding.etSearchActivitySearch.showKeyboard()
-
-        mBinding.etSearchActivitySearch.setOnEditorActionListener(object :
-            TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (v.text.toString().isBlank()) {
-                        getString(R.string.search_input_keywords_tips).showToast()
-                        return false
-                    }
-
-                    //避免刷新间隔太短
-                    return if (System.currentTimeMillis() - lastRefreshTime > 500) {
-                        lastRefreshTime = System.currentTimeMillis()
-                        search(v.text.toString())
-                        true
-                    } else {
-                        false
-                    }
+        mBinding.tbSearchActivity.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_item_search_activity_close -> {
+                    finish()
+                    true
                 }
-                return true
+                else -> false
             }
-        })
+        }
 
-        if (viewModel.keyWord.isBlank()) viewModel.getSearchHistoryData()
-        else search(viewModel.keyWord, pageNumber)
+        if (viewModel.keyWord.isBlank()) {
+            if (viewModel.mldSearchHistoryList.value == null) viewModel.getSearchHistoryData()
+        } else {
+            if (viewModel.mldSearchResultList.value == null) search(viewModel.keyWord, pageNumber)
+        }
     }
 
-    override fun getBinding(): ActivitySearchBinding = ActivitySearchBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivitySearchBinding.inflate(layoutInflater)
 
     fun search(key: String, partUrl: String = "") {
         //setText一定要在加载布局之前，否则progressbar会被gone掉
         mBinding.run {
-            etSearchActivitySearch.setText(key)
-            etSearchActivitySearch.setSelection(key.length)
+            svSearchActivity.setQuery(key, false)
             if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) {
                 mLayoutCircleProgressTextTip1.visible()
             } else {
@@ -179,11 +179,5 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     override fun finish() {
         super.finish()
         overridePendingTransition(0, R.anim.anl_push_top_out)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
     }
 }

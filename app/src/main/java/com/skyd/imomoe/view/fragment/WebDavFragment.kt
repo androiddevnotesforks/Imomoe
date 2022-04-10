@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.fragment
 
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -7,23 +8,17 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.preference.Preference
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.ext.editor
-import com.skyd.imomoe.ext.secretSharedPreferences
-import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.warningDialog
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.RestoreFile1Proxy
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
-import com.skyd.imomoe.view.component.preference.Preference
 import com.skyd.imomoe.viewmodel.WebDavViewModel
 
 class WebDavFragment : BasePreferenceFragment() {
@@ -32,11 +27,17 @@ class WebDavFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        findPreference<Preference>("backup_app_database_to_cloud")?.title = getString(
+            R.string.backup_app_database_to_cloud, ""
+        )
+
         viewModel.mldBackup.observe(viewLifecycleOwner) {
             if (it.first == WebDavViewModel.TYPE_APP_DATABASE_DIR) {
-                findPreference<Preference>("backup_app_database_to_cloud")?.text1 =
+                findPreference<Preference>("backup_app_database_to_cloud")?.title = getString(
+                    R.string.backup_app_database_to_cloud,
                     if (it.second) getString(R.string.backup_succeed)
                     else getString(R.string.backup_failed)
+                )
             }
         }
     }
@@ -45,59 +46,58 @@ class WebDavFragment : BasePreferenceFragment() {
         setPreferencesFromResource(R.xml.webdav_preferences, rootKey)
 
         findPreference<Preference>("webdav_server_address")?.apply {
-            val address = App.context.sharedPreferences()
-                .getString("webdav_server_address", null).orEmpty()
+            val address = sharedPreferences().getString("webdav_server_address", null).orEmpty()
             summary = address
             setOnPreferenceClickListener {
                 var url: String
-                MaterialDialog(requireActivity()).input(
-                    hintRes = R.string.webdav_server_address,
+                showInputDialog(
+                    hint = getString(R.string.webdav_server_address),
                     prefill = address
-                ) { _, text ->
+                ) { _, _, text ->
                     url = text.toString()
                     if (url.matches(Regex("^[a-zA-z]+://[^\\s]+"))) {
                         if (!url.endsWith("/")) url += "/"
-                        App.context.sharedPreferences().editor {
-                            putString("webdav_server_address", url)
-                        }
+                        sharedPreferences().editor { putString("webdav_server_address", url) }
                         summary = url
                     } else {
-                        warningDialog(onPositive = { it.dismiss() })
-                            .message(res = R.string.wrong_webdav_server_address_format).show()
+                        showMessageDialog(
+                            onPositive = { dialog, _ -> dialog.dismiss() },
+                            message = getString(R.string.wrong_webdav_server_address_format)
+                        )
                     }
-                }.positiveButton(R.string.ok).show()
+                }
                 false
             }
         }
 
         findPreference<Preference>("webdav_account")?.apply {
-            val account = App.context.sharedPreferences()
+            val account = sharedPreferences()
                 .getString("webdav_account", null).orEmpty()
             summary = account
             setOnPreferenceClickListener {
-                MaterialDialog(requireActivity()).input(
-                    hintRes = R.string.webdav_account,
+                showInputDialog(
+                    hint = getString(R.string.webdav_account),
                     prefill = account
-                ) { _, text ->
-                    App.context.sharedPreferences().editor {
-                        putString("webdav_account", text.toString())
-                    }
+                ) { _, _, text ->
+                    sharedPreferences().editor { putString("webdav_account", text.toString()) }
                     summary = text
-                }.positiveButton(R.string.ok).show()
+                }
                 false
             }
         }
 
         findPreference<Preference>("webdav_password")?.apply {
             setOnPreferenceClickListener {
-                MaterialDialog(requireActivity()).input(hintRes = R.string.webdav_password) { _, text ->
+                showInputDialog(
+                    hint = getString(R.string.webdav_password),
+                ) { _, _, text ->
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         secretSharedPreferences().editor {
                             putString("webdav_password", text.toString())
                         }
                     } else viewModel.pwd = text.toString()
                     summary = getString(R.string.webdav_password_set)
-                }.positiveButton(R.string.ok).show()
+                }
                 false
             }
             summary = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -125,7 +125,10 @@ class WebDavFragment : BasePreferenceFragment() {
                     credential.first, credential.second, credential.third,
                     WebDavViewModel.TYPE_APP_DATABASE_DIR
                 )
-                text1 = getString(R.string.backing_up)
+                title = getString(
+                    R.string.backup_app_database_to_cloud,
+                    getString(R.string.backing_up)
+                )
                 false
             }
         }
@@ -155,10 +158,8 @@ class WebDavFragment : BasePreferenceFragment() {
     }
 
     private fun getWebDAVCredential(): Triple<String, String, String> {
-        val url = App.context.sharedPreferences()
-            .getString("webdav_server_address", null).orEmpty()
-        val account = App.context.sharedPreferences()
-            .getString("webdav_account", null).orEmpty()
+        val url = sharedPreferences().getString("webdav_server_address", null).orEmpty()
+        val account = sharedPreferences().getString("webdav_account", null).orEmpty()
         val password = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             secretSharedPreferences().getString("webdav_password", null).orEmpty()
         } else {
@@ -203,15 +204,15 @@ class WebDavFragment : BasePreferenceFragment() {
         recyclerView.post { recyclerView.scrollToPosition(0) }
         val adapter = VarietyAdapter(
             mutableListOf(RestoreFile1Proxy(onClickListener = { _, data, _ ->
-                askRestore(type, warningDialog(onPositive = {
+                askRestore(type) { dialog, _ ->
                     viewModel.restore(data.path, getWebDAVCredential(), type)
                     getString(R.string.restoring_data).showToast()
-                    it.dismiss()
-                }))
+                    dialog.dismiss()
+                }
             }, onLongClickListener = { _, data, _ ->
-                askDelete(type, warningDialog(onPositive = {
+                askDelete(type) { _, _ ->
                     viewModel.delete(data, getWebDAVCredential(), type)
-                }))
+                }
                 true
             }))
         )
@@ -230,22 +231,32 @@ class WebDavFragment : BasePreferenceFragment() {
     /**
      * 弹出询问是否覆盖恢复数据对话框
      */
-    private fun askRestore(type: String, dialog: MaterialDialog) {
-        when (type) {
+    private fun askRestore(
+        type: String,
+        onPositive: (dialog: DialogInterface, which: Int) -> Unit
+    ) {
+        val message = when (type) {
             WebDavViewModel.TYPE_APP_DATABASE_DIR -> {
-                dialog.message(res = R.string.restore_app_database_warning).show()
+                getString(R.string.restore_app_database_warning)
             }
+            else -> null
         }
+        showMessageDialog(onPositive = onPositive, message = message)
     }
 
     /**
      * 弹出询问是否删除对话框
      */
-    private fun askDelete(type: String, dialog: MaterialDialog) {
-        when (type) {
+    private fun askDelete(
+        type: String,
+        onPositive: (dialog: DialogInterface, which: Int) -> Unit
+    ) {
+        val message = when (type) {
             WebDavViewModel.TYPE_APP_DATABASE_DIR -> {
-                dialog.message(res = R.string.delete_remote_file_warning).show()
+                getString(R.string.delete_remote_file_warning)
             }
+            else -> null
         }
+        showMessageDialog(onPositive = onPositive, message = message)
     }
 }

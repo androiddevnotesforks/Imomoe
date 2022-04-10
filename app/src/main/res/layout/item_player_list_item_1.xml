@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skyd.imomoe.view.component.textview.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/TextAppearance.Material3.TitleMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
     android:paddingVertical="7dp"
-    android:textColor="@color/foreground_white_skin"
-    android:textSize="17sp"
+    android:textColor="@android:color/white"
     tools:text="16:9"
-    tools:textColor="@color/foreground_main_color_2_skin" />
+    tools:textColor="#000000" />

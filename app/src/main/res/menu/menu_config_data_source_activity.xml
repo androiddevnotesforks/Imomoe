@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_config_data_source_activity_reset"
+        android:enabled="true"
+        android:icon="@drawable/ic_refresh_24"
+        android:title="@string/config_data_source_activity_menu_reset"
+        app:showAsAction="always" />
+</menu>

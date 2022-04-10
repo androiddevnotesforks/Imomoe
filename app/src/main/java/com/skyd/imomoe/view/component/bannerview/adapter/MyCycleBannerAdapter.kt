@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.bean.AnimeCover6Bean
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover6Proxy
-import com.skyd.skin.SkinManager
 
 /**
  * Created by Sky_D on 2021-02-08.
@@ -22,7 +21,7 @@ class MyCycleBannerAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {
-        return proxy.onCreateViewHolder(parent, viewType).apply { SkinManager.setSkin(itemView) }
+        return proxy.onCreateViewHolder(parent, viewType)
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinCover1Bean
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.SkinCover1ViewHolder
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
-import com.skyd.skin.SkinManager
 
 class SkinCover1Proxy : VarietyAdapter.Proxy<SkinCover1Bean, SkinCover1ViewHolder>() {
     private var selectedItem: SkinCover1ViewHolder? = null
@@ -43,15 +41,15 @@ class SkinCover1Proxy : VarietyAdapter.Proxy<SkinCover1Bean, SkinCover1ViewHolde
         }
         holder.itemView.setOnClickListener {
             if (data.using) return@setOnClickListener
-            if (data.skinSuffix == SkinManager.KEY_SKIN_DARK_SUFFIX && data.skinPath == "")
-                SkinManager.setDarkMode(SkinManager.DARK_MODE_YES)
-            else SkinManager.notifyListener(data.skinPath, data.skinSuffix)
             holder.ivSkinCover1Selected.visible()
-            ((holder.bindingAdapter as VarietyAdapter).dataList[selectedItemPosition] as SkinCover1Bean)
-                .using = false
+            ((holder.bindingAdapter as VarietyAdapter)
+                .dataList.getOrNull(selectedItemPosition) as? SkinCover1Bean)
+                ?.using = false
             selectedItem?.ivSkinCover1Selected?.gone()
             selectedItem = holder
             selectedItemPosition = index
+            appThemeRes.postValue(data.themeRes)
+            holder.itemView.activity?.recreate()
         }
     }
 }

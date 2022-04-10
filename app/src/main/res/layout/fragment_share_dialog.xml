@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12_skin"
+    android:background="@drawable/shape_circle_corner_bottom_dialog_12"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingStart="13dp"
     android:paddingEnd="13dp">
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="17dp"
         android:gravity="center"
         android:text="@string/share_to"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textColor="?attr/colorOnSurface" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,6 +25,7 @@
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_qq"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -33,12 +33,13 @@
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
             android:text="@string/qq"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textSize="12sp"
-            app:drawableTopCompat="@drawable/ic_qq_main_color_2_34_skin" />
+            android:textColor="?attr/colorOnSurface"
+            app:drawableTint="?attr/colorOnSurface"
+            app:drawableTopCompat="@drawable/ic_qq_34" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_wechat"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -46,12 +47,13 @@
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
             android:text="@string/wechat"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textSize="12sp"
-            app:drawableTopCompat="@drawable/ic_wechat_main_color_2_34_skin" />
+            android:textColor="?attr/colorOnSurface"
+            app:drawableTint="?attr/colorOnSurface"
+            app:drawableTopCompat="@drawable/ic_wechat_34" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_to_weibo"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -59,12 +61,13 @@
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
             android:text="@string/weibo"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textSize="12sp"
-            app:drawableTopCompat="@drawable/ic_weibo_main_color_2_34_skin" />
+            android:textColor="?attr/colorOnSurface"
+            app:drawableTint="?attr/colorOnSurface"
+            app:drawableTopCompat="@drawable/ic_weibo_34" />
 
         <com.skyd.imomoe.view.component.textview.TypefaceTextView
             android:id="@+id/tv_copy_link"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -72,20 +75,19 @@
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
             android:text="@string/copy_url"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textSize="12sp"
-            app:drawableTopCompat="@drawable/ic_link_main_color_2_34_skin" />
+            android:textColor="?attr/colorOnSurface"
+            app:drawableTint="?attr/colorOnSurface"
+            app:drawableTopCompat="@drawable/ic_link_34" />
 
     </LinearLayout>
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_cancel_share"
+        style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingVertical="17dp"
         android:text="@string/cancel"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="14sp" />
-
+        android:textColor="?attr/colorOnSurface" />
 </LinearLayout>

@@ -29,9 +29,7 @@ class AnimeCover7Proxy : VarietyAdapter.Proxy<AnimeCover7Bean, AnimeCover7ViewHo
         action: ((Any?) -> Unit)?
     ) {
         val activity = holder.itemView.activity
-        holder.tvAnimeCover7Title.isFocused = true
         holder.tvAnimeCover7Title.text = data.title
-        holder.tvAnimeCover7Size.isFocused = true
         holder.tvAnimeCover7Size.text = data.size
         if (data.path == 1) {
             holder.tvAnimeCover7OldPath.text = activity?.getString(R.string.old_path)

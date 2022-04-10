@@ -70,7 +70,6 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
         mBinding.avpSimplePlayActivity.run {
             //设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
-            getDownloadButton()?.gone()
             setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
             //是否开启自动旋转

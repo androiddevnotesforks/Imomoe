@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.skyd.imomoe.R
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.ext.visible
-import com.skyd.skin.core.SkinBaseFragment
 import org.greenrobot.eventbus.EventBus
 
 
-abstract class BaseFragment<VB : ViewBinding> : SkinBaseFragment() {
+abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     protected var isFirstLoadData = true
     private var binding: VB? = null
     protected val mBinding get() = binding!!

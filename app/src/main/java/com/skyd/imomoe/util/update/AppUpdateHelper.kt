@@ -2,11 +2,11 @@ package com.skyd.imomoe.util.update
 
 import android.app.Activity
 import androidx.lifecycle.LiveData
-import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.model.AppUpdateModel
 import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.ext.formatSize
+import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -38,9 +38,9 @@ class AppUpdateHelper private constructor() {
     fun noticeUpdate(activity: Activity) {
         listOf<Function<Unit>> { checkUpdate() }
         val updateBean = AppUpdateModel.updateBean ?: return
-        MaterialDialog(activity).show {
-            title(text = "发现新版本\n版本名：${updateBean.name}\n版本代号：${updateBean.tagName}")
-            StringBuffer().apply {
+        activity.showMessageDialog(
+            title = "发现新版本\n版本名：${updateBean.name}\n版本代号：${updateBean.tagName}",
+            message = StringBuffer().run {
                 val size = updateBean.assets[0].size
                 if (size > 0) {
                     append("<p>大小：${size.toDouble().formatSize()}<br/>")
@@ -67,20 +67,18 @@ class AppUpdateHelper private constructor() {
                     append("下载次数：${downloadCount}次<p/>")
                 }
                 append(updateBean.body)
-                this@show.message(
-                    text = this.toString().toHtml()
-                )
-            }
-            positiveButton(res = R.string.download_update) {
-                openBrowser(
-                    AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl
-                        ?: return@positiveButton
-                )
-            }
-            negativeButton(res = R.string.cancel) {
-                dismiss()
+                this.toString().toHtml()
+            },
+            onNegative = { dialog, _ ->
+                dialog.dismiss()
                 AppUpdateModel.status.value = AppUpdateStatus.LATER
-            }
+            },
+            positiveText = activity.getString(R.string.download_update)
+        ) { _, _ ->
+            openBrowser(
+                AppUpdateModel.updateBean?.assets?.get(0)?.browserDownloadUrl
+                    ?: return@showMessageDialog
+            )
         }
     }
 }

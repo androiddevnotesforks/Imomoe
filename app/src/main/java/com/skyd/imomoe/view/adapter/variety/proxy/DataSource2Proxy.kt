@@ -39,7 +39,7 @@ class DataSource2Proxy(
         holder.tvDataSource2Author.text = data.author
         data.icon.let {
             if (it.isNullOrBlank()) {
-                holder.ivDataSource2Icon.setImageDrawable(getResDrawable(R.drawable.ic_insert_drive_file_main_color_2_24_skin))
+                holder.ivDataSource2Icon.setImageDrawable(getResDrawable(R.drawable.ic_insert_drive_file_24))
             } else {
                 holder.ivDataSource2Icon.loadImage(
                     if (it.startsWith("/")) Api.DATA_SOURCE_IMAGE_PREFIX + it

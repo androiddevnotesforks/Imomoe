@@ -20,13 +20,14 @@ deps.kotlinx = kotlinx
 
 def support = [:]
 support.constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
-support.material = "com.google.android.material:material:1.4.0"
+support.material = "com.google.android.material:material:1.6.0-beta01"
 support.appcompat = "androidx.appcompat:appcompat:1.4.1"
 support.swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 support.viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 support.fragment_ktx = "androidx.fragment:fragment-ktx:1.4.1"
 support.preference = "androidx.preference:preference:1.2.0"
 support.security_crypto = "androidx.security:security-crypto:1.1.0-alpha03"
+support.legacy_support_v4 = "androidx.legacy:legacy-support-v4:1.0.0"
 deps.support = support
 
 def retrofit2 = [:]
@@ -70,11 +71,6 @@ deps.getActivity = getActivity
 def filedownloader = [:]
 filedownloader.library = "com.liulishuo.filedownloader:library:1.7.7"
 deps.filedownloader = filedownloader
-
-def material_dialogs = [:]
-material_dialogs.core = "com.afollestad.material-dialogs:core:3.3.0"
-material_dialogs.input = "com.afollestad.material-dialogs:input:3.3.0"
-deps.material_dialogs = material_dialogs
 
 // cling 2.1.2版本无法搜索到设备，不要升级
 def cling = [:]

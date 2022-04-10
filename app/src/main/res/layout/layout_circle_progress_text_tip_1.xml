@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_circle_progress_text_tip_1"
     android:layout_width="wrap_content"
@@ -12,18 +11,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/foreground_main_color_2_skin"
         android:indeterminateTintMode="src_atop" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_circle_progress_text_tip_1"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/pb_circle_progress_text_tip_1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="17sp"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorPrimary"
         tools:text="@string/read_download_data_file" />
 </RelativeLayout>

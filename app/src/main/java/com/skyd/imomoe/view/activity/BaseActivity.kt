@@ -4,48 +4,44 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewStub
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.efs.sdk.launch.LaunchManager
-import com.skyd.skin.core.SkinBaseActivity
+import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.setColorStatusBar
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.Util
-import com.skyd.skin.core.SkinResourceProcessor
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseActivity<VB : ViewBinding> : SkinBaseActivity() {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     protected lateinit var mBinding: VB
+    protected open var activityThemeRes = appThemeRes.value
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
+        setTheme(activityThemeRes!!)
+        appThemeRes.observe(this) {
+            if (activityThemeRes != it) {
+                // 壁纸取色
+                if (it == R.style.Theme_Anime_Dynamic) {
+                    DynamicColors.applyToActivityIfAvailable(this)
+                }
+                recreate()
+            }
+        }
         mBinding = getBinding()
         setContentView(mBinding.root)
-        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
 
         if (Util.lastReadUserNoticeVersion() >= Const.Common.USER_NOTICE_VERSION) {
             initUM()
         }
 
         LaunchManager.onTraceApp(application, LaunchManager.PAGE_ON_CREATE, false)
-    }
-
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        setTheme(SkinResourceProcessor.instance.getSkinThemeId(R.style.Theme_Anime_skin))
-    }
-
-    override fun onChangeStatusBarSkin() {
-        setColorStatusBar(window, getResColor(R.color.main_color_2_skin))
     }
 
     protected abstract fun getBinding(): VB

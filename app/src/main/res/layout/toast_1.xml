@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skyd.imomoe.view.component.textview.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tv_toast_1"
+    style="@style/TextAppearance.Material3.LabelLarge"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
+    android:background="@drawable/shape_fill_circle_corner_50"
     android:paddingHorizontal="15dp"
     android:paddingVertical="9dp"
-    android:textColor="@color/foreground_white_skin"
-    android:textStyle="bold"
-    app:typeface="bPRTypeface"
+    android:textColor="@android:color/white"
     tools:text="Toast" />

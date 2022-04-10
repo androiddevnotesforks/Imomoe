@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.view.View
 import android.view.animation.AlphaAnimation
+import android.view.inputmethod.InputMethodManager
+import com.skyd.imomoe.appContext
 
 
 fun View.enable() {
@@ -53,3 +55,18 @@ val View.activity: Activity?
         }
         return null
     }
+
+fun View.showKeyboard() {
+    isFocusable = true
+    isFocusableInTouchMode = true
+    requestFocus()
+    val inputManager =
+        appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.showSoftInput(this, 0)
+}
+
+fun View.hideKeyboard() {
+    val inputManager =
+        appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputManager.hideSoftInputFromWindow(this.windowToken, 0)
+}

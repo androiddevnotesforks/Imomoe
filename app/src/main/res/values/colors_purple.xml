@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_purple">#673AB7</color>
+    <color name="on_primary_purple">#FFFFFF</color>
+    <color name="primary_inverse_purple">#9375C8</color>
+    <color name="primary_container_purple">#A071F3</color>
+    <color name="on_primary_container_purple">#460EA8</color>
+    <color name="secondary_purple">#9267E1</color>
+    <color name="on_secondary_purple">#FFFFFF</color>
+    <color name="secondary_container_purple">#9B69F3</color>
+    <color name="on_secondary_container_purple">#5001DD</color>
+    <color name="tertiary_purple">#480CB3</color>
+    <color name="on_tertiary_purple">#FFFFFF</color>
+    <color name="tertiary_container_purple">#8A65CC</color>
+    <color name="on_tertiary_container_purple">#250065</color>
+    <color name="surface_purple">#F0E7FF</color>
+    <color name="on_surface_purple">#5302E3</color>
+    <color name="surface_variant_purple">#D6C2FB</color>
+    <color name="on_surface_variant_purple">#7731F3</color>
+    <color name="inverse_surface_purple">#4A19A1</color>
+    <color name="inverse_on_surface_purple">#E8DBFF</color>
+    <color name="background_purple">#EDE2FF</color>
+    <color name="on_background_purple">#0D0913</color>
+    <color name="error_purple">#B61E1E</color>
+    <color name="on_error_purple">#FFFFFF</color>
+    <color name="error_container_purple">#E5D7FF</color>
+    <color name="on_error_container_purple">#4E0E0E</color>
+    <color name="outline_purple">#130A23</color>
+
+</resources>

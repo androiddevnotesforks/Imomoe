@@ -1,12 +1,11 @@
 package com.skyd.imomoe.util.compare
 
 import android.app.Activity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.showListDialog
 
 
 object EpisodeTitleSort {
@@ -84,14 +83,13 @@ object EpisodeTitleSort {
             EpisodeTitleSortMode.Descending
         )
         items.forEachIndexed { index, s -> if (s == episodeTitleSortMode) initialSelection = index }
-        MaterialDialog(this).listItemsSingleChoice(
+        showListDialog(
+            title = getString(R.string.select_episode_title_sort_mode),
             items = items,
-            initialSelection = initialSelection
-        ) { _, index, _ ->
-            episodeTitleSortMode = items[index]
-            onPositive?.invoke(items[index])
-        }.positiveButton(R.string.ok).negativeButton(R.string.cancel).show {
-            title(res = R.string.select_episode_title_sort_mode)
+            checkedItem = initialSelection
+        ) { _, _, itemIndex ->
+            episodeTitleSortMode = items[itemIndex]
+            onPositive?.invoke(items[itemIndex])
         }
     }
 }

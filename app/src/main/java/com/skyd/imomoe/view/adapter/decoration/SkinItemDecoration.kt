@@ -29,14 +29,10 @@ class SkinItemDecoration : RecyclerView.ItemDecoration() {
                 // x=4 y=10
                 0 -> {
                     outRect.left = 16.dp
-                    outRect.right = 4.dp    // 4
+                    outRect.right = 7.dp
                 }
                 1 -> {
-                    outRect.left = 10.dp    // 10
-                    outRect.right = 10.dp   // 10
-                }
-                2 -> {
-                    outRect.left = 4.dp     // 4
+                    outRect.left = 7.dp
                     outRect.right = 16.dp
                 }
             }

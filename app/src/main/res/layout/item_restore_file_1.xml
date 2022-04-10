@@ -13,22 +13,23 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
         android:importantForAccessibility="no"
-        tools:src="@drawable/ic_database_main_color_2_24_skin" />
+        app:tint="?attr/colorPrimary"
+        tools:src="@drawable/ic_database_24" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_restore_file_1_title"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="12dp"
         android:layout_toEndOf="@id/iv_restore_file_1_icon"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="16sp"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorPrimary"
         tools:text="app.db" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_restore_file_1_size"
+        style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_restore_file_1_title"
@@ -36,13 +37,12 @@
         android:layout_marginTop="6dp"
         android:layout_marginBottom="12dp"
         android:layout_toEndOf="@id/iv_restore_file_1_icon"
-        android:textColor="@color/main_color_skin"
-        android:textSize="13sp"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorSecondary"
         tools:text="30K" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_restore_file_1_last_modified"
+        style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_restore_file_1_title"
@@ -51,8 +51,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="12dp"
         android:layout_toEndOf="@id/tv_restore_file_1_size"
-        android:textColor="@color/main_color_skin"
-        android:textSize="13sp"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorSecondary"
         tools:text="30K" />
 </RelativeLayout>

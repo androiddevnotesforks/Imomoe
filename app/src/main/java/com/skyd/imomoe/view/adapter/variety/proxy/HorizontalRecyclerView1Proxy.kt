@@ -1,22 +1,24 @@
 package com.skyd.imomoe.view.adapter.variety.proxy
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisode1Bean
 import com.skyd.imomoe.bean.HorizontalRecyclerView1Bean
+import com.skyd.imomoe.ext.getAttrColor
 import com.skyd.imomoe.util.AnimeEpisode1ViewHolder
 import com.skyd.imomoe.util.HorizontalRecyclerView1ViewHolder
-import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.view.adapter.decoration.HorizontalRecyclerViewDecoration
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 
 class HorizontalRecyclerView1Proxy(
-    @IntRange(from = 0, to = 1) private val color: Int = MAIN_COLOR_2,
+    @IntRange(from = 0, to = 1) private val color: Int = THEME,
     private val onMoreButtonClickListener: ((
         holder: HorizontalRecyclerView1ViewHolder,
         data: HorizontalRecyclerView1Bean,
@@ -31,7 +33,7 @@ class HorizontalRecyclerView1Proxy(
     private val animeEpisodeWidth: Int? = null
 ) : VarietyAdapter.Proxy<HorizontalRecyclerView1Bean, HorizontalRecyclerView1ViewHolder>() {
     companion object {
-        const val MAIN_COLOR_2 = 0
+        const val THEME = 0
         const val WHITE = 1
     }
 
@@ -49,13 +51,19 @@ class HorizontalRecyclerView1Proxy(
         action: ((Any?) -> Unit)?
     ) {
         when (color) {
-            MAIN_COLOR_2 -> {
+            THEME -> {
                 holder.ivHorizontalRecyclerView1More
-                    .setImageDrawable(getResDrawable(R.drawable.ic_keyboard_arrow_down_main_color_2_24_skin))
+                    .setImageResource(R.drawable.ic_keyboard_arrow_down_24)
+                holder.ivHorizontalRecyclerView1More.imageTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getAttrColor(R.attr.colorPrimary)
+                )
             }
             WHITE -> {
                 holder.ivHorizontalRecyclerView1More
-                    .setImageDrawable(getResDrawable(R.drawable.ic_keyboard_arrow_down_white_24_skin))
+                    .setImageResource(R.drawable.ic_keyboard_arrow_down_24)
+                holder.ivHorizontalRecyclerView1More.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(holder.itemView.context, android.R.color.white)
+                )
             }
         }
         holder.rvHorizontalRecyclerView1.apply {
@@ -64,7 +72,6 @@ class HorizontalRecyclerView1Proxy(
                 adapter = VarietyAdapter(
                     mutableListOf(
                         AnimeEpisode1Proxy(
-                            color = color,
                             onClickListener = onAnimeEpisodeClickListener,
                             height = animeEpisodeHeight,
                             width = animeEpisodeWidth

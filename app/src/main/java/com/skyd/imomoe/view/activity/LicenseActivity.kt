@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.bean.License1Bean
@@ -71,12 +70,6 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         )
         list += License1Bean(
             ActionUrl.ANIME_BROWSER,
-            "https://github.com/afollestad/material-dialogs",
-            "material-dialogs",
-            "Apache-2.0 License"
-        )
-        list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
             "https://github.com/lingochamp/FileDownloader",
             "FileDownloader",
             "Apache-2.0 License"
@@ -126,18 +119,11 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         adapter.dataList = list
 
         mBinding.run {
-            atbLicenseActivity.setBackButtonClickListener { finish() }
+            tbLicenseActivity.setNavigationOnClickListener { finish() }
             rvLicenseActivity.layoutManager = LinearLayoutManager(this@LicenseActivity)
             rvLicenseActivity.adapter = adapter
         }
     }
 
-    override fun getBinding(): ActivityLicenseBinding =
-        ActivityLicenseBinding.inflate(layoutInflater)
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
+    override fun getBinding() = ActivityLicenseBinding.inflate(layoutInflater)
 }

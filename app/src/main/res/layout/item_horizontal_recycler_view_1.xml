@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -26,5 +25,5 @@
         android:minHeight="50dp"
         android:padding="12dp"
         android:scaleType="center"
-        android:src="@drawable/ic_keyboard_arrow_down_white_24_skin" />
+        android:src="@drawable/ic_keyboard_arrow_down_24" />
 </LinearLayout>

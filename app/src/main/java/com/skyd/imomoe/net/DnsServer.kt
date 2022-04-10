@@ -1,13 +1,12 @@
 package com.skyd.imomoe.net
 
 import android.app.Activity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.showInputDialog
+import com.skyd.imomoe.ext.showListDialog
 import com.skyd.imomoe.util.showToast
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
@@ -69,21 +68,25 @@ object DnsServer {
             if (s.equals(dnsServer)) initialSelection = index
         }
         if (dnsServer.isNullOrBlank()) initialSelection = 0
-        MaterialDialog(this).listItemsSingleChoice(
+        showListDialog(
+            title = getString(R.string.select_dns_server),
             items = defaultDnsServer,
-            initialSelection = initialSelection
-        ) { _, index, _ ->
-            dnsServer = defaultDnsServer[index].dnsServer
-        }.positiveButton(R.string.ok).negativeButton(R.string.custom_dns_server) {
-            customDnsServer()
-            it.dismiss()
-        }.show {
-            title(res = R.string.select_dns_server)
+            checkedItem = initialSelection,
+            neutralText = getString(R.string.custom_dns_server),
+            onNeutral = { dialog, _ ->
+                customDnsServer()
+                dialog.dismiss()
+            }
+        ) { _, _, itemIndex ->
+            dnsServer = defaultDnsServer[itemIndex].dnsServer
         }
     }
 
     fun Activity.customDnsServer() {
-        MaterialDialog(this).input(hintRes = R.string.custom_dns_server_describe) { _, text ->
+        showInputDialog(
+            title = getString(R.string.custom_dns_server_dialog_title),
+            hint = getString(R.string.custom_dns_server_describe)
+        ) { _, _, text ->
             val url = text.toString()
             runCatching {
                 // 测试url合法性
@@ -93,6 +96,6 @@ object DnsServer {
                 e.printStackTrace()
                 e.message?.showToast()
             }
-        }.show()
+        }
     }
 }

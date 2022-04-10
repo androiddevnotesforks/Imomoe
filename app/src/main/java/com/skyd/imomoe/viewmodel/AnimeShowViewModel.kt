@@ -10,15 +10,14 @@ import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 
 
 class AnimeShowViewModel : ViewModel() {
     private val animeShowModel: IAnimeShowModel by lazy {
         DataSourceManager.create(IAnimeShowModel::class.java) ?: AnimeShowModel()
     }
-    var viewPool: SerializableRecycledViewPool? = null
-    var mldGetAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var partUrl: String = ""
+    var mldAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()
     private var pageNumberBean: PageNumberBean? = null
 
@@ -26,9 +25,9 @@ class AnimeShowViewModel : ViewModel() {
         pageNumberBean = null
         request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
             pageNumberBean = it.second
-            mldGetAnimeShowList.postValue(it.first)
+            mldAnimeShowList.postValue(it.first)
         }, error = {
-            mldGetAnimeShowList.postValue(null)
+            mldAnimeShowList.postValue(null)
             "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }

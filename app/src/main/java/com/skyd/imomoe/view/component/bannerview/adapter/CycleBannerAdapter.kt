@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.component.bannerview.adapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_ID
 import com.skyd.imomoe.view.component.bannerview.BannerUtil.getPosition
-import com.skyd.skin.SkinManager
 
 /**
  * Created by Sky_D on 2021-02-08.
@@ -13,7 +12,6 @@ abstract class CycleBannerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder
         getItemType(getPosition(position, getCount()))
 
     final override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        SkinManager.applyViews(holder.itemView)
         onBind(holder, getPosition(position, getCount()))
     }
 

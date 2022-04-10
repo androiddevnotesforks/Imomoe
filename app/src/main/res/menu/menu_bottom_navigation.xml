@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_24"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/everyday_anime_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_sunny_24"
+        android:title="@string/everyday_anime" />
+
+    <item
+        android:id="@+id/more_fragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_beans_24"
+        android:title="@string/more" />
+</menu>

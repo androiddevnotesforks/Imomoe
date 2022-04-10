@@ -15,10 +15,12 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_insert_drive_file_main_color_2_24_skin" />
+        android:src="@drawable/ic_insert_drive_file_24"
+        app:tint="?attr/colorPrimary" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_data_source_1_name"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -28,8 +30,6 @@
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="17sp"
         app:typeface="bPRTypeface"
         tools:text="CustomDataSource.jar" />
 
@@ -38,10 +38,12 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="6dp"
-        android:src="@drawable/ic_check_circle_main_color_2_24_skin" />
+        android:src="@drawable/ic_check_circle_24"
+        app:tint="?attr/colorPrimary" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_data_source_1_size"
+        style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -53,7 +55,6 @@
         android:marqueeRepeatLimit="marquee_forever"
         android:minWidth="45dp"
         android:singleLine="true"
-        android:textColor="@color/main_color_skin"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorSecondary"
         tools:text="300M" />
 </LinearLayout>

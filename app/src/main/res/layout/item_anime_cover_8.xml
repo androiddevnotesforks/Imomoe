@@ -7,10 +7,10 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="2dp">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        app:cardCornerRadius="5dp"
         app:layout_constraintDimensionRatio="7:10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,12 +22,6 @@
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             tools:src="@drawable/ic_launcher_background" />
-
-        <View
-            android:id="@+id/view_anime_cover_8_night"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/transparent_skin" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,33 +36,29 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1">
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_anime_cover_8_title"
+                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="13sp"
-                app:typeface="bPRTypeface"
+                android:textColor="@android:color/white"
                 tools:text="中二病也要谈恋爱！" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_anime_cover_8_episode"
                 android:layout_width="wrap_content"
+                style="@style/TextAppearance.Material3.TitleSmall"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:ellipsize="marquee"
                 android:focusable="true"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="11sp"
-                app:focused="true"
-                app:typeface="bPRTypeface"
-                tools:ignore="SmallSp"
+                android:textColor="@android:color/white"
                 tools:text="全12集" />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

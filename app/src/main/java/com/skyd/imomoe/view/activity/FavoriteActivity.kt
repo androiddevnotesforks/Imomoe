@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
 import androidx.activity.viewModels
@@ -20,7 +19,7 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         super.onCreate(savedInstanceState)
 
         mBinding.run {
-            atbFavoriteActivity.setBackButtonClickListener { finish() }
+            tbFavoriteActivity.setNavigationOnClickListener { finish() }
 
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
             rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)
@@ -37,18 +36,12 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
         }
 
         mBinding.srlFavoriteActivity.isRefreshing = true
-        viewModel.getFavoriteData()
+        if (viewModel.mldFavoriteList.value == null) viewModel.getFavoriteData()
     }
 
-    override fun getBinding(): ActivityFavoriteBinding =
-        ActivityFavoriteBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityFavoriteBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutFavoriteActivityNoFavorite
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }
 

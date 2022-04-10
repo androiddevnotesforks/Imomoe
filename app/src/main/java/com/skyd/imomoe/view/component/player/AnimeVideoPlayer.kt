@@ -28,7 +28,6 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
@@ -82,33 +81,25 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 正在双指缩放移动
     private var doublePointerZoomingMoving = false
 
-    private var ivDownloadButton: ImageView? = null
-
     private var initFirstLoad = true
 
-    //记住切换数据源类型
+    // 记住切换数据源类型
     private var mScaleIndex = 0
 
-    //4:3  16:9等
+    // 4:3  16:9等
     private var tvMoreScale: TextView? = null
 
-    //倍速按钮
+    // 倍速按钮
     private var tvSpeed: TextView? = null
     private var rvSpeed: RecyclerView? = null
 
-    //速度
+    // 速度
     private var mPlaySpeed = 1f
 
-    //投屏按钮
+    // 投屏按钮
     private var ivCling: ImageView? = null
 
-    //分享按钮
-    private var ivShare: ImageView? = null
-
-    //更多按钮
-    private var ivMore: ImageView? = null
-
-    //下一集按钮
+    // 下一集按钮
     private var ivNextEpisode: ImageView? = null
 
     // 如何播放下一集
@@ -127,7 +118,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 关闭进度提示ImageView
     private var ivClosePlayPositionTip: ImageView? = null
 
-    //选集
+    // 选集
     private var tvEpisode: TextView? = null
     private var mEpisodeTextViewVisibility: Int = View.VISIBLE
     private var mEpisodeButtonOnClickListener: OnClickListener? = null
@@ -150,7 +141,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 自动播放下一集CheckBox
     private var cbAutoPlayNextEpisode: CheckBox? = null
 
-    //底部进度调
+    // 底部进度调
     private var pbBottomProgress: ProgressBar? = null
 
     // 外部播放器打开
@@ -209,14 +200,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
 
-        ivDownloadButton = findViewById(R.id.iv_play_activity_toolbar_download)
         tvMoreScale = findViewById(R.id.tv_more_scale)
         tvSpeed = findViewById(R.id.tv_speed)
 //        mClingImageView = findViewById(R.id.iv_cling)
         vgRightContainer = findViewById(R.id.layout_right)
         rvSpeed = findViewById(R.id.rv_right)
         rvEpisode = findViewById(R.id.rv_right)
-        ivShare = findViewById(R.id.iv_play_activity_toolbar_share)
         ivNextEpisode = findViewById(R.id.iv_next)
         tvEpisode = findViewById(R.id.tv_episode)
         ivSetting = findViewById(R.id.iv_setting)
@@ -225,7 +214,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
         cbAutoPlayNextEpisode = findViewById(R.id.cb_auto_play_next_episode)
         pbBottomProgress = super.mBottomProgressBar
-        ivMore = findViewById(R.id.iv_play_activity_toolbar_more)
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
         tvTouchDownHighSpeed = findViewById(R.id.tv_touch_down_high_speed)
@@ -275,7 +263,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 val adapter = VarietyAdapter(
                     mutableListOf(VideoSpeed1Proxy(onBindViewHolder = { holder, data, _, _ ->
                         if (data.title.toFloat() == speed) {
-                            holder.tvTitle.setTextColor(getResColor(R.color.unchanged_main_color_2_skin))
+                            holder.tvTitle.setTextColor(mContext.getAttrColor(R.attr.colorPrimary))
                         }
                         holder.tvTitle.text = data.title
                         holder.tvTitle.setOnClickListener {
@@ -688,13 +676,13 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                     imageView.setImageDrawable(getResDrawable(R.drawable.ic_pause_white_24))
                 }
                 GSYVideoView.CURRENT_STATE_ERROR -> {
-                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_24))
                 }
                 GSYVideoView.CURRENT_STATE_AUTO_COMPLETE -> {
-                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_refresh_white_24))
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_refresh_24))
                 }
                 else -> {
-                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_white_24))
+                    imageView.setImageDrawable(getResDrawable(R.drawable.ic_play_24))
                 }
             }
         } else {
@@ -1120,13 +1108,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         mEpisodeAdapter = adapter
     }
 
-    fun getShareButton() = ivShare
-
-    fun getMoreButton() = ivMore
-
     fun getEpisodeButton() = tvEpisode
-
-    fun getDownloadButton() = ivDownloadButton
 
     fun getBottomContainer() = mBottomContainer
 

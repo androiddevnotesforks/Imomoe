@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.activity
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
@@ -12,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,14 +27,9 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.toMD5
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.showToast
@@ -59,7 +54,6 @@ import kotlin.math.abs
 
 
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
-    override var statusBarSkin: Boolean = false
     private val viewModel: PlayViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(
@@ -84,67 +78,72 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         setColorStatusBar(window, Color.BLACK)
 
         mBinding.apply {
-            setSupportActionBar(tbPlayActivity)
             supportActionBar?.setDisplayShowTitleEnabled(false)
 
             if (ctlPlayActivity != null && ablPlayActivity != null) {
                 ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     when {
                         abs(verticalOffset) > ctlPlayActivity.scrimVisibleHeightTrigger -> {
-                            tvPlayActivityToolbarVideoTitle.gone()
+                            tbPlayActivity.title = null
                             tvPlayActivityToolbarTitle?.visible(animate = true, dur = 200L)
                         }
                         else -> {
-                            tvPlayActivityToolbarVideoTitle.visible(animate = true, dur = 200L)
+                            tbPlayActivity.title = viewModel.animeEpisodeDataBean.title
                             tvPlayActivityToolbarTitle?.gone()
                         }
                     }
                 })
             }
 
-            ivPlayActivityToolbarBack.setOnClickListener { finish() }
+            tbPlayActivity.setNavigationOnClickListener { finish() }
+            tbPlayActivity.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_item_play_activity_share -> {
+                        ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                            .show(supportFragmentManager, "share_dialog")
+                        true
+                    }
+                    R.id.menu_item_play_activity_download -> {
+                        getSheetDialog("download").show()
+                        true
+                    }
+                    R.id.menu_item_play_activity_more -> {
+                        MoreDialogFragment().apply {
+                            show(supportFragmentManager, "more_dialog")
+                            onCancelButtonClick { dismiss() }
+                            onDlnaButtonClick {
+                                val url = avpPlayActivity.getUrl()
+                                if (url == null) {
+                                    getString(R.string.please_wait_video_loaded).showToast()
+                                    return@onDlnaButtonClick
+                                }
+                                startActivity(
+                                    Intent(this@PlayActivity, DlnaActivity::class.java)
+                                        .putExtra("url", url)
+                                        .putExtra("title", avpPlayActivity.getTitle())
+                                )
+                                dismiss()
+                            }
+                            onOpenInOtherPlayerButtonClick {
+                                if (!openVideoByExternalPlayer(
+                                        this@PlayActivity,
+                                        viewModel.animeEpisodeDataBean.videoUrl
+                                    )
+                                ) getString(R.string.matched_app_not_found).showToast()
+                                dismiss()
+                            }
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+
             tvPlayActivityToolbarTitle?.setOnClickListener {
                 (avpPlayActivity.currentPlayer as AnimeVideoPlayer).clickStartIcon()
             }
 
-            avpPlayActivity.setTopContainer(tbPlayActivity)
-
-            ivPlayActivityToolbarDownload.setOnClickListener { getSheetDialog("download").show() }
-            ivPlayActivityToolbarBack.setOnClickListener { onBackPressed() }
-
-            // 分享按钮
-            ivPlayActivityToolbarShare.setOnClickListener {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
-                    .show(supportFragmentManager, "share_dialog")
-            }
-            // 更多按钮
-            ivPlayActivityToolbarMore.setOnClickListener {
-                MoreDialogFragment().apply {
-                    show(supportFragmentManager, "more_dialog")
-                    onCancelButtonClick { dismiss() }
-                    onDlnaButtonClick {
-                        val url = avpPlayActivity.getUrl()
-                        if (url == null) {
-                            getString(R.string.please_wait_video_loaded).showToast()
-                            return@onDlnaButtonClick
-                        }
-                        startActivity(
-                            Intent(this@PlayActivity, DlnaActivity::class.java)
-                                .putExtra("url", url)
-                                .putExtra("title", avpPlayActivity.getTitle())
-                        )
-                        dismiss()
-                    }
-                    onOpenInOtherPlayerButtonClick {
-                        if (!openVideoByExternalPlayer(
-                                this@PlayActivity,
-                                viewModel.animeEpisodeDataBean.videoUrl
-                            )
-                        ) getString(R.string.matched_app_not_found).showToast()
-                        dismiss()
-                    }
-                }
-            }
+            avpPlayActivity.setTopContainer(tbPlayActivity as? ViewGroup)
         }
     }
 
@@ -173,9 +172,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
 
         viewModel.mldFavorite.observe(this) {
-            mBinding.ivPlayActivityFavorite.setImageDrawable(
-                if (it) getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
-                else getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
+            mBinding.ivPlayActivityFavorite.setImageResource(
+                if (it) R.drawable.ic_star_24
+                else R.drawable.ic_star_border_24
             )
         }
 
@@ -217,11 +216,16 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                         PlayerEpisode1Proxy(onBindViewHolder = { holder, data, index, _ ->
                             holder.tvTitle.text = data.title
                             if (data.actionUrl == viewModel.animeEpisodeDataBean.actionUrl) {
-                                holder.tvTitle.setTextColor(getResColor(R.color.unchanged_main_color_2_skin))
+                                holder.tvTitle.setTextColor(getAttrColor(R.attr.colorPrimary))
                                 (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
                                     .rvEpisode?.scrollToPosition(index)
                             } else {
-                                holder.tvTitle.setTextColor(getResColor(R.color.foreground_white_skin))
+                                holder.tvTitle.setTextColor(
+                                    ContextCompat.getColor(
+                                        this,
+                                        android.R.color.white
+                                    )
+                                )
                             }
                             holder.itemView.setOnClickListener {
                                 mBinding.avpPlayActivity.currentPlayer.run {
@@ -258,7 +262,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
-        mBinding.tvPlayActivityToolbarVideoTitle.text = viewModel.animeEpisodeDataBean.title
+        mBinding.tbPlayActivity.title = viewModel.animeEpisodeDataBean.title
         // 设置播放URL
         viewModel.updateFavoriteData()
         viewModel.insertHistoryData()
@@ -367,7 +371,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 avpPlayActivity.setTopContainer(null)
                 tbPlayActivity.visible()
             } else {
-                avpPlayActivity.setTopContainer(tbPlayActivity)
+                avpPlayActivity.setTopContainer(tbPlayActivity as? ViewGroup)
             }
         }
     }
@@ -457,20 +461,14 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             if (it != currentNightMode) {
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
-                mBinding.ivPlayActivityFavorite.setImageDrawable(
+                mBinding.ivPlayActivityFavorite.setImageResource(
                     if (viewModel.mldFavorite.value == true) {
-                        getResDrawable(R.drawable.ic_star_main_color_2_24_skin)
+                        R.drawable.ic_star_24
                     } else {
-                        getResDrawable(R.drawable.ic_star_border_main_color_2_24_skin)
+                        R.drawable.ic_star_border_24
                     }
                 )
             }
         }
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
     }
 }

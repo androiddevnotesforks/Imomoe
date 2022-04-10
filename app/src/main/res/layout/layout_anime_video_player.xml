@@ -47,20 +47,22 @@
         app:layout_constraintBottom_toTopOf="@id/layout_bottom"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
             android:layout_marginStart="10dp"
             android:text="@string/play_position_tip"
-            android:textColor="@color/foreground_white_skin" />
+            android:textColor="@android:color/white" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_play_position_time"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
-            android:textColor="@color/foreground_main_color_2_skin"
+            android:textColor="?attr/colorPrimary"
             tools:text="19:35" />
 
         <!--margin缩小点击范围-->
@@ -69,8 +71,8 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_close_white_24" />
-
+            android:src="@drawable/ic_close_24"
+            app:tint="@android:color/white" />
     </LinearLayout>
 
     <!--高度都加了20dp，让阴影往下延伸一点-->
@@ -83,51 +85,50 @@
         android:paddingTop="17dp"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller">
 
-        <SeekBar
+        <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/progress"
             android:layout_width="0px"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
             android:max="100"
-            android:maxHeight="2dp"
-            android:minHeight="2dp"
+            android:maxHeight="3dp"
+            android:minHeight="3dp"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:progressDrawable="@drawable/seek_bar_progress_1_skin"
-            android:thumb="@drawable/seek_bar_thumb_1_skin" />
+            android:progressDrawable="@drawable/seek_bar_progress_1" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/current"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="14sp"
-            app:typeface="bPRTypeface"
+            android:textColor="@android:color/white"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="/"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="14sp" />
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/total"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="14sp"
-            app:typeface="bPRTypeface"
+            android:textColor="@android:color/white"
             tools:text="00:00" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_speed"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -135,9 +136,7 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/play_speed"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="14sp"
-            app:typeface="bPRTypeface" />
+            android:textColor="@android:color/white" />
 
         <ImageView
             android:id="@+id/fullscreen"
@@ -147,43 +146,43 @@
             android:adjustViewBounds="true"
             android:paddingStart="6dp"
             android:paddingEnd="12dp"
-            tools:src="@drawable/ic_fullscreen_white_24" />
+            app:tint="@android:color/white"
+            tools:src="@drawable/ic_fullscreen_24" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_danmu_controller"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:background="@color/white_skin"
+        android:background="?attr/colorSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_input_danmu"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_input_danmaku"
             android:layout_width="0px"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_gravity="center_vertical"
             android:layout_marginVertical="6dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="12dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_circle_corner_edge_main_color_2_ripper_5_skin"
+            android:background="@drawable/shape_circle_corner_edge_primary_ripper_5"
             android:gravity="center_vertical"
             android:hint="@string/send_a_danmaku"
             android:imeOptions="actionSend"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="2dp"
+            android:paddingHorizontal="12dp"
             android:singleLine="true"
-            android:textColor="@color/foreground_main_color_2_skin"
-            android:textColorHint="@color/main_color_3_skin"
-            android:textSize="13sp"
+            android:textColor="?attr/colorPrimary"
+            android:textColorHint="?attr/colorPrimary"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_show_danmu"
+            app:layout_constraintEnd_toStartOf="@id/iv_show_danmaku"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_show_danmu"
+            android:id="@+id/iv_show_danmaku"
             android:layout_width="45dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
@@ -192,16 +191,16 @@
             android:gravity="center"
             android:paddingStart="2dp"
             android:paddingEnd="13dp"
-            android:src="@drawable/selector_turn_on_off_danmu_skin"
+            android:src="@drawable/selector_turn_on_off_danmaku"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorPrimary" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginHorizontal="16dp"
-            android:background="@color/foreground_main_color_2_skin"
+            android:background="?attr/colorOutline"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +210,7 @@
         android:layout_width="match_parent"
         android:layout_height="1.5dp"
         android:max="100"
-        android:progressDrawable="@drawable/layerlist_video_progress_bg_skin"
+        android:progressDrawable="@drawable/layerlist_video_progress_bg"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller" />
 
     <ImageView
@@ -230,7 +229,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateTint="@color/main_color_skin"
+        android:indeterminateTint="?attr/colorPrimary"
         android:indeterminateTintMode="src_atop"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
@@ -247,7 +246,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_play_white_24" />
+        app:tint="@android:color/white"
+        tools:src="@drawable/ic_play_24" />
 
     <ImageView
         android:id="@+id/lock_screen"
@@ -259,7 +259,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@android:color/white" />
 
     <View
         android:id="@+id/view_top_container_shadow"
@@ -268,8 +269,9 @@
         android:background="@drawable/shape_gray_transparent_angle_270"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_touch_down_high_speed"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_circle_corner_white_ripper_5"
@@ -277,8 +279,7 @@
         android:paddingHorizontal="17dp"
         android:paddingVertical="6dp"
         android:text="@string/touch_down_high_speed"
-        android:textColor="@color/foreground_white_skin"
-        android:textSize="17sp"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_top_container_shadow" />

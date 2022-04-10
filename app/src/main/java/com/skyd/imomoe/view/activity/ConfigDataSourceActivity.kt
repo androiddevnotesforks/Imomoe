@@ -8,18 +8,18 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
 import com.skyd.imomoe.ext.copyTo
 import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.showSnackbar
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.view.fragment.DataSourceMarketFragment
 import com.skyd.imomoe.view.fragment.LocalDataSourceFragment
 import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
 import java.io.File
@@ -27,8 +27,8 @@ import java.io.File
 
 class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>() {
     private val viewModel: ConfigDataSourceViewModel by viewModels()
-    private val localDataSourceFragment = LocalDataSourceFragment()
-//    private val dataSourceMarketFragment = DataSourceMarketFragment()
+    private val adapter: VpAdapter by lazy { VpAdapter(this) }
+
     private val tabLayoutTitle by lazy {
         arrayOf(getString(R.string.local_data_source), getString(R.string.data_source_market))
     }
@@ -37,19 +37,21 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         super.onCreate(savedInstanceState)
 
         mBinding.apply {
-            atbConfigDataSourceActivity.apply {
-                setBackButtonClickListener { finish() }
-                setButtonClickListener(0) { resetDataSource() }
+            tbConfigDataSourceActivity.apply {
+                setNavigationOnClickListener { finish() }
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.menu_item_config_data_source_activity_reset -> {
+                            resetDataSource()
+                            true
+                        }
+                        else -> false
+                    }
+                }
             }
 
-            vp2ConfigDataSourceActivity.setAdapter(
-                VpAdapter(
-                    listOf(
-                        localDataSourceFragment,
-//                        dataSourceMarketFragment
-                    ), this@ConfigDataSourceActivity
-                )
-            )
+            vp2ConfigDataSourceActivity.adapter = adapter
+
             val tabLayoutMediator = TabLayoutMediator(
                 tlConfigDataSourceActivity, vp2ConfigDataSourceActivity.getViewPager()
             ) { tab, position ->
@@ -59,7 +61,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         }
 
         viewModel.mldDeleteSource.observe(this) {
-            localDataSourceFragment.getDataSourceList()
+            adapter.getFragment<LocalDataSourceFragment>(supportFragmentManager, 0)
+                ?.getDataSourceList()
         }
 
         intent?.let { callToImport(it) }
@@ -81,18 +84,19 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                                 R.string.import_data_source_success,
                                 uri.path
                             ).showSnackbar(this@ConfigDataSourceActivity)
-                            localDataSourceFragment.getDataSourceList()
+                            adapter.getFragment<LocalDataSourceFragment>(supportFragmentManager, 0)
+                                ?.getDataSourceList()
                         },
                         onFailed = {
                             val msg =
                                 "建议更换其他文件管理器后重试。" + (if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M)
                                     "Android 6及以下，请勿使用MT管理器打开ads文件，失败原因未知！若有解决方案，欢迎到GitHub仓库提PR"
                                 else "") + "\n\n" + it.message
-                            MaterialDialog(this@ConfigDataSourceActivity).show {
-                                title(res = R.string.import_data_source_failed)
-                                message(text = msg)
-                                positiveButton(res = R.string.ok)
-                            }
+                            showMessageDialog(
+                                title = getString(R.string.import_data_source_failed),
+                                message = msg,
+                                onPositive = { dialog, _ -> dialog.dismiss() }
+                            )
                         }
                     )
                 }
@@ -114,12 +118,12 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                 .showSnackbar(this, duration = Toast.LENGTH_LONG)
             return
         }
-        MaterialDialog(this).show {
-            icon(drawable = Util.getResDrawable(R.drawable.ic_insert_drive_file_main_color_2_24_skin))
-            title(res = R.string.warning)
-            message(res = R.string.import_data_source)
-            cancelable(false)
-            positiveButton(res = R.string.ok) {
+        showMessageDialog(
+            title = getString(R.string.warning),
+            icon = R.drawable.ic_insert_drive_file_24,
+            message = getString(R.string.import_data_source),
+            cancelable = false,
+            onPositive = { _, _ ->
                 try {
                     val sourceFileName = uri.path!!.substringAfterLast("/")
                     val directory = File(DataSourceManager.getJarDirectory())
@@ -168,26 +172,23 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                 } catch (e: Exception) {
                     onFailed?.invoke(e)
                 }
-            }
-            negativeButton(res = R.string.cancel) {
-                dismiss()
-            }
-        }
+            },
+            onNegative = { dialog, _ -> dialog.dismiss() }
+        )
     }
 
     private fun resetDataSource(runBeforeReset: (() -> Unit)? = null) {
-        MaterialDialog(this).show {
-            icon(drawable = Util.getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
-            title(res = R.string.warning)
-            message(res = R.string.request_restart_app)
-            positiveButton(res = R.string.restart) {
+        showMessageDialog(
+            title = getString(R.string.warning),
+            icon = R.drawable.ic_category_24,
+            message = getString(R.string.request_restart_app),
+            positiveText = getString(R.string.restart),
+            onPositive = { _, _ ->
                 runBeforeReset?.invoke()
                 viewModel.resetDataSource()
-            }
-            negativeButton(res = R.string.cancel) {
-                dismiss()
-            }
-        }
+            },
+            onNegative = { dialog, _ -> dialog.dismiss() }
+        )
     }
 
     fun setDataSource(name: String, showDialog: Boolean = true) {
@@ -195,58 +196,68 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             viewModel.setDataSource(name)
             return
         }
-        MaterialDialog(this).show {
-            icon(drawable = Util.getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
-            title(res = R.string.warning)
-            message(res = R.string.custom_data_source_tip)
-            cancelable(false)
-            positiveButton(res = R.string.restart) {
-                viewModel.setDataSource(name)
-            }
-            negativeButton(res = R.string.cancel) {
-                dismiss()
-            }
-        }
+        showMessageDialog(
+            title = getString(R.string.warning),
+            icon = R.drawable.ic_category_24,
+            message = getString(R.string.custom_data_source_tip),
+            cancelable = false,
+            positiveText = getString(R.string.restart),
+            onPositive = { _, _ -> viewModel.setDataSource(name) },
+            onNegative = { dialog, _ -> dialog.dismiss() }
+        )
     }
 
     fun deleteDataSource(bean: DataSourceFileBean) {
-        MaterialDialog(this).show {
-            icon(drawable = Util.getResDrawable(R.drawable.ic_category_main_color_2_24_skin))
-            title(res = R.string.warning)
-            message(res = R.string.ask_delete_data_source)
-            positiveButton(res = R.string.ok) {
+        showMessageDialog(
+            title = getString(R.string.warning),
+            icon = R.drawable.ic_category_24,
+            message = getString(R.string.ask_delete_data_source),
+            onPositive = { _, _ ->
                 if (DataSourceManager.dataSourceName == bean.file.name) {
                     resetDataSource { viewModel.deleteDataSource(bean) }
                 } else {
                     viewModel.deleteDataSource(bean)
                 }
-            }
-            negativeButton(res = R.string.cancel) {
-                dismiss()
-            }
-        }
+            },
+            onNegative = { dialog, _ -> dialog.dismiss() }
+        )
     }
 
     private fun askOverwriteFile(needRestartApp: Boolean = false, callback: (Boolean) -> Unit) {
-        MaterialDialog(this).show {
-            icon(drawable = Util.getResDrawable(R.drawable.ic_insert_drive_file_main_color_2_24_skin))
-            title(res = R.string.warning)
-            message(res = R.string.ask_overwrite_file)
-            cancelable(false)
-            positiveButton(
-                res = if (needRestartApp) R.string.overwrite_file_and_restart
+        showMessageDialog(
+            title = getString(R.string.warning),
+            icon = R.drawable.ic_insert_drive_file_24,
+            message = getString(R.string.ask_overwrite_file),
+            cancelable = false,
+            positiveText = getString(
+                if (needRestartApp) R.string.overwrite_file_and_restart
                 else R.string.overwrite_file
-            ) { callback.invoke(true) }
-            negativeButton(res = R.string.do_not_overwrite_file) { callback.invoke(false) }
-        }
+            ),
+            onPositive = { _, _ -> callback.invoke(true) },
+            negativeText = getString(R.string.do_not_overwrite_file),
+            onNegative = { _, _ -> callback.invoke(false) }
+        )
     }
 
     override fun getBinding(): ActivityConfigDataSourceBinding =
         ActivityConfigDataSourceBinding.inflate(layoutInflater)
 
-    class VpAdapter(private val fragments: List<Fragment>, fragmentActivity: FragmentActivity) :
-        FragmentStateAdapter(fragmentActivity) {
-        override fun getItemCount() = fragments.size
-        override fun createFragment(position: Int) = fragments[position]
+    class VpAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getItemCount() = 1
+
+        override fun createFragment(position: Int) = when (position) {
+            0 -> LocalDataSourceFragment()
+            else -> LocalDataSourceFragment()
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        fun <T : Fragment> getFragment(fm: FragmentManager, id: Long): T? {
+            return fm.findFragmentByTag("f$id") as? T
+        }
     }
 }

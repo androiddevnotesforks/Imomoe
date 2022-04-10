@@ -31,14 +31,11 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Anime.skin"
+        android:theme="@style/Theme.Anime.Pink"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".view.activity.BackupRestoreActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.BackupRestoreActivity" />
         <activity
             android:name=".view.activity.ConfigDataSourceActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:label="@string/import_data_source_label"
             android:launchMode="singleTask">
@@ -55,68 +52,35 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.NoticeActivity" />
-        <activity
-            android:name=".view.activity.WebViewActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.SkinActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.CrashActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.HistoryActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.FavoriteActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.WebViewActivity" />
+        <activity android:name=".view.activity.SkinActivity" />
+        <activity android:name=".view.activity.CrashActivity" />
+        <activity android:name=".view.activity.HistoryActivity" />
+        <activity android:name=".view.activity.FavoriteActivity" />
         <activity
             android:name=".view.activity.DlnaControlActivity"
             android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.DlnaActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.DlnaActivity" />
         <activity
             android:name=".view.activity.SimplePlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
-        <activity
-            android:name=".view.activity.AnimeDownloadActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.LicenseActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.AboutActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.SettingActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.MonthAnimeActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.ClassifyActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.RankActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.SearchActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.AnimeDownloadActivity" />
+        <activity android:name=".view.activity.LicenseActivity" />
+        <activity android:name=".view.activity.AboutActivity" />
+        <activity android:name=".view.activity.SettingActivity" />
+        <activity android:name=".view.activity.MonthAnimeActivity" />
+        <activity android:name=".view.activity.ClassifyActivity" />
+        <activity android:name=".view.activity.RankActivity" />
+        <activity android:name=".view.activity.SearchActivity" />
         <activity
             android:name=".view.activity.PlayActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
-        <activity
-            android:name=".view.activity.AnimeDetailActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize" />
-        <activity
-            android:name=".view.activity.BaseActivity"
-            android:configChanges="uiMode" />
+        <activity android:name=".view.activity.AnimeDetailActivity" />
+        <activity android:name=".view.activity.BaseActivity" />
         <activity
             android:name=".view.activity.MainActivity"
-            android:configChanges="uiMode|orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

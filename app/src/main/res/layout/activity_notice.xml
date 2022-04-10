@@ -1,49 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
-    android:orientation="vertical"
     tools:context=".view.activity.NoticeActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
-        android:id="@+id/atb_notice_activity_toolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:titleColor="@color/foreground_white_skin"
-        app:toolBarBackground="@color/main_color_2_skin" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_notice_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
+            app:title="@string/config_custom_data_source" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_notice_activity_title"
+                style="@style/TextAppearance.Material3.TitleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="27sp"
-                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
                 tools:text="题目" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_notice_activity_content"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="20dp"
-                android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="16sp"
+                android:textColor="?attr/colorSecondary"
                 tools:text="题目题目题目题目\n题目题目\n题目\n题目\n题目\n题目题目题目题目题目题目题目题目题目题目题目题目" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

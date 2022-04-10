@@ -9,14 +9,12 @@
         android:id="@+id/srl_rank_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants"
-        app:srlPrimaryColor="@color/main_color_3_skin">
+        android:descendantFocusability="blocksDescendants">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_rank_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
             android:scrollbarSize="4dp"
             android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
@@ -27,5 +25,4 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout="@layout/layout_image_text_tip_1" />
-
 </RelativeLayout>

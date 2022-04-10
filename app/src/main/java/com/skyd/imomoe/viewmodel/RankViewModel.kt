@@ -9,7 +9,6 @@ import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RankModel
 import com.skyd.imomoe.model.interfaces.IRankModel
 import com.skyd.imomoe.util.showToast
-import java.util.*
 
 
 class RankViewModel : ViewModel() {
@@ -17,19 +16,15 @@ class RankViewModel : ViewModel() {
         DataSourceManager.create(IRankModel::class.java) ?: RankModel()
     }
     var isRequesting = false
-    var tabList: MutableList<TabBean> = Collections.synchronizedList(ArrayList())
-    var mldRankData: MutableLiveData<Boolean> = MutableLiveData()
+    var mldRankData: MutableLiveData<List<TabBean>?> = MutableLiveData()
 
     fun getRankTabData() {
         if (isRequesting) return
         isRequesting = true
         request(request = { rankModel.getRankTabData() }, success = {
-            tabList.clear()
-            tabList.addAll(it)
-            mldRankData.postValue(true)
+            mldRankData.postValue(it)
         }, error = {
-            mldRankData.postValue(false)
-            tabList.clear()
+            mldRankData.postValue(null)
             it.message?.showToast(Toast.LENGTH_LONG)
         }, finish = { isRequesting = false })
     }

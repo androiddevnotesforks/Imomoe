@@ -23,7 +23,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="70dp"
                 android:background="?android:selectableItemBackground"
-                android:src="@drawable/ic_play_circle_white_24" />
+                android:src="@drawable/ic_play_circle_24"
+                app:tint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/iv_dlna_control_activity_stop"
@@ -32,55 +33,54 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="60dp"
                 android:background="?android:selectableItemBackground"
-                android:src="@drawable/ic_power_white_24" />
+                android:src="@drawable/ic_power_24"
+                app:tint="@android:color/white" />
 
-            <SeekBar
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/sb_dlna_control_activity"
                 android:layout_width="match_parent"
-                android:layout_height="17dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="60dp"
                 android:background="@null"
-                android:maxHeight="2dp"
-                android:minHeight="2dp"
-                android:progressDrawable="@drawable/video_seek_progress"
-                android:thumb="@drawable/video_seek_thumb" />
+                android:maxHeight="3dp"
+                android:minHeight="3dp"
+                android:paddingVertical="6dp"
+                android:progressDrawable="@drawable/video_seek_progress" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_dlna_control_activity_time"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="17dp"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="20sp"
-                app:typeface="bPRTypeface"
+                android:textColor="@android:color/white"
                 tools:text="00:00 / 12:12" />
 
-            <SeekBar
+            <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/sb_dlna_control_activity_volume"
                 android:layout_width="match_parent"
-                android:layout_height="17dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="50dp"
                 android:background="@null"
                 android:max="100"
-                android:maxHeight="2dp"
-                android:minHeight="2dp"
-                android:progressDrawable="@drawable/video_seek_progress"
-                android:thumb="@drawable/video_seek_thumb" />
+                android:maxHeight="3dp"
+                android:minHeight="3dp"
+                android:paddingVertical="6dp"
+                android:progressDrawable="@drawable/video_seek_progress" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_dlna_control_activity_volume"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="17dp"
                 android:layout_marginBottom="70dp"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="20sp"
-                app:typeface="bPRTypeface"
+                android:textColor="@android:color/white"
                 tools:text="@string/dlna_volume" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

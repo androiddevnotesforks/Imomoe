@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,24 +7,27 @@
     android:orientation="vertical"
     tools:context=".view.fragment.MoreFragment">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
-        android:id="@+id/atb_more_fragment_header"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:paddingHorizontal="6dp"
-        app:backDrawable="@drawable/ic_beans_main_color_24_skin"
-        app:backDrawableTitlePadding="0px"
-        app:backTint="@color/foreground_white_skin"
-        app:title="@string/more"
-        app:titleColor="@color/foreground_white_skin"
-        app:titleSize="17sp"
-        app:toolBarBackground="@color/main_color_2_skin"
-        app:typeface="bPRTypeface" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_more_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/ic_beans_24"
+            app:title="@string/more" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_more_fragment"
         android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="1" />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

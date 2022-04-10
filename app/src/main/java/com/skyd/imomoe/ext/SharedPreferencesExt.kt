@@ -6,7 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.skyd.imomoe.App
+import com.skyd.imomoe.appContext
 
 
 fun Context.sharedPreferences(name: String = "App"): SharedPreferences =
@@ -15,16 +15,16 @@ fun Context.sharedPreferences(name: String = "App"): SharedPreferences =
 fun SharedPreferences.editor(editorBuilder: SharedPreferences.Editor.() -> Unit) =
     edit().apply(editorBuilder).apply()
 
-fun sharedPreferences(name: String = "App"): SharedPreferences = App.context.sharedPreferences(name)
+fun sharedPreferences(name: String = "App"): SharedPreferences = appContext.sharedPreferences(name)
 
 @RequiresApi(Build.VERSION_CODES.M)
 fun secretSharedPreferences(name: String = "Secret"): SharedPreferences {
-    val masterKey = MasterKey.Builder(App.context)
+    val masterKey = MasterKey.Builder(appContext)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
     return EncryptedSharedPreferences.create(
-        App.context,
+        appContext,
         name,
         masterKey,
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,

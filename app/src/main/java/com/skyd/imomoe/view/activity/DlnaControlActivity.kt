@@ -1,16 +1,17 @@
 package com.skyd.imomoe.view.activity
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
@@ -32,9 +33,6 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
     private lateinit var title: String
     private var isPlaying = false
 
-    // 此界面不换肤
-    override fun isChangeSkin(): Boolean = false
-
     companion object {
         const val TAG = "DlnaControlActivity"
         val deviceHashMap = HashMap<String, Device<*, *, *>>()
@@ -43,7 +41,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setColorStatusBar(window, getResColor(R.color.gray_5))
+        setColorStatusBar(window, ContextCompat.getColor(this, R.color.gray_5))
 
         layoutDlnaControlActivityLoading =
             mBinding.layoutDlnaControlActivityLoading.layoutCircleProgressTextTip1
@@ -94,7 +92,10 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                 override fun onSuccess(result: Void?) {
                     getString(R.string.dlna_play).showToast()
                     isPlaying = true
-                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_pause_circle_white_24)
+                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_pause_circle_24)
+                    mBinding.ivDlnaControlActivityPlay.imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@DlnaControlActivity, android.R.color.white)
+                    )
 
                     positionHandler.start(refreshPositionTime)
                     volumeHandler.start(refreshVolumeTime)
@@ -111,7 +112,10 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                 override fun onSuccess(result: Void?) {
                     getString(R.string.dlna_pause).showToast()
                     isPlaying = false
-                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_white_24)
+                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_24)
+                    mBinding.ivDlnaControlActivityPlay.imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@DlnaControlActivity, android.R.color.white)
+                    )
 
                     layoutDlnaControlActivityLoading.gone()
                 }
@@ -125,7 +129,11 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
                 override fun onSuccess(result: Void?) {
                     getString(R.string.dlna_stop).showToast()
                     isPlaying = false
-                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_white_24)
+                    mBinding.ivDlnaControlActivityPlay.setImageResource(R.drawable.ic_play_circle_24)
+                    mBinding.ivDlnaControlActivityPlay.imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(this@DlnaControlActivity, android.R.color.white)
+                    )
+
                     positionHandler.stop()
                     volumeHandler.stop()
 

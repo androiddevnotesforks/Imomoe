@@ -1,8 +1,8 @@
 package com.skyd.imomoe.view.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.Toast
@@ -12,7 +12,6 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.Banner1ViewHolder
-import com.skyd.imomoe.view.adapter.SerializableRecycledViewPool
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -21,7 +20,6 @@ import com.skyd.imomoe.viewmodel.AnimeShowViewModel
 
 
 class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
-    private var partUrl: String = ""
     private val viewModel: AnimeShowViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(
@@ -48,15 +46,13 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val arguments = arguments
 
         runCatching {
-            partUrl = arguments?.getString("partUrl").orEmpty()
-            viewModel.viewPool =
-                arguments?.getSerializable("viewPool") as SerializableRecycledViewPool
+            viewModel.partUrl = arguments?.getString("partUrl").orEmpty()
         }.onFailure {
             it.printStackTrace()
             it.message?.showToast(Toast.LENGTH_LONG)
@@ -82,22 +78,18 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeShowFragment.adapter = adapter
             srlAnimeShowFragment.setOnRefreshListener {
-                viewModel.getAnimeShowData(partUrl)
+                viewModel.getAnimeShowData(viewModel.partUrl)
             }
             srlAnimeShowFragment.setOnLoadMoreListener {
                 viewModel.loadMoreAnimeShowData()
             }
         }
 
-        viewModel.viewPool?.let {
-            mBinding.rvAnimeShowFragment.setRecycledViewPool(it)
-        }
-
-        viewModel.mldGetAnimeShowList.observe(viewLifecycleOwner) {
+        viewModel.mldAnimeShowList.observe(viewLifecycleOwner) {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
             if (it == null) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getAnimeShowData(partUrl)
+                    viewModel.getAnimeShowData(viewModel.partUrl)
                     hideLoadFailedTip()
                 }
             } else {
@@ -114,7 +106,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             }
         }
 
-        refresh()
+        if (viewModel.mldAnimeShowList.value == null) refresh()
     }
 
     fun refresh(): Boolean {
@@ -122,10 +114,4 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeShowFragmentLoadFailed
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

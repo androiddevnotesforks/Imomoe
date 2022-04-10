@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.adapter.variety.proxy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover1Bean
@@ -11,7 +12,6 @@ import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.AnimeCover1ViewHolder
 import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.getResColor
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -36,8 +36,12 @@ class AnimeCover1Proxy(
     ) {
         val activity = holder.itemView.activity
         when (color) {
-            BLACK -> holder.tvAnimeCover1Title.setTextColor(getResColor(R.color.foreground_black_skin))
-            WHITE -> holder.tvAnimeCover1Title.setTextColor(getResColor(R.color.foreground_white_skin))
+            WHITE -> holder.tvAnimeCover1Title.setTextColor(
+                ContextCompat.getColor(
+                    holder.itemView.context,
+                    android.R.color.white
+                )
+            )
         }
         holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, data.cover.url)
         activity?.let {

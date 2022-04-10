@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
@@ -55,7 +54,7 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
         title = intent.getStringExtra("title").orEmpty()
 
         mBinding.run {
-            atbDlnaActivity.setBackButtonClickListener { finish() }
+            tbDlnaActivity.setNavigationOnClickListener { finish() }
 
             rvDlnaActivityDevice.layoutManager = LinearLayoutManager(this@DlnaActivity)
             rvDlnaActivityDevice.adapter = adapter
@@ -88,10 +87,4 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
     }
 
     override fun getBinding(): ActivityDlnaBinding = ActivityDlnaBinding.inflate(layoutInflater)
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

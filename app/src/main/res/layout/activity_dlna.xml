@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
     tools:context=".view.activity.DlnaActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
-        android:id="@+id/atb_dlna_activity"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:title="@string/play_on_tv"
-        app:titleColor="@color/foreground_white_skin"
-        app:toolBarBackground="@color/main_color_2_skin" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_dlna_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:buttonGravity="center_vertical"
+            app:navigationIcon="@drawable/ic_arrow_back_24"
+            app:title="@string/play_on_tv" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/atb_dlna_activity">
+        android:layout_below="@id/tb_dlna_activity"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,10 +36,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/main_color_skin"
+                android:background="?attr/colorSurface"
                 android:orientation="horizontal">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
@@ -39,16 +48,13 @@
                     android:paddingEnd="16dp"
                     android:paddingBottom="12dp"
                     android:text="@string/device_list"
-                    android:textColor="@color/foreground_white_skin"
-                    android:textSize="15sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ProgressBar
                     android:id="@+id/pb_dlna_activity_searching"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
-                    android:indeterminateTint="@color/foreground_white_skin"
                     android:indeterminateTintMode="src_atop" />
             </LinearLayout>
 
@@ -58,27 +64,25 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/main_color_skin"
+                android:background="?attr/colorSurface"
                 android:paddingVertical="12dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/dlna_step"
-                android:textColor="@color/foreground_white_skin"
-                android:textSize="15sp"
-                app:typeface="bPRTypeface" />
+                android:textColor="?attr/colorOnSurface" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
                 android:text="1. 确保电视和手机在同一WiFi下，打开支持投屏的电视。\n2. 点击上方搜索到的设备进行投屏。\n3. 注意，部分未知格式的视频可能无法投屏。"
-                android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="15sp"
-                app:typeface="bPRTypeface" />
+                android:textColor="?attr/colorSecondary" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

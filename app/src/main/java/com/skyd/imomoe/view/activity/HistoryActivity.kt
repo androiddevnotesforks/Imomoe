@@ -1,15 +1,12 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
-import com.skyd.imomoe.ext.warningDialog
-import com.skyd.imomoe.util.Util.getResDrawable
+import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
 import com.skyd.imomoe.viewmodel.HistoryViewModel
@@ -25,15 +22,31 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mBinding.run {
-            atbHistoryActivity.setBackButtonClickListener { finish() }
+        mBinding.tbHistoryActivity.also {
+            it.setNavigationOnClickListener { finish() }
+            it.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_item_history_activity_delete_all -> {
+                        if (adapter.dataList.isEmpty()) return@setOnMenuItemClickListener true
+                        showMessageDialog(
+                            onPositive = { _, _ -> viewModel.deleteAllHistory() },
+                            icon = R.drawable.ic_delete_24,
+                            positiveText = getString(R.string.delete),
+                            message = getString(R.string.confirm_delete_all_watch_history)
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
 
+        mBinding.run {
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 
             rvHistoryActivity.layoutManager = LinearLayoutManager(this@HistoryActivity)
             rvHistoryActivity.adapter = adapter
         }
-
 
         viewModel.mldHistoryList.observe(this) {
             mBinding.srlHistoryActivity.isRefreshing = false
@@ -59,29 +72,11 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             adapter.dataList = emptyList()
         }
 
-        mBinding.atbHistoryActivity.run {
-            setButtonClickListener(0) {
-                if (adapter.dataList.isEmpty()) return@setButtonClickListener
-                warningDialog(
-                    onPositive = { viewModel.deleteAllHistory() },
-                    icon = getResDrawable(R.drawable.ic_delete_main_color_2_24_skin),
-                    positiveRes = R.string.delete
-                ).message(res = R.string.confirm_delete_all_watch_history).show()
-            }
-        }
-
         mBinding.srlHistoryActivity.isRefreshing = true
-        viewModel.getHistoryList()
+        if (viewModel.mldHistoryList.value == null) viewModel.getHistoryList()
     }
 
-    override fun getBinding(): ActivityHistoryBinding =
-        ActivityHistoryBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityHistoryBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutHistoryActivityNoHistory
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

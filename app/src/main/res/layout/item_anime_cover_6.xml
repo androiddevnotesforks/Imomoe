@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,12 +14,6 @@
         android:scaleType="centerCrop"
         tools:src="@drawable/ic_launcher_background" />
 
-    <View
-        android:id="@+id/view_anime_cover_6_night"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/transparent_skin" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,55 +21,52 @@
         android:background="@color/gray_2"
         android:paddingVertical="7dp">
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_anime_cover_6_title"
+            style="@style/TextAppearance.Material3.TitleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:paddingStart="12dp"
             android:paddingEnd="0px"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textColor="@android:color/white"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@id/tv_anime_cover_6_describe"
             app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_6_episode"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:typeface="bPRTypeface"
             tools:text="中二病也要谈恋爱！" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_anime_cover_6_describe"
+            style="@style/TextAppearance.Material3.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:paddingStart="12dp"
             android:paddingEnd="0px"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textColor="@android:color/white"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_6_episode"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_6_title"
-            app:typeface="bPRTypeface"
             tools:text="每周四21:00更新一集" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_anime_cover_6_episode"
+            style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:typeface="bPRTypeface"
             tools:text="全12集" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</com.google.android.material.card.MaterialCardView>

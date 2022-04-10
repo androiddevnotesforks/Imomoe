@@ -59,7 +59,7 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
             adapter.dataList = (it ?: emptyList())
         }
 
-        viewModel.getDataSourceList()
+        if (viewModel.mldDataSourceList.value == null) viewModel.getDataSourceList()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =

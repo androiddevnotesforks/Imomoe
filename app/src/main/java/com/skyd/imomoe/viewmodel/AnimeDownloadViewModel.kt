@@ -20,6 +20,10 @@ import java.io.File
 
 
 class AnimeDownloadViewModel : ViewModel() {
+    var mode = 0        //0是默认的，是番剧；1是番剧每一集
+    var actionBarTitle = ""
+    var directoryName = ""
+    var path = 0
     var mldAnimeCoverList: MutableLiveData<List<Any>?> = MutableLiveData()
 
     fun getAnimeCover() {

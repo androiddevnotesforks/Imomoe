@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
-    android:orientation="vertical"
     tools:context=".view.activity.AboutActivity">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
-        android:id="@+id/atb_about_activity"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:buttonDrawable1="@drawable/ic_info_white_24"
-        app:title="@string/about"
-        app:titleColor="@color/foreground_white_skin"
-        app:toolBarBackground="@color/main_color_2_skin" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="?attr/collapsingToolbarLayoutLargeStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tb_about_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:buttonGravity="center_vertical"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:menu="@menu/menu_about_activity"
+                app:navigationIcon="@drawable/ic_arrow_back_24"
+                app:title="@string/about" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iv_about_activity_icon"
+                android:id="@+id/iv_about_fragment_icon"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="50dp"
                 android:importantForAccessibility="no"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -37,46 +53,44 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_about_activity_icon_egg"
+                android:id="@+id/iv_about_fragment_icon_egg"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
                 android:importantForAccessibility="no"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/iv_about_activity_icon"
-                app:layout_constraintTop_toTopOf="@id/iv_about_activity_icon"
+                app:layout_constraintEnd_toEndOf="@id/iv_about_fragment_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_about_fragment_icon"
                 tools:src="@drawable/ic_christmas_hat"
                 tools:visibility="visible" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:id="@+id/tv_about_activity_name"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_about_fragment_name"
+                style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/app_name"
-                android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="17sp"
+                android:textColor="?attr/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon"
-                app:typeface="bPRTypeface" />
+                app:layout_constraintTop_toBottomOf="@id/iv_about_fragment_icon" />
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:id="@+id/tv_about_activity_version"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_about_fragment_version"
+                style="@style/TextAppearance.Material3.LabelLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="2dp"
                 android:gravity="center_horizontal"
-                android:textColor="@color/foreground_main_color_2_skin"
-                android:textSize="15sp"
+                android:textColor="?attr/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_about_activity_name"
-                app:typeface="bPRTypeface"
+                app:layout_constraintTop_toBottomOf="@id/tv_about_fragment_name"
                 tools:text="version" />
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_imomoe"
+                android:id="@+id/rl_about_fragment_imomoe"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
@@ -85,40 +99,40 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_about_activity_version">
+                app:layout_constraintTop_toBottomOf="@id/tv_about_fragment_version">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_custom_data_source_about"
+                    android:layout_toStartOf="@id/iv_about_fragment_custom_data_source_about"
                     android:text="@string/data_source_url"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_custom_data_source_about"
+                    android:id="@+id/iv_about_fragment_custom_data_source_about"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
-                    android:src="@drawable/ic_info_white_24"
-                    app:tint="@color/foreground_main_color_2_skin" />
+                    android:layout_toStartOf="@id/iv_about_fragment_imomoe"
+                    android:src="@drawable/ic_info_24"
+                    app:tint="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_imomoe"
+                    android:id="@+id/iv_about_fragment_imomoe"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_github"
+                android:id="@+id/rl_about_fragment_github"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -126,31 +140,31 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_imomoe">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_imomoe">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_github"
+                    android:layout_toStartOf="@id/iv_about_fragment_github"
                     android:text="@string/github"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_github"
+                    android:id="@+id/iv_about_fragment_github"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_license"
+                android:id="@+id/rl_about_fragment_license"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -158,31 +172,31 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_github">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_github">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_license"
+                    android:layout_toStartOf="@id/iv_about_fragment_license"
                     android:text="@string/open_source_licenses"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_license"
+                    android:id="@+id/iv_about_fragment_license"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_user_notice"
+                android:id="@+id/rl_about_fragment_user_notice"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -190,31 +204,31 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_license">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_user_notice"
+                    android:layout_toStartOf="@id/iv_about_fragment_user_notice"
                     android:text="@string/user_notice"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_user_notice"
+                    android:id="@+id/iv_about_fragment_user_notice"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_activity_test_device"
+                android:id="@+id/rl_about_fragment_test_device"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -222,41 +236,42 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_user_notice">
 
-                <com.skyd.imomoe.view.component.textview.TypefaceTextView
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_activity_test_device"
+                    android:layout_toStartOf="@id/iv_about_fragment_test_device"
                     android:text="@string/test_device"
-                    android:textColor="@color/foreground_main_color_2_skin"
-                    android:textSize="16sp"
-                    app:typeface="bPRTypeface" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_activity_test_device"
+                    android:id="@+id/iv_about_fragment_test_device"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_arrow_right_main_color_2_24_skin" />
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
             </RelativeLayout>
 
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.Material3.LabelLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/app_icon_describe"
-                android:textColor="@color/main_color_skin"
+                android:textColor="?attr/colorSecondary"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_test_device" />
+                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_test_device" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

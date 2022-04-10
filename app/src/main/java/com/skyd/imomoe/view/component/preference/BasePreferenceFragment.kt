@@ -1,11 +1,11 @@
 package com.skyd.imomoe.view.component.preference
 
+import androidx.preference.PreferenceFragmentCompat
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
-import com.skyd.skin.core.SkinBasePreferenceFragment
 import org.greenrobot.eventbus.EventBus
 
 
-abstract class BasePreferenceFragment : SkinBasePreferenceFragment() {
+abstract class BasePreferenceFragment : PreferenceFragmentCompat() {
     protected var isFirstLoadData = true
 
     override fun onStart() {

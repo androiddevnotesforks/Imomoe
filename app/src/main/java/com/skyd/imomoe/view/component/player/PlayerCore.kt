@@ -1,8 +1,6 @@
 package com.skyd.imomoe.view.component.player
 
 import android.app.Activity
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.shuyu.gsyvideoplayer.player.IPlayerManager
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
@@ -12,9 +10,9 @@ import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.showListDialog
 import com.skyd.imomoe.util.logI
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
-import java.lang.IllegalStateException
 
 
 object PlayerCore {
@@ -77,14 +75,13 @@ object PlayerCore {
         playerCores.forEachIndexed { index, s ->
             if (s == playerCore) initialSelection = index
         }
-        MaterialDialog(this).listItemsSingleChoice(
+        showListDialog(
+            title = getString(R.string.select_player_core),
             items = playerCores,
-            initialSelection = initialSelection
-        ) { _, index, _ ->
-            playerCore = playerCores[index]
-            onPositive?.invoke(playerCores[index])
-        }.positiveButton(R.string.ok).negativeButton(R.string.cancel).show {
-            title(res = R.string.select_player_core)
+            checkedItem = initialSelection,
+        ) { _, _, itemIndex ->
+            playerCore = playerCores[itemIndex]
+            onPositive?.invoke(playerCores[itemIndex])
         }
     }
 

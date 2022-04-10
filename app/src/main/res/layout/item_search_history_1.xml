@@ -13,13 +13,15 @@
         android:layout_marginStart="16dp"
         android:importantForAccessibility="no"
         android:paddingVertical="7dp"
-        android:src="@drawable/ic_access_time_main_color_24_skin"
+        android:src="@drawable/ic_access_time_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorPrimary" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_search_history_1_title"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="10dp"
@@ -27,15 +29,13 @@
         android:layout_marginEnd="5dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="16sp"
+        android:textColor="?attr/colorPrimary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_search_history_1_delete"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/iv_search_history_1_icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:typeface="bPRTypeface"
         tools:text="轻音" />
 
     <ImageView
@@ -46,8 +46,9 @@
         android:paddingVertical="7dp"
         android:paddingStart="3dp"
         android:paddingEnd="16dp"
-        android:src="@drawable/ic_clear_main_color_24_skin"
+        android:src="@drawable/ic_clear_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?attr/colorSecondary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

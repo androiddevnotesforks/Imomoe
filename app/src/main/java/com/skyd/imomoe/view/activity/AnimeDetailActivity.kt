@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +14,12 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.util.Util.setTransparentStatusBar
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
-import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.dp
+import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
@@ -85,35 +83,44 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             )
         )
     }
-    override var statusBarSkin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTransparentStatusBar(window, isDark = false)
-
         viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
 
-        mBinding.atbAnimeDetailActivityToolbar.run {
-            setBackButtonClickListener { finish() }
-            // 分享
-            setButtonClickListener(0) {
-                ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
-                    .show(supportFragmentManager, "share_dialog")
+        mBinding.tbAnimeDetailActivity.run {
+            setNavigationOnClickListener { finish() }
+            menu.getItem(1).isVisible = false
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_item_anime_detail_activity_share -> {
+                        ShareDialogFragment().setShareContent(Api.MAIN_URL + viewModel.partUrl)
+                            .show(supportFragmentManager, "share_dialog")
+                        true
+                    }
+                    R.id.menu_item_anime_detail_activity_favorite -> {
+                        when (item.isChecked) {
+                            true -> {
+                                item.setIcon(R.drawable.ic_star_border_24)
+                                viewModel.deleteFavorite()
+                            }
+                            false -> {
+                                item.setIcon(R.drawable.ic_star_24)
+                                viewModel.insertFavorite()
+                            }
+                        }
+                        true
+                    }
+                    else -> false
+                }
             }
-            addButton(null)
             // 收藏
             viewModel.mldFavorite.observe(this@AnimeDetailActivity) {
-                setButtonDrawable(
-                    1, if (it) R.drawable.ic_star_white_24_skin else
-                        R.drawable.ic_star_border_white_24
-                )
-            }
-            setButtonEnable(1, false)
-            setButtonClickListener(1) {
-                when (viewModel.mldFavorite.value) {
-                    true -> viewModel.deleteFavorite()
-                    false -> viewModel.insertFavorite()
+                menu.findItem(R.id.menu_item_anime_detail_activity_favorite).apply {
+                    isVisible = true
+                    isChecked = it
+                    setIcon(if (it) R.drawable.ic_star_24 else R.drawable.ic_star_border_24)
                 }
             }
         }
@@ -131,7 +138,6 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         viewModel.mldAnimeDetailList.observe(this, Observer {
             mBinding.srlAnimeDetailActivity.isRefreshing = false
             adapter.dataList = it ?: emptyList()
-            mBinding.atbAnimeDetailActivityToolbar.setButtonEnable(1, true)
 
             if (viewModel.cover.url.isBlank()) return@Observer
             mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover.url) {
@@ -146,21 +152,15 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
                 )
             }
-            mBinding.atbAnimeDetailActivityToolbar.titleText = viewModel.title
+            mBinding.tbAnimeDetailActivity.title = viewModel.title
         })
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
-        viewModel.getAnimeDetailData()
+        if (viewModel.mldAnimeDetailList.value == null) viewModel.getAnimeDetailData()
     }
 
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 
     private fun showEpisodeSheetDialog(dataList: List<AnimeEpisodeDataBean>): BottomSheetDialog {
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)

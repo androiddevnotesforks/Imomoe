@@ -1,12 +1,10 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
 import com.skyd.imomoe.util.showToast
@@ -18,36 +16,21 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover7Proxy
 import com.skyd.imomoe.viewmodel.AnimeDownloadViewModel
 
 class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
-    private var mode = 0        //0是默认的，是番剧；1是番剧每一集
-    private var actionBarTitle = ""
-    private var directoryName = ""
-    private var path = 0
     private val viewModel: AnimeDownloadViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover7Proxy())) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mode = intent.getIntExtra("mode", 0)
-        actionBarTitle =
+        viewModel.mode = intent.getIntExtra("mode", 0)
+        viewModel.actionBarTitle =
             intent.getStringExtra("actionBarTitle") ?: getString(R.string.download_anime)
-        directoryName = intent.getStringExtra("directoryName").orEmpty()
-        path = intent.getIntExtra("path", 0)
+        viewModel.directoryName = intent.getStringExtra("directoryName").orEmpty()
+        viewModel.path = intent.getIntExtra("path", 0)
 
         mBinding.run {
-            atbAnimeDownloadActivityToolbar.titleText = actionBarTitle
-            atbAnimeDownloadActivityToolbar.setBackButtonClickListener { finish() }
-            atbAnimeDownloadActivityToolbar.setButtonClickListener(0) {
-                MaterialDialog(this@AnimeDownloadActivity).show {
-                    title(res = R.string.attention)
-                    message(
-                        text = "由于新版Android存储机制变更，因此新缓存的动漫将存储在App的私有路径，" +
-                                "以前缓存的动漫依旧能够观看，其后面将有“旧”字样。新缓存的动漫与以前缓存的互不影响。" +
-                                "\n\n注意：新缓存的动漫将在App被卸载或数据被清除后丢失。"
-                    )
-                    positiveButton { dismiss() }
-                }
-            }
+            tbAnimeDownloadActivity.title = viewModel.actionBarTitle
+            tbAnimeDownloadActivity.setNavigationOnClickListener { finish() }
 
             rvAnimeDownloadActivity.layoutManager = LinearLayoutManager(this@AnimeDownloadActivity)
             rvAnimeDownloadActivity.adapter = adapter
@@ -66,10 +49,13 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
 
         requestManageExternalStorage {
             onGranted {
-                if (mode == 0) viewModel.getAnimeCover()
-                else if (mode == 1) {
+                if (viewModel.mode == 0 && viewModel.mldAnimeCoverList.value == null) {
+                    viewModel.getAnimeCover()
+                } else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                    viewModel.getAnimeCoverEpisode(directoryName, path)
+                    if (viewModel.mldAnimeCoverList.value == null) {
+                        viewModel.getAnimeCoverEpisode(viewModel.directoryName, viewModel.path)
+                    }
                 }
             }
             onDenied {
@@ -79,14 +65,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         }
     }
 
-    override fun getBinding(): ActivityAnimeDownloadBinding =
-        ActivityAnimeDownloadBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityAnimeDownloadBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutAnimeDownloadNoDownload
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.activity
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +10,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyTab1Bean
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
-import com.skyd.imomoe.util.Util.getResColor
+import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.ClassifyTab1Proxy
@@ -33,27 +32,23 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private val classifyAdapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(AnimeCover3Proxy()))
     }
-    private var classifyTabTitle: String = ""       //如 地区
-    private var classifyTitle: String = ""          //如 大陆
-    private var currentPartUrl: String = ""
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        currentPartUrl = intent.getStringExtra("partUrl").orEmpty()
-        classifyTabTitle = intent.getStringExtra("classifyTabTitle").orEmpty()
-        classifyTitle = intent.getStringExtra("classifyTitle").orEmpty()
-
-        mBinding.atbClassifyActivityToolbar.setBackButtonClickListener { finish() }
+        viewModel.currentPartUrl = intent.getStringExtra("partUrl").orEmpty()
+        viewModel.classifyTabTitle = intent.getStringExtra("classifyTabTitle").orEmpty()
+        viewModel.classifyTitle = intent.getStringExtra("classifyTitle").orEmpty()
 
         mBinding.run {
+            tbClassifyActivity.setNavigationOnClickListener { finish() }
             srlClassifyActivity.setOnRefreshListener {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
                     if (viewModel.mldClassifyTabList.value?.isEmpty() == false)
-                        viewModel.getClassifyData(currentPartUrl)
+                        viewModel.getClassifyData(viewModel.currentPartUrl)
                     else viewModel.getClassifyTabData()
                 } else {
                     srlClassifyActivity.finishRefresh()
@@ -70,12 +65,13 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
             spinnerClassifyActivity.adapter = spinnerAdapter
             spinnerClassifyActivity.setOnItemSelectedListener {
-                onItemSelected { _, view, position, _ ->
-                    if (view is TextView) view.setTextColor(getResColor(R.color.foreground_main_color_2_skin))
+                onItemSelected { _, _, position, _ ->
                     classifyTabAdapter.dataList =
                         spinnerAdapter.getItem(position)?.classifyDataList.orEmpty()
                 }
             }
+
+            ablClassifyActivity.hideToolbarWhenCollapsed(tbClassifyActivity)
         }
 
         viewModel.mldClassifyTabList.observe(this) {
@@ -89,27 +85,27 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 spinnerAdapter.notifyDataSetChanged()
 
                 //自动选中第一个
-                if (currentPartUrl.isEmpty() && it[0].classifyDataList.size > 0) {
+                if (viewModel.currentPartUrl.isEmpty() && it[0].classifyDataList.size > 0) {
                     val firstItem = it[0].classifyDataList[0]
-                    currentPartUrl = firstItem.actionUrl
-                    classifyTabTitle = it[0].toString()
-                    classifyTitle = firstItem.title
-                    tabSelected(currentPartUrl)
+                    viewModel.currentPartUrl = firstItem.actionUrl
+                    viewModel.classifyTabTitle = it[0].toString()
+                    viewModel.classifyTitle = firstItem.title
+                    tabSelected(viewModel.currentPartUrl)
                 } else {
                     var found = false
                     it.forEachIndexed { index, classifyBean ->
                         classifyBean.classifyDataList.forEach { item ->
-                            if (item.actionUrl == currentPartUrl) {
+                            if (item.actionUrl == viewModel.currentPartUrl) {
                                 mBinding.spinnerClassifyActivity.setSelection(index, true)
-                                classifyTabTitle = classifyBean.name
-                                classifyTitle = item.title
-                                tabSelected(currentPartUrl)
+                                viewModel.classifyTabTitle = classifyBean.name
+                                viewModel.classifyTitle = item.title
+                                tabSelected(viewModel.currentPartUrl)
                                 found = true
                                 return@forEachIndexed
                             }
                         }
                     }
-                    if (!found) tabSelected(currentPartUrl)
+                    if (!found) tabSelected(viewModel.currentPartUrl)
                 }
             }
         }
@@ -117,14 +113,14 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         viewModel.mldClassifyList.observe(this) {
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
             classifyAdapter.dataList = it ?: emptyList()
-            mBinding.atbClassifyActivityToolbar.titleText =
-                if (classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  $classifyTitle"
+            mBinding.tbClassifyActivity.title =
+                if (viewModel.classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  ${viewModel.classifyTitle}"
                 else "${getString(R.string.anime_classify)}  ${
-                    if (classifyTabTitle.endsWith(":") ||
-                        classifyTabTitle.endsWith("：")
-                    ) classifyTabTitle.substring(0, classifyTabTitle.length - 1)
-                    else classifyTabTitle
-                }：$classifyTitle"
+                    if (viewModel.classifyTabTitle.endsWith(":") ||
+                        viewModel.classifyTabTitle.endsWith("：")
+                    ) viewModel.classifyTabTitle.substring(0, viewModel.classifyTabTitle.length - 1)
+                    else viewModel.classifyTabTitle
+                }：${viewModel.classifyTitle}"
         }
 
         viewModel.mldLoadMoreClassifyList.observe(this) {
@@ -134,7 +130,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
         viewModel.setActivity(this)
 
-        viewModel.getClassifyTabData()
+        if (viewModel.mldClassifyTabList.value == null) viewModel.getClassifyTabData()
     }
 
     override fun onDestroy() {
@@ -146,22 +142,15 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
         ActivityClassifyBinding.inflate(layoutInflater)
 
     private fun tabSelected(partUrl: String) {
-        currentPartUrl = partUrl
+        viewModel.currentPartUrl = partUrl
         mBinding.srlClassifyActivity.autoRefresh()
     }
 
     private fun classifyTabClicked(data: ClassifyTab1Bean) {
-        classifyTabTitle = spinnerAdapter.getItem(
+        viewModel.classifyTabTitle = spinnerAdapter.getItem(
             mBinding.spinnerClassifyActivity.selectedItemPosition
         ).toString()
-        classifyTitle = data.title
+        viewModel.classifyTitle = data.title
         tabSelected(data.actionUrl)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        classifyAdapter.notifyDataSetChanged()
-        classifyTabAdapter.notifyDataSetChanged()
     }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="9dp"
@@ -25,8 +26,9 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_skin_cover_1_title"
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
@@ -35,14 +37,12 @@
             android:layout_marginBottom="9dp"
             android:ellipsize="end"
             android:maxLines="3"
-            android:textColor="@color/foreground_white_skin"
-            android:textSize="13sp"
+            android:textColor="@android:color/white"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:typeface="bPRTypeface"
             tools:text="蓝色" />
 
         <ImageView
@@ -51,8 +51,9 @@
             android:layout_height="16dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="6dp"
-            android:src="@drawable/ic_right_white_32_skin"
+            android:src="@drawable/ic_right_32"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@android:color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

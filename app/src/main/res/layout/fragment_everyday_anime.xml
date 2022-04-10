@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.EverydayAnimeFragment">
 
-    <com.skyd.imomoe.view.component.AnimeToolbar
-        android:id="@+id/atb_everyday_anime_fragment"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_everyday_anime_fragment"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:elevation="5dp"
-        android:paddingHorizontal="6dp"
-        app:backDrawable="@drawable/ic_sunny_white_24"
-        app:backDrawableTitlePadding="0px"
-        app:title="@string/everyday_anime_list"
-        app:titleColor="@color/foreground_white_skin"
-        app:toolBarBackground="@color/main_color_2_skin" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:liftOnScrollTargetViewId="@+id/srl_everyday_anime_fragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_everyday_anime_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:buttonGravity="center_vertical"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@drawable/ic_sunny_24"
+            app:title="@string/everyday_anime_list" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/atb_everyday_anime_fragment"
-        app:colorScheme="@color/main_color_skin">
+        android:layout_below="@id/tb_everyday_anime_fragment"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:id="@+id/ll_everyday_anime_fragment"
@@ -35,11 +41,7 @@
                 android:id="@+id/tl_everyday_anime_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white_skin"
-                android:elevation="5dp"
-                app:tabIndicatorColor="@color/foreground_main_color_2_skin"
-                app:tabMode="scrollable"
-                app:tabTextColor="@color/foreground_main_color_2_skin" />
+                app:tabMode="scrollable" />
 
             <com.skyd.imomoe.view.component.ViewPager2View
                 android:id="@+id/vp2_everyday_anime_fragment"
@@ -52,6 +54,7 @@
         android:id="@+id/layout_everyday_anime_fragment_load_failed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout="@layout/layout_image_text_tip_1" />
-</RelativeLayout>
+        android:layout="@layout/layout_image_text_tip_1"
+        app:layout_anchor="@id/srl_everyday_anime_fragment"
+        app:layout_anchorGravity="center" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

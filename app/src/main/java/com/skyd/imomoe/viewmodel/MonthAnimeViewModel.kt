@@ -16,6 +16,7 @@ class MonthAnimeViewModel : ViewModel() {
     private val monthAnimeModel: IMonthAnimeModel by lazy {
         DataSourceManager.create(IMonthAnimeModel::class.java) ?: MonthAnimeModel()
     }
+    var partUrl: String = ""
     var mldMonthAnimeList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreMonthAnimeList: MutableLiveData<List<Any>?> = MutableLiveData()
     private var pageNumberBean: PageNumberBean? = null

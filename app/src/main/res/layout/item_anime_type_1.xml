@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.skyd.imomoe.view.component.textview.TypefaceTextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_anime_type_1"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="3dp"
-    android:background="@drawable/shape_fill_circle_corner_main_color_2_50_skin"
-    android:paddingHorizontal="6dp"
-    android:paddingVertical="2dp"
-    android:textColor="@color/foreground_white_skin"
-    android:textSize="11sp"
-    app:typeface="bPRTypeface"
-    tools:text="日本" />
+    android:layout_marginEnd="3dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_anime_type_1"
+        style="@style/TextAppearance.Material3.LabelMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="2dp"
+        android:textColor="?attr/colorOnSurface"
+        tools:text="日本" />
+</com.google.android.material.card.MaterialCardView>

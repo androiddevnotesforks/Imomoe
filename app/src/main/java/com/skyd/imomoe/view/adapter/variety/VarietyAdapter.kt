@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.util.EmptyViewHolder
-import com.skyd.skin.SkinManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -71,12 +70,10 @@ class VarietyAdapter(
         // debug模式下让他崩溃，以便检查错误出处
         if (viewType == -1 && !BuildConfig.DEBUG) return EmptyViewHolder(View(parent.context))
         return proxyList[viewType].onCreateViewHolder(parent, viewType)
-            .apply { SkinManager.setSkin(itemView) }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        SkinManager.applyViews(holder.itemView)
         val type = getItemViewType(position)
         if (type != -1) (proxyList[type] as Proxy<Any, ViewHolder>)
             .onBindViewHolder(holder, dataList[position], position, action)
@@ -85,7 +82,6 @@ class VarietyAdapter(
     // 布局刷新
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        SkinManager.applyViews(holder.itemView)
         val type = getItemViewType(position)
         if (type != -1) (proxyList[type] as Proxy<Any, ViewHolder>)
             .onBindViewHolder(holder, dataList[position], position, action, payloads)

@@ -10,8 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.input.input
+import com.google.android.material.textfield.TextInputLayout
 import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.ecs.DanmakuEngine
 import com.kuaishou.akdanmaku.ecs.component.filter.*
@@ -21,14 +20,12 @@ import com.kuaishou.akdanmaku.ui.DanmakuView
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuBean
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmakuService
 import com.skyd.imomoe.util.*
-import com.skyd.imomoe.util.Util.hideKeyboard
 import com.skyd.imomoe.util.Util.toEncodedUrl
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.html.SnifferVideo.AC
@@ -119,8 +116,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         mDanmakuPlayer = DanmakuPlayer(SimpleRenderer()).also {
             it.bindView(mDanmakuView)
         }
-        ivShowDanmaku = findViewById(R.id.iv_show_danmu)
-        etDanmakuInput = findViewById(R.id.et_input_danmu)
+        ivShowDanmaku = findViewById(R.id.iv_show_danmaku)
+        etDanmakuInput = findViewById(R.id.et_input_danmaku)
         vgDanmakuController = findViewById(R.id.cl_danmu_controller)
         tvInputCustomDanmakuUrl = findViewById(R.id.tv_input_custom_danmaku_url)
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
@@ -184,7 +181,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         }
 
         tvInputCustomDanmakuUrl?.setOnClickListener {
-            MaterialDialog(mContext).input(hintRes = R.string.input_danmaku_url) { dialog, text ->
+            mContext.showInputDialog(
+                hint = mContext.getString(R.string.input_danmaku_url)
+            ) { _, _, text ->
                 try {
                     val url = URL(text.toString()).toString()
 //                        val url = URL("http://api.bilibili.com/x/v1/dm/list.so?oid=431625080").toString()
@@ -192,10 +191,10 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         setDanmakuUrl(url, null, Const.TAG_BILIBILI)
                     }
                 } catch (e: Exception) {
-                    App.context.resources.getString(R.string.website_format_error).showToast()
+                    mContext.getString(R.string.website_format_error).showToast()
                     e.printStackTrace()
                 }
-            }.positiveButton(R.string.ok).show()
+            }
             vgSettingContainer?.invisible()
         }
 

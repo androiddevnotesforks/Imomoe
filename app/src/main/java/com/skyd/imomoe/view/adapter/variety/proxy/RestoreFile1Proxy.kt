@@ -36,9 +36,9 @@ class RestoreFile1Proxy(
         action: ((Any?) -> Unit)?
     ) {
         if (data.name.contains(".db")) {
-            holder.ivRestoreFile1Icon.setImageDrawable(getResDrawable(R.drawable.ic_database_main_color_2_24_skin))
+            holder.ivRestoreFile1Icon.setImageDrawable(getResDrawable(R.drawable.ic_database_24))
         } else {
-            holder.ivRestoreFile1Icon.setImageDrawable(getResDrawable(R.drawable.ic_insert_drive_file_main_color_2_24_skin))
+            holder.ivRestoreFile1Icon.setImageDrawable(getResDrawable(R.drawable.ic_insert_drive_file_24))
         }
         holder.tvRestoreFile1Title.text = data.displayName
         holder.tvRestoreFile1Size.text = data.contentLength.formatSize()

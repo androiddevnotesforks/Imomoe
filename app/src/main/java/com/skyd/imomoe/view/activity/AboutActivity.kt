@@ -3,19 +3,15 @@ package com.skyd.imomoe.view.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import com.afollestad.materialdialogs.MaterialDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.getAppVersionCode
-import com.skyd.imomoe.util.Util.getAppVersionName
-import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.ext.warningDialog
+import com.skyd.imomoe.ext.showMessageDialog
 import java.net.URL
 import java.util.*
 
@@ -25,13 +21,22 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         super.onCreate(savedInstanceState)
 
         mBinding.run {
-            atbAboutActivity.setBackButtonClickListener { finish() }
-            atbAboutActivity.setButtonClickListener(0) {
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.attention)
-                    message(text = "本软件免费开源，严禁商用，支持Android 5.0+！仅在GitHub仓库长期发布！\n不介意的话可以给我的GitHub仓库点个Star")
-                    positiveButton(text = "去点Star") { openBrowser(Const.Common.GITHUB_URL) }
-                    negativeButton(res = R.string.cancel) { dismiss() }
+            tbAboutFragment.setNavigationOnClickListener { finish() }
+
+            tbAboutFragment.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_item_about_activity_info -> {
+                        showMessageDialog(
+                            title = getString(R.string.attention),
+                            message = "本软件免费开源，严禁商用，支持Android 5.0+！仅在GitHub仓库长期发布！\n不介意的话可以给我的GitHub仓库点个Star",
+                            positiveText = "去点Star",
+                            negativeText = getString(R.string.cancel),
+                            onPositive = { _, _ -> Util.openBrowser(Const.Common.GITHUB_URL) },
+                            onNegative = { dialog, _ -> dialog.dismiss() }
+                        )
+                        true
+                    }
+                    else -> false
                 }
             }
 
@@ -39,78 +44,78 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             if (month == Calendar.DECEMBER && (day > 21 || day < 29)) {     // 圣诞节彩蛋
-                ivAboutActivityIconEgg.visible()
-                ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
+                ivAboutFragmentIconEgg.visible()
+                ivAboutFragmentIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutActivityVersion.text =
-                getString(R.string.app_version_name, getAppVersionName()) + "\n" +
-                        getString(R.string.app_version_code, getAppVersionCode()) + "\n" +
+            tvAboutFragmentVersion.text =
+                getString(R.string.app_version_name, Util.getAppVersionName()) + "\n" +
+                        getString(R.string.app_version_code, Util.getAppVersionCode()) + "\n" +
                         getString(
                             R.string.data_source_interface_version,
                             com.skyd.imomoe.model.interfaces.interfaceVersion
                         )
 
-            rlAboutActivityImomoe.setOnClickListener {
+            rlAboutFragmentImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)
                 if (URL(Api.MAIN_URL).protocol == "http") {
                     warningString =
                         getString(R.string.jump_to_browser_http_warning) + "\n" + warningString
                 }
-                warningDialog(
-                    onPositive = { openBrowser(Api.MAIN_URL) },
-                    positiveRes = R.string.still_to_visit
-                ).message(text = warningString).show()
+                showMessageDialog(
+                    message = warningString,
+                    positiveText = getString(R.string.still_to_visit),
+                    onPositive = { _, _ -> Util.openBrowser(Api.MAIN_URL) },
+                    onNegative = { dialog, _ -> dialog.dismiss() }
+                )
             }
 
-            ivAboutActivityCustomDataSourceAbout.setOnClickListener {
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.data_source_info)
-                    message(
-                        text = (DataSourceManager.getConst()
-                            ?: com.skyd.imomoe.model.impls.Const()).run {
-                            "${
-                                getString(
-                                    R.string.data_source_jar_version_name,
-                                    versionName()
-                                )
-                            }\n${
-                                getString(
-                                    R.string.data_source_jar_version_code,
-                                    versionCode().toString()
-                                )
-                            }\n${about()}"
-                        }
-                    )
-                    positiveButton(res = R.string.ok) { dismiss() }
-                }
+            ivAboutFragmentCustomDataSourceAbout.setOnClickListener {
+                showMessageDialog(
+                    title = getString(R.string.data_source_info),
+                    message = (DataSourceManager.getConst()
+                        ?: com.skyd.imomoe.model.impls.Const()).run {
+                        "${
+                            getString(
+                                R.string.data_source_jar_version_name,
+                                versionName()
+                            )
+                        }\n${
+                            getString(
+                                R.string.data_source_jar_version_code,
+                                versionCode().toString()
+                            )
+                        }\n${about()}"
+                    },
+                    onPositive = { dialog, _ -> dialog.dismiss() }
+                )
             }
 
-            rlAboutActivityGithub.setOnClickListener {
-                openBrowser(Const.Common.GITHUB_URL)
+            rlAboutFragmentGithub.setOnClickListener {
+                Util.openBrowser(Const.Common.GITHUB_URL)
             }
 
-            rlAboutActivityLicense.setOnClickListener {
+            rlAboutFragmentLicense.setOnClickListener {
                 startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
             }
 
-            rlAboutActivityUserNotice.setOnClickListener {
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.user_notice)
-                    message(text = Util.getUserNoticeContent().toHtml())
-                    cancelable(false)
-                    positiveButton(res = R.string.ok) {
+            rlAboutFragmentUserNotice.setOnClickListener {
+                showMessageDialog(
+                    title = getString(R.string.user_notice),
+                    message = Util.getUserNoticeContent().toHtml(),
+                    cancelable = false,
+                    onPositive = { _, _ ->
                         Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
                     }
-                }
+                )
             }
 
-            rlAboutActivityTestDevice.setOnClickListener {
-                MaterialDialog(this@AboutActivity).show {
-                    title(res = R.string.test_device)
-                    message(text = "Physical Device: \nAndroid 10")
-                    positiveButton(res = R.string.ok) { dismiss() }
-                }
+            rlAboutFragmentTestDevice.setOnClickListener {
+                showMessageDialog(
+                    title = getString(R.string.test_device),
+                    message = "Physical Device: \nAndroid 10",
+                    onPositive = { dialog, _ -> dialog.dismiss() }
+                )
             }
         }
     }

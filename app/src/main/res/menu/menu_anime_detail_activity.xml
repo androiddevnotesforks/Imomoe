@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_anime_detail_activity_share"
+        android:icon="@drawable/ic_share_24"
+        android:title="@string/anime_detail_activity_menu_share"
+        app:iconTint="@android:color/white"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_item_anime_detail_activity_favorite"
+        android:checked="true"
+        android:enabled="true"
+        android:icon="@drawable/ic_star_border_24"
+        android:title="@string/anime_detail_activity_menu_favorite"
+        app:iconTint="@android:color/white"
+        app:showAsAction="ifRoom" />
+</menu>

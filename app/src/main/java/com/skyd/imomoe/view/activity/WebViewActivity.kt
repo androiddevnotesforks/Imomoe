@@ -25,7 +25,7 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
                 it as HashMap<String, String>
             }
         }
-        mBinding.atbWebViewActivityToolbar.setBackButtonClickListener { finish() }
+        mBinding.tbWebViewActivity.setNavigationOnClickListener { finish() }
         mBinding.wvWebViewActivity.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)

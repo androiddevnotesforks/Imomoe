@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Lemon" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_lemon</item>
+        <item name="colorOnPrimary">@color/on_primary_lemon</item>
+        <item name="colorPrimaryInverse">@color/primary_inverse_lemon</item>
+        <item name="colorPrimaryContainer">@color/primary_container_lemon</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container_lemon</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_lemon</item>
+        <item name="colorOnSecondary">@color/on_secondary_lemon</item>
+        <item name="colorSecondaryContainer">@color/secondary_container_lemon</item>
+        <!-- navigationIcon选中的颜色 -->
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container_lemon</item>
+        <item name="colorTertiary">@color/tertiary_lemon</item>
+        <item name="colorOnTertiary">@color/on_tertiary_lemon</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container_lemon</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_lemon</item>
+        <!-- TopBar、NavigationBar底色 -->
+        <item name="colorSurface">@color/surface_lemon</item>
+        <!-- navigationIcon颜色 -->
+        <item name="colorOnSurface">@color/on_surface_lemon</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_lemon</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_lemon</item>
+        <item name="colorSurfaceInverse">@color/inverse_surface_lemon</item>
+        <item name="colorOnSurfaceInverse">@color/inverse_on_surface_lemon</item>
+        <!-- 窗体背景颜色 -->
+        <item name="background">@color/background_lemon</item>
+        <item name="colorOnBackground">@color/on_background_lemon</item>
+        <item name="colorError">@color/error_lemon</item>
+        <item name="colorOnError">@color/on_error_lemon</item>
+        <item name="colorErrorContainer">@color/error_container_lemon</item>
+        <item name="colorOnErrorContainer">@color/on_error_container_lemon</item>
+        <item name="colorOutline">@color/outline_lemon</item>
+    </style>
+
+    <style name="Theme.Anime.Lemon" parent="Theme.Lemon">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+</resources>

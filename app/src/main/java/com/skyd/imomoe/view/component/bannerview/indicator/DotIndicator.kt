@@ -6,26 +6,22 @@ import android.graphics.Paint
 import android.view.View
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
+import com.skyd.imomoe.ext.getAttrColor
 import com.skyd.imomoe.util.Util.dp
-import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.skin.attrs.BannerIndicatorDotSelectedColorAttr
-import com.skyd.imomoe.util.skin.attrs.BannerIndicatorDotUnselectedColorAttr
-import com.skyd.skin.SkinManager
-import com.skyd.skin.core.listeners.ChangeCustomSkinListener
 
 /**
  * Created by Sky_D on 2021-02-08.
  */
-class DotIndicator : View, Indicator, ChangeCustomSkinListener {
+class DotIndicator : View, Indicator {
     private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)        //抗锯齿
     private var mRadius: Float = 3f.dp
     private var mDotsPadding = 3.dp
-    var mSelectedColor: Int = context.getResColor(R.color.main_color_2_skin)
+    var mSelectedColor: Int = context.getAttrColor(R.attr.colorPrimary)
         set(value) {
             field = value
             invalidate()
         }
-    var mUnSelectedColor: Int = context.getResColor(R.color.foreground_white_skin)
+    var mUnSelectedColor: Int = context.getAttrColor(R.attr.background)
         set(value) {
             field = value
             invalidate()
@@ -94,26 +90,6 @@ class DotIndicator : View, Indicator, ChangeCustomSkinListener {
                 mPaint.color = if (mCurrentPosition == i) mSelectedColor else mUnSelectedColor
                 canvas?.drawCircle(cx, mRadius, mRadius, mPaint)
                 cx += mRadius * 2 + mDotsPadding
-            }
-        }
-    }
-
-    override fun setCustomTag() {
-        SkinManager.setCustomViewAttrs(this,
-            BannerIndicatorDotSelectedColorAttr().apply {
-                attrResourceRefId = R.color.main_color_2_skin
-            },
-            BannerIndicatorDotUnselectedColorAttr().apply {
-                attrResourceRefId = R.color.foreground_white_skin
-            }
-        )
-    }
-
-    override fun changeCustomSkin() {
-        SkinManager.getCustomViewAttrs(this).let {
-            it ?: return@let
-            it.attrsMap.forEach { entry ->
-                entry.value.applySkin(this)
             }
         }
     }

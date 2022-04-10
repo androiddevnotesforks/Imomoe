@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
     <!-- 此项专为widget_everyday_anime使用 -->
+    <!-- ?attr/colorPrimary不能使用，只能用@color/primary_pink -->
     <TextView
         android:id="@+id/tv_anime_cover_10_title"
         android:layout_width="0px"
@@ -31,5 +32,4 @@
         android:textColor="@color/widget_everyday_anime_item_text_color"
         android:textSize="17sp"
         tools:text="第10集" />
-
 </LinearLayout>

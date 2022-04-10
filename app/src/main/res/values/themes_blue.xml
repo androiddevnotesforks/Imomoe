@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Blue" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorOnPrimary">@color/on_primary_blue</item>
+        <item name="colorPrimaryInverse">@color/primary_inverse_blue</item>
+        <item name="colorPrimaryContainer">@color/primary_container_blue</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container_blue</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_blue</item>
+        <item name="colorOnSecondary">@color/on_secondary_blue</item>
+        <item name="colorSecondaryContainer">@color/secondary_container_blue</item>
+        <!-- navigationIcon选中的颜色 -->
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container_blue</item>
+        <item name="colorTertiary">@color/tertiary_blue</item>
+        <item name="colorOnTertiary">@color/on_tertiary_blue</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container_blue</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_blue</item>
+        <!-- TopBar、NavigationBar底色 -->
+        <item name="colorSurface">@color/surface_blue</item>
+        <!-- navigationIcon颜色 -->
+        <item name="colorOnSurface">@color/on_surface_blue</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_blue</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_blue</item>
+        <item name="colorSurfaceInverse">@color/inverse_surface_blue</item>
+        <item name="colorOnSurfaceInverse">@color/inverse_on_surface_blue</item>
+        <!-- 窗体背景颜色 -->
+        <item name="background">@color/background_blue</item>
+        <item name="colorOnBackground">@color/on_background_blue</item>
+        <item name="colorError">@color/error_blue</item>
+        <item name="colorOnError">@color/on_error_blue</item>
+        <item name="colorErrorContainer">@color/error_container_blue</item>
+        <item name="colorOnErrorContainer">@color/on_error_container_blue</item>
+        <item name="colorOutline">@color/outline_blue</item>
+    </style>
+
+    <style name="Theme.Anime.Blue" parent="Theme.Blue">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+</resources>

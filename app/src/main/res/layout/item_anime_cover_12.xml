@@ -6,8 +6,9 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_cover_12_title"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,37 +18,32 @@
         android:maxLines="2"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:textColor="@color/foreground_black_skin"
-        android:textSize="15sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_12_episode"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
     <com.skyd.imomoe.view.component.textview.TypefaceTextView
         android:id="@+id/tv_anime_cover_12_episode"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="17sp"
+        android:textColor="?attr/colorPrimary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:typeface="bPRTypeface"
         tools:text="第12集" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginHorizontal="16dp"
-        android:background="@color/main_color_skin"
+        android:background="?attr/colorOutline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

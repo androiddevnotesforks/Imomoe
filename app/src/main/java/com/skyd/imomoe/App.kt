@@ -8,15 +8,12 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import com.skyd.imomoe.ext.getAttrColor
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.PushHelper
 import com.skyd.imomoe.util.Util.getManifestMetaValue
-import com.skyd.imomoe.util.Util.getResColor
-import com.skyd.imomoe.util.Util.getSkinResourceId
 import com.skyd.imomoe.util.release
-import com.skyd.imomoe.util.skin.SkinUtil
 import com.skyd.imomoe.view.component.player.PlayerCore
-import com.skyd.skin.core.attrs.SrlPrimaryColorAttr
 import com.umeng.commonsdk.UMConfigure
 
 
@@ -31,6 +28,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
+        appContext = this
 
         release {
             // Crash提示
@@ -51,9 +49,6 @@ class App : Application() {
 
         FileDownloader.setup(this)
 
-        // 初始化自定义皮肤属性
-        SkinUtil.initCustomAttrIds()
-
         PlayerCore.onAppCreate()
 
         LaunchManager.onTraceApp(this, LaunchManager.APP_ON_CREATE, false)
@@ -66,36 +61,31 @@ class App : Application() {
         init {
             // 防止内存泄漏
             // 设置全局默认配置（优先级最低，会被其他设置覆盖）
-            SmartRefreshLayout.setDefaultRefreshInitializer { _, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
+            SmartRefreshLayout.setDefaultRefreshInitializer { context, layout -> //开始设置全局的基本参数（可以被下面的DefaultRefreshHeaderCreator覆盖）
                 layout.setReboundDuration(150)
                 layout.setFooterHeight(100f)
                 layout.setHeaderTriggerRate(0.5f)
                 layout.setDisableContentWhenLoading(false)
+                layout.setPrimaryColors(context.getAttrColor(R.attr.colorSurface))
             }
 
             // 全局设置默认的 Header
             SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> //开始设置全局的基本参数（这里设置的属性只跟下面的MaterialHeader绑定，其他Header不会生效，能覆盖DefaultRefreshInitializer的属性和Xml设置的属性）
-                val colorSchemeResources = R.color.main_color_skin
-                SrlPrimaryColorAttr.materialHeaderColorSchemeRes = colorSchemeResources
                 layout.setEnableHeaderTranslationContent(true)
                     .setHeaderHeight(70f)
                     .setDragRate(0.6f)
-                MaterialHeader(context).setColorSchemeResources(
-                    getSkinResourceId(
-                        colorSchemeResources
-                    )
-                )
+                MaterialHeader(context)
+                    .setColorSchemeColors(context.getAttrColor(R.attr.colorPrimary))
                     .setShowBezierWave(true)
             }
 
             SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
-                val animatingColor = R.color.foreground_main_color_2_skin
-                SrlPrimaryColorAttr.ballPulseFooterAnimatingColorRes = animatingColor
                 layout.setEnableFooterTranslationContent(true)
-                BallPulseFooter(context).setAnimatingColor(
-                    context.getResColor(animatingColor)
-                )
+                BallPulseFooter(context)
+                    .setAnimatingColor(context.getAttrColor(R.attr.colorPrimary))
             }
         }
     }
 }
+
+lateinit var appContext: Context

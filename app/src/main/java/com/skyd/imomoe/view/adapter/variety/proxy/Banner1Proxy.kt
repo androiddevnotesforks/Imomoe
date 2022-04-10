@@ -10,7 +10,6 @@ import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.component.bannerview.adapter.MyCycleBannerAdapter
 import com.skyd.imomoe.view.component.bannerview.indicator.DotIndicator
-import com.skyd.skin.SkinManager
 
 class Banner1Proxy : VarietyAdapter.Proxy<Banner1Bean, Banner1ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
@@ -27,7 +26,7 @@ class Banner1Proxy : VarietyAdapter.Proxy<Banner1Bean, Banner1ViewHolder>() {
         val activity = holder.itemView.activity
         holder.banner1.apply {
             setAdapter(MyCycleBannerAdapter(data.animeCoverList))
-            activity?.also { setIndicator(DotIndicator(it).apply { SkinManager.setViewTag(this) }) }
+            activity?.also { setIndicator(DotIndicator(it)) }
             startPlay(5000)
         }
     }

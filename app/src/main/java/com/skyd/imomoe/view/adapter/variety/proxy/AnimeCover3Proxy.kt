@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.adapter.variety.proxy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover3Bean
@@ -44,13 +45,13 @@ class AnimeCover3Proxy : VarietyAdapter.Proxy<AnimeCover3Bean, AnimeCover3ViewHo
             }
 
             data.animeType.forEach { type ->
-                val tvFlowLayout: TextView = activity.layoutInflater.inflate(
+                val cardView = activity.layoutInflater.inflate(
                     R.layout.item_anime_type_1,
                     holder.flAnimeCover3Type,
                     false
-                ) as TextView
-                tvFlowLayout.text = type.title
-                tvFlowLayout.setOnClickListener {
+                ) as CardView
+                cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = type.title
+                cardView.setOnClickListener {
                     if (type.actionUrl.isBlank()) return@setOnClickListener
                     //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                     val actionUrl = type.actionUrl.run {
@@ -62,7 +63,7 @@ class AnimeCover3Proxy : VarietyAdapter.Proxy<AnimeCover3Bean, AnimeCover3ViewHo
                         Const.ActionUrl.ANIME_CLASSIFY + actionUrl
                     )
                 }
-                holder.flAnimeCover3Type.addView(tvFlowLayout)
+                holder.flAnimeCover3Type.addView(cardView)
             }
         }
         holder.itemView.setOnClickListener {

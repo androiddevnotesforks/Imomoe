@@ -34,7 +34,7 @@ class AnimeCover11Proxy : VarietyAdapter.Proxy<AnimeCover11Bean, AnimeCover11Vie
             )
             Util.getResDrawable(backgrounds[index])
         } else {
-            Util.getResDrawable(R.drawable.shape_fill_circle_corner_main_color_2_50_skin)
+            Util.getResDrawable(R.drawable.shape_fill_circle_corner_50)
         }
         holder.tvAnimeCover11Title.text = data.title
         holder.itemView.setOnClickListener {

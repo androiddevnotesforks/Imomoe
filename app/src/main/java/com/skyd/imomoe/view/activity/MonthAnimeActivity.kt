@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.activity
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.ViewStub
 import androidx.activity.viewModels
@@ -12,7 +11,6 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
 
 class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
-    private var partUrl: String = ""
     private val viewModel: MonthAnimeViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover3Proxy())) }
     private var lastRefreshTime: Long = System.currentTimeMillis()
@@ -20,20 +18,20 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        partUrl = intent.getStringExtra("partUrl").orEmpty()
+        viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
 
         mBinding.run {
-            atbMonthAnimeActivity.titleText = getString(R.string.year_month_anime, partUrl)
+            tbMonthAnimeActivity.title = getString(R.string.year_month_anime, viewModel.partUrl)
+            tbMonthAnimeActivity.setNavigationOnClickListener { finish() }
 
             rvMonthAnimeActivity.layoutManager = LinearLayoutManager(this@MonthAnimeActivity)
             rvMonthAnimeActivity.setHasFixedSize(true)
             rvMonthAnimeActivity.adapter = adapter
 
-            atbMonthAnimeActivity.setBackButtonClickListener { finish() }
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
-                    viewModel.getMonthAnimeData(partUrl)
+                    viewModel.getMonthAnimeData(viewModel.partUrl)
                 } else {
                     srlMonthAnimeActivity.closeHeaderOrFooter()
                 }
@@ -45,7 +43,7 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
             if (it == null) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getMonthAnimeData(partUrl)
+                    viewModel.getMonthAnimeData(viewModel.partUrl)
                     hideLoadFailedTip()
                 }
             } else {
@@ -62,17 +60,10 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             }
         }
 
-        mBinding.srlMonthAnimeActivity.autoRefresh()
+        if (viewModel.mldMonthAnimeList.value == null) mBinding.srlMonthAnimeActivity.autoRefresh()
     }
 
-    override fun getBinding(): ActivityMonthAnimeBinding =
-        ActivityMonthAnimeBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityMonthAnimeBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutMonthAnimeActivityLoadFailed
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

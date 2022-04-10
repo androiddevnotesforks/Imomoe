@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_circle_corner_bottom_dialog_white_12_skin">
+    android:background="@drawable/shape_circle_corner_bottom_dialog_12">
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_dialog_bottom_sheet_1_title"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="10dp"
         android:text="@string/webdav_server_file_list"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textColor="?attr/colorOnSurface" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_dialog_bottom_sheet_1_tips"
+        style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/tv_dialog_bottom_sheet_1_title"
@@ -32,10 +31,7 @@
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        android:textColor="@color/foreground_main_color_2_skin"
-        android:textSize="15sp"
-        app:focused="true"
-        app:typeface="bPRTypeface"
+        android:textColor="?attr/colorOnSurface"
         tools:text="tips" />
 
     <com.skyd.imomoe.view.component.BottomSheetRecyclerView
@@ -44,5 +40,4 @@
         android:layout_height="match_parent"
         android:layout_below="@id/tv_dialog_bottom_sheet_1_title"
         android:clipToPadding="false" />
-
 </RelativeLayout>

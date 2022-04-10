@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval">
-            <solid android:color="@color/main_color_2_skin" />
+            <solid android:color="@color/primary_pink" />
         </shape>
     </item>
     <item
         android:bottom="7dp"
-        android:drawable="@drawable/ic_star_white_24_skin"
+        android:drawable="@drawable/ic_star_24"
         android:gravity="fill"
         android:left="7dp"
         android:right="7dp"

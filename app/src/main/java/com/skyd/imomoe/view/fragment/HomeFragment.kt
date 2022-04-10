@@ -8,33 +8,24 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
+import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.ext.clickScale
-import com.skyd.imomoe.util.eventbus.EventBusSubscriber
-import com.skyd.imomoe.util.eventbus.MessageEvent
-import com.skyd.imomoe.util.eventbus.RefreshEvent
-import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val viewModel: HomeViewModel by viewModels()
-    private val adapter: VpAdapter by lazy { VpAdapter(this) }
-    private var currentTab = -1
+    private val adapter: VpAdapter by lazy { VpAdapter() }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentHomeBinding =
         FragmentHomeBinding.inflate(inflater, container, false)
@@ -42,33 +33,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 清除缓存，以免换肤后颜色错误
-        viewModel.viewPool.clear()
-
         mBinding.run {
-            vp2HomeFragment.setAdapter(adapter)
+            vp2HomeFragment.adapter = adapter
             val tabLayoutMediator = TabLayoutMediator(
                 tlHomeFragment, vp2HomeFragment.getViewPager()
             ) { tab, position ->
-                if (position < viewModel.allTabList.size)
-                    tab.text = viewModel.allTabList[position].title
+                if (position < viewModel.mldAllTabList.value?.size ?: 0)
+                    tab.text = viewModel.mldAllTabList.value?.get(position)?.title
             }
             tabLayoutMediator.attach()
 
-            ivHomeFragmentRank.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                activity?.let { it1 ->
-                    it1.startActivity(Intent(it1, RankActivity::class.java))
-                    it1.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
+            tbHomeFragment.apply {
+                setNavigationOnClickListener {
+                    startActivity(Intent(activity, RankActivity::class.java))
+                    activity?.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
+                }
+
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.menu_item_home_fragment_classify -> {
+                            startActivity(Intent(activity, ClassifyActivity::class.java))
+                            true
+                        }
+                        R.id.menu_item_home_fragment_download -> {
+                            requestManageExternalStorage {
+                                onGranted {
+                                    startActivity(
+                                        Intent(activity, AnimeDownloadActivity::class.java)
+                                    )
+                                }
+                                onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
+                            }
+                            true
+                        }
+                        R.id.menu_item_home_fragment_favorite -> {
+                            startActivity(Intent(activity, FavoriteActivity::class.java))
+                            true
+                        }
+                        else -> false
+                    }
+
                 }
             }
 
-            ivHomeFragmentClassify.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                startActivity(Intent(activity, ClassifyActivity::class.java))
-            }
-
-            tvHomeFragmentHeaderSearch.setOnClickListener {
+            btnHomeFragmentSearch.setOnClickListener {
                 activity?.let {
                     val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
                     process(it, const.actionUrl.ANIME_SEARCH() + "")
@@ -76,28 +84,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 }
             }
 
-            ivHomeFragmentAnimeDownload.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                requestManageExternalStorage {
-                    onGranted { startActivity(Intent(activity, AnimeDownloadActivity::class.java)) }
-                    onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
-                }
-            }
-
-            ivHomeFragmentFavorite.setOnClickListener {
-                it.clickScale(0.8f, 70)
-                startActivity(Intent(activity, FavoriteActivity::class.java))
-            }
-
             tlHomeFragment.addOnTabSelectedListener {
-                onTabSelected { currentTab = it!!.position }
-                onTabReselected { adapter.refresh(currentTab) }
+                onTabSelected { viewModel.currentTab = it!!.position }
             }
+
+            ablHomeFragment.hideToolbarWhenCollapsed(tbHomeFragment)
         }
 
-        viewModel.mldGetAllTabList.observe(viewLifecycleOwner) {
-            adapter.clearAllFragment()
-            if (!it) {
+        viewModel.mldAllTabList.observe(viewLifecycleOwner) {
+            if (it == null) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
                     viewModel.getAllTabData()
                     hideLoadFailedTip()
@@ -105,78 +100,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), EventBusSubscriber {
                 getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
             } else {
                 hideLoadFailedTip()
-                viewModel.allTabList.size.let { size ->
-                    if (size > 0) mBinding.vp2HomeFragment.setOffscreenPageLimit(size)
-                }
-                for (i in viewModel.allTabList.indices) {
-                    val fragment = AnimeShowFragment()
-                    val bundle = Bundle()
-                    bundle.putString("partUrl", viewModel.allTabList[i].actionUrl)
-                    bundle.putSerializable("viewPool", viewModel.viewPool)
-                    fragment.arguments = bundle
-                    adapter.addFragment(fragment)
-                }
+                if (it.isNotEmpty()) mBinding.vp2HomeFragment.offscreenPageLimit = it.size
             }
             adapter.notifyDataSetChanged()
         }
 
-        viewModel.getAllTabData()
-    }
-
-    // priority = 1比MainActivity的高，以便在找不到相应子页面时拦截SelectHomeTabEvent
-    // 使得不会切换到MainActivity页面
-    @Subscribe(threadMode = ThreadMode.MAIN, priority = 1)
-    override fun onMessageEvent(event: MessageEvent) {
-        when (event) {
-            is RefreshEvent -> {
-                // 如果获取首页信息成功了，则刷新每个tab内容，否则重新获取主页信息
-                if (viewModel.mldGetAllTabList.value == true)
-                    adapter.refresh(currentTab)
-                else viewModel.getAllTabData()
-            }
-            is SelectHomeTabEvent -> {
-                var tabPosition = -1
-                viewModel.allTabList.forEachIndexed { index, tabBean ->
-                    if (tabBean.actionUrl == event.actionUrl) {
-                        tabPosition = index
-                        return@forEachIndexed
-                    }
-                }
-                if (tabPosition >= 0 && tabPosition < mBinding.tlHomeFragment.tabCount)
-                    mBinding.vp2HomeFragment.getViewPager()
-                        .apply { post { currentItem = tabPosition } }
-                else {
-                    EventBus.getDefault().cancelEventDelivery(event)
-                    getString(R.string.unknown_route, event.actionUrl).showToast()
-                }
-            }
-        }
+        if (viewModel.mldAllTabList.value == null) viewModel.getAllTabData()
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutHomeFragmentLoadFailed
 
-    class VpAdapter : FragmentStateAdapter {
+    inner class VpAdapter : FragmentStateAdapter(this) {
 
-        constructor(fragmentActivity: FragmentActivity) : super(fragmentActivity)
+        override fun getItemCount() = viewModel.mldAllTabList.value?.size ?: 0
 
-        constructor(fragment: Fragment) : super(fragment)
-
-        private val fragments = mutableListOf<AnimeShowFragment>()
-
-        fun clearAllFragment() {
-            fragments.clear()
+        override fun createFragment(position: Int): Fragment {
+            val fragment = AnimeShowFragment()
+            val bundle = Bundle()
+            bundle.putString("partUrl", viewModel.mldAllTabList.value?.get(position)?.actionUrl)
+            fragment.arguments = bundle
+            return fragment
         }
-
-        fun addFragment(fragment: AnimeShowFragment) {
-            fragments.add(fragment)
-        }
-
-        fun refresh(position: Int) {
-            fragments[position].refresh()
-        }
-
-        override fun getItemCount() = fragments.size
-
-        override fun createFragment(position: Int) = fragments[position]
     }
 }

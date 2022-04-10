@@ -53,7 +53,7 @@ object CoilUtil {
         url: String,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
-        @DrawableRes error: Int = R.drawable.ic_warning_main_color_3_24_skin
+        @DrawableRes error: Int = R.drawable.ic_warning_24
     ) {
         // 是本地drawable
         url.toIntOrNull()?.let { drawableResId ->

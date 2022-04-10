@@ -18,6 +18,9 @@ class ClassifyViewModel : ViewModel() {
     private val classifyModel: IClassifyModel by lazy {
         DataSourceManager.create(IClassifyModel::class.java) ?: ClassifyModel()
     }
+    var classifyTabTitle: String = ""       //如 地区
+    var classifyTitle: String = ""          //如 大陆
+    var currentPartUrl: String = ""
     private var isRequesting = false
     var mldClassifyTabList: MutableLiveData<List<ClassifyBean>?> = MutableLiveData()
     var mldClassifyList: MutableLiveData<List<Any>?> = MutableLiveData()

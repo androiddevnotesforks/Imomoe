@@ -6,14 +6,14 @@
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_anime_cover_3_cover"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="90dp"
         android:layout_height="120dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
-        app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,60 +27,51 @@
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             tools:src="@drawable/ic_launcher_background" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <View
-            android:id="@+id/view_anime_cover_3_night"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/transparent_skin" />
-    </androidx.cardview.widget.CardView>
-
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_cover_3_title"
+        style="@style/TextAppearance.Material3.TitleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/foreground_black_skin"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/cv_anime_cover_3_cover"
         app:layout_constraintTop_toTopOf="parent"
-        app:typeface="bPRTypeface"
         tools:text="中二病也要谈恋爱！" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_cover_3_alias"
+        style="@style/TextAppearance.Material3.TitleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textSize="12sp"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_cover_3_title"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_3_title"
-        app:typeface="bPRTypeface"
         tools:text="别名" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_cover_3_episode"
+        style="@style/TextAppearance.Material3.LabelMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/main_color_skin"
-        android:textSize="12sp"
+        android:textColor="?attr/colorSecondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_anime_cover_3_alias"
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_3_alias"
-        app:typeface="bPRTypeface"
         tools:text="全12集" />
 
     <com.skyd.imomoe.view.component.FlowLayout
@@ -97,8 +88,9 @@
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_3_episode"
         app:rowSpacing="5dp" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_anime_cover_3_describe"
+        style="@style/TextAppearance.Material3.BodySmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -106,8 +98,7 @@
         android:layout_marginBottom="7dp"
         android:ellipsize="end"
         android:maxLines="3"
-        android:textColor="@color/gray_1"
-        android:textSize="12sp"
+        android:textColor="?attr/colorSecondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,6 +106,5 @@
         app:layout_constraintStart_toStartOf="@id/tv_anime_cover_3_title"
         app:layout_constraintTop_toBottomOf="@id/fl_anime_cover_3_type"
         app:layout_constraintVertical_bias="0"
-        app:typeface="bPRTypeface"
         tools:text="春天，新生入学后开始考虑要加入哪个社团的时候—— 田井中律被从小一起长大的玩伴秋山澪带到轻音部见习。" />
 </androidx.constraintlayout.widget.ConstraintLayout>

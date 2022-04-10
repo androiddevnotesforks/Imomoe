@@ -6,15 +6,39 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import androidx.annotation.Nullable
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_DRAGGING
 import kotlin.math.abs
 
-class ViewPager2View(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+class ViewPager2View(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs) {
 
-    private val mViewPager2: ViewPager2 = ViewPager2(context)
+    private val mViewPager2: ViewPager2 = ViewPager2(context, attrs)
+
+    var adapter: RecyclerView.Adapter<*>?
+        get() = mViewPager2.adapter
+        set(value) {
+            mViewPager2.adapter = value
+        }
+
+    var offscreenPageLimit: Int
+        get() = mViewPager2.offscreenPageLimit
+        set(value) {
+            mViewPager2.offscreenPageLimit = value
+        }
+
+    var currentItem: Int
+        get() = mViewPager2.currentItem
+        set(value) {
+            mViewPager2.currentItem = value
+        }
+
+    var orientation: Int
+        get() = mViewPager2.orientation
+        set(value) {
+            mViewPager2.orientation = value
+        }
 
     private var mStartX = 0f
     private var mStartY = 0f
@@ -26,29 +50,15 @@ class ViewPager2View(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         attachViewToParent(mViewPager2, 0, mViewPager2.layoutParams)
     }
 
-    fun <T : RecyclerView.ViewHolder> setAdapter(adapter: RecyclerView.Adapter<T>) {
-        mViewPager2.adapter = adapter
-    }
-
-    fun setOffscreenPageLimit(limit: Int) {
-        mViewPager2.offscreenPageLimit = limit
-    }
-
     fun getViewPager() = mViewPager2
 
     fun setPageTransformer(@Nullable transformer: ViewPager2.PageTransformer) {
         mViewPager2.setPageTransformer(transformer)
     }
 
-    fun setCurrentItem(item: Int) {
-        mViewPager2.currentItem = item
-    }
-
     fun setCurrentItem(item: Int, smoothScroll: Boolean) {
         mViewPager2.setCurrentItem(item, smoothScroll)
     }
-
-    fun getOrientation() = mViewPager2.orientation
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         when (ev.action) {

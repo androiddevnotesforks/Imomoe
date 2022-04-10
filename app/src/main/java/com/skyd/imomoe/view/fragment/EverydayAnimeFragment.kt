@@ -1,7 +1,6 @@
 package com.skyd.imomoe.view.fragment
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,8 +8,8 @@ import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
+import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
@@ -62,17 +61,19 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         super.onActivityCreated(savedInstanceState)
 
         mBinding.run {
-            vp2EverydayAnimeFragment.setOffscreenPageLimit(offscreenPageLimit)
+            vp2EverydayAnimeFragment.offscreenPageLimit = offscreenPageLimit
             srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
 
             tlEverydayAnimeFragment.addOnTabSelectedListener {
                 onTabSelected { tab -> selectedTabIndex = tab?.position ?: return@onTabSelected }
             }
-            mBinding.vp2EverydayAnimeFragment.setAdapter(adapter)
+            vp2EverydayAnimeFragment.adapter = adapter
+
+            ablEverydayAnimeFragment.hideToolbarWhenCollapsed(tbEverydayAnimeFragment)
         }
 
         viewModel.mldHeader.observe(viewLifecycleOwner) {
-            mBinding.atbEverydayAnimeFragment.titleText = it
+            mBinding.tbEverydayAnimeFragment.title = it
         }
 
         viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner) {
@@ -121,8 +122,10 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             }
         }
 
-        mBinding.srlEverydayAnimeFragment.isRefreshing = true
-        viewModel.getEverydayAnimeData()
+        if (viewModel.mldTabList.value == null || viewModel.mldEverydayAnimeList.value == null) {
+            mBinding.srlEverydayAnimeFragment.isRefreshing = true
+            viewModel.getEverydayAnimeData()
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -146,10 +149,4 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutEverydayAnimeFragmentLoadFailed
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }

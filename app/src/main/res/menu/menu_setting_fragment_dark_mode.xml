@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_setting_fragment_dark_no"
+        android:enabled="true"
+        android:title="@string/setting_fragment_dark_no_menu_info"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_setting_fragment_dark_yes"
+        android:enabled="true"
+        android:title="@string/setting_fragment_dark_yes_menu_info"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_item_setting_fragment_dark_follow_system"
+        android:enabled="true"
+        android:title="@string/setting_fragment_dark_follow_system_menu_info"
+        app:showAsAction="never" />
+</menu>

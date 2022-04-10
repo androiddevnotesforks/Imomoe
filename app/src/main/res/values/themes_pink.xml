@@ -1,0 +1,43 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Pink" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_pink</item>
+        <item name="colorOnPrimary">@color/on_primary_pink</item>
+        <item name="colorPrimaryInverse">@color/primary_inverse_pink</item>
+        <item name="colorPrimaryContainer">@color/primary_container_pink</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container_pink</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_pink</item>
+        <item name="colorOnSecondary">@color/on_secondary_pink</item>
+        <item name="colorSecondaryContainer">@color/secondary_container_pink</item>
+        <!-- navigationIcon选中的颜色 -->
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container_pink</item>
+        <item name="colorTertiary">@color/tertiary_pink</item>
+        <item name="colorOnTertiary">@color/on_tertiary_pink</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container_pink</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_pink</item>
+        <!-- TopBar、NavigationBar底色 -->
+        <item name="colorSurface">@color/surface_pink</item>
+        <!-- navigationIcon颜色 -->
+        <item name="colorOnSurface">@color/on_surface_pink</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_pink</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_pink</item>
+        <item name="colorSurfaceInverse">@color/inverse_surface_pink</item>
+        <item name="colorOnSurfaceInverse">@color/inverse_on_surface_pink</item>
+        <!-- 窗体背景颜色 -->
+        <item name="background">@color/background_pink</item>
+        <item name="colorOnBackground">@color/on_background_pink</item>
+        <item name="colorError">@color/error_pink</item>
+        <item name="colorOnError">@color/on_error_pink</item>
+        <item name="colorErrorContainer">@color/error_container_pink</item>
+        <item name="colorOnErrorContainer">@color/on_error_container_pink</item>
+        <item name="colorOutline">@color/outline_pink</item>
+    </style>
+
+    <style name="Theme.Anime.Pink" parent="Theme.Pink">
+        <!-- Customize your theme here. -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+</resources>

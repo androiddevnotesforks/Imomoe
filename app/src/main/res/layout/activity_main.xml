@@ -4,115 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_skin"
     android:orientation="vertical"
     tools:context=".view.activity.MainActivity">
 
-    <FrameLayout
-        android:id="@+id/fl_main_activity_fragment_container"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp2_main_activity"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1" />
 
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnv_main_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_skin"
-        android:elevation="10dp"
-        android:orientation="horizontal">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_home_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/iv_control_bar_home"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_marginTop="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/selector_home_button_skin"
-                app:layout_constraintBottom_toTopOf="@id/tv_control_bar_home"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:id="@+id/tv_control_bar_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:gravity="center"
-                android:text="@string/home"
-                android:textColor="@drawable/selector_home_button_skin"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:ignore="SmallSp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_everyday_anime_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/iv_control_bar_everyday_anime"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_marginTop="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/selector_everyday_anime_button_skin"
-                app:layout_constraintBottom_toTopOf="@id/tv_control_bar_everyday_anime"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:id="@+id/tv_control_bar_everyday_anime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:gravity="center"
-                android:text="@string/everyday_anime"
-                android:textColor="@drawable/selector_everyday_anime_button_skin"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:ignore="SmallSp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_more_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1">
-
-            <ImageView
-                android:id="@+id/iv_control_bar_more"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_marginTop="7dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/selector_more_button_skin"
-                app:layout_constraintBottom_toTopOf="@id/tv_control_bar_more"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.skyd.imomoe.view.component.textview.TypefaceTextView
-                android:id="@+id/tv_control_bar_more"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:gravity="center"
-                android:text="@string/more"
-                android:textColor="@drawable/selector_more_button_skin"
-                android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:ignore="SmallSp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
+        android:fitsSystemWindows="true"
+        app:menu="@menu/menu_bottom_navigation" />
 </LinearLayout>

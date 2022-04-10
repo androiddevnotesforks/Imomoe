@@ -6,16 +6,15 @@ import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
-import com.skyd.imomoe.util.Util.getResColor
 
 fun CharSequence.showSnackbar(
     activity: Activity,
     duration: Int = Snackbar.LENGTH_SHORT,
     actionText: CharSequence? = App.context.getString(R.string.close),
     actionCallback: (() -> Unit)? = null,
-    backgroundTintList: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.main_color_2_skin)),
-    textColor: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.foreground_white_skin)),
-    actionTextColor: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.foreground_white_skin))
+    backgroundTintList: ColorStateList? = null,
+    textColor: ColorStateList? = null,
+    actionTextColor: ColorStateList? = null
 ) {
     showSnackbar(
         view = activity.findViewById(android.R.id.content),
@@ -34,9 +33,9 @@ fun CharSequence.showSnackbar(
     duration: Int = Snackbar.LENGTH_SHORT,
     actionText: CharSequence? = App.context.getString(R.string.close),
     actionCallback: (() -> Unit)? = null,
-    backgroundTintList: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.main_color_2_skin)),
-    textColor: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.foreground_white_skin)),
-    actionTextColor: ColorStateList? = ColorStateList.valueOf(getResColor(R.color.foreground_white_skin))
+    backgroundTintList: ColorStateList? = null,
+    textColor: ColorStateList? = null,
+    actionTextColor: ColorStateList? = null
 ) {
     Snackbar.make(view, this, duration)
         .setAction(actionText) { actionCallback?.invoke() }

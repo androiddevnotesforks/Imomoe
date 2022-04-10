@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.adapter.variety.proxy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.App
 import com.skyd.imomoe.R
@@ -51,10 +52,13 @@ class AnimeInfo1Proxy(
         holder.flAnimeInfo1Type.removeAllViews()
         data.animeType.forEach { type ->
             activity ?: return@forEach
-            val tvFlowLayout: TextView = activity.layoutInflater
-                .inflate(R.layout.item_anime_type_1, holder.flAnimeInfo1Type, false) as TextView
-            tvFlowLayout.text = type.title
-            tvFlowLayout.setOnClickListener {
+            val cardView = activity.layoutInflater.inflate(
+                R.layout.item_anime_type_1,
+                holder.flAnimeInfo1Type,
+                false
+            ) as CardView
+            cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = type.title
+            cardView.setOnClickListener {
                 if (type.actionUrl.isBlank()) return@setOnClickListener
                 //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
                 val actionUrl = type.actionUrl.run {
@@ -63,15 +67,18 @@ class AnimeInfo1Proxy(
                 }
                 Util.process(activity, Const.ActionUrl.ANIME_CLASSIFY + actionUrl)
             }
-            holder.flAnimeInfo1Type.addView(tvFlowLayout)
+            holder.flAnimeInfo1Type.addView(cardView)
         }
         holder.flAnimeInfo1Tag.removeAllViews()
         data.tag.forEach { tag ->
             activity ?: return@forEach
-            val tvFlowLayout: TextView = activity.layoutInflater
-                .inflate(R.layout.item_anime_type_1, holder.flAnimeInfo1Tag, false) as TextView
-            tvFlowLayout.text = tag.title
-            tvFlowLayout.setOnClickListener {
+            val cardView = activity.layoutInflater.inflate(
+                R.layout.item_anime_type_1,
+                holder.flAnimeInfo1Type,
+                false
+            ) as CardView
+            cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = tag.title
+            cardView.setOnClickListener {
                 //此处是”标签“，由于分类没有这一大项，因此传入”“串
                 val actionUrl = tag.actionUrl.run {
                     if (endsWith("/")) "${this}${tag.title}"
@@ -79,7 +86,7 @@ class AnimeInfo1Proxy(
                 }
                 Util.process(activity, Const.ActionUrl.ANIME_CLASSIFY + actionUrl)
             }
-            holder.flAnimeInfo1Tag.addView(tvFlowLayout)
+            holder.flAnimeInfo1Tag.addView(cardView)
         }
     }
 }

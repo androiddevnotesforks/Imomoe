@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.fragment
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -71,15 +70,9 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             }
         }
 
-        mBinding.srlRankFragment.autoRefresh()
+        if (viewModel.mldRankData.value == null) mBinding.srlRankFragment.autoRefresh()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRankBinding =
         FragmentRankBinding.inflate(inflater, container, false)
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onChangeSkin() {
-        super.onChangeSkin()
-        adapter.notifyDataSetChanged()
-    }
 }
