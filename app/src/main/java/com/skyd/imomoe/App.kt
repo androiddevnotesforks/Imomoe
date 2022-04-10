@@ -55,6 +55,7 @@ class App : Application() {
     }
 
     companion object {
+        @Deprecated("use appContext instead", ReplaceWith("appContext"))
         @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
 

@@ -30,7 +30,6 @@
         android:focusable="true"
         android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
-        app:typeface="bPRTypeface"
         tools:text="CustomDataSource.jar" />
 
     <ImageView

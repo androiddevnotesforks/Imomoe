@@ -48,7 +48,9 @@
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:pathPattern=".*\\.ads" />
-                <data android:mimeType="application/octet-stream" />
+                <!-- 部分机型会导致找不到打开方式 -->
+                <!-- <data android:mimeType="application/octet-stream" />-->
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.NoticeActivity" />

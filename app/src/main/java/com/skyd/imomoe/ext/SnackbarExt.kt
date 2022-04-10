@@ -4,20 +4,19 @@ import android.app.Activity
 import android.content.res.ColorStateList
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 
-fun CharSequence.showSnackbar(
-    activity: Activity,
+fun Activity.showSnackbar(
+    text: CharSequence,
     duration: Int = Snackbar.LENGTH_SHORT,
-    actionText: CharSequence? = App.context.getString(R.string.close),
+    actionText: CharSequence? = getString(R.string.close),
     actionCallback: (() -> Unit)? = null,
     backgroundTintList: ColorStateList? = null,
     textColor: ColorStateList? = null,
     actionTextColor: ColorStateList? = null
 ) {
-    showSnackbar(
-        view = activity.findViewById(android.R.id.content),
+    findViewById<View>(android.R.id.content).showSnackbar(
+        text = text,
         duration = duration,
         actionText = actionText,
         actionCallback = actionCallback,
@@ -28,16 +27,16 @@ fun CharSequence.showSnackbar(
 }
 
 
-fun CharSequence.showSnackbar(
-    view: View,
+fun View.showSnackbar(
+    text: CharSequence,
     duration: Int = Snackbar.LENGTH_SHORT,
-    actionText: CharSequence? = App.context.getString(R.string.close),
+    actionText: CharSequence? = context.getString(R.string.close),
     actionCallback: (() -> Unit)? = null,
     backgroundTintList: ColorStateList? = null,
     textColor: ColorStateList? = null,
     actionTextColor: ColorStateList? = null
 ) {
-    Snackbar.make(view, this, duration)
+    Snackbar.make(this, text, duration)
         .setAction(actionText) { actionCallback?.invoke() }
         .apply {
             if (backgroundTintList != null) setBackgroundTintList(backgroundTintList)

@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeInfo1Bean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
@@ -47,7 +47,7 @@ class AnimeInfo1Proxy(
         holder.tvAnimeInfo1Area.text = data.area
         holder.tvAnimeInfo1Year.text = data.year
         holder.tvAnimeInfo1Index.text =
-            App.context.getString(R.string.anime_detail_index, data.index)
+            appContext.getString(R.string.anime_detail_index, data.index)
         holder.tvAnimeInfo1Info.text = data.info
         holder.flAnimeInfo1Type.removeAllViews()
         data.animeType.forEach { type ->

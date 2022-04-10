@@ -1,7 +1,7 @@
 package com.skyd.imomoe.model
 
 import androidx.lifecycle.MutableLiveData
-import com.skyd.imomoe.App
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.UpdateBean
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.UpdateService
@@ -24,7 +24,7 @@ object AppUpdateModel {
         set(value) {
             if (value == field) return
             field = if (value in AppUpdateHelper.serverName.indices) {
-                App.context.sharedPreferences("update").editor {
+                sharedPreferences("update").editor {
                     putInt(AppUpdateHelper.UPDATE_SERVER_SP_KEY, value)
                 }
                 value
@@ -39,7 +39,7 @@ object AppUpdateModel {
     init {
         status.value = AppUpdateStatus.UNCHECK
         updateServer =
-            App.context.sharedPreferences("update").getInt(AppUpdateHelper.UPDATE_SERVER_SP_KEY, 0)
+            appContext.sharedPreferences("update").getInt(AppUpdateHelper.UPDATE_SERVER_SP_KEY, 0)
     }
 
     fun checkUpdate() {

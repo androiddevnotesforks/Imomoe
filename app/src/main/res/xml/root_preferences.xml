@@ -55,6 +55,12 @@
             app:summary="@string/auto_jump_to_last_position_summary"
             app:title="@string/auto_jump_to_last_position" />
 
+        <CheckBoxPreference
+            app:icon="@drawable/ic_fast_forward_24"
+            app:key="restore_play_speed"
+            app:persistent="false"
+            app:title="@string/restore_play_speed" />
+
         <Preference
             app:icon="@drawable/ic_sort_24"
             app:key="episode_title_sort_mode"

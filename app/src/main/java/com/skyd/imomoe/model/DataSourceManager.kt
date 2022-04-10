@@ -2,9 +2,9 @@ package com.skyd.imomoe.model
 
 import android.util.LruCache
 import android.widget.Toast
-import com.skyd.imomoe.App
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.string
@@ -26,19 +26,19 @@ object DataSourceManager {
     const val DEFAULT_DATA_SOURCE = ""
 
     var dataSourceName: String =
-        App.context.sharedPreferences().getString("dataSourceName", DEFAULT_DATA_SOURCE)
+        sharedPreferences().getString("dataSourceName", DEFAULT_DATA_SOURCE)
             ?: DEFAULT_DATA_SOURCE
         get() {
-            return if (field.isBlank() && App.context.sharedPreferences()
+            return if (field.isBlank() && sharedPreferences()
                     .getBoolean("customDataSource", false)
             ) {
-                App.context.sharedPreferences().editor { putBoolean("customDataSource", false) }
+                sharedPreferences().editor { putBoolean("customDataSource", false) }
                 "CustomDataSource.jar"
             } else field
         }
         set(value) {
             field = value
-            App.context.sharedPreferences().editor { putString("dataSourceName", value) }
+            sharedPreferences().editor { putString("dataSourceName", value) }
         }
 
     private var showInterfaceVersionTip: Boolean = false
@@ -71,7 +71,7 @@ object DataSourceManager {
         "${getJarDirectory()}/${dataSourceName}"
 
     fun getJarDirectory(): String {
-        return "${App.context.getExternalFilesDir(null).toString()}/DataSourceJar"
+        return "${appContext.getExternalFilesDir(null).toString()}/DataSourceJar"
     }
 
     fun <T> getBinaryName(clazz: Class<T>): String {
@@ -124,7 +124,7 @@ object DataSourceManager {
         if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
         if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !BuildConfig.DEBUG) {
             if (!showInterfaceVersionTip)
-                App.context.getString(R.string.data_source_interface_version_not_match)
+                appContext.getString(R.string.data_source_interface_version_not_match)
                     .showToast(Toast.LENGTH_LONG)
             showInterfaceVersionTip = true
             return null
@@ -149,13 +149,13 @@ object DataSourceManager {
             if (!BuildConfig.DEBUG) return null
         }
         val optimizedDirectory =
-            File(App.context.getExternalFilesDir(null).toString() + "/DataSourceDex")
+            File(appContext.getExternalFilesDir(null).toString() + "/DataSourceDex")
         if (!optimizedDirectory.exists() && !optimizedDirectory.mkdirs()) {
             logE("DataSourceManager", "can't create optimizedDirectory")
             return null
         }
         val classLoader =
-            DexClassLoader(jarFile.path, optimizedDirectory.path, null, App.context.classLoader)
+            DexClassLoader(jarFile.path, optimizedDirectory.path, null, appContext.classLoader)
         var o: T? = null
         var clz: Class<*>? = null
         try {

@@ -100,14 +100,15 @@ class AnimeCover7Bean(
     var title: String,
     var size: String? = null,           //视频大小，如300M
     var episodeCount: String? = null,    //集数
+    var path: String,
     // 0：/storage/emulated/0/Android/data/packagename/files
     // 1：/storage/emulated/0/
-    var path: Int = 0
+    var pathType: Int = 0,
 ) : BaseBean, Diff, Comparable<AnimeCover7Bean> {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeCover7Bean -> false
         actionUrl == o.actionUrl && title == o.title && size == o.size &&
-                episodeCount == o.episodeCount && path == o.path -> true
+                episodeCount == o.episodeCount && path == o.path && pathType == o.pathType -> true
         else -> false
     }
 

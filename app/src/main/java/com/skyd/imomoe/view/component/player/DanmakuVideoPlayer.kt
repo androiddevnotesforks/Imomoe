@@ -10,7 +10,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import com.google.android.material.textfield.TextInputLayout
 import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.ecs.DanmakuEngine
 import com.kuaishou.akdanmaku.ecs.component.filter.*

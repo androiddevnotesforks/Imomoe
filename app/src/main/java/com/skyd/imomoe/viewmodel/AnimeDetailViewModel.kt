@@ -2,8 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
@@ -32,7 +32,7 @@ class AnimeDetailViewModel : ViewModel() {
             refreshAnimeCover()     // 更新数据库中番剧封面地址
         }, error = {
             mldAnimeDetailList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -48,7 +48,7 @@ class AnimeDetailViewModel : ViewModel() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
         }, success = {
-            App.context.getString(R.string.remove_favorite_succeed).showToast()
+            appContext.getString(R.string.remove_favorite_succeed).showToast()
             mldFavorite.postValue(false)
         })
     }
@@ -66,7 +66,7 @@ class AnimeDetailViewModel : ViewModel() {
                 )
             )
         }, success = {
-            App.context.getString(R.string.favorite_succeed).showToast()
+            appContext.getString(R.string.favorite_succeed).showToast()
             mldFavorite.postValue(true)
         })
     }

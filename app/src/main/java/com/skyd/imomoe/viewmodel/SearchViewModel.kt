@@ -2,8 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
@@ -35,14 +35,14 @@ class SearchViewModel : ViewModel() {
             mldSearchResultList.postValue(it.first)
         }, error = {
             mldSearchResultList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
     fun loadMoreSearchData() {
         val partUrl = pageNumberBean?.actionUrl
         if (partUrl == null) {
-            App.context.getString(R.string.no_more_info).showToast()
+            appContext.getString(R.string.no_more_info).showToast()
             mldLoadMoreSearchResultList.postValue(ArrayList())
             return
         }
@@ -51,7 +51,7 @@ class SearchViewModel : ViewModel() {
             mldLoadMoreSearchResultList.postValue(it.first)
         }, error = {
             mldLoadMoreSearchResultList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -63,7 +63,7 @@ class SearchViewModel : ViewModel() {
             mldSearchHistoryList.postValue(it)
         }, error = {
             mldSearchHistoryList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 

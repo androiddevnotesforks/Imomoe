@@ -10,8 +10,8 @@ import android.net.Uri
 import android.os.Build
 import android.widget.RemoteViews
 import com.google.gson.Gson
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeCover10Bean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.RouteProcessor
@@ -46,7 +46,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
                 mgr.getAppWidgetIds(cn),
                 R.id.lv_widget_everyday_anime
             )
-            App.context.getString(R.string.update_widget).showToast()
+            appContext.getString(R.string.update_widget).showToast()
         }
         super.onReceive(context, intent)
     }

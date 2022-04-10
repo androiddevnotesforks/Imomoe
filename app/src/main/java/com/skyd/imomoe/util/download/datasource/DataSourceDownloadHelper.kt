@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.util.download.DownloadStatus
 import com.skyd.imomoe.util.showToast
@@ -29,7 +29,7 @@ class DataSourceDownloadHelper private constructor() {
         folderAndFileName: String
     ) {
         if (activity.isFinishing) {
-            App.context.getString(R.string.do_not_finish_the_page_when_parse_download_data)
+            appContext.getString(R.string.do_not_finish_the_page_when_parse_download_data)
                 .showToast()
             return
         }

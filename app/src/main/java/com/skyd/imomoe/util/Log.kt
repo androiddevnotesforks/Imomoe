@@ -1,10 +1,6 @@
 package com.skyd.imomoe.util
 
 import android.util.Log
-import com.skyd.imomoe.App
-import java.text.SimpleDateFormat
-import java.util.*
-import java.io.*
 
 
 //class LogManager {
@@ -17,7 +13,7 @@ import java.io.*
 //        const val WARN = "W"
 //        const val ERROR = "E"
 //
-//        val CACHE_PATH = App.context.getExternalFilesDir(null).toString() + "/Logs/"
+//        val CACHE_PATH = appContextgetExternalFilesDir(null).toString() + "/Logs/"
 //    }
 //
 //    private val dateFormat = SimpleDateFormat("yyyy-MM-dd_HHmmss", Locale.getDefault())

@@ -4,10 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.util.Util.copy2Clipboard
-import com.skyd.imomoe.util.showToast
 
 object Share {
     const val SHARE_QQ = 1
@@ -17,7 +16,7 @@ object Share {
 
     fun isInstalled(packageName: String): Boolean {
         val packageInfo: PackageInfo? = try {
-            App.context.packageManager.getPackageInfo(packageName, 0)
+            appContext.packageManager.getPackageInfo(packageName, 0)
         } catch (e: PackageManager.NameNotFoundException) {
             null
         }

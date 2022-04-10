@@ -2,8 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.util.showToast
@@ -23,7 +23,7 @@ class FavoriteViewModel : ViewModel() {
             mldFavoriteList.postValue(it)
         }, error = {
             mldFavoriteList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 }

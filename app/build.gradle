@@ -89,7 +89,7 @@ android {
             signingConfig signingConfigs.release    //签名
             minifyEnabled true
             zipAlignEnabled true
-            shrinkResources false       // 使用keep.xml，keep住某些资源文件
+            shrinkResources true       // 使用keep.xml，keep住某些资源文件
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             ndk {
                 abiFilters 'armeabi', 'arm64-v8a'

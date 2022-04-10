@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.skyd.imomoe.App
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.converter.AnimeDownloadStatusConverter
 import com.skyd.imomoe.database.converter.ImageBeanConverter
@@ -61,4 +61,4 @@ abstract class AppDatabase : RoomDatabase() {
     }
 }
 
-fun getAppDataBase() = AppDatabase.getInstance(App.context)
+fun getAppDataBase() = AppDatabase.getInstance(appContext)

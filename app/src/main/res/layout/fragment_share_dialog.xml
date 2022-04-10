@@ -9,7 +9,7 @@
     android:paddingStart="13dp"
     android:paddingEnd="13dp">
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_to_qq"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
@@ -37,7 +37,7 @@
             app:drawableTint="?attr/colorOnSurface"
             app:drawableTopCompat="@drawable/ic_qq_34" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_to_wechat"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
@@ -51,7 +51,7 @@
             app:drawableTint="?attr/colorOnSurface"
             app:drawableTopCompat="@drawable/ic_wechat_34" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_to_weibo"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
@@ -65,7 +65,7 @@
             app:drawableTint="?attr/colorOnSurface"
             app:drawableTopCompat="@drawable/ic_weibo_34" />
 
-        <com.skyd.imomoe.view.component.textview.TypefaceTextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_copy_link"
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="0px"
@@ -81,7 +81,7 @@
 
     </LinearLayout>
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_cancel_share"
         style="@style/TextAppearance.Material3.LabelLarge"
         android:layout_width="match_parent"

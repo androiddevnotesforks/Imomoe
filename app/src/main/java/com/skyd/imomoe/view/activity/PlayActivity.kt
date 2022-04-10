@@ -23,7 +23,6 @@ import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
@@ -271,8 +270,8 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         lifecycleScope.launch {
             val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
             // 若用户设置了自动跳转 且 没有播放完
-            if (playPosition != null && playPosition != -1L && App.context.sharedPreferences()
-                    .getBoolean("auto_jump_to_last_position", false)
+            if (playPosition != null && playPosition != -1L && sharedPreferences()
+                    .getBoolean("autoJumpToLastPosition", false)
             ) currentPlayer.seekOnStart = playPosition
             withContext(Dispatchers.Main) {
                 // 开始播放

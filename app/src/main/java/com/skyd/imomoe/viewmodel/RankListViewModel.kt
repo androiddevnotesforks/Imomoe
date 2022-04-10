@@ -3,8 +3,8 @@ package com.skyd.imomoe.viewmodel
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
@@ -35,7 +35,7 @@ class RankListViewModel : ViewModel() {
         val partUrl = pageNumberBean?.actionUrl
         if (partUrl == null) {
             mldLoadMoreRankData.postValue(emptyList())
-            App.context.getString(R.string.no_more_info).showToast()
+            appContext.getString(R.string.no_more_info).showToast()
             return
         }
         request(request = { rankModel.getRankListData(partUrl) }, success = {

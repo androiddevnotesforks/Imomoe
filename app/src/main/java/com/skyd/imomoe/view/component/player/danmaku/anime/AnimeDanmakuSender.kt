@@ -4,8 +4,8 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.ui.DanmakuPlayer
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuBean
 import com.skyd.imomoe.bean.danmaku.AnimeSendDanmakuResultBean
 import com.skyd.imomoe.net.RetrofitManager
@@ -27,7 +27,7 @@ object AnimeDanmakuSender {
         animeSendDanmakuBean: AnimeSendDanmakuBean,
     ) {
         if (animeSendDanmakuBean.text.shield()) {
-            App.context.getString(R.string.danmaku_exist_shield_content).showToast(Toast.LENGTH_LONG)
+            appContext.getString(R.string.danmaku_exist_shield_content).showToast(Toast.LENGTH_LONG)
             return
         }
         val time = danmakuPlayer.getCurrentTimeMs() + 500
@@ -46,7 +46,7 @@ object AnimeDanmakuSender {
             .toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
         request.sendDanmaku(ac, key, json).enqueue(object : Callback<AnimeSendDanmakuResultBean> {
             override fun onFailure(call: Call<AnimeSendDanmakuResultBean>, t: Throwable) {
-                App.context.getString(R.string.send_danmaku_failed, t.message).showToast()
+                appContext.getString(R.string.send_danmaku_failed, t.message).showToast()
                 t.printStackTrace()
             }
 

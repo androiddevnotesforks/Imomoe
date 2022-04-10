@@ -23,7 +23,6 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.ext.*
@@ -36,7 +35,6 @@ import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.VideoSpeed1Proxy
 import com.skyd.imomoe.view.component.ZoomView
-import com.skyd.imomoe.view.component.textview.TypefaceTextView
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
 import java.io.File
@@ -321,11 +319,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         cbBottomProgress?.setOnCheckedChangeListener { _, isChecked ->
             setBottomProgressBarVisibility(isChecked)
             sharedPreferences().editor {
-                putBoolean("show_player_bottom_progressbar", isChecked)
+                putBoolean("showPlayerBottomProgressbar", isChecked)
             }
         }
         cbBottomProgress?.isChecked = sharedPreferences()
-            .getBoolean("show_player_bottom_progressbar", false)
+            .getBoolean("showPlayerBottomProgressbar", false)
 
         cbAutoPlayNextEpisode?.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences().editor {
@@ -421,8 +419,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             cancelDismissControlViewTimer()
             if (mReverseValue == null) mReverseValue = rgReverse?.getChildAt(0)?.id
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
-            cbBottomProgress?.isChecked = App.context.sharedPreferences()
-                .getBoolean("show_player_bottom_progressbar", false)
+            cbBottomProgress?.isChecked = sharedPreferences()
+                .getBoolean("showPlayerBottomProgressbar", false)
 
 //            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
 //            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -520,7 +518,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.onPlayNextEpisode = onPlayNextEpisode
         if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
         player.setBottomProgressBarVisibility(
-            App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
+            sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
         )
         touchSurfaceUp()
         player.setRestoreScreenTextViewVisibility()
@@ -566,7 +564,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             onPlayNextEpisode = player.onPlayNextEpisode
             if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
             setBottomProgressBarVisibility(
-                App.context.sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
+                sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
             )
             player.touchSurfaceUp()
             setRestoreScreenTextViewVisibility()
@@ -602,6 +600,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     override fun setSpeed(speed: Float, soundTouch: Boolean) {
         super.setSpeed(speed, soundTouch)
+        onSpeedChanged(speed)
+    }
+
+    override fun setSpeed(speed: Float) {
+        super.setSpeed(speed)
         onSpeedChanged(speed)
     }
 
@@ -659,13 +662,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         cachePath: File?,
         title: String?
     ): Boolean {
-        val result = super.setUp(url, cacheWithPlay, cachePath, title)
-        mTitleTextView?.let {
-            if (it is TypefaceTextView) {
-                it.isFocused = true
-            }
-        }
-        return result
+        return super.setUp(url, cacheWithPlay, cachePath, title)
     }
 
     override fun updateStartImage() {
@@ -1018,6 +1015,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      */
     override fun onPrepared() {
         super.onPrepared()
+        if (sharedPreferences().getBoolean("restorePlaySpeed", false)) {
+            setSpeed(sharedPreferences().getFloat("playSpeed", 1f), true)
+        }
         playPositionViewJob?.cancel()
         playPositionMemoryStore?.apply {
             playPositionMemoryStoreCoroutineScope.launch {
@@ -1025,8 +1025,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                     preSeekPlayPosition = it
                     playPositionViewJob = launch(Dispatchers.Main) {
                         // 若用户没有设置自动跳转 或者 看完了，才显示提示
-                        if (!App.context.sharedPreferences()
-                                .getBoolean("auto_jump_to_last_position", false) || it == -1L
+                        if (!sharedPreferences()
+                                .getBoolean("autoJumpToLastPosition", false) || it == -1L
                         ) {
                             tvPlayPosition?.text = positionFormat(it)
                             vgPlayPosition?.visible()
@@ -1045,6 +1045,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      */
     override fun onDetachedFromWindow() {
         storePlayPosition()
+        sharedPreferences().editor { putFloat("playSpeed", mPlaySpeed) }
         super.onDetachedFromWindow()
     }
 

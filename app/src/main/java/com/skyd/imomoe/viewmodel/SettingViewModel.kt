@@ -3,8 +3,8 @@ package com.skyd.imomoe.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import coil.util.CoilUtils
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.database.getOfflineDatabase
 import com.skyd.imomoe.util.showToast
@@ -29,18 +29,18 @@ class SettingViewModel : ViewModel() {
             getAllHistoryCount()
         }, error = {
             mldDeleteAllHistory.postValue(false)
-            "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }
 
     // 获取Coil磁盘缓存大小
     fun getCacheSize() {
         request(request = {
-            CoilUtils.createDefaultCache(App.context).directory.formatSize()
+            CoilUtils.createDefaultCache(appContext).directory.formatSize()
         }, success = {
             mldCacheSize.postValue(it)
         }, error = {
-            mldCacheSize.postValue(App.context.getString(R.string.get_cache_size_failed))
+            mldCacheSize.postValue(appContext.getString(R.string.get_cache_size_failed))
         })
     }
 
@@ -50,7 +50,7 @@ class SettingViewModel : ViewModel() {
             mldClearAllCache.postValue(true)
         }, error = {
             mldClearAllCache.postValue(false)
-            "${App.context.getString(R.string.delete_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }
 

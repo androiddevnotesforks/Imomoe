@@ -6,7 +6,6 @@ import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
@@ -52,14 +51,13 @@ object PlayerCore {
         "系统内核" to SystemPlayerManager::class.java
     )
 
-    var playerCore: Core = playerCores.first {
-        it.equals(App.context.sharedPreferences().getString("playerCore", null)
+    var playerCore: Core = (playerCores.firstOrNull {
+        it.equals(sharedPreferences().getString("playerCore", null)
             .run { this ?: IjkPlayerManager::class.java.name })
-    }.also { PlayerFactory.setPlayManager(it.playManager) }
+    } ?: playerCores.first()).also { PlayerFactory.setPlayManager(it.playManager) }
         set(value) {
             if (value == field) return
-            App.context.sharedPreferences()
-                .editor { putString("playerCore", value.playManager.name) }
+            sharedPreferences().editor { putString("playerCore", value.playManager.name) }
             field = value
             PlayerFactory.setPlayManager(value.playManager)
         }
@@ -99,10 +97,10 @@ object PlayerCore {
             GSYVideoType.disableMediaCodec()
             GSYVideoType.disableMediaCodecTexture()
         }
-        App.context.sharedPreferences().editor { putBoolean("mediaCodec", enable) }
+        sharedPreferences().editor { putBoolean("mediaCodec", enable) }
     }
 
     fun applyMediaCodec() {
-        setMediaCodec(App.context.sharedPreferences().getBoolean("mediaCodec", false))
+        setMediaCodec(sharedPreferences().getBoolean("mediaCodec", false))
     }
 }

@@ -192,20 +192,30 @@ class SettingFragment : BasePreferenceFragment() {
         }
 
         findPreference<CheckBoxPreference>("show_player_bottom_progressbar")?.apply {
-            isChecked = sharedPreferences().getBoolean("show_player_bottom_progressbar", false)
+            isChecked = sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
             setOnPreferenceChangeListener { _, newValue ->
                 sharedPreferences().editor {
-                    putBoolean("show_player_bottom_progressbar", newValue as? Boolean ?: false)
+                    putBoolean("showPlayerBottomProgressbar", newValue as? Boolean ?: false)
                 }
                 true
             }
         }
 
         findPreference<CheckBoxPreference>("auto_jump_to_last_position")?.apply {
-            isChecked = sharedPreferences().getBoolean("auto_jump_to_last_position", false)
+            isChecked = sharedPreferences().getBoolean("autoJumpToLastPosition", false)
             setOnPreferenceChangeListener { _, newValue ->
                 sharedPreferences().editor {
-                    putBoolean("auto_jump_to_last_position", newValue as? Boolean ?: false)
+                    putBoolean("autoJumpToLastPosition", newValue as? Boolean ?: false)
+                }
+                true
+            }
+        }
+
+        findPreference<CheckBoxPreference>("store_play_speed")?.apply {
+            isChecked = sharedPreferences().getBoolean("restorePlaySpeed", false)
+            setOnPreferenceChangeListener { _, newValue ->
+                sharedPreferences().editor {
+                    putBoolean("restorePlaySpeed", newValue as? Boolean ?: false)
                 }
                 true
             }

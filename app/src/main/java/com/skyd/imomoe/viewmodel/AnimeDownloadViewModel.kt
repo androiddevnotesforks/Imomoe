@@ -2,8 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeCover7Bean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
@@ -16,6 +16,7 @@ import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
+import kotlinx.coroutines.Job
 import java.io.File
 
 
@@ -25,6 +26,7 @@ class AnimeDownloadViewModel : ViewModel() {
     var directoryName = ""
     var path = 0
     var mldAnimeCoverList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var mldDelete: MutableLiveData<Pair<Boolean, String>> = MutableLiveData()
 
     fun getAnimeCover() {
         request(request = {
@@ -50,7 +52,8 @@ class AnimeDownloadViewModel : ViewModel() {
                                     title = file.name,
                                     size = file.formatSize(),
                                     episodeCount = episodeCount.toString() + "P",
-                                    path = if (i == 0) 0 else 1
+                                    path = file.path,
+                                    pathType = if (i == 0) 0 else 1
                                 )
                             )
                         }
@@ -62,7 +65,7 @@ class AnimeDownloadViewModel : ViewModel() {
             mldAnimeCoverList.postValue(it)
         }, error = {
             mldAnimeCoverList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -135,7 +138,8 @@ class AnimeDownloadViewModel : ViewModel() {
                                     + "/" + fileName,
                             title = anime.title,
                             size = File(animeFilePath + directoryName + "/" + anime.fileName).formatSize(),
-                            path = path
+                            path = fileName,
+                            pathType = path
                         )
                     )
                 }
@@ -145,7 +149,25 @@ class AnimeDownloadViewModel : ViewModel() {
             mldAnimeCoverList.postValue(it)
         }, error = {
             mldAnimeCoverList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
+    }
+
+    private var deleteJob: Job? = null
+
+    fun cancelDelete() {
+        deleteJob?.cancel()
+    }
+
+    fun delete(path: String) {
+        deleteJob = request(request = {
+            val file = File(path)
+            file.deleteRecursively()
+        }, success = {
+            mldDelete.postValue(it to path)
+        }, error = {
+            mldDelete.postValue(false to path)
+            it.message?.showToast()
+        }, finish = { deleteJob = null })
     }
 }

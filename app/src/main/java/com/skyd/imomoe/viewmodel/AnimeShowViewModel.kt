@@ -2,8 +2,8 @@ package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.AnimeShowModel
@@ -28,7 +28,7 @@ class AnimeShowViewModel : ViewModel() {
             mldAnimeShowList.postValue(it.first)
         }, error = {
             mldAnimeShowList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -36,7 +36,7 @@ class AnimeShowViewModel : ViewModel() {
         val partUrl = pageNumberBean?.actionUrl
         if (partUrl == null) {
             mldLoadMoreAnimeShowList.postValue(emptyList())
-            App.context.getString(R.string.no_more_info).showToast()
+            appContext.getString(R.string.no_more_info).showToast()
             return
         }
         request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
@@ -44,7 +44,7 @@ class AnimeShowViewModel : ViewModel() {
             mldLoadMoreAnimeShowList.postValue(it.first)
         }, error = {
             mldLoadMoreAnimeShowList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 }

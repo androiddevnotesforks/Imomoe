@@ -3,8 +3,8 @@ package com.skyd.imomoe.viewmodel
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
@@ -41,7 +41,7 @@ class EverydayAnimeViewModel : ViewModel() {
         }, error = {
             selectedTabIndex = -1
             mldEverydayAnimeList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast(Toast.LENGTH_LONG)
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast(Toast.LENGTH_LONG)
         })
     }
 }

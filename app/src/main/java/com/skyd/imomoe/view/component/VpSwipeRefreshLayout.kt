@@ -1,14 +1,10 @@
 package com.skyd.imomoe.view.component
 
 import android.content.Context
-import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ViewConfiguration
-import androidx.annotation.ColorInt
-import androidx.core.content.res.getColorOrThrow
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.skyd.imomoe.R
 import kotlin.math.abs
 
 //解决外层SwipeRefreshLayout内有Vp的滑动冲突
@@ -22,15 +18,7 @@ class VpSwipeRefreshLayout : SwipeRefreshLayout {
 
     constructor(context: Context) : this(context, null)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        val a: TypedArray =
-            context.theme.obtainStyledAttributes(attrs, R.styleable.VpSwipeRefreshLayout, 0, 0)
-        runCatching {
-            a.getColorOrThrow(R.styleable.FlowLayout_rowSpacing)
-        }.onSuccess {
-            setColorSchemeColors(it)
-        }
-    }
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
         when (ev.action) {

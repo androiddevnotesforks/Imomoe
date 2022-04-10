@@ -3,8 +3,8 @@ package com.skyd.imomoe.view.adapter.variety.proxy
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeCover8Bean
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.util.AnimeCover8ViewHolder
@@ -28,8 +28,8 @@ class AnimeCover8Proxy : VarietyAdapter.Proxy<AnimeCover8Bean, AnimeCover8ViewHo
         holder.ivAnimeCover8Cover.loadImage(url = data.cover.url, referer = data.cover.referer)
         holder.tvAnimeCover8Title.text = data.animeTitle
         holder.tvAnimeCover8Episodes.text = data.lastEpisode?.let {
-            App.context.getString(R.string.already_seen_episode_x, it)
-        } ?: App.context.getString(R.string.have_not_watched_this_anime)
+            appContext.getString(R.string.already_seen_episode_x, it)
+        } ?: appContext.getString(R.string.have_not_watched_this_anime)
         holder.itemView.setOnClickListener {
             if (data.lastEpisodeUrl != null) Util.process(
                 activity ?: return@setOnClickListener,

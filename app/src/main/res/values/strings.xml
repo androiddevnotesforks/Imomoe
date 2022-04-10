@@ -264,5 +264,11 @@
     <string name="play_activity_menu_share">分享</string>
     <string name="play_activity_menu_download">缓存</string>
     <string name="play_activity_menu_more">更多</string>
+    <string name="anime_download_activity_delete_message">确定删除：%s？\n此操作不可逆！</string>
+    <string name="anime_download_activity_delete_success">删除成功：%s</string>
+    <string name="anime_download_activity_delete_failed">删除失败：%s</string>
+    <string name="anime_download_activity_item_menu_delete">删除</string>
+    <string name="anime_download_activity_deleting">正在删除，请稍候…</string>
+    <string name="restore_play_speed">记忆播放速度</string>
 
 </resources>

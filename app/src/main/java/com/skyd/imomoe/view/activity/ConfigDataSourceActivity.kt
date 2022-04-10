@@ -80,10 +80,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                 onGranted {
                     importDataSource(uri,
                         onSuccess = {
-                            getString(
-                                R.string.import_data_source_success,
-                                uri.path
-                            ).showSnackbar(this@ConfigDataSourceActivity)
+                            showSnackbar(getString(R.string.import_data_source_success, uri.path))
                             adapter.getFragment<LocalDataSourceFragment>(supportFragmentManager, 0)
                                 ?.getDataSourceList()
                         },
@@ -101,7 +98,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                     )
                 }
                 onDenied {
-                    "无存储权限，无法导入".showSnackbar(this@ConfigDataSourceActivity, Toast.LENGTH_LONG)
+                    showSnackbar("无存储权限，无法导入", Toast.LENGTH_LONG)
                 }
             }
         }
@@ -114,8 +111,10 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
     ) {
         val dataSourceSuffix = (uri.path ?: "").substringAfterLast(".", "")
         if (!dataSourceSuffix.equals("ads", true)) {
-            getString(R.string.invalid_data_source_suffix, dataSourceSuffix)
-                .showSnackbar(this, duration = Toast.LENGTH_LONG)
+            showSnackbar(
+                text = getString(R.string.invalid_data_source_suffix, dataSourceSuffix),
+                duration = Toast.LENGTH_LONG
+            )
             return
         }
         showMessageDialog(

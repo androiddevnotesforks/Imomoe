@@ -19,21 +19,22 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
             onClickListener = { _, data, _ ->
                 val configDataSourceActivity = activity ?: return@DataSource1Proxy
                 if (data.selected) {
-                    getString(R.string.the_data_source_is_using_now)
-                        .showSnackbar(configDataSourceActivity)
+                    configDataSourceActivity.showSnackbar(getString(R.string.the_data_source_is_using_now))
                 } else {
                     if (configDataSourceActivity is ConfigDataSourceActivity) {
                         configDataSourceActivity.setDataSource(data.file.name)
-                    } else getString(R.string.activity_is_not_config_data_source_activity)
-                        .showSnackbar(configDataSourceActivity)
+                    } else {
+                        configDataSourceActivity.showSnackbar(getString(R.string.activity_is_not_config_data_source_activity))
+                    }
                 }
             },
             onLongClickListener = { _, data, _ ->
                 val configDataSourceActivity = activity ?: return@DataSource1Proxy true
                 if (configDataSourceActivity is ConfigDataSourceActivity) {
                     configDataSourceActivity.deleteDataSource(data)
-                } else getString(R.string.activity_is_not_config_data_source_activity)
-                    .showSnackbar(configDataSourceActivity)
+                } else {
+                    configDataSourceActivity.showSnackbar(getString(R.string.activity_is_not_config_data_source_activity))
+                }
                 true
             }
         )))

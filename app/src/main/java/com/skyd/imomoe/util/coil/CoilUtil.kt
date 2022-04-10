@@ -9,8 +9,8 @@ import coil.load
 import coil.request.ImageRequest
 import coil.util.CoilUtils
 import coil.util.DebugLogger
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Api.Companion.MAIN_URL
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.net.okhttpClient
@@ -23,7 +23,7 @@ import kotlin.random.Random
 
 
 object CoilUtil {
-    private val imageLoaderBuilder = ImageLoader.Builder(App.context)
+    private val imageLoaderBuilder = ImageLoader.Builder(appContext)
         .crossfade(400)
         .apply { debug { logger(DebugLogger()) } }
 
@@ -33,7 +33,7 @@ object CoilUtil {
 
     fun setOkHttpClient(okHttpClient: OkHttpClient) {
         imageLoaderBuilder.okHttpClient(
-            okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(App.context)).build()
+            okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(appContext)).build()
         ).build().apply { Coil.setImageLoader(this) }
     }
 
@@ -87,7 +87,7 @@ object CoilUtil {
 
 
     fun clearMemoryDiskCache() {
-        App.context.imageLoader.memoryCache.clear()
-        CoilUtils.createDefaultCache(App.context).delete()
+        appContext.imageLoader.memoryCache.clear()
+        CoilUtils.createDefaultCache(appContext).delete()
     }
 }

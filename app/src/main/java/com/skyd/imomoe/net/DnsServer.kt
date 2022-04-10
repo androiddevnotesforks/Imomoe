@@ -1,7 +1,6 @@
 package com.skyd.imomoe.net
 
 import android.app.Activity
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
@@ -53,12 +52,12 @@ object DnsServer {
     var dnsServer: String? = null
         set(value) {
             if (value == null || value == field) return
-            App.context.sharedPreferences().editor { putString("dnsServer", value) }
+            sharedPreferences().editor { putString("dnsServer", value) }
             field = value
             changeDnsServer(value)
         }
         get() {
-            return field ?: App.context.sharedPreferences()
+            return field ?: sharedPreferences()
                 .getString("dnsServer", null).apply { field = this }
         }
 

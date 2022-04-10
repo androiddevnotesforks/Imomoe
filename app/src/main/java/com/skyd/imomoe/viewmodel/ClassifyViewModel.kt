@@ -3,8 +3,8 @@ package com.skyd.imomoe.viewmodel
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
@@ -40,7 +40,7 @@ class ClassifyViewModel : ViewModel() {
             mldClassifyTabList.postValue(it)
         }, error = {
             mldClassifyTabList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -53,7 +53,7 @@ class ClassifyViewModel : ViewModel() {
         }, error = {
             pageNumberBean = null
             mldClassifyList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { isRequesting = false })
     }
 
@@ -63,7 +63,7 @@ class ClassifyViewModel : ViewModel() {
         val partUrl = pageNumberBean?.actionUrl
         if (partUrl == null) {
             mldLoadMoreClassifyList.postValue(ArrayList())
-            App.context.getString(R.string.no_more_info).showToast()
+            appContext.getString(R.string.no_more_info).showToast()
             isRequesting = false
             return
         }
@@ -73,7 +73,7 @@ class ClassifyViewModel : ViewModel() {
         }, error = {
             pageNumberBean = null
             mldLoadMoreClassifyList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { isRequesting = false })
     }
 }

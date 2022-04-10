@@ -1,8 +1,8 @@
 package com.skyd.imomoe.util.compare
 
 import android.app.Activity
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.showListDialog
@@ -35,9 +35,9 @@ object EpisodeTitleSort {
 
         val name by lazy {
             when (this) {
-                is Ascending -> App.context.getString(R.string.episode_title_sort_ascending)
-                is Descending -> App.context.getString(R.string.episode_title_sort_descending)
-                else -> App.context.getString(R.string.episode_title_sort_default)
+                is Ascending -> appContext.getString(R.string.episode_title_sort_ascending)
+                is Descending -> appContext.getString(R.string.episode_title_sort_descending)
+                else -> appContext.getString(R.string.episode_title_sort_default)
             }
         }
 

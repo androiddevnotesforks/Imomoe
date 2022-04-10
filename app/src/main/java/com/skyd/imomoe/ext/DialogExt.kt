@@ -9,6 +9,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doOnTextChanged
@@ -185,6 +186,30 @@ fun Context.showInputDialog(
             positionButton = getButton(AlertDialog.BUTTON_POSITIVE)
             positionButton?.isEnabled = false
         }
+}
+
+private var waitingDialog: AlertDialog? = null
+fun dismissWaitingDialog() {
+    waitingDialog?.dismiss()
+}
+
+fun Activity.showWaitingDialog(
+    message: CharSequence? = null,
+    cancelable: Boolean = true,
+    negativeText: String = getString(R.string.cancel),
+    positiveText: String = getString(R.string.ok),
+    onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
+    onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
+): AlertDialog {
+    waitingDialog = MaterialAlertDialogBuilder(this)
+        .setMessage(message)
+        .setView(ProgressBar(this))
+        .apply { onPositive?.let { setPositiveButton(positiveText, it) } }
+        .apply { onNegative?.let { setNegativeButton(negativeText, it) } }
+        .setCancelable(cancelable)
+        .setOnDismissListener { waitingDialog = null }
+        .show()
+    return waitingDialog!!
 }
 
 /**

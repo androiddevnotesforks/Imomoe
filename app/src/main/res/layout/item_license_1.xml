@@ -17,7 +17,7 @@
         android:textColor="?attr/colorPrimary"
         tools:text="名称" />
 
-    <com.skyd.imomoe.view.component.textview.TypefaceTextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_license_1_license"
         style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="0px"

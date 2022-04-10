@@ -3,8 +3,8 @@ package com.skyd.imomoe.viewmodel
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.App
 import com.skyd.imomoe.R
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
@@ -89,7 +89,7 @@ class PlayViewModel : ViewModel() {
             animeEpisodeDataBean.title = ""
             animeEpisodeDataBean.videoUrl = ""
             mldPlayAnotherEpisode.postValue(false)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { this.currentEpisodeIndex = currentEpisodeIndex })
     }
 
@@ -103,7 +103,7 @@ class PlayViewModel : ViewModel() {
             mldEpisodesList.postValue(true)
             mldAnimeDownloadUrl.postValue(episodesList[position])
         }, error = {
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -122,7 +122,7 @@ class PlayViewModel : ViewModel() {
             mldEpisodesList.postValue(true)
         }, error = {
             mldPlayDataList.postValue(null)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -186,7 +186,7 @@ class PlayViewModel : ViewModel() {
             mldAnimeCover.postValue(true)
         }, error = {
             mldAnimeCover.postValue(false)
-            "${App.context.getString(R.string.get_data_failed)}\n${it.message}".showToast()
+            "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
@@ -203,7 +203,7 @@ class PlayViewModel : ViewModel() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
         }, success = {
-            App.context.getString(R.string.remove_favorite_succeed).showToast()
+            appContext.getString(R.string.remove_favorite_succeed).showToast()
             mldFavorite.postValue(false)
         })
     }
@@ -226,11 +226,11 @@ class PlayViewModel : ViewModel() {
                     )
                 )
             }, success = {
-                App.context.getString(R.string.favorite_succeed).showToast()
+                appContext.getString(R.string.favorite_succeed).showToast()
                 mldFavorite.postValue(true)
             })
         } else {
-            App.context.getString(R.string.insert_favorite_failed_in_play_activity).showToast()
+            appContext.getString(R.string.insert_favorite_failed_in_play_activity).showToast()
         }
     }
 }

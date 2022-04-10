@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.skyd.imomoe.App
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Const.Database.OfflineDataBase.OFFLINE_DATA_BASE_FILE_NAME
 import com.skyd.imomoe.database.dao.PlayRecordDao
 import com.skyd.imomoe.database.entity.PlayRecordEntity
@@ -33,4 +33,4 @@ abstract class OfflineDatabase : RoomDatabase() {
     }
 }
 
-fun getOfflineDatabase() = OfflineDatabase.getInstance(App.context)
+fun getOfflineDatabase() = OfflineDatabase.getInstance(appContext)
