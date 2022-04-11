@@ -4,8 +4,25 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.util.TypedValue
 import androidx.annotation.StyleRes
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.MutableLiveData
 import com.skyd.imomoe.R
+
+
+var darkMode: Int = sharedPreferences()
+    .getInt("darkMode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    .also { AppCompatDelegate.setDefaultNightMode(it) }
+    set(value) {
+        if (value != AppCompatDelegate.MODE_NIGHT_YES &&
+            value != AppCompatDelegate.MODE_NIGHT_NO &&
+            value != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        ) {
+            throw IllegalArgumentException("darkMode value invalid!!!")
+        }
+        sharedPreferences().editor { putInt("darkMode", value) }
+        AppCompatDelegate.setDefaultNightMode(value)
+        field = value
+    }
 
 private val map = hashMapOf(
     "Pink" to R.style.Theme_Anime_Pink,

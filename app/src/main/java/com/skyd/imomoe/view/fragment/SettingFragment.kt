@@ -15,6 +15,7 @@ import androidx.preference.Preference
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.ext.darkMode
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.showMessageDialog
@@ -261,13 +262,13 @@ class SettingFragment : BasePreferenceFragment() {
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.menu_item_setting_fragment_dark_yes -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        darkMode = AppCompatDelegate.MODE_NIGHT_YES
                     }
                     R.id.menu_item_setting_fragment_dark_no -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        darkMode = AppCompatDelegate.MODE_NIGHT_NO
                     }
                     R.id.menu_item_setting_fragment_dark_follow_system -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        darkMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                     }
                 }
                 true

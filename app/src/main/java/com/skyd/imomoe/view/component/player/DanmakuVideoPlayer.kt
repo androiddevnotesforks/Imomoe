@@ -240,10 +240,10 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         stopDanmaku()
     }
 
-    override fun onBufferingUpdate(percent: Int) {
-        super.onBufferingUpdate(percent)
-        pauseDanmaku()
-    }
+//    override fun onBufferingUpdate(percent: Int) {
+//        super.onBufferingUpdate(percent)
+//        pauseDanmaku()
+//    }
 
     override fun onPrepared() {
         super.onPrepared()
@@ -507,7 +507,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      */
     protected open fun stopDanmaku() {
         mDanmakuPlayer.stop()
-        // 加此句是因为stop后悔seek 0，又会播放
+        // 加此句是因为stop后会seek 0，又会播放
         mDanmakuPlayer.pause()
     }
 
