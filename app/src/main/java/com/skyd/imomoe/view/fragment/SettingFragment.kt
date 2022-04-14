@@ -2,11 +2,7 @@ package com.skyd.imomoe.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import androidx.annotation.MenuRes
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -15,10 +11,10 @@ import androidx.preference.Preference
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.ext.darkMode
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.ext.theme.selectDarkMode
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.DnsServer.selectDnsServer
 import com.skyd.imomoe.util.Util
@@ -154,7 +150,7 @@ class SettingFragment : BasePreferenceFragment() {
 
         findPreference<Preference>("dark_mode_follow_system")?.apply {
             setOnPreferenceClickListener {
-                showDarkModeMenu(listView.getChildAt(order), R.menu.menu_setting_fragment_dark_mode)
+                requireActivity().selectDarkMode()
                 false
             }
         }
@@ -253,27 +249,6 @@ class SettingFragment : BasePreferenceFragment() {
                 true
             }
             isVisible = PlayerCore.playerCore.playManager == IjkPlayerManager::class.java
-        }
-    }
-
-    private fun showDarkModeMenu(v: View, @MenuRes menuRes: Int) {
-        PopupMenu(requireContext(), v).apply {
-            menuInflater.inflate(menuRes, menu)
-            setOnMenuItemClickListener { item: MenuItem ->
-                when (item.itemId) {
-                    R.id.menu_item_setting_fragment_dark_yes -> {
-                        darkMode = AppCompatDelegate.MODE_NIGHT_YES
-                    }
-                    R.id.menu_item_setting_fragment_dark_no -> {
-                        darkMode = AppCompatDelegate.MODE_NIGHT_NO
-                    }
-                    R.id.menu_item_setting_fragment_dark_follow_system -> {
-                        darkMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-                    }
-                }
-                true
-            }
-            show()
         }
     }
 }

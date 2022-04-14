@@ -11,6 +11,7 @@ import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.theme.appThemeRes
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.Util

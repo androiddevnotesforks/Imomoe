@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.component.player
 
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -180,7 +181,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         }
 
         tvInputCustomDanmakuUrl?.setOnClickListener {
-            mContext.showInputDialog(
+            (mContext as? Activity)?.showInputDialog(
                 hint = mContext.getString(R.string.input_danmaku_url)
             ) { _, _, text ->
                 try {
@@ -398,7 +399,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 Const.TAG_ANIME -> {
                     logD(DanmakuEngine.TAG, "[ANIME] 开始加载数据")
                     val danmakuString = RetrofitManager.get().create(DanmakuService::class.java)
-                        .getDanmaku(url.toEncodedUrl()).execute().body()?.string()
+                        .getCustomizeDanmaku(url.toEncodedUrl()).execute().body()?.string()
                     if (danmakuString.isNullOrBlank()) {
                         logE(DanmakuEngine.TAG, "danmaku data is null or blank!")
                         mContext.getString(R.string.danmaku_data_is_null_or_blank).showToast()
@@ -418,7 +419,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                     logD(DanmakuEngine.TAG, "[BILIBILI] 开始加载数据")
                     val originalInputStream =
                         RetrofitManager.get().create(DanmakuService::class.java)
-                            .getDanmaku(url.toEncodedUrl()).execute().body()?.byteStream()
+                            .getCustomizeDanmaku(url.toEncodedUrl()).execute().body()?.byteStream()
                     if (originalInputStream == null) {
                         logE(DanmakuEngine.TAG, "original input stream is null!")
                         mContext.getString(R.string.danmaku_input_stream_is_null).showToast()

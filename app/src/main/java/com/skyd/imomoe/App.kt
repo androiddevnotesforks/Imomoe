@@ -8,7 +8,8 @@ import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
-import com.skyd.imomoe.ext.getAttrColor
+import com.skyd.imomoe.ext.theme.getAttrColor
+import com.skyd.imomoe.ext.theme.initDarkMode
 import com.skyd.imomoe.util.CrashHandler
 import com.skyd.imomoe.util.PushHelper
 import com.skyd.imomoe.util.Util.getManifestMetaValue
@@ -29,6 +30,8 @@ class App : Application() {
         super.onCreate()
         context = this
         appContext = this
+
+        initDarkMode()
 
         release {
             // Crash提示

@@ -26,6 +26,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.BaseBean
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness

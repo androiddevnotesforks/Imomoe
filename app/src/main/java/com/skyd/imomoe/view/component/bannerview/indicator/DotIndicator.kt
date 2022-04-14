@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.view.View
 import android.widget.RelativeLayout
 import com.skyd.imomoe.R
-import com.skyd.imomoe.ext.getAttrColor
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.Util.dp
 
 /**

@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.fragment
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.fragment.app.viewModels
@@ -51,14 +52,11 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     private var selectedTabIndex = -1
     private var lastRefreshTime: Long = System.currentTimeMillis()
 
-    override fun getBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentEverydayAnimeBinding =
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentEverydayAnimeBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
             vp2EverydayAnimeFragment.offscreenPageLimit = offscreenPageLimit
@@ -70,6 +68,14 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
             vp2EverydayAnimeFragment.adapter = adapter
 
             ablEverydayAnimeFragment.hideToolbarWhenCollapsed(tbEverydayAnimeFragment)
+
+            val tabLayoutMediator = TabLayoutMediator(
+                mBinding.tlEverydayAnimeFragment,
+                mBinding.vp2EverydayAnimeFragment.getViewPager()
+            ) { tab, position ->
+                tab.text = viewModel.mldTabList.value?.get(position)?.title
+            }
+            tabLayoutMediator.attach()
         }
 
         viewModel.mldHeader.observe(viewLifecycleOwner) {
@@ -86,13 +92,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                     ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 1f, 0f)
                         .setDuration(270).start()
                     adapter.dataList = it
-                    val tabLayoutMediator = TabLayoutMediator(
-                        mBinding.tlEverydayAnimeFragment,
-                        mBinding.vp2EverydayAnimeFragment.getViewPager()
-                    ) { tab, position ->
-                        tab.text = viewModel.mldTabList.value?.get(position)?.title
-                    }
-                    tabLayoutMediator.attach()
 
                     val tabCount = adapter.itemCount
                     mBinding.vp2EverydayAnimeFragment.post {

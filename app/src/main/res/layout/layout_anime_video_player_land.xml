@@ -326,7 +326,7 @@
 
         <TextClock
             android:id="@+id/tc_system_time"
-            style="@style/TextAppearance.Material3.LabelLarge"
+            style="@style/TextAppearance.Material3.ActionBar.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -334,7 +334,8 @@
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_setting"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12:00" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.textview.MaterialTextView

@@ -27,6 +27,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
@@ -261,7 +262,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
-        mBinding.tbPlayActivity.title = viewModel.animeEpisodeDataBean.title
+        val title = viewModel.animeEpisodeDataBean.title
+//        viewModel.getDanmakuList(title, )
+        mBinding.tbPlayActivity.title = title
         // 设置播放URL
         viewModel.updateFavoriteData()
         viewModel.insertHistoryData()

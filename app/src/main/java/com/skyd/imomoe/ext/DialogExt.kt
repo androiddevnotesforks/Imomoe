@@ -29,7 +29,7 @@ fun Fragment.showMessageDialog(
     positiveText: String = resources.getString(R.string.ok),
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = { dialog, _ -> dialog.dismiss() },
     onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
-): AlertDialog =
+): AlertDialog? =
     requireActivity().showMessageDialog(
         onPositive = onPositive,
         onNegative = onNegative,
@@ -50,7 +50,7 @@ fun Activity.showMessageDialog(
     positiveText: String = getString(R.string.ok),
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
-): AlertDialog {
+): AlertDialog? {
     return MaterialAlertDialogBuilder(this)
         .setTitle(title)
         .setMessage(message)
@@ -58,7 +58,9 @@ fun Activity.showMessageDialog(
         .apply { onNegative?.let { setNegativeButton(negativeText, it) } }
         .setCancelable(cancelable)
         .setIcon(icon)
-        .show()
+        .run {
+            if (!isFinishing) show() else null
+        }
 }
 
 fun Activity.showListDialog(
@@ -74,7 +76,7 @@ fun Activity.showListDialog(
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onNeutral: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int, itemIndex: Int) -> Unit)? = null,
-): AlertDialog {
+): AlertDialog? {
     var itemIndex = checkedItem
     var positionButton: Button? = null
     return MaterialAlertDialogBuilder(this)
@@ -99,9 +101,13 @@ fun Activity.showListDialog(
         }
         .setCancelable(cancelable)
         .setIcon(icon)
-        .show().apply {
-            positionButton = getButton(AlertDialog.BUTTON_POSITIVE)
-            positionButton?.isEnabled = itemIndex != -1
+        .run {
+            if (!isFinishing) {
+                show().apply {
+                    positionButton = getButton(AlertDialog.BUTTON_POSITIVE)
+                    positionButton?.isEnabled = itemIndex != -1
+                }
+            } else null
         }
 }
 
@@ -117,7 +123,7 @@ fun Fragment.showInputDialog(
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onNeutral: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int, text: CharSequence) -> Unit)? = null,
-): AlertDialog {
+): AlertDialog? {
     return requireActivity().showInputDialog(
         title = title,
         hint = hint,
@@ -133,7 +139,7 @@ fun Fragment.showInputDialog(
     )
 }
 
-fun Context.showInputDialog(
+fun Activity.showInputDialog(
     title: CharSequence? = null,
     hint: String? = null,
     prefill: CharSequence? = null,
@@ -145,7 +151,7 @@ fun Context.showInputDialog(
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onNeutral: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int, text: CharSequence) -> Unit)? = null,
-): AlertDialog {
+): AlertDialog? {
     var text: CharSequence = ""
     var positionButton: Button? = null
     return MaterialAlertDialogBuilder(this)
@@ -166,8 +172,8 @@ fun Context.showInputDialog(
         .setCancelable(cancelable)
         .setIcon(icon)
         .setView(R.layout.layout_input_dialog)
-        .show()
-        .apply {
+        .run { if (!isFinishing) show() else null }
+        ?.apply {
             findViewById<TextInputLayout>(R.id.til_input_dialog)?.hint = hint
             findViewById<TextInputEditText>(R.id.et_input_dialog)?.also {
                 it.doOnTextChanged { t, _, _, _ ->
@@ -200,7 +206,7 @@ fun Activity.showWaitingDialog(
     positiveText: String = getString(R.string.ok),
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
-): AlertDialog {
+): AlertDialog? {
     waitingDialog = MaterialAlertDialogBuilder(this)
         .setMessage(message)
         .setView(ProgressBar(this))
@@ -208,8 +214,8 @@ fun Activity.showWaitingDialog(
         .apply { onNegative?.let { setNegativeButton(negativeText, it) } }
         .setCancelable(cancelable)
         .setOnDismissListener { waitingDialog = null }
-        .show()
-    return waitingDialog!!
+        .run { if (!isFinishing) show() else null }
+    return waitingDialog
 }
 
 /**

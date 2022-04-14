@@ -97,7 +97,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     viewModel.getAllTabData()
                     hideLoadFailedTip()
                 }
-                getString(R.string.get_home_tab_data_failed).showToast(Toast.LENGTH_LONG)
             } else {
                 hideLoadFailedTip()
                 if (it.isNotEmpty()) mBinding.vp2HomeFragment.offscreenPageLimit = it.size

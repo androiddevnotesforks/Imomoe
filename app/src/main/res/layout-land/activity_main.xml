@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context=".view.activity.MainActivity">
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:id="@+id/nv_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/menu_navigation" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_main_activity"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
         android:layout_weight="1" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nv_main_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        app:menu="@menu/menu_navigation" />
 </LinearLayout>

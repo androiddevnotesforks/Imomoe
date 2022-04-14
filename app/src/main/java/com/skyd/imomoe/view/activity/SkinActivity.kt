@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinCover1Bean
 import com.skyd.imomoe.databinding.ActivitySkinBinding
-import com.skyd.imomoe.ext.appThemeRes
-import com.skyd.imomoe.ext.getAttrColor
+import com.skyd.imomoe.ext.theme.appThemeRes
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.view.adapter.decoration.SkinItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.SkinSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter

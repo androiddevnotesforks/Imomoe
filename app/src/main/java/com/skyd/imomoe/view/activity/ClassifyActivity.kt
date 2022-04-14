@@ -11,6 +11,7 @@ import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyTab1Bean
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.ClassifyTab1Proxy
@@ -60,7 +61,8 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 GridLayoutManager(this@ClassifyActivity, 2, GridLayoutManager.HORIZONTAL, false)
             rvClassifyActivityTab.adapter = classifyTabAdapter
 
-            rvClassifyActivity.layoutManager = LinearLayoutManager(this@ClassifyActivity)
+            rvClassifyActivity.layoutManager = GridLayoutManager(this@ClassifyActivity, 4)
+                .apply { spanSizeLookup = AnimeShowSpanSize(classifyAdapter) }
             rvClassifyActivity.adapter = classifyAdapter
 
             spinnerClassifyActivity.adapter = spinnerAdapter

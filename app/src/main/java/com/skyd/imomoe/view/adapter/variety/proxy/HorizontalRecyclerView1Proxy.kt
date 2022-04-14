@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisode1Bean
 import com.skyd.imomoe.bean.HorizontalRecyclerView1Bean
-import com.skyd.imomoe.ext.getAttrColor
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.AnimeEpisode1ViewHolder
 import com.skyd.imomoe.util.HorizontalRecyclerView1ViewHolder
 import com.skyd.imomoe.view.adapter.decoration.HorizontalRecyclerViewDecoration

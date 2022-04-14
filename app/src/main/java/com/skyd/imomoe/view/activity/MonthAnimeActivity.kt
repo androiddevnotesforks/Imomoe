@@ -3,9 +3,10 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.view.ViewStub
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
@@ -24,8 +25,8 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             tbMonthAnimeActivity.title = getString(R.string.year_month_anime, viewModel.partUrl)
             tbMonthAnimeActivity.setNavigationOnClickListener { finish() }
 
-            rvMonthAnimeActivity.layoutManager = LinearLayoutManager(this@MonthAnimeActivity)
-            rvMonthAnimeActivity.setHasFixedSize(true)
+            rvMonthAnimeActivity.layoutManager = GridLayoutManager(this@MonthAnimeActivity, 4)
+                .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             rvMonthAnimeActivity.adapter = adapter
 
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短

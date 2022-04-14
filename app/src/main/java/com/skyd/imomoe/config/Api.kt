@@ -22,6 +22,6 @@ interface Api {
         val DATA_SOURCE_IMAGE_PREFIX = "https://github.com/SkyD666/DataSourceRepository/raw/master"
 
         // 弹幕url
-        const val DANMU_URL = "https://yuan.cuan.la/barrage/api"
+        const val DANMAKU_URL = "https://api.danmu.oyyds.top"
     }
 }

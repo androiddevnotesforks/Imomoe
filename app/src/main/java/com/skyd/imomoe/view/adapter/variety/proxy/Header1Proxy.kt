@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.adapter.variety.proxy
 
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IntRange
@@ -8,8 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.Header1Bean
-import com.skyd.imomoe.ext.activity
-import com.skyd.imomoe.ext.getAttrColor
+import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.Header1ViewHolder
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 

@@ -26,7 +26,7 @@
             app:icon="@drawable/ic_nights_stay_24"
             app:key="dark_mode_follow_system"
             app:persistent="false"
-            app:title="@string/dark_mode_follow_system" />
+            app:title="@string/setting_fragment_dark_mode" />
 
         <Preference
             app:icon="@drawable/ic_update_24"

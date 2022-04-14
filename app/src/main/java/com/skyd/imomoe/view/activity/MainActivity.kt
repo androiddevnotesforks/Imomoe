@@ -3,9 +3,9 @@ package com.skyd.imomoe.view.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.navigation.NavigationBarView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Route
@@ -14,7 +14,6 @@ import com.skyd.imomoe.ext.fitsSystemWindows2
 import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
-import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.process
@@ -80,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
             it.isUserInputEnabled = false
         }
 
-        mBinding.bnvMainActivity.setOnItemSelectedListener { item ->
+        (mBinding.nvMainActivity as NavigationBarView).setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home_fragment -> {
                     mBinding.vp2MainActivity.setCurrentItem(0, false)

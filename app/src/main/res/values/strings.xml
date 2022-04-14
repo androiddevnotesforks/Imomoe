@@ -19,7 +19,6 @@
     <string name="rank_list">排行榜</string>
     <string name="anime_classify">动漫分类</string>
     <string name="year_month_anime">新番列表：%s</string>
-    <string name="get_home_tab_data_failed">获取首页标签信息失败:(</string>
     <string name="setting">设置</string>
     <string name="about">关于</string>
     <string name="uncheck_update">未检查</string>
@@ -94,7 +93,6 @@
     <string name="reverse">镜像</string>
     <string name="no_reverse">正常</string>
     <string name="bottom_progress">底部进度条</string>
-    <string name="dark_mode_follow_system">深色模式跟随系统</string>
     <string name="ok">确定</string>
     <string name="agree">同意</string>
     <string name="disagree_and_exit">不同意并退出</string>
@@ -253,9 +251,11 @@
     <string name="home_fragment_menu_rank">排行榜</string>
     <string name="search_activity_search_view_hint">搜索</string>
     <string name="search_activity_menu_close">取消</string>
-    <string name="setting_fragment_dark_no_menu_info">关闭</string>
-    <string name="setting_fragment_dark_yes_menu_info">开启</string>
-    <string name="setting_fragment_dark_follow_system_menu_info">跟随系统</string>
+    <string name="dark_ext_select_dark_mode">选择深色模式方案</string>
+    <string name="dark_ext_dark_no">关闭</string>
+    <string name="dark_ext_dark_yes">开启</string>
+    <string name="dark_ext_dark_follow_system">跟随系统</string>
+    <string name="setting_fragment_dark_mode">深色模式</string>
     <string name="theme_pink_title">\uD83C\uDF80粉色少女</string>
     <string name="theme_dynamic_title">\uD83C\uDF04壁纸取色</string>
     <string name="theme_blue_title">\u2642\uFE0F深蓝幻想</string>
