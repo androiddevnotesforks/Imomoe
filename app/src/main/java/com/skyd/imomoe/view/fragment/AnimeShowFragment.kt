@@ -92,6 +92,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
                     viewModel.getAnimeShowData(viewModel.partUrl)
                     hideLoadFailedTip()
                 }
+                adapter.dataList = emptyList()
             } else {
                 adapter.dataList = it
                 hideLoadFailedTip()

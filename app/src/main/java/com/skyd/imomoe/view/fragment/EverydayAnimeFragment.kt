@@ -71,7 +71,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
             val tabLayoutMediator = TabLayoutMediator(
                 mBinding.tlEverydayAnimeFragment,
-                mBinding.vp2EverydayAnimeFragment.getViewPager()
+                mBinding.vp2EverydayAnimeFragment//.getViewPager()
             ) { tab, position ->
                 tab.text = viewModel.mldTabList.value?.get(position)?.title
             }
@@ -83,13 +83,13 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         }
 
         viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner) {
-            mBinding.srlEverydayAnimeFragment.isRefreshing = false
+            mBinding.srlEverydayAnimeFragment.closeHeaderOrFooter()//.isRefreshing = false
 
             if (it != null) {
                 val selectedTabIndex = this.selectedTabIndex
                 activity?.let { _ ->
                     //先隐藏
-                    ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 1f, 0f)
+                    ObjectAnimator.ofFloat(mBinding.vp2EverydayAnimeFragment, "alpha", 1f, 0f)
                         .setDuration(270).start()
                     adapter.dataList = it
 
@@ -107,7 +107,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                             )
                         }
                         //设置完数据后显示，避免闪烁
-                        ObjectAnimator.ofFloat(mBinding.llEverydayAnimeFragment, "alpha", 0f, 1f)
+                        ObjectAnimator.ofFloat(mBinding.vp2EverydayAnimeFragment, "alpha", 0f, 1f)
                             .setDuration(270).start()
                     }
                 }
@@ -122,8 +122,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         }
 
         if (viewModel.mldTabList.value == null || viewModel.mldEverydayAnimeList.value == null) {
-            mBinding.srlEverydayAnimeFragment.isRefreshing = true
-            viewModel.getEverydayAnimeData()
+            mBinding.srlEverydayAnimeFragment.autoRefresh()
         }
     }
 
@@ -139,11 +138,10 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     private fun refresh() {
         //避免刷新间隔太短
         if (System.currentTimeMillis() - lastRefreshTime > 500) {
-            mBinding.srlEverydayAnimeFragment.isRefreshing = true
             lastRefreshTime = System.currentTimeMillis()
             viewModel.getEverydayAnimeData()
         } else {
-            mBinding.srlEverydayAnimeFragment.isRefreshing = false
+            mBinding.srlEverydayAnimeFragment.closeHeaderOrFooter()
         }
     }
 

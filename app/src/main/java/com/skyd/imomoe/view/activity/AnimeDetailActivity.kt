@@ -27,7 +27,7 @@ import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
-import com.skyd.imomoe.view.fragment.ShareDialogFragment
+import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import java.net.URL
 import kotlin.random.Random

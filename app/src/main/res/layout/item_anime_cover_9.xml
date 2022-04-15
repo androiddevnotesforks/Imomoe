@@ -126,10 +126,10 @@
         app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title"
         app:layout_constraintVertical_bias="1" />
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginHorizontal="16dp"
-        android:background="?attr/colorOutline"
+        android:layout_height="wrap_content"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

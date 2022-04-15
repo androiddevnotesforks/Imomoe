@@ -43,8 +43,8 @@ import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.AnimeVideoPositionMemoryStore
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
-import com.skyd.imomoe.view.fragment.MoreDialogFragment
-import com.skyd.imomoe.view.fragment.ShareDialogFragment
+import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
+import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -109,7 +109,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     }
                     R.id.menu_item_play_activity_more -> {
                         MoreDialogFragment().apply {
-                            show(supportFragmentManager, "more_dialog")
+                            show(supportFragmentManager, MoreDialogFragment.TAG)
                             onCancelButtonClick { dismiss() }
                             onDlnaButtonClick {
                                 val url = avpPlayActivity.getUrl()

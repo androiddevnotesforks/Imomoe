@@ -1,6 +1,7 @@
 package com.skyd.imomoe.ext.theme
 
 import android.app.Activity
+import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
@@ -38,11 +39,15 @@ class DarkMode(val name: String, val value: Int) : CharSequence {
 
 private infix fun String.to(that: Int): DarkMode = DarkMode(this, that)
 
-val darkModeList: List<DarkMode> = listOf(
-    appContext.getString(R.string.dark_ext_dark_follow_system) to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+val darkModeList: List<DarkMode> = mutableListOf(
     appContext.getString(R.string.dark_ext_dark_yes) to AppCompatDelegate.MODE_NIGHT_YES,
     appContext.getString(R.string.dark_ext_dark_no) to AppCompatDelegate.MODE_NIGHT_NO
-)
+).apply {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) add(
+        0,
+        appContext.getString(R.string.dark_ext_dark_follow_system) to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+    )
+}
 
 var darkMode: Int = 0
     get() {
@@ -66,7 +71,13 @@ var darkMode: Int = 0
 
 fun initDarkMode() {
     darkMode = sharedPreferences()
-        .getInt("darkMode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        .getInt(
+            "darkMode", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
         .also { AppCompatDelegate.setDefaultNightMode(it) }
 }
 

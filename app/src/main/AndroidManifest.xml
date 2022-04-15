@@ -49,7 +49,7 @@
                 <data android:scheme="content" />
                 <data android:pathPattern=".*\\.ads" />
                 <!-- 部分机型会导致找不到打开方式 -->
-                <!-- <data android:mimeType="application/octet-stream" />-->
+                <!-- <data android:mimeType="application/octet-stream" /> -->
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>

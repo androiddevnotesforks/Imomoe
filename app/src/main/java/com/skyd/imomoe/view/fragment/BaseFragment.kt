@@ -61,7 +61,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             tvImageTextTip1.text = text
             if (onClickListener != null) loadFailedTipView.setOnClickListener(onClickListener)
         } else {
-            if (this::loadFailedTipView.isInitialized) {
+            if (::loadFailedTipView.isInitialized) {
                 loadFailedTipView.visible()
             } else {
                 logE("showLoadFailedTip", "layout_image_text_tip_1 isn't initialized")

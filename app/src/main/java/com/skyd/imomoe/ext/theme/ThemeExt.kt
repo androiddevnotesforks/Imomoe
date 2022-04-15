@@ -2,6 +2,7 @@ package com.skyd.imomoe.ext.theme
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
 import androidx.lifecycle.MutableLiveData
@@ -28,10 +29,20 @@ private fun getKeyByValue(v: Int): String? {
 }
 
 var appThemeRes: MutableLiveData<Int> = object : MutableLiveData<Int>(
-    map.getOrDefault(
-        sharedPreferences().getString("themeRes", null),
-        R.style.Theme_Anime_Pink
-    )
+    // getOrDefault method was added in API level 24
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        map.getOrDefault(
+            sharedPreferences().getString("themeRes", null),
+            R.style.Theme_Anime_Pink
+        )
+    } else {
+        val v = sharedPreferences().getString("themeRes", null)
+        if (map[v] != null) {
+            map[v]
+        } else {
+            R.style.Theme_Anime_Pink
+        }
+    }
 ) {
     override fun postValue(@StyleRes value: Int?) {
         sharedPreferences().editor {

@@ -139,7 +139,9 @@ dependencies {
     implementation deps.kotlin.core_ktx
     implementation deps.support.appcompat
     implementation deps.support.material
+    implementation deps.support.recyclerview
     implementation deps.support.swiperefreshlayout
+    implementation deps.support.coordinatorlayout
     implementation deps.support.constraintlayout
     implementation deps.support.fragment_ktx
     implementation deps.support.viewpager2

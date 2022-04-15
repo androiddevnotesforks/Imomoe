@@ -270,5 +270,7 @@
     <string name="anime_download_activity_item_menu_delete">删除</string>
     <string name="anime_download_activity_deleting">正在删除，请稍候…</string>
     <string name="restore_play_speed">记忆播放速度</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

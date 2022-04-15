@@ -118,7 +118,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         }
         ivShowDanmaku = findViewById(R.id.iv_show_danmaku)
         etDanmakuInput = findViewById(R.id.et_input_danmaku)
-        vgDanmakuController = findViewById(R.id.cl_danmu_controller)
+        vgDanmakuController = findViewById(R.id.cl_danmaku_controller)
         tvInputCustomDanmakuUrl = findViewById(R.id.tv_input_custom_danmaku_url)
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
         tvResetDanmakuProgress = findViewById(R.id.tv_player_reset_danmaku_progress)

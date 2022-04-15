@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.fragment.EverydayAnimeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -35,8 +36,7 @@
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tb_everyday_anime_fragment"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@id/abl_everyday_anime_fragment"
         app:srlEnableLoadMore="false">
 
         <androidx.viewpager2.widget.ViewPager2
@@ -49,7 +49,7 @@
         android:id="@+id/layout_everyday_anime_fragment_load_failed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout="@layout/layout_image_text_tip_1"
-        app:layout_anchor="@id/srl_everyday_anime_fragment"
-        app:layout_anchorGravity="center" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_below="@id/abl_everyday_anime_fragment"
+        android:layout_centerHorizontal="true"
+        android:layout="@layout/layout_image_text_tip_1" />
+</RelativeLayout>

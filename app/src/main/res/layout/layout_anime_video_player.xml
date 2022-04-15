@@ -11,7 +11,7 @@
         android:id="@+id/bigger_surface"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
@@ -25,14 +25,14 @@
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller" />
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller" />
 
     <RelativeLayout
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +83,7 @@
         android:background="@drawable/shape_gray_transparent_angle_90"
         android:orientation="horizontal"
         android:paddingTop="17dp"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller">
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller">
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/progress"
@@ -151,7 +151,7 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_danmu_controller"
+        android:id="@+id/cl_danmaku_controller"
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:background="?attr/colorSurface"
@@ -197,10 +197,12 @@
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorPrimary" />
 
-        <View
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="?attr/colorOutline"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:dividerInsetEnd="16dp"
+            app:dividerInsetStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -211,7 +213,7 @@
         android:layout_height="1.5dp"
         android:max="100"
         android:progressDrawable="@drawable/layerlist_video_progress_bg"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller" />
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller" />
 
     <ImageView
         android:id="@+id/back_tiny"
@@ -232,7 +234,7 @@
         android:indeterminateTint="?attr/colorPrimary"
         android:indeterminateTintMode="src_atop"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -242,7 +244,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_above="@id/layout_bottom"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -257,7 +259,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/unlock"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmu_controller"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@android:color/white" />

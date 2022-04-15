@@ -1,4 +1,4 @@
-package com.skyd.imomoe.view.fragment
+package com.skyd.imomoe.view.fragment.dialog
 
 import android.app.Activity
 import android.os.Bundle
@@ -14,34 +14,17 @@ import com.skyd.imomoe.util.Share.SHARE_WECHAT
 import com.skyd.imomoe.util.Share.SHARE_WEIBO
 import com.skyd.imomoe.util.Share.share
 
-open class ShareDialogFragment : BottomSheetDialogFragment() {
-    private var _binding: FragmentShareDialogBinding? = null
-    private val mBinding get() = _binding!!
+open class ShareDialogFragment : BaseBottomSheetDialogFragment<FragmentShareDialogBinding>() {
     private lateinit var shareContent: String
     private lateinit var attachedActivity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentShareDialogBinding.inflate(inflater, container, false)
-        return mBinding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         activity?.let { act ->
             attachedActivity = act
@@ -71,4 +54,7 @@ open class ShareDialogFragment : BottomSheetDialogFragment() {
         this.shareContent = shareContent
         return this
     }
+
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentShareDialogBinding.inflate(layoutInflater)
 }
