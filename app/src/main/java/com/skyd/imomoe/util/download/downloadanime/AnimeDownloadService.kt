@@ -1,253 +1,245 @@
 package com.skyd.imomoe.util.download.downloadanime
 
-import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
-import android.os.Build
+import android.os.Binder
 import android.os.IBinder
-import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import com.liulishuo.filedownloader.BaseDownloadTask
-import com.liulishuo.filedownloader.FileDownloadListener
-import com.liulishuo.filedownloader.FileDownloader
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.MutableLiveData
+import com.arialyy.annotations.Download
+import com.arialyy.aria.core.Aria
+import com.arialyy.aria.core.common.HttpOption
+import com.arialyy.aria.core.download.DownloadEntity
+import com.arialyy.aria.core.download.m3u8.M3U8VodOption
+import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.downloadHashMap
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.save2Xml
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadNotificationReceiver.Companion.DOWNLOAD_ANIME_NOTIFICATION_ID
 import com.skyd.imomoe.ext.toMD5
-import com.skyd.imomoe.util.download.DownloadStatus
-import com.skyd.imomoe.util.download.DownloadListener
-import com.skyd.imomoe.view.activity.MainActivity
-import kotlinx.coroutines.*
+import com.skyd.imomoe.net.RetrofitManager
+import com.skyd.imomoe.net.service.HtmlService
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.save2Xml
+import com.skyd.imomoe.util.showToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.Serializable
 
 
-class AnimeDownloadService : Service() {
-    private val downloadServiceHashMap: HashMap<String, AnimeDownloadServiceDataBean> = HashMap()
-    private val folderAndFileNameHashMap: HashMap<String, String> = HashMap()
+class AnimeDownloadService : LifecycleService() {
+    companion object {
+        val mldStopTask: MutableLiveData<Long> = MutableLiveData(-1L)
+        val mldCancelTask: MutableLiveData<Pair<Long, String>> = MutableLiveData(-1L to "")
+        val mldResumeTask: MutableLiveData<Long> = MutableLiveData(-1L)
 
-    private var notificationManager: NotificationManager? = null
-    private var totalNotificationId = 1002
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+        const val DOWNLOAD_URL_KEY = "downloadUrl"
+        const val STORE_DIRECTORY_PATH_KEY = "storeFilePath"
+        const val ANIME_TITLE = "animeTitle"
+        const val ANIME_EPISODE = "animeEpisode"
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (intent.extras == null) {
-            coroutineScope.cancel()
-            "取消下载".showToast()
-            return START_NOT_STICKY
+        const val M3U8_CONTENT_TYPE = "application/vnd.apple.mpegurl"
+    }
+
+    private val coroutineScope by lazy(LazyThreadSafetyMode.NONE) {
+        CoroutineScope(Dispatchers.IO)
+    }
+
+    private val mldOnTaskStart: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val mldOnTaskComplete: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val mldOnTaskRunning: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val mldOnTaskStop: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val mldOnTaskCancel: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val mldOnTaskFail: MutableLiveData<DownloadTask> = MutableLiveData()
+
+    private val notifyMap = hashMapOf<String, AnimeDownloadNotification>()
+    private val animeTitleEpisodeMap = hashMapOf<String, Pair<String, String>>()
+
+    inner class AnimeDownloadBinder : Binder() {
+        val service: AnimeDownloadService
+            get() = this@AnimeDownloadService
+        val animeTitleEpisodeMap: HashMap<String, Pair<String, String>>
+            get() = this@AnimeDownloadService.animeTitleEpisodeMap
+        val notCompleteList: List<DownloadEntity>
+            get() = Aria.download(this).allNotCompleteTask
+
+        val mldOnTaskStart: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskStart
+        val mldOnTaskComplete: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskComplete
+        val mldOnTaskRunning: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskRunning
+        val mldOnTaskStop: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskStop
+        val mldOnTaskCancel: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskCancel
+        val mldOnTaskFail: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskFail
+    }
+
+    private val animeDownloadBinder: Binder = AnimeDownloadBinder()
+
+    fun stopTask(id: Long) {
+        if (id == -1L) return
+        Aria.download(this).load(id).stop()
+    }
+
+    fun resumeTask(id: Long) {
+        if (id == -1L) return
+        Aria.download(this).load(id).resume()
+    }
+
+    fun cancelTask(id: Long, url: String?) {
+        if (id == -1L) return
+        Aria.download(this).load(id).cancel()
+        if (url.isNullOrEmpty()) notifyMap.remove(url)
+    }
+
+    override fun onBind(intent: Intent): IBinder {
+        super.onBind(intent)
+        return animeDownloadBinder
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
+        intent ?: return START_NOT_STICKY
+
+        val downloadUrl = intent.getStringExtra(DOWNLOAD_URL_KEY).orEmpty()
+        val storeDirectoryPath = intent.getStringExtra(STORE_DIRECTORY_PATH_KEY).orEmpty()
+        val animeTitle = intent.getStringExtra(ANIME_TITLE).orEmpty()
+        val animeEpisode = intent.getStringExtra(ANIME_EPISODE).orEmpty()
+        val fileName = downloadUrl.substringAfterLast("/", animeEpisode)
+
+        coroutineScope.launch {
+            val contentType = RetrofitManager
+                .get()
+                .create(HtmlService::class.java)
+                .getResponseHeader(downloadUrl)
+                .headers()["Content-Type"]
+            withContext(Dispatchers.Main) {
+                addTask(
+                    downloadUrl = downloadUrl,
+                    filePath = "$storeDirectoryPath/$fileName",
+                    animeTitle = animeTitle,
+                    animeEpisode = animeEpisode,
+                    isM3u8 = contentType.equals(M3U8_CONTENT_TYPE, ignoreCase = true)
+                )
+            }
         }
-        val url = intent.getStringExtra("url").orEmpty()
-        val key = intent.getStringExtra("key").orEmpty()
-        val folderAndFileName = intent.getStringExtra("folderAndFileName").orEmpty()
-        folderAndFileNameHashMap[key] = folderAndFileName
-        downloadServiceHashMap[key] = AnimeDownloadServiceDataBean(url, totalNotificationId++)
-        if (isNetWorkAvailable()) {
-            createNotification(key)
-            downloadAnime(key, url, object : DownloadListener {
-                override fun complete(fileName: String) {
-                    deleteNotification(key)
-                    val animeDir = folderAndFileName.split("/").first()
-                    val title = folderAndFileName.split("/").last()
-                    val file = File("$animeFilePath$animeDir/$fileName")
-                    if (file.exists()) {
-                        downloadHashMap[key]?.postValue(DownloadStatus.COMPLETE)
-                        GlobalScope.launch(Dispatchers.IO) {
-                            file.toMD5()?.let {
-                                val entity = AnimeDownloadEntity(it, title, fileName)
-                                getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
-                                save2Xml(animeDir, entity)
-                            }
-                        }
-                        "${folderAndFileName}下载完成".showToast()
-                    } else {
-                        if (downloadHashMap[key]?.value != DownloadStatus.CANCEL) {
-                            downloadHashMap[key]?.postValue(
-                                DownloadStatus.ERROR
-                            )
-                        }
-                        "文件未找到，下载失败".showToast()
-                    }
-                }
 
-                override fun error() {
-                    super.error()
-                    deleteNotification(key)
-                    downloadHashMap[key]?.postValue(DownloadStatus.ERROR)
-                }
-            })
-            "开始下载${folderAndFileName}...".showToast()
-        }
         return START_NOT_STICKY
     }
 
-    private fun deleteNotification(key: String) {
-        downloadServiceHashMap[key]?.let {
-            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-                .cancel(it.notificationId)
-        }
+    private fun addTask(
+        downloadUrl: String,
+        filePath: String,
+        animeTitle: String,
+        animeEpisode: String,
+        isM3u8: Boolean = false
+    ) {
+        val id = Aria.download(this)
+            .load(downloadUrl)
+            .option(HttpOption().apply {
+                useServerFileName(true)
+            })
+            .setFilePath(
+                if (isM3u8 && filePath.endsWith(".m3u8", ignoreCase = true)) {
+                    filePath.substringBeforeLast(".m3u8")
+                } else {
+                    filePath
+                }
+            )
+            .apply {
+                if (isM3u8) {
+                    val option = M3U8VodOption()
+                    option.setVodTsUrlConvert(MyVodTsUrlConverter())
+                    option.setBandWidthUrlConverter(MyBandWidthUrlConverter())
+                    option.setUseDefConvert(false)
+                    m3u8VodOption(option)
+                }
+            }
+            .create()
+        animeTitleEpisodeMap[downloadUrl] = animeTitle to animeEpisode
+        notifyMap[downloadUrl] = AnimeDownloadNotification(
+            applicationContext,
+            taskId = id,
+            url = downloadUrl,
+            title = "$animeTitle - $animeEpisode"
+        )
     }
 
-    @SuppressLint("MissingPermission")
-    private fun isNetWorkAvailable(): Boolean {
-        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetInfo = connectivityManager.activeNetworkInfo
-        return activeNetInfo != null && activeNetInfo.isConnected
+    override fun onCreate() {
+        super.onCreate()
+        Aria.download(this).register()
+
+        mldStopTask.observe(this) { stopTask(it) }
+        mldCancelTask.observe(this) { cancelTask(it.first, it.second) }
+        mldResumeTask.observe(this) { resumeTask(it) }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        coroutineScope.cancel()
-        for (key in downloadServiceHashMap.keys) {
-            downloadHashMap[key]?.postValue(DownloadStatus.CANCEL)
-            val file = File(animeFilePath + key)
-            if (file.exists()) {
-                file.delete()
+        Aria.download(this).unRegister()
+    }
+
+    @Download.onTaskStart
+    fun onTaskStart(task: DownloadTask) {
+        animeTitleEpisodeMap[task.downloadEntity.url]?.run {
+            getString(
+                R.string.anime_download_service_start_download,
+                "$first - $second"
+            ).showToast()
+        }
+        mldOnTaskStart.postValue(task)
+    }
+
+    @Download.onTaskStop
+    fun onTaskStop(task: DownloadTask) {
+        mldOnTaskStop.postValue(task)
+    }
+
+    @Download.onTaskCancel
+    fun onTaskCancel(task: DownloadTask) {
+        mldOnTaskCancel.postValue(task)
+    }
+
+    @Download.onTaskFail
+    fun onTaskFail(task: DownloadTask) {
+        animeTitleEpisodeMap[task.downloadEntity.url]?.run {
+            getString(
+                R.string.anime_download_service_download_failed,
+                "$first - $second"
+            ).showToast()
+        }
+        mldOnTaskFail.postValue(task)
+    }
+
+    @Download.onTaskComplete
+    fun onTaskComplete(task: DownloadTask) {
+        notifyMap[task.downloadEntity.url]?.cancel()
+        val (title, episode) = animeTitleEpisodeMap[task.downloadEntity.url]!!
+        coroutineScope.launch {
+            val file = File(task.downloadEntity.m3U8Entity.filePath)
+            file.toMD5()?.let {
+                val entity = AnimeDownloadEntity(it, episode, file.name)
+                getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
+                save2Xml((file.parent ?: title).substringAfterLast("/"), entity)
             }
         }
-        downloadServiceHashMap.clear()
+        mldOnTaskComplete.postValue(task)
     }
 
-    private fun createNotification(key: String) {
-        val folderAndFileName = folderAndFileNameHashMap[key]
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_LOW
-            createNotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
-            downloadServiceHashMap[key]?.builder = NotificationCompat.Builder(this, CHANNEL_ID)
+    @Download.onTaskRunning
+    fun onTaskRunning(task: DownloadTask) {
+        val m3U8Entity = task.downloadEntity.m3U8Entity
+        if (m3U8Entity == null) {
+            val len: Long = task.fileSize
+            val p = (task.currentProgress * 100.0 / len).toInt()
+            notifyMap[task.downloadEntity.url]?.upload(p)
         } else {
-            downloadServiceHashMap[key]?.builder = NotificationCompat.Builder(this)
+            val p = ((m3U8Entity.peerIndex + 1) * 100.0 / m3U8Entity.peerNum).toInt()
+            notifyMap[task.downloadEntity.url]?.upload(p)
         }
-        val notificationId = downloadServiceHashMap[key]?.notificationId ?: -1
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val stopIntent = Intent(this, AnimeDownloadNotificationReceiver::class.java)
-        stopIntent.action = "notification_canceled"
-        stopIntent.putExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, notificationId)
-        stopIntent.putExtra("key", key)
-
-        val clickIntent = Intent(Intent.ACTION_MAIN)
-        clickIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-        clickIntent.setClass(this, MainActivity::class.java)
-        clickIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        clickIntent.putExtra(DOWNLOAD_ANIME_NOTIFICATION_ID, notificationId)
-        downloadServiceHashMap[key]?.builder?.setSmallIcon(R.mipmap.ic_launcher)
-            ?.setContentTitle("正在下载$folderAndFileName")
-            ?.setContentText("0%")
-            ?.setProgress(100, 0, false)
-            ?.setDeleteIntent(
-                PendingIntent.getBroadcast(
-                    this,
-                    //requestCode需要不一样才能接收每次的消息
-                    notificationId,
-                    stopIntent,
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
-                    else PendingIntent.FLAG_MUTABLE
-                )
-            )?.setContentIntent(
-                PendingIntent.getActivity(
-                    this,
-                    0,
-                    clickIntent,
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
-                    else PendingIntent.FLAG_MUTABLE
-                )
-            )?.setAutoCancel(false)?.setTicker(folderAndFileName)
-        val notification = downloadServiceHashMap[key]?.builder?.build()
-        notificationManager?.notify(notificationId, notification)
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(channelId: String, channelName: String, importance: Int) {
-        val channel = NotificationChannel(channelId, channelName, importance)
-        val notificationManager = getSystemService(
-            Context.NOTIFICATION_SERVICE
-        ) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    private fun updateNotification(key: String, progress: Int) {
-        val n = downloadServiceHashMap[key]?.builder ?: return
-
-        n.setProgress(100, progress, false)
-        n.setContentText("$progress%")
-
-        val manager = notificationManager
-            ?: getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notification = n.build()
-        manager.notify(downloadServiceHashMap[key]?.notificationId ?: -1, notification)
-        if (notificationManager == null) {
-            notificationManager = manager
-        }
-    }
-
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
-
-    private fun downloadAnime(
-        key: String,
-        param: String,
-        listener: DownloadListener
-    ) {
-        val animeDir = folderAndFileNameHashMap[key]?.split("/")?.first()
-        downloadHashMap[key]?.postValue(DownloadStatus.DOWNLOADING)
-        FileDownloader.getImpl().create(param)
-            .setPath(animeFilePath + animeDir, true)
-            .setListener(object : FileDownloadListener() {
-                override fun pending(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                }
-
-                override fun progress(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                    if (downloadHashMap[key]?.value == DownloadStatus.CANCEL) {
-                        task?.let {
-                            FileDownloader.getImpl().pause(it.id)
-                        }
-                    }
-                    val progress = (soFarBytes.toFloat() / totalBytes * 100).toInt()
-                    onProgressUpdate(key, progress)
-                }
-
-                override fun completed(task: BaseDownloadTask?) {
-                    listener.complete(task?.filename.orEmpty())
-                }
-
-                override fun paused(task: BaseDownloadTask?, soFarBytes: Int, totalBytes: Int) {
-                    listener.error()
-                }
-
-                override fun error(task: BaseDownloadTask?, e: Throwable?) {
-                    downloadHashMap[key]?.postValue(DownloadStatus.ERROR)
-                    e?.printStackTrace()
-                    e?.message?.showToast(Toast.LENGTH_LONG)
-                    listener.error()
-                }
-
-                override fun warn(task: BaseDownloadTask?) {
-                }
-            }).start()
-    }
-
-    private fun onProgressUpdate(key: String, values: Int) {
-        updateNotification(key, values)
-    }
-
-    inner class AnimeDownloadServiceDataBean(
-        var url: String,
-        var notificationId: Int,
-        var builder: NotificationCompat.Builder? = null
-    ) : Serializable
-
-    companion object {
-        const val CHANNEL_ID = "download_anime"
-        const val CHANNEL_NAME = "下载消息"
+        mldOnTaskRunning.postValue(task)
     }
 }

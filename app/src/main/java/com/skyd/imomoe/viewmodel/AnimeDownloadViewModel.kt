@@ -8,14 +8,14 @@ import com.skyd.imomoe.bean.AnimeCover7Bean
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.deleteAnimeFromXml
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.getAnimeFromXml
-import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.Companion.save2Xml
 import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.deleteAnimeFromXml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.getAnimeFromXml
+import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.save2Xml
 import kotlinx.coroutines.Job
 import java.io.File
 

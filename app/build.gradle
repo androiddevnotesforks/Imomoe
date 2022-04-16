@@ -151,6 +151,7 @@ dependencies {
     implementation deps.lifecycle.lifecycle_livedata_ktx
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
+    implementation deps.lifecycle.lifecycle_extensions
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
     implementation deps.retrofit2.retrofit
@@ -161,14 +162,17 @@ dependencies {
     implementation deps.room.room_ktx
     implementation deps.support.legacy_support_v4
     kapt deps.room.room_compiler
-    implementation deps.filedownloader.library
+    implementation deps.aria.core
+    kapt deps.aria.compiler
+    implementation deps.aria.m3u8Component
     implementation deps.cling.cling_core
     implementation deps.cling.cling_support
     implementation deps.jetty.jetty_server
     implementation deps.jetty.jetty_servlet
     implementation deps.jetty.jetty_client
     implementation deps.nanohttpd.nanohttpd
-    compileOnly files ('libs/cdi-api.jar')      // DLNACastService编译需要javax.enterprise.inject.Alternative类
+    compileOnly files('libs/cdi-api.jar')
+    // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
     implementation deps.greenrobot.eventbus
     implementation deps.umsdk.common
@@ -266,8 +270,8 @@ task makeJar(type: Jar) {
     baseName 'CustomDataSource'
     //选取要打包的文件夹
     from(
-         'build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom',
-         'src\\main\\java\\com\\skyd\\imomoe\\model\\impls\\custom\\CustomInfo'
+            'build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom',
+            'src\\main\\java\\com\\skyd\\imomoe\\model\\impls\\custom\\CustomInfo'
     )
     //需要跟实际类的包名路径一样
     into('com/skyd/imomoe/model/impls/custom')

@@ -270,7 +270,9 @@
     <string name="anime_download_activity_item_menu_delete">删除</string>
     <string name="anime_download_activity_deleting">正在删除，请稍候…</string>
     <string name="restore_play_speed">记忆播放速度</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="anime_download_notification_title">正在下载 %s</string>
+    <string name="anime_download_service_start_download">%s 开始下载</string>
+    <string name="anime_download_service_download_failed">%s 下载失败</string>
+    <string name="anime_download_helper_no_storage">未获取存储权限，无法下载</string>
 
 </resources>

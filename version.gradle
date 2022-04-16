@@ -1,4 +1,4 @@
-ext.version_code = 21
+ext.version_code = 22
 ext.version_name = "1.4.0_Akarin"
 
 def build_versions = [:]
@@ -41,6 +41,7 @@ def lifecycle = [:]
 lifecycle.lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+lifecycle.lifecycle_extensions = 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 deps.lifecycle = lifecycle
 
 def okhttp3 = [:]
@@ -70,9 +71,11 @@ def getActivity = [:]
 getActivity.XXPermissions = "com.github.getActivity:XXPermissions:13.5"
 deps.getActivity = getActivity
 
-def filedownloader = [:]
-filedownloader.library = "com.liulishuo.filedownloader:library:1.7.7"
-deps.filedownloader = filedownloader
+def aria = [:]
+aria.core = "com.arialyy.aria:core:3.8.12"
+aria.compiler = "com.arialyy.aria:compiler:3.8.12"
+aria.m3u8Component = "com.arialyy.aria:m3u8Component:3.8.12"
+deps.aria = aria
 
 // cling 2.1.2版本无法搜索到设备，不要升级
 def cling = [:]

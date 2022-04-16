@@ -193,3 +193,11 @@ class RestoreFile1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvRestoreFile1LastModified: TextView =
         view.findViewById(R.id.tv_restore_file_1_last_modified)
 }
+
+class AnimeDownload1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val tvAnimeDownload1Title: ImageView = view.findViewById(R.id.tv_anime_download_1_title)
+    val tvAnimeDownload1Episode: TextView = view.findViewById(R.id.tv_anime_download_1_episode)
+    val tvAnimeDownload1Size: TextView = view.findViewById(R.id.tv_anime_download_1_size)
+    val pbAnimeDownload1: TextView = view.findViewById(R.id.pb_anime_download_1)
+    val ivAnimeDownload1Cancel: TextView = view.findViewById(R.id.iv_anime_download_1_cancel)
+}

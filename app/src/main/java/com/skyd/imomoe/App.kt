@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.efs.sdk.launch.LaunchManager
-import com.liulishuo.filedownloader.FileDownloader
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -49,8 +48,6 @@ class App : Application() {
 
             PushHelper.preInit(applicationContext)
         }
-
-        FileDownloader.setup(this)
 
         PlayerCore.onAppCreate()
 

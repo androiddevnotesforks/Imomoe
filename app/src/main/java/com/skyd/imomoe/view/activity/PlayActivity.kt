@@ -199,9 +199,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
 
         viewModel.mldAnimeDownloadUrl.observe(this) {
-            AnimeDownloadHelper.instance.downloadAnime(
-                this, it.videoUrl, it.videoUrl.toMD5(),
-                "${viewModel.playBean?.title?.title}/${it.title}"
+            AnimeDownloadHelper.downloadAnime(
+                this,
+                url = it.videoUrl,
+                animeTitle = viewModel.playBean?.title?.title.orEmpty(),
+                animeEpisode = it.title
             )
         }
 

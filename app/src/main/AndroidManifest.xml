@@ -126,15 +126,7 @@
             android:enabled="true" />
 
         <receiver
-            android:name=".util.download.downloadanime.AnimeDownloadNotificationReceiver"
-            android:exported="false" />
-
-        <service
-            android:name=".util.download.datasource.DataSourceDownloadService"
-            android:enabled="true" />
-
-        <receiver
-            android:name=".util.download.datasource.DataSourceDownloadNotificationReceiver"
+            android:name=".util.download.downloadanime.AnimeDownloadReceiver"
             android:exported="false" />
 
         <provider

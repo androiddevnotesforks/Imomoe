@@ -70,8 +70,8 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         )
         list += License1Bean(
             ActionUrl.ANIME_BROWSER,
-            "https://github.com/lingochamp/FileDownloader",
-            "FileDownloader",
+            "https://github.com/AriaLyy/Aria",
+            "Aria",
             "Apache-2.0 License"
         )
         list += License1Bean(
