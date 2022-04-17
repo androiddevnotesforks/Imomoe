@@ -21,9 +21,7 @@ class AnimeDownloadReceiver : BroadcastReceiver() {
 
         when (action) {
             CANCEL_ACTION -> {
-                val notificationManager =
-                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                notificationManager.cancel(notificationId)
+                // 在Service里面统一cancel
                 val taskId = intent.getLongExtra(TASK_ID, -1)
                 val taskUrl = intent.getStringExtra(TASK_URL).orEmpty()
                 if (taskId != -1L) {

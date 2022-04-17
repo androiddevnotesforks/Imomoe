@@ -44,6 +44,7 @@ class AnimeDownloadService : LifecycleService() {
         CoroutineScope(Dispatchers.IO)
     }
 
+    private val mldOnTaskPre: MutableLiveData<DownloadTask> = MutableLiveData()
     private val mldOnTaskStart: MutableLiveData<DownloadTask> = MutableLiveData()
     private val mldOnTaskComplete: MutableLiveData<DownloadTask> = MutableLiveData()
     private val mldOnTaskRunning: MutableLiveData<DownloadTask> = MutableLiveData()
@@ -60,8 +61,10 @@ class AnimeDownloadService : LifecycleService() {
         val animeTitleEpisodeMap: HashMap<String, Pair<String, String>>
             get() = this@AnimeDownloadService.animeTitleEpisodeMap
         val notCompleteList: List<DownloadEntity>
-            get() = Aria.download(this).allNotCompleteTask
+            get() = Aria.download(this).allNotCompleteTask.orEmpty()
 
+        val mldOnTaskPre: MutableLiveData<DownloadTask>
+            get() = this@AnimeDownloadService.mldOnTaskPre
         val mldOnTaskStart: MutableLiveData<DownloadTask>
             get() = this@AnimeDownloadService.mldOnTaskStart
         val mldOnTaskComplete: MutableLiveData<DownloadTask>
@@ -160,6 +163,8 @@ class AnimeDownloadService : LifecycleService() {
             }
             .create()
         animeTitleEpisodeMap[downloadUrl] = animeTitle to animeEpisode
+
+        notifyMap[downloadUrl]?.cancel()
         notifyMap[downloadUrl] = AnimeDownloadNotification(
             applicationContext,
             taskId = id,
@@ -182,63 +187,94 @@ class AnimeDownloadService : LifecycleService() {
         Aria.download(this).unRegister()
     }
 
+    @Download.onPre
+    fun onPre(task: DownloadTask?) {
+        mldOnTaskPre.postValue(task)
+    }
+
+    @Download.onTaskPre
+    fun onTaskPre(task: DownloadTask?) {
+        mldOnTaskPre.postValue(task)
+    }
+
     @Download.onTaskStart
-    fun onTaskStart(task: DownloadTask) {
-        animeTitleEpisodeMap[task.downloadEntity.url]?.run {
-            getString(
-                R.string.anime_download_service_start_download,
-                "$first - $second"
-            ).showToast()
+    fun onTaskStart(task: DownloadTask?) {
+        if (task != null) {
+            animeTitleEpisodeMap[task.downloadEntity.url]?.run {
+                getString(
+                    R.string.anime_download_service_start_download,
+                    "$first - $second"
+                ).showToast()
+            }
         }
         mldOnTaskStart.postValue(task)
     }
 
     @Download.onTaskStop
-    fun onTaskStop(task: DownloadTask) {
+    fun onTaskStop(task: DownloadTask?) {
         mldOnTaskStop.postValue(task)
     }
 
     @Download.onTaskCancel
-    fun onTaskCancel(task: DownloadTask) {
+    fun onTaskCancel(task: DownloadTask?) {
         mldOnTaskCancel.postValue(task)
+        if (task != null) {
+            notifyMap[task.downloadEntity?.url]?.cancel()
+        }
     }
 
     @Download.onTaskFail
-    fun onTaskFail(task: DownloadTask) {
-        animeTitleEpisodeMap[task.downloadEntity.url]?.run {
-            getString(
-                R.string.anime_download_service_download_failed,
-                "$first - $second"
-            ).showToast()
+    fun onTaskFail(task: DownloadTask?) {
+        if (task != null) {
+            notifyMap[task.downloadEntity?.url]?.cancel()
+            animeTitleEpisodeMap[task.downloadEntity?.url]?.run {
+                getString(
+                    R.string.anime_download_service_download_failed,
+                    "$first - $second"
+                ).showToast()
+            }
         }
         mldOnTaskFail.postValue(task)
     }
 
     @Download.onTaskComplete
-    fun onTaskComplete(task: DownloadTask) {
-        notifyMap[task.downloadEntity.url]?.cancel()
-        val (title, episode) = animeTitleEpisodeMap[task.downloadEntity.url]!!
-        coroutineScope.launch {
-            val file = File(task.downloadEntity.m3U8Entity.filePath)
-            file.toMD5()?.let {
-                val entity = AnimeDownloadEntity(it, episode, file.name)
-                getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
-                save2Xml((file.parent ?: title).substringAfterLast("/"), entity)
+    fun onTaskComplete(task: DownloadTask?) {
+        if (task != null) {
+            notifyMap[task.downloadEntity?.url]?.cancel()
+            val p = animeTitleEpisodeMap[task.downloadEntity?.url]
+            if (p != null) {
+                runCatching {
+                    coroutineScope.launch {
+                        val file = File(task.downloadEntity.m3U8Entity.filePath)
+                        file.toMD5()?.let {
+                            val entity = AnimeDownloadEntity(it, p.second, file.name)
+                            getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
+                            save2Xml((file.parent ?: p.first).substringAfterLast("/"), entity)
+                        }
+                    }
+                }.onFailure {
+                    it.printStackTrace()
+                    it.message?.showToast()
+                }
+            } else {
+                getString(R.string.anime_download_service_get_title_failed).showToast()
             }
         }
         mldOnTaskComplete.postValue(task)
     }
 
     @Download.onTaskRunning
-    fun onTaskRunning(task: DownloadTask) {
-        val m3U8Entity = task.downloadEntity.m3U8Entity
-        if (m3U8Entity == null) {
-            val len: Long = task.fileSize
-            val p = (task.currentProgress * 100.0 / len).toInt()
-            notifyMap[task.downloadEntity.url]?.upload(p)
-        } else {
-            val p = ((m3U8Entity.peerIndex + 1) * 100.0 / m3U8Entity.peerNum).toInt()
-            notifyMap[task.downloadEntity.url]?.upload(p)
+    fun onTaskRunning(task: DownloadTask?) {
+        if (task != null) {
+            val m3U8Entity = task.downloadEntity?.m3U8Entity
+            if (m3U8Entity == null) {
+                val len: Long = task.fileSize
+                val p = (task.currentProgress * 100.0 / len).toInt()
+                notifyMap[task.downloadEntity.url]?.upload(p)
+            } else {
+                val p = ((m3U8Entity.peerIndex + 1) * 100.0 / m3U8Entity.peerNum).toInt()
+                notifyMap[task.downloadEntity.url]?.upload(p)
+            }
         }
         mldOnTaskRunning.postValue(task)
     }

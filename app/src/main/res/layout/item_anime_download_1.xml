@@ -52,14 +52,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dp"
+        android:layout_marginBottom="7dp"
         android:textColor="?attr/colorSecondary"
         app:layout_constraintBottom_toTopOf="@id/pb_anime_download_1"
         app:layout_constraintEnd_toStartOf="@id/iv_anime_download_1_cancel"
         tools:text="215MB" />
 
-    <ProgressBar
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_anime_download_1_percent"
+        style="@style/TextAppearance.Material3.LabelLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="7dp"
+        android:textColor="?attr/colorSecondary"
+        app:layout_constraintBottom_toTopOf="@id/pb_anime_download_1"
+        app:layout_constraintEnd_toStartOf="@id/tv_anime_download_1_size"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/cv_anime_download_1_episode"
+        tools:text="70%" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/pb_anime_download_1"
-        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
@@ -72,10 +86,11 @@
         android:id="@+id/iv_anime_download_1_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="?android:selectableItemBackground"
+        android:layout_marginBottom="7dp"
         android:contentDescription="@string/cancel"
-        android:padding="3dp"
+        android:paddingStart="6dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="0dp"
         android:src="@drawable/ic_delete_24"
         app:layout_constraintBottom_toTopOf="@id/pb_anime_download_1"
         app:layout_constraintEnd_toEndOf="parent"

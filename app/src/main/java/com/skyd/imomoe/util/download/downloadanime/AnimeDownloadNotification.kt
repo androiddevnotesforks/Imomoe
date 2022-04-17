@@ -46,7 +46,7 @@ class AnimeDownloadNotification(
         }
         val pendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            notifyId,
             intent,
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) PendingIntent.FLAG_CANCEL_CURRENT
             else PendingIntent.FLAG_MUTABLE
@@ -56,6 +56,7 @@ class AnimeDownloadNotification(
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentText("0%")
             .setProgress(100, 0, false)
+            .setAutoCancel(false)
             .addAction(
                 R.drawable.ic_close_24,
                 context.getString(R.string.cancel),
@@ -66,6 +67,7 @@ class AnimeDownloadNotification(
 
     fun upload(progress: Int) {
         builder.setProgress(100, progress, false)
+            .setContentText("$progress%")
         manager.notify(notifyId, builder.build())
     }
 

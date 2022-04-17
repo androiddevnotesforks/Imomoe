@@ -2,8 +2,10 @@ package com.skyd.imomoe.util
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.view.component.bannerview.BannerView
 import com.skyd.imomoe.view.component.FlowLayout
@@ -195,9 +197,10 @@ class RestoreFile1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class AnimeDownload1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvAnimeDownload1Title: ImageView = view.findViewById(R.id.tv_anime_download_1_title)
+    val tvAnimeDownload1Title: TextView = view.findViewById(R.id.tv_anime_download_1_title)
     val tvAnimeDownload1Episode: TextView = view.findViewById(R.id.tv_anime_download_1_episode)
     val tvAnimeDownload1Size: TextView = view.findViewById(R.id.tv_anime_download_1_size)
-    val pbAnimeDownload1: TextView = view.findViewById(R.id.pb_anime_download_1)
-    val ivAnimeDownload1Cancel: TextView = view.findViewById(R.id.iv_anime_download_1_cancel)
+    val tvAnimeDownload1Percent: TextView = view.findViewById(R.id.tv_anime_download_1_percent)
+    val pbAnimeDownload1: LinearProgressIndicator = view.findViewById(R.id.pb_anime_download_1)
+    val ivAnimeDownload1Cancel: ImageView = view.findViewById(R.id.iv_anime_download_1_cancel)
 }

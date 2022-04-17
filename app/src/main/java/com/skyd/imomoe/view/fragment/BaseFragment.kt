@@ -53,7 +53,10 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     protected open fun getLoadFailedTipView(): ViewStub? = null
 
-    protected open fun showLoadFailedTip(text: String, onClickListener: View.OnClickListener?) {
+    protected open fun showLoadFailedTip(
+        text: String,
+        onClickListener: View.OnClickListener? = null
+    ) {
         val loadFailedTipViewStub = getLoadFailedTipView() ?: return
         if (loadFailedTipViewStub.parent != null) {
             loadFailedTipView = loadFailedTipViewStub.inflate()

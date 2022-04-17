@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
@@ -20,8 +21,8 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentMoreBinding =
         FragmentMoreBinding.inflate(inflater, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${HistoryActivity::class.qualifiedName}",
@@ -39,14 +40,19 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             R.drawable.ic_skin_32
         )
         list += More1Bean(
-            "$ANIME_LAUNCH_ACTIVITY/${SettingActivity::class.qualifiedName}",
-            getString(R.string.setting),
-            R.drawable.ic_settings_24
+            "$ANIME_LAUNCH_ACTIVITY/${DownloadManagerActivity::class.qualifiedName}",
+            getString(R.string.download_manager),
+            R.drawable.ic_cloud_download_24
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${BackupRestoreActivity::class.qualifiedName}",
             getString(R.string.backup_and_restore),
             R.drawable.ic_cloud_done_24
+        )
+        list += More1Bean(
+            "$ANIME_LAUNCH_ACTIVITY/${SettingActivity::class.qualifiedName}",
+            getString(R.string.setting),
+            R.drawable.ic_settings_24
         )
         list += More1Bean(
             "$ANIME_LAUNCH_ACTIVITY/${AboutActivity::class.qualifiedName}",

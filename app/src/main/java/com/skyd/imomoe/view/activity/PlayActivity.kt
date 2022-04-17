@@ -263,6 +263,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun getBinding() = ActivityPlayBinding.inflate(layoutInflater)
 
     private fun GSYBaseVideoPlayer.startPlay() {
+        return
         if (isDestroyed) return
         val title = viewModel.animeEpisodeDataBean.title
 //        viewModel.getDanmakuList(title, )

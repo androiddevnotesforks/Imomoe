@@ -134,6 +134,7 @@
     <string name="ask_delete_data_source">确认删除此数据源？</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
     <string name="skin_center">皮肤中心</string>
+    <string name="download_manager">下载管理</string>
     <string name="data_source_jar_version_name">版本：%s</string>
     <string name="data_source_jar_version_code">版本代号：%s</string>
     <string name="app_version_name">%s</string>
@@ -274,5 +275,9 @@
     <string name="anime_download_service_start_download">%s 开始下载</string>
     <string name="anime_download_service_download_failed">%s 下载失败</string>
     <string name="anime_download_helper_no_storage">未获取存储权限，无法下载</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="m3u8_peer_count">共%s段</string>
+    <string name="anime_download_service_get_title_failed">未获取到番剧标题，无法存储缓存视频信息</string>
 
 </resources>
