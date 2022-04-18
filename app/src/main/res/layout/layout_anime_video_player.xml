@@ -24,13 +24,13 @@
     <com.kuaishou.akdanmaku.ui.DanmakuView
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0px"
         app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller" />
 
     <RelativeLayout
         android:id="@+id/thumb"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0px"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
@@ -289,11 +289,13 @@
     <RelativeLayout
         android:id="@+id/layout_right"
         android:layout_width="150dp"
-        android:layout_height="match_parent"
+        android:layout_height="0px"
         android:background="@color/gray_2"
         android:clickable="true"
         android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView

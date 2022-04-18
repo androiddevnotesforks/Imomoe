@@ -15,6 +15,9 @@ fun Context.sharedPreferences(name: String = "App"): SharedPreferences =
 fun SharedPreferences.editor(editorBuilder: SharedPreferences.Editor.() -> Unit) =
     edit().apply(editorBuilder).apply()
 
+fun SharedPreferences.editor2(editorBuilder: SharedPreferences.Editor.() -> Unit) =
+    edit().apply(editorBuilder).commit()
+
 fun sharedPreferences(name: String = "App"): SharedPreferences = appContext.sharedPreferences(name)
 
 @RequiresApi(Build.VERSION_CODES.M)

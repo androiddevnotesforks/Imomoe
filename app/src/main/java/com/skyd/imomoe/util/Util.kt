@@ -81,6 +81,9 @@ object Util {
         val i = appContext.packageManager.getLaunchIntentForPackage(appContext.packageName)
         i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         appContext.startActivity(i)
+
+        // 杀死原进程
+        android.os.Process.killProcess(android.os.Process.myPid())
     }
 
     /**

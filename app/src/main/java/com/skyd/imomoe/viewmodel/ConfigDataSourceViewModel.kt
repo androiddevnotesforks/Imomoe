@@ -19,7 +19,7 @@ class ConfigDataSourceViewModel : ViewModel() {
     }
 
     fun setDataSource(name: String) {
-        DataSourceManager.dataSourceName = name
+        DataSourceManager.setDataSourceNameSynchronously(name)
         DataSourceManager.clearCache()
         RetrofitManager.setInstanceNull()
         Util.restartApp()

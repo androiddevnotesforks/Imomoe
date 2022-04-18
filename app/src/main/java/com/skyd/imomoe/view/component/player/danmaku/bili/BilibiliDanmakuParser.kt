@@ -13,7 +13,7 @@ import java.lang.NumberFormatException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BiliBiliDanmakuParser {
+class BilibiliDanmakuParser {
     init {
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
     }

@@ -6,6 +6,7 @@ import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.editor2
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.string
 //import com.skyd.imomoe.model.impls.custom.TestClass
@@ -36,10 +37,15 @@ object DataSourceManager {
                 "CustomDataSource.jar"
             } else field
         }
-        set(value) {
-            field = value
-            sharedPreferences().editor { putString("dataSourceName", value) }
-        }
+        private set
+
+    fun setDataSourceName(value: String) {
+        sharedPreferences().editor { putString("dataSourceName", value) }
+    }
+
+    fun setDataSourceNameSynchronously(value: String) {
+        sharedPreferences().editor2 { putString("dataSourceName", value) }
+    }
 
     private var showInterfaceVersionTip: Boolean = false
 

@@ -8,34 +8,25 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface DanmakuService {
-    @Headers(value = ["Content-Type: application/json", "Accept: application/json"])
-    @POST(Api.DANMAKU_URL)
-    fun sendDanmaku(
-        @Query("ac") ac: String,
-        @Query("key") key: String,
-        @Body json: RequestBody
-    ): Call<AnimeSendDanmakuResultBean>
+    @FormUrlEncoded
+    @POST("${Api.DANMAKU_URL}/message/addOne")
+    suspend fun sendDanmaku(
+        @Field("content") content: String,
+        @Field("time") time: Double,     // 秒时间戳
+        @Field("episodeId") episodeId: String,
+        @Field("type") type: String,
+        @Field("color") color: String,
+    ): DanmakuWrapper<DanmakuData.Data?>
 
     @GET
-    fun getCustomizeDanmaku(@Url url: String): Call<ResponseBody>
-    
+    suspend fun getCustomizeDanmaku(@Url url: String): ResponseBody
+
     // 查询弹幕
-    @GET("${Api.DANMAKU_URL}/api/message/getSome")
+    @GET("${Api.DANMAKU_URL}/message/getSome")
     suspend fun getDanmaku(
-        @Query("episodeId") episodeId: String,
-    ): DanmakuWrapper<DanmakuData>
+        @Query("name") animeName: String,
+        @Query("number") episode: String,
+        @Query("type") type: String = "1",
+    ): DanmakuWrapper<DanmakuData?>
 
-    // 查询单个集信息
-    @GET("${Api.DANMAKU_URL}/api/episode/getOneByNumer")
-    suspend fun getEpisodeDanmaku(
-        @Query("number") number: String,
-        @Query("goodsId") goodsId: String
-    ): DanmakuWrapper<DanmakuEpisodeData>
-
-    // 查询资源列表
-    @GET("${Api.DANMAKU_URL}/api/goods/getSome")
-    suspend fun getAnimeDanmakuId(
-        @Query("name") name: String,
-        @Query("type") type: Int = 1
-    ): DanmakuWrapper<List<DanmakuAnimeData>>
 }

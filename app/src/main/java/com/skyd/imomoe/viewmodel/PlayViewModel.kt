@@ -6,16 +6,11 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.bean.danmaku.DanmakuAnimeData
-import com.skyd.imomoe.bean.danmaku.DanmakuData
-import com.skyd.imomoe.bean.danmaku.DanmakuEpisodeData
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
-import com.skyd.imomoe.net.RetrofitManager
-import com.skyd.imomoe.net.service.DanmakuService
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
@@ -43,7 +38,6 @@ class PlayViewModel : ViewModel() {
     var animeCover: ImageBean? = null
     var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
     var mldPlayDataList: MutableLiveData<List<Any>?> = MutableLiveData()
-    var mldDanmaku: MutableLiveData<List<DanmakuData.Data>?> = MutableLiveData()
 
     // 当前播放集数的索引
     var currentEpisodeIndex = 0
@@ -238,27 +232,5 @@ class PlayViewModel : ViewModel() {
         } else {
             appContext.getString(R.string.insert_favorite_failed_in_play_activity).showToast()
         }
-    }
-
-    // 查询弹幕资源列表
-    fun getDanmakuList(animeName: String, episodeNumber: String) {
-        request(request = {
-            val goodsId = findAnimeDanmakuList(animeName).first().id
-            val episodeId = findEpisodeDanmaku(episodeNumber, goodsId).id
-            RetrofitManager.get().create(DanmakuService::class.java).getDanmaku(episodeId)
-        }, success = {
-            mldDanmaku.postValue(it.data.data)
-        })
-    }
-
-    // 查询单个集信息
-    private suspend fun findEpisodeDanmaku(number: String, goodsId: String): DanmakuEpisodeData {
-        return RetrofitManager.get().create(DanmakuService::class.java)
-            .getEpisodeDanmaku(number, goodsId).data
-    }
-
-    // 查询弹幕资源列表
-    private suspend fun findAnimeDanmakuList(name: String): List<DanmakuAnimeData> {
-        return RetrofitManager.get().create(DanmakuService::class.java).getAnimeDanmakuId(name).data
     }
 }

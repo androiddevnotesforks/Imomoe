@@ -60,11 +60,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         // 夜间屏幕最大Alpha
         const val NIGHT_SCREEN_MAX_ALPHA: Int = 0xAA
 
-        val playPositionMemoryStoreCoroutineScope by lazy(LazyThreadSafetyMode.NONE) {
+        val coroutineScope by lazy(LazyThreadSafetyMode.NONE) {
             CoroutineScope(Dispatchers.Default)
         }
 
     }
+
+    // 番剧名称（不是每一集的名称）
+    var animeTitle: String = ""
 
     /**
      * 进度记忆最小时间，默认5秒后的进度才记忆
@@ -517,6 +520,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.mPlaySpeed = mPlaySpeed
         player.sbNightScreen?.progress = mNightScreenSeekBarProgress
         player.onPlayNextEpisode = onPlayNextEpisode
+        player.animeTitle = animeTitle
         if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
         player.setBottomProgressBarVisibility(
             sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
@@ -563,6 +567,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mPlaySpeed = player.mPlaySpeed
             mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
             onPlayNextEpisode = player.onPlayNextEpisode
+            animeTitle = player.animeTitle
             if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
             setBottomProgressBarVisibility(
                 sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
@@ -1021,7 +1026,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
         playPositionViewJob?.cancel()
         playPositionMemoryStore?.apply {
-            playPositionMemoryStoreCoroutineScope.launch {
+            coroutineScope.launch {
                 getPlayPosition(mOriginUrl)?.also {
                     preSeekPlayPosition = it
                     playPositionViewJob = launch(Dispatchers.Main) {
@@ -1085,7 +1090,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         // 进度为负（已经播放完） 或 当前进度大于最小限制且小于最大限制（播放完时不记录），则记录
         if (newPosition < 0 || (newPosition > playPositionMemoryTimeLimit && duration > 0)) {
             playPositionMemoryStore?.apply {
-                playPositionMemoryStoreCoroutineScope.launch {
+                coroutineScope.launch {
                     putPlayPosition(url, newPosition)
                 }
             }

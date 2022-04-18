@@ -28,7 +28,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/tb_play_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/menu_play_activity"
                 app:navigationIcon="@drawable/ic_arrow_back_ios_24"
@@ -37,7 +37,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tv_play_activity_toolbar_title"
-                    style="@style/TextAppearance.Material3.ActionBar.Title"
+                    style="@style/TextAppearance.Material3.ActionBar.Subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"

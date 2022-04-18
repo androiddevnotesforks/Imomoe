@@ -84,11 +84,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
                     when {
                         abs(verticalOffset) > ctlPlayActivity.scrimVisibleHeightTrigger -> {
-                            tbPlayActivity.title = null
                             tvPlayActivityToolbarTitle?.visible(animate = true, dur = 200L)
                         }
                         else -> {
-                            tbPlayActivity.title = viewModel.animeEpisodeDataBean.title
                             tvPlayActivityToolbarTitle?.gone()
                         }
                     }
@@ -182,6 +180,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             when (viewModel.mldFavorite.value) {
                 true -> viewModel.deleteFavorite()
                 false -> viewModel.insertFavorite()
+                else -> {}
             }
         }
 
@@ -263,16 +262,18 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun getBinding() = ActivityPlayBinding.inflate(layoutInflater)
 
     private fun GSYBaseVideoPlayer.startPlay() {
-        return
         if (isDestroyed) return
-        val title = viewModel.animeEpisodeDataBean.title
-//        viewModel.getDanmakuList(title, )
-        mBinding.tbPlayActivity.title = title
+        val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
+        val episodeTitle = viewModel.animeEpisodeDataBean.title
+        val animeTitle = viewModel.playBean?.title?.title.orEmpty()
+        if (this is AnimeVideoPlayer) {
+            this.animeTitle = animeTitle
+        }
+        mBinding.tbPlayActivity.title = episodeTitle
         // 设置播放URL
         viewModel.updateFavoriteData()
         viewModel.insertHistoryData()
-        val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
-        currentPlayer.setUp(videoUrl, false, viewModel.animeEpisodeDataBean.title)
+        currentPlayer.setUp(videoUrl, false, episodeTitle)
         lifecycleScope.launch {
             val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
             // 若用户设置了自动跳转 且 没有播放完

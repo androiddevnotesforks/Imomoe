@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class DanmakuData(
-    @SerializedName("episodeId")
-    val episodeId: String,
+    @SerializedName("episode")
+    val episode: Episode?,
     @SerializedName("data")
-    val data: List<Data>,
+    val data: List<Data>?,
     @SerializedName("total")
     val total: Int,
 ) : Serializable {
@@ -24,6 +24,21 @@ class DanmakuData(
         val episodeId: String,
         @SerializedName("ip")
         val ip: String,
+        @SerializedName("createdAt")
+        val createdAt: String,
+        @SerializedName("updatedAt")
+        val updatedAt: String,
+        @SerializedName("id")
+        val id: String,
+    ) : Serializable
+
+    class Episode(
+        @SerializedName("number")
+        val number: String,
+        @SerializedName("type")
+        val type: String,
+        @SerializedName("goodsId")
+        val goodsId: String?,
         @SerializedName("createdAt")
         val createdAt: String,
         @SerializedName("updatedAt")
