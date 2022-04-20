@@ -6,16 +6,16 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.MonthAnimeModel
 import com.skyd.imomoe.model.interfaces.IMonthAnimeModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class MonthAnimeViewModel : ViewModel() {
-    private val monthAnimeModel: IMonthAnimeModel by lazy {
-        DataSourceManager.create(IMonthAnimeModel::class.java) ?: MonthAnimeModel()
-    }
+@HiltViewModel
+class MonthAnimeViewModel @Inject constructor(
+    private val monthAnimeModel: IMonthAnimeModel
+) : ViewModel() {
     var partUrl: String = ""
     var mldMonthAnimeList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreMonthAnimeList: MutableLiveData<List<Any>?> = MutableLiveData()

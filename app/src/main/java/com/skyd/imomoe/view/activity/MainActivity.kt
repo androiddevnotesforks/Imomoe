@@ -8,13 +8,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.navigation.NavigationBarView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.databinding.ActivityMainBinding
 import com.skyd.imomoe.ext.fitsSystemWindows2
 import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
-import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
@@ -29,10 +27,12 @@ import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment
 import com.skyd.imomoe.view.fragment.HomeFragment
 import com.skyd.imomoe.view.fragment.MoreFragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     private var backPressTime = 0L
     private val adapter: VpAdapter by lazy { VpAdapter(this) }

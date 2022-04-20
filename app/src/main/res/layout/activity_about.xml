@@ -18,7 +18,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/tb_about_fragment"
+                android:id="@+id/tb_about_activity"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
@@ -42,7 +42,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iv_about_fragment_icon"
+                android:id="@+id/iv_about_activity_icon"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_marginTop="50dp"
@@ -53,18 +53,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/iv_about_fragment_icon_egg"
+                android:id="@+id/iv_about_activity_icon_egg"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
                 android:importantForAccessibility="no"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/iv_about_fragment_icon"
-                app:layout_constraintTop_toTopOf="@id/iv_about_fragment_icon"
+                app:layout_constraintEnd_toEndOf="@id/iv_about_activity_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_about_activity_icon"
                 tools:src="@drawable/ic_christmas_hat"
                 tools:visibility="visible" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_about_fragment_name"
+                android:id="@+id/tv_about_activity_name"
                 style="@style/TextAppearance.Material3.TitleMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,10 +73,10 @@
                 android:textColor="?attr/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_about_fragment_icon" />
+                app:layout_constraintTop_toBottomOf="@id/iv_about_activity_icon" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_about_fragment_version"
+                android:id="@+id/tv_about_activity_version"
                 style="@style/TextAppearance.Material3.LabelLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,11 +86,11 @@
                 android:textColor="?attr/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_about_fragment_name"
+                app:layout_constraintTop_toBottomOf="@id/tv_about_activity_name"
                 tools:text="version" />
 
             <RelativeLayout
-                android:id="@+id/rl_about_fragment_imomoe"
+                android:id="@+id/rl_about_activity_imomoe"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
@@ -99,7 +99,7 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_about_fragment_version">
+                app:layout_constraintTop_toBottomOf="@id/tv_about_activity_version">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.TitleMedium"
@@ -107,21 +107,21 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_custom_data_source_about"
+                    android:layout_toStartOf="@id/iv_about_activity_custom_data_source_about"
                     android:text="@string/data_source_url"
                     android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_custom_data_source_about"
+                    android:id="@+id/iv_about_activity_custom_data_source_about"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_imomoe"
+                    android:layout_toStartOf="@id/iv_about_activity_imomoe"
                     android:src="@drawable/ic_info_24"
                     app:tint="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_imomoe"
+                    android:id="@+id/iv_about_activity_imomoe"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -132,7 +132,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_fragment_github"
+                android:id="@+id/rl_about_activity_github"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -140,7 +140,7 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_imomoe">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_imomoe">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.TitleMedium"
@@ -148,12 +148,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_github"
+                    android:layout_toStartOf="@id/iv_about_activity_github"
                     android:text="@string/github"
                     android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_github"
+                    android:id="@+id/iv_about_activity_github"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -164,7 +164,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_fragment_license"
+                android:id="@+id/rl_about_activity_license"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -172,7 +172,7 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_github">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_github">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.TitleMedium"
@@ -180,12 +180,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_license"
+                    android:layout_toStartOf="@id/iv_about_activity_license"
                     android:text="@string/open_source_licenses"
                     android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_license"
+                    android:id="@+id/iv_about_activity_license"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -196,7 +196,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_fragment_user_notice"
+                android:id="@+id/rl_about_activity_user_notice"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -204,7 +204,7 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_license">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_license">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.TitleMedium"
@@ -212,12 +212,12 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_user_notice"
+                    android:layout_toStartOf="@id/iv_about_activity_user_notice"
                     android:text="@string/user_notice"
                     android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_user_notice"
+                    android:id="@+id/iv_about_activity_user_notice"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -228,7 +228,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_about_fragment_test_device"
+                android:id="@+id/rl_about_activity_test_device"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="?android:selectableItemBackground"
@@ -236,7 +236,7 @@
                 android:paddingEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_user_notice">
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_user_notice">
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.TitleMedium"
@@ -244,12 +244,44 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_toStartOf="@id/iv_about_fragment_test_device"
+                    android:layout_toStartOf="@id/iv_about_activity_test_device"
                     android:text="@string/test_device"
                     android:textColor="?attr/colorPrimary" />
 
                 <ImageView
-                    android:id="@+id/iv_about_fragment_test_device"
+                    android:id="@+id/iv_about_activity_test_device"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_arrow_right_24"
+                    app:tint="?attr/colorPrimary" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_about_activity_thanks"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="?android:selectableItemBackground"
+                android:paddingStart="25dp"
+                android:paddingEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_test_device">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/iv_about_activity_thanks"
+                    android:text="@string/about_activity_thanks"
+                    android:textColor="?attr/colorPrimary" />
+
+                <ImageView
+                    android:id="@+id/iv_about_activity_thanks"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
@@ -271,7 +303,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_fragment_test_device" />
+                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_thanks" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

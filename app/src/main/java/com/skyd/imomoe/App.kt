@@ -14,8 +14,10 @@ import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.release
 import com.skyd.imomoe.view.component.player.PlayerCore
 import com.umeng.commonsdk.UMConfigure
+import dagger.hilt.android.HiltAndroidApp
 
 
+@HiltAndroidApp
 class App : Application() {
 
     override fun attachBaseContext(base: Context?) {

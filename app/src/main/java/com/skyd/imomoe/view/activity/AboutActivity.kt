@@ -21,9 +21,9 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
         super.onCreate(savedInstanceState)
 
         mBinding.run {
-            tbAboutFragment.setNavigationOnClickListener { finish() }
+            tbAboutActivity.setNavigationOnClickListener { finish() }
 
-            tbAboutFragment.setOnMenuItemClickListener { item ->
+            tbAboutActivity.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_item_about_activity_info -> {
                         showMessageDialog(
@@ -44,11 +44,11 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             val month = c.get(Calendar.MONTH)
             val day = c.get(Calendar.DAY_OF_MONTH)
             if (month == Calendar.DECEMBER && (day > 21 || day < 29)) {     // 圣诞节彩蛋
-                ivAboutFragmentIconEgg.visible()
-                ivAboutFragmentIconEgg.setImageResource(R.drawable.ic_christmas_hat)
+                ivAboutActivityIconEgg.visible()
+                ivAboutActivityIconEgg.setImageResource(R.drawable.ic_christmas_hat)
             }
 
-            tvAboutFragmentVersion.text =
+            tvAboutActivityVersion.text =
                 getString(R.string.app_version_name, Util.getAppVersionName()) + "\n" +
                         getString(R.string.app_version_code, Util.getAppVersionCode()) + "\n" +
                         getString(
@@ -56,7 +56,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                             com.skyd.imomoe.model.interfaces.interfaceVersion
                         )
 
-            rlAboutFragmentImomoe.setOnClickListener {
+            rlAboutActivityImomoe.setOnClickListener {
                 var warningString: String = getString(R.string.jump_to_data_source_website_warning)
                 if (URL(Api.MAIN_URL).protocol == "http") {
                     warningString =
@@ -70,7 +70,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 )
             }
 
-            ivAboutFragmentCustomDataSourceAbout.setOnClickListener {
+            ivAboutActivityCustomDataSourceAbout.setOnClickListener {
                 showMessageDialog(
                     title = getString(R.string.data_source_info),
                     message = (DataSourceManager.getConst()
@@ -91,15 +91,15 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 )
             }
 
-            rlAboutFragmentGithub.setOnClickListener {
+            rlAboutActivityGithub.setOnClickListener {
                 Util.openBrowser(Const.Common.GITHUB_URL)
             }
 
-            rlAboutFragmentLicense.setOnClickListener {
+            rlAboutActivityLicense.setOnClickListener {
                 startActivity(Intent(this@AboutActivity, LicenseActivity::class.java))
             }
 
-            rlAboutFragmentUserNotice.setOnClickListener {
+            rlAboutActivityUserNotice.setOnClickListener {
                 showMessageDialog(
                     title = getString(R.string.user_notice),
                     message = Util.getUserNoticeContent().toHtml(),
@@ -110,10 +110,18 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 )
             }
 
-            rlAboutFragmentTestDevice.setOnClickListener {
+            rlAboutActivityTestDevice.setOnClickListener {
                 showMessageDialog(
                     title = getString(R.string.test_device),
                     message = "Physical Device: \nAndroid 10",
+                    onPositive = { dialog, _ -> dialog.dismiss() }
+                )
+            }
+
+            rlAboutActivityThanks.setOnClickListener {
+                showMessageDialog(
+                    title = getString(R.string.about_activity_thanks),
+                    message = "MaybeQHL提供弹幕服务器：\nhttps://github.com/MaybeQHL/my_danmu_pub",
                     onPositive = { dialog, _ -> dialog.dismiss() }
                 )
             }

@@ -5,16 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RankModel
 import com.skyd.imomoe.model.interfaces.IRankModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class RankViewModel : ViewModel() {
-    private val rankModel: IRankModel by lazy {
-        DataSourceManager.create(IRankModel::class.java) ?: RankModel()
-    }
+@HiltViewModel
+class RankViewModel @Inject constructor(
+    private val rankModel: IRankModel
+) : ViewModel() {
     var isRequesting = false
     var mldRankData: MutableLiveData<List<TabBean>?> = MutableLiveData()
 

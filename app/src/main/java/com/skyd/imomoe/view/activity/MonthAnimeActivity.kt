@@ -10,7 +10,9 @@ import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.MonthAnimeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
     private val viewModel: MonthAnimeViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy { VarietyAdapter(mutableListOf(AnimeCover3Proxy())) }

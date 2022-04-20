@@ -71,8 +71,7 @@ object DataSourceManager {
             return field
         }
 
-    fun getJarPath(): String =
-        "${getJarDirectory()}/${dataSourceName}"
+    fun getJarPath(): String = "${getJarDirectory()}/${dataSourceName}"
 
     fun getJarDirectory(): String {
         return "${appContext.getExternalFilesDir(null).toString()}/DataSourceJar"
@@ -80,8 +79,7 @@ object DataSourceManager {
 
     fun <T> getBinaryName(clazz: Class<T>): String {
         return "com.skyd.imomoe.model.impls.custom.Custom${
-            clazz.getDeclaredField("implName")
-                .get(null)
+            clazz.getDeclaredField("implName").get(null)
         }"
     }
 

@@ -435,7 +435,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     /**
      * 开始播放弹幕
      */
-    private fun onPrepareDanmaku() {
+    private fun onDanmakuStart() {
         etDanmakuInput?.visible()
         ivShowDanmaku?.visible()
         tvRewindDanmakuProgress?.visible()
@@ -453,6 +453,10 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         }
         showBottomDanmakuController()
         setTextSizeScale(mDanmakuTextScalePercent / 100f)
+
+        mVideoAllCallBack.let {
+            if (it is MyVideoAllCallBack) it.onDanmakuStart()
+        }
     }
 
     /**
@@ -462,7 +466,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         if (mDanmakuUrl.isBlank()) return
         // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
         mDanmakuPlayer.start(config)
-        onPrepareDanmaku()
+        onDanmakuStart()
     }
 
     /**

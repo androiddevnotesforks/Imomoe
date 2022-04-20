@@ -20,10 +20,12 @@ import com.skyd.imomoe.view.adapter.variety.proxy.GridRecyclerView1Proxy
 import com.skyd.imomoe.view.component.WrapLinearLayoutManager
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.EverydayAnimeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 
+@AndroidEntryPoint
 class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), EventBusSubscriber {
     private val viewModel: EverydayAnimeViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {

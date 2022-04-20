@@ -8,17 +8,16 @@ import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.SearchModel
 import com.skyd.imomoe.model.interfaces.ISearchModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class SearchViewModel : ViewModel() {
-    private val searchModel: ISearchModel by lazy {
-        DataSourceManager.create(ISearchModel::class.java) ?: SearchModel()
-    }
-
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val searchModel: ISearchModel
+) : ViewModel() {
     var searchHistoryList: List<Any> = ArrayList()
     var mldSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()

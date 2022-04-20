@@ -8,16 +8,16 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.ClassifyModel
 import com.skyd.imomoe.model.interfaces.IClassifyModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class ClassifyViewModel : ViewModel() {
-    private val classifyModel: IClassifyModel by lazy {
-        DataSourceManager.create(IClassifyModel::class.java) ?: ClassifyModel()
-    }
+@HiltViewModel
+class ClassifyViewModel @Inject constructor(
+    private val classifyModel: IClassifyModel
+) : ViewModel() {
     var classifyTabTitle: String = ""       //如 地区
     var classifyTitle: String = ""          //如 大陆
     var currentPartUrl: String = ""

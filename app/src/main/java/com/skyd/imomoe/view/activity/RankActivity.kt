@@ -12,7 +12,9 @@ import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.view.fragment.RankFragment
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.RankViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RankActivity : BaseActivity<ActivityRankBinding>() {
     private val viewModel: RankViewModel by viewModels()
     private val adapter: VpAdapter by lazy { VpAdapter() }

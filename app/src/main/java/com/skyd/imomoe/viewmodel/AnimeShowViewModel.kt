@@ -5,17 +5,17 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.AnimeShowModel
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class AnimeShowViewModel : ViewModel() {
-    private val animeShowModel: IAnimeShowModel by lazy {
-        DataSourceManager.create(IAnimeShowModel::class.java) ?: AnimeShowModel()
-    }
+@HiltViewModel
+class AnimeShowViewModel @Inject constructor(
+    private val animeShowModel: IAnimeShowModel
+) : ViewModel() {
     var partUrl: String = ""
     var mldAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()

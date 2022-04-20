@@ -31,10 +31,11 @@ import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.net.URL
 import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
     private val viewModel: AnimeDetailViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {

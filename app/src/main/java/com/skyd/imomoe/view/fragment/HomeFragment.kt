@@ -21,8 +21,10 @@ import com.skyd.imomoe.route.processor.SearchActivityProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     private val adapter: VpAdapter by lazy { VpAdapter() }

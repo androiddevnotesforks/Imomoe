@@ -7,18 +7,18 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.EverydayAnimeModel
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
 import com.skyd.imomoe.util.Util.getRealDayOfWeek
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
+import javax.inject.Inject
 
 
-class EverydayAnimeViewModel : ViewModel() {
-    private val everydayAnimeModel: IEverydayAnimeModel by lazy {
-        DataSourceManager.create(IEverydayAnimeModel::class.java) ?: EverydayAnimeModel()
-    }
+@HiltViewModel
+class EverydayAnimeViewModel @Inject constructor(
+    private val everydayAnimeModel: IEverydayAnimeModel
+) : ViewModel() {
     var header: String = ""
     var selectedTabIndex = -1
     var mldHeader: MutableLiveData<String> = MutableLiveData()

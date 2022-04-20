@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -15,7 +16,9 @@ import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover11Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.viewmodel.RankListViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RankFragment : BaseFragment<FragmentRankBinding>() {
     private var partUrl: String = ""
     private val viewModel: RankListViewModel by viewModels()
@@ -35,8 +38,8 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
             rvRankFragment.layoutManager = GridLayoutManager(activity, 4)

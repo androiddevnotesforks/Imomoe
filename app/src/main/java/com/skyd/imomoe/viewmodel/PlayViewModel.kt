@@ -8,18 +8,18 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.PlayModel
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class PlayViewModel : ViewModel() {
-    private val playModel: IPlayModel by lazy {
-        DataSourceManager.create(IPlayModel::class.java) ?: PlayModel()
-    }
+@HiltViewModel
+class PlayViewModel @Inject constructor(
+    private val playModel: IPlayModel
+) : ViewModel() {
     var playBean: PlayBean? = null
     var partUrl: String = ""
     var detailPartUrl: String = ""

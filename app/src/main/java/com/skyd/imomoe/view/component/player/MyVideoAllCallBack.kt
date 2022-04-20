@@ -8,4 +8,6 @@ interface MyVideoAllCallBack : VideoAllCallBack {
     fun onVideoResume()
 
     fun onVideoSizeChanged()
+
+    fun onDanmakuStart()
 }

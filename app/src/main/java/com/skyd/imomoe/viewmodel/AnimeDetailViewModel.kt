@@ -7,16 +7,15 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.AnimeDetailModel
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-
-class AnimeDetailViewModel : ViewModel() {
-    private val animeDetailModel: IAnimeDetailModel by lazy {
-        DataSourceManager.create(IAnimeDetailModel::class.java) ?: AnimeDetailModel()
-    }
+@HiltViewModel
+class AnimeDetailViewModel @Inject constructor(
+    private val animeDetailModel: IAnimeDetailModel
+) : ViewModel() {
     var cover: ImageBean = ImageBean("", "", "")
     var title: String = ""
     var mldAnimeDetailList: MutableLiveData<List<Any>?> = MutableLiveData()

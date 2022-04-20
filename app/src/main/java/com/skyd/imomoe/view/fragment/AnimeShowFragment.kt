@@ -17,8 +17,10 @@ import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
     private val viewModel: AnimeShowViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {

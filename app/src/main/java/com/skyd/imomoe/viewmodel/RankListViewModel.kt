@@ -7,16 +7,16 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RankListModel
 import com.skyd.imomoe.model.interfaces.IRankListModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class RankListViewModel : ViewModel() {
-    private val rankModel: IRankListModel by lazy {
-        DataSourceManager.create(IRankListModel::class.java) ?: RankListModel()
-    }
+@HiltViewModel
+class RankListViewModel @Inject constructor(
+    private val rankModel: IRankListModel
+) : ViewModel() {
     var mldRankData: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreRankData: MutableLiveData<List<Any>?> = MutableLiveData()
     private var pageNumberBean: PageNumberBean? = null

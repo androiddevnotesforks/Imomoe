@@ -46,6 +46,7 @@ import com.skyd.imomoe.view.component.player.DetailPlayerActivity
 import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,6 +54,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import kotlin.math.abs
 
 
+@AndroidEntryPoint
 class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBinding>() {
     private val viewModel: PlayViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
@@ -293,45 +295,59 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     }
 
     override fun onVideoSizeChanged() {
+        resizePlayer()
+    }
+
+    override fun onDanmakuStart() {
+
+        resizePlayer()
+    }
+
+    /**
+     * 根据视频和是否显示弹幕调整播放器高度
+     */
+    private fun resizePlayer() {
         mBinding.apply {
-            val tag = avpPlayActivity.tag
-            val state = avpPlayActivity.currentPlayer.currentState
-            if (avpPlayActivity.isIfCurrentIsFullscreen ||
-                state == GSYVideoView.CURRENT_STATE_ERROR ||
-                state == GSYVideoView.CURRENT_STATE_AUTO_COMPLETE ||
-                state == GSYVideoView.CURRENT_STATE_PREPAREING ||
-                (tag is String && tag == "sw600dp-land")
-            ) {
-                return
-            }
-            val videoHeight: Int = avpPlayActivity.currentVideoHeight
-            val videoWidth: Int = avpPlayActivity.currentVideoWidth
-            if (videoHeight <= 10 || videoWidth <= 10) return
-            val ratio = videoWidth.toDouble() / videoHeight
-            if (ratio < 0.001) return
-            avpPlayActivity.measure(
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            )
-            val playerWidth: Int = avpPlayActivity.width
-            if (abs(playerWidth.toDouble() / avpPlayActivity.height - ratio) < 0.001) return
-            var playerHeight = playerWidth / ratio
-            avpPlayActivity.currentPlayer.let {
-                if (it is DanmakuVideoPlayer) playerHeight += it.getDanmakuControllerHeight()
-            }
-            val parentHeight = Util.getScreenHeight(true)
-            if (playerHeight > parentHeight * 0.75) playerHeight = parentHeight * 0.75
-            val layoutParams: ViewGroup.LayoutParams = avpPlayActivity.layoutParams
-            avpPlayActivity.requestLayout()
-            ValueAnimator.ofInt(layoutParams.height, playerHeight.toInt())
-                .setDuration(200)
-                .apply {
-                    addUpdateListener { animation ->
-                        layoutParams.height = animation.animatedValue as Int
-                        avpPlayActivity.requestLayout()
-                    }
-                    start()
+            avpPlayActivity.currentPlayer.post {
+                val tag = avpPlayActivity.tag
+                val state = avpPlayActivity.currentPlayer.currentState
+                if (avpPlayActivity.isIfCurrentIsFullscreen ||
+                    state == GSYVideoView.CURRENT_STATE_ERROR ||
+                    state == GSYVideoView.CURRENT_STATE_AUTO_COMPLETE ||
+                    state == GSYVideoView.CURRENT_STATE_PREPAREING ||
+                    (tag is String && tag == "sw600dp-land")
+                ) {
+                    return@post
                 }
+                val videoHeight: Int = avpPlayActivity.currentVideoHeight
+                val videoWidth: Int = avpPlayActivity.currentVideoWidth
+                if (videoHeight <= 10 || videoWidth <= 10) return@post
+                val ratio = videoWidth.toDouble() / videoHeight
+                if (ratio < 0.001) return@post
+                avpPlayActivity.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                )
+                val playerWidth: Int = avpPlayActivity.width
+                if (abs(playerWidth.toDouble() / avpPlayActivity.height - ratio) < 0.001) return@post
+                var playerHeight = playerWidth / ratio
+                avpPlayActivity.currentPlayer.let {
+                    if (it is DanmakuVideoPlayer) playerHeight += it.getDanmakuControllerHeight()
+                }
+                val parentHeight = Util.getScreenHeight(true)
+                if (playerHeight > parentHeight * 0.75) playerHeight = parentHeight * 0.75
+                val layoutParams: ViewGroup.LayoutParams = avpPlayActivity.layoutParams
+                avpPlayActivity.requestLayout()
+                ValueAnimator.ofInt(layoutParams.height, playerHeight.toInt())
+                    .setDuration(200)
+                    .apply {
+                        addUpdateListener { animation ->
+                            layoutParams.height = animation.animatedValue as Int
+                            avpPlayActivity.requestLayout()
+                        }
+                        start()
+                    }
+            }
         }
     }
 

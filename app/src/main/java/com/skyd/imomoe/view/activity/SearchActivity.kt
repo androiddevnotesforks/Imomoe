@@ -19,7 +19,9 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistory1Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistoryHeader1Proxy
 import com.skyd.imomoe.viewmodel.SearchViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     private lateinit var mLayoutCircleProgressTextTip1: RelativeLayout
     private lateinit var tvCircleProgressTextTip1: TextView

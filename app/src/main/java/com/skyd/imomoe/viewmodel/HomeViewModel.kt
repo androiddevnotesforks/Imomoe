@@ -7,16 +7,16 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.ext.request
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.HomeModel
 import com.skyd.imomoe.model.interfaces.IHomeModel
 import com.skyd.imomoe.util.showToast
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class HomeViewModel : ViewModel() {
-    private val homeModel: IHomeModel by lazy {
-        DataSourceManager.create(IHomeModel::class.java) ?: HomeModel()
-    }
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val homeModel: IHomeModel
+) : ViewModel() {
     var mldAllTabList: MutableLiveData<List<TabBean>?> = MutableLiveData()
     var currentTab = -1
 

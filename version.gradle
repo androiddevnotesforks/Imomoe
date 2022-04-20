@@ -44,6 +44,11 @@ lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.
 lifecycle.lifecycle_extensions = 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 deps.lifecycle = lifecycle
 
+def hilt = [:]
+hilt.hilt_android = "com.google.dagger:hilt-android:2.41"
+hilt.hilt_android_compiler = "com.google.dagger:hilt-android-compiler:2.41"
+deps.hilt = hilt
+
 def okhttp3 = [:]
 okhttp3.okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 okhttp3.okhttp_dnsoverhttps = "com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0"

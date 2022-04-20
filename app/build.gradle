@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
     id 'AndResGuard'
     id 'com.efs.sdk.plugin'
 }
@@ -152,6 +153,8 @@ dependencies {
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
     implementation deps.lifecycle.lifecycle_extensions
+    implementation deps.hilt.hilt_android
+    kapt deps.hilt.hilt_android_compiler
     implementation deps.okhttp3.okhttp
     implementation deps.shuyu.GSYVideoPlayer
     implementation deps.retrofit2.retrofit
@@ -268,9 +271,10 @@ task deleteOldJar(type: Delete) {
 }
 
 // 2.使用d8将class打包为dex文件
+// 要保证已经将.../Android/Sdk/build-tools/xx.x.x加入环境变量
 task makeDex(type: Exec) {
     project.file('build/dex/').mkdirs()
-    commandLine 'cmd',"/c","d8 --output build/dex/ build/tmp/kotlin-classes/GithubDebug/com/skyd/imomoe/model/impls/custom/*.class"
+    commandLine 'cmd', "/c", "d8 --output build/dex/ build/tmp/kotlin-classes/GithubDebug/com/skyd/imomoe/model/impls/custom/*.class"
 }
 
 // 3.将dex和CustomInfo文件一起打入jar

@@ -16,8 +16,10 @@ import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.ClassifyTab1Proxy
 import com.skyd.imomoe.view.listener.dsl.setOnItemSelectedListener
 import com.skyd.imomoe.viewmodel.ClassifyViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private val viewModel: ClassifyViewModel by viewModels()
     private var lastRefreshTime: Long = System.currentTimeMillis() - 500
