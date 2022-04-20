@@ -14,6 +14,7 @@ import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
 import com.skyd.imomoe.util.Util.setFullScreen
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.toMD5
+import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
@@ -22,8 +23,15 @@ import java.io.File
 
 
 class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
+    companion object {
+        const val URL = "url"
+        const val ANIME_TITLE = "animeTitle"
+        const val EPISODE_TITLE = "episodeTitle"
+    }
+
     private var url = ""
-    private var title = ""
+    private var animeTitle = ""
+    private var episodeTitle = ""
     private lateinit var orientationUtils: OrientationUtils
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +39,9 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
 
         setFullScreen(window)
 
-        url = intent.getStringExtra("url").orEmpty()
-        title = intent.getStringExtra("title").orEmpty()
+        url = intent.getStringExtra(URL).orEmpty()
+        animeTitle = intent.getStringExtra(ANIME_TITLE).orEmpty()
+        episodeTitle = intent.getStringExtra(EPISODE_TITLE).orEmpty()
 
         init()
 
@@ -50,7 +59,7 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val title = getAppDataBase().animeDownloadDao()
                     .getAnimeDownloadTitleByMd5(File(url.replaceFirst("file://", "")).toMD5() ?: "")
-                    ?: this@SimplePlayActivity.title
+                    ?: this@SimplePlayActivity.episodeTitle
                 runOnUiThread {
                     avpSimplePlayActivity.titleTextView?.text = title
                     avpSimplePlayActivity.fullWindowPlayer?.titleTextView?.text = title
@@ -89,7 +98,8 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
                     this@run.currentPlayer.seekRatio = this@run.currentPlayer.duration / 90_000f
                 }
             })
-            setUp(url, false, title)
+            this.animeTitle = this@SimplePlayActivity.animeTitle
+            setUp(url, false, episodeTitle)
         }
     }
 

@@ -2,8 +2,10 @@ package com.skyd.imomoe.model.impls
 
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
-import com.skyd.imomoe.config.Const.ActionUrl.Companion.ANIME_BROWSER
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
+import com.skyd.imomoe.route.Route
+import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.processor.OpenBrowserProcessor
 
 class AnimeShowModel : IAnimeShowModel {
     override suspend fun getAnimeShowData(
@@ -15,7 +17,12 @@ class AnimeShowModel : IAnimeShowModel {
                     "",
                     arrayListOf(
                         AnimeCover6Bean(
-                            ANIME_BROWSER + "https://github.com/SkyD666/Imomoe/tree/master/doc/customdatasource/README.md",
+                            OpenBrowserProcessor.route.buildRouteUri {
+                                appendQueryParameter(
+                                    "url",
+                                    "https://github.com/SkyD666/Imomoe/tree/master/doc/customdatasource/README.md"
+                                )
+                            }.toString(),
                             "请在设置页面选择自定义数据源ads包,以便使用APP",
                             ImageBean("", "", ""),
                             "具体使用方法请点击此处",

@@ -9,13 +9,13 @@ typealias DataSource1Bean = DataSourceFileBean
 typealias DataSource2Bean = DataSourceRepositoryBean
 
 class DataSourceFileBean(
-    override var actionUrl: String,
+    override var route: String,
     var file: File,
     var selected: Boolean = false
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is DataSourceFileBean -> false
-        actionUrl == o.actionUrl && file == o.file && selected == o.selected -> true
+        route == o.route && file == o.file && selected == o.selected -> true
         else -> false
     }
 }
@@ -26,7 +26,7 @@ class DataSourceRepositoryBeanWrapper(
 ) : Serializable
 
 class DataSourceRepositoryBean(
-    override var actionUrl: String,
+    override var route: String,
     @SerializedName("name")
     val name: String?,
     @SerializedName("interfaceVersion")
@@ -48,7 +48,7 @@ class DataSourceRepositoryBean(
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is DataSourceRepositoryBean -> false
-        actionUrl == o.actionUrl && name == o.name && interfaceVersion == o.interfaceVersion
+        route == o.route && name == o.name && interfaceVersion == o.interfaceVersion
                 && versionName == o.versionName && versionCode == o.versionCode &&
                 author == o.author && describe == o.describe && publicAt == o.publicAt &&
                 downloadUrl == o.downloadUrl && icon == o.icon -> true

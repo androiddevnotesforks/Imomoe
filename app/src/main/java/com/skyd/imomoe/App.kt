@@ -1,6 +1,5 @@
 package com.skyd.imomoe
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.efs.sdk.launch.LaunchManager
@@ -27,7 +26,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        context = this
         appContext = this
 
         initDarkMode()
@@ -55,10 +53,6 @@ class App : Application() {
     }
 
     companion object {
-        @Deprecated("use appContext instead", ReplaceWith("appContext"))
-        @SuppressLint("StaticFieldLeak")
-        lateinit var context: Context
-
         init {
             // 防止内存泄漏
             // 设置全局默认配置（优先级最低，会被其他设置覆盖）

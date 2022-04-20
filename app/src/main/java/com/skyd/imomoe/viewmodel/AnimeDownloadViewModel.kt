@@ -11,6 +11,10 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.ext.toMD5
+import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.processor.EpisodeDownloadProcessor
+import com.skyd.imomoe.route.processor.PlayDownloadProcessor
+import com.skyd.imomoe.route.processor.PlayDownloadM3U8Processor
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.deleteAnimeFromXml
@@ -48,7 +52,14 @@ class AnimeDownloadViewModel : ViewModel() {
                             }?.size
                             list.add(
                                 AnimeCover7Bean(
-                                    Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE + "/" + file.name,
+                                    EpisodeDownloadProcessor.route.buildRouteUri {
+                                        appendQueryParameter("directoryName", file.name)
+                                        appendQueryParameter(
+                                            "type",
+                                            (if (i == 0) 0 else 1).toString()
+                                        )
+                                        appendQueryParameter("animeTitle", file.name)
+                                    }.toString(),
                                     title = file.name,
                                     size = file.formatSize(),
                                     episodeCount = episodeCount.toString() + "P",
@@ -69,7 +80,7 @@ class AnimeDownloadViewModel : ViewModel() {
         })
     }
 
-    fun getAnimeCoverEpisode(directoryName: String, path: Int = 0) {
+    fun getAnimeCoverEpisode() {
         //不支持重命名文件
         request(request = {
             val animeFilePath = if (path == 0) Const.DownloadAnime.animeFilePath
@@ -127,15 +138,20 @@ class AnimeDownloadViewModel : ViewModel() {
 
                 val list: MutableList<AnimeCover7Bean> = ArrayList()
                 for (anime in animeList) {
-                    val fileName =
-                        animeFilePath + directoryName.substring(1, directoryName.length) +
-                                "/" + anime.fileName
+                    val fileName = animeFilePath + directoryName + "/" + anime.fileName
+                    var route = if (fileName.endsWith(".m3u8", true)) {
+                        PlayDownloadM3U8Processor.route
+                    } else {
+                        PlayDownloadProcessor.route
+                    }
+                    route = route.buildRouteUri {
+                        appendQueryParameter("filePath", fileName)
+                        appendQueryParameter("animeTitle", actionBarTitle)
+                        appendQueryParameter("episodeTitle", anime.title)
+                    }.toString()
                     list.add(
                         AnimeCover7Bean(
-                            (if (fileName.endsWith(".m3u8", true))
-                                Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8
-                            else Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY)
-                                    + "/" + fileName,
+                            route,
                             title = anime.title,
                             size = File(animeFilePath + directoryName + "/" + anime.fileName).formatSize(),
                             path = fileName,

@@ -22,7 +22,7 @@ class SearchViewModel : ViewModel() {
     var searchHistoryList: List<Any> = ArrayList()
     var mldSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreSearchResultList: MutableLiveData<List<Any>?> = MutableLiveData()
-    var keyWord = ""
+    var keyword = ""
     var mldSearchHistoryList: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldInsertCompleted: MutableLiveData<List<SearchHistoryBean>?> = MutableLiveData()
     var mldDeleteCompleted: MutableLiveData<SearchHistoryBean> = MutableLiveData()
@@ -31,7 +31,7 @@ class SearchViewModel : ViewModel() {
     fun getSearchData(keyWord: String, partUrl: String = "") {
         request(request = { searchModel.getSearchData(keyWord, partUrl) }, success = {
             pageNumberBean = it.second
-            this@SearchViewModel.keyWord = keyWord
+            this@SearchViewModel.keyword = keyWord
             mldSearchResultList.postValue(it.first)
         }, error = {
             mldSearchResultList.postValue(null)
@@ -40,13 +40,13 @@ class SearchViewModel : ViewModel() {
     }
 
     fun loadMoreSearchData() {
-        val partUrl = pageNumberBean?.actionUrl
+        val partUrl = pageNumberBean?.route
         if (partUrl == null) {
             appContext.getString(R.string.no_more_info).showToast()
             mldLoadMoreSearchResultList.postValue(ArrayList())
             return
         }
-        request(request = { searchModel.getSearchData(keyWord, partUrl) }, success = {
+        request(request = { searchModel.getSearchData(keyword, partUrl) }, success = {
             pageNumberBean = it.second
             mldLoadMoreSearchResultList.postValue(it.first)
         }, error = {

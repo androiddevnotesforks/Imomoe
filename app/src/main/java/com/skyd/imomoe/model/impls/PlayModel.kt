@@ -24,7 +24,7 @@ class PlayModel : IPlayModel {
         return null
     }
 
-    override suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean? {
+    override suspend fun getAnimeCoverImageBean(partUrl: String): ImageBean? {
         return null
     }
 

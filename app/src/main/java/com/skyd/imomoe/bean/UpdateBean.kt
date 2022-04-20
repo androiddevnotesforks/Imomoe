@@ -3,7 +3,7 @@ package com.skyd.imomoe.bean
 import com.google.gson.annotations.SerializedName
 
 class UpdateBean(
-    override var actionUrl: String,
+    override var route: String,
 
     @SerializedName("tag_name")
     var tagName: String,
@@ -23,7 +23,7 @@ class UpdateBean(
     ) : BaseBean {
 
     class AssetsBean(
-        override var actionUrl: String,
+        override var route: String,
 
         @SerializedName("name")
         var name: String,

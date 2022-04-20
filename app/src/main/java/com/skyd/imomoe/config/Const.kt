@@ -12,22 +12,6 @@ interface Const {
         }
     }
 
-    interface ActionUrl {
-        companion object {
-            const val ANIME_CLASSIFY = "/app/classify"      //此常量为自己定义，与服务器无关
-            const val ANIME_BROWSER = "/app/browser"      //此常量为自己定义，与服务器无关
-            const val ANIME_ANIME_DOWNLOAD_EPISODE =
-                "/app/animeDownloadEpisode"      //此常量为自己定义，转到下载的每一集
-            const val ANIME_ANIME_DOWNLOAD_PLAY = "/app/animeDownloadPlay"      //此常量为自己定义，播放这一集
-            const val ANIME_ANIME_DOWNLOAD_M3U8 = "/app/animeDownloadM3U8"      //此常量为自己定义，m3u8格式
-            const val ANIME_LAUNCH_ACTIVITY = "/app/animeLaunchActivity"      //此常量为自己定义，启动Activity
-            const val ANIME_SKIP_BY_WEBSITE = "/app/skipByWebsite"      //此常量为自己定义，根据网址跳转
-
-            // 此常量为自己定义，显示通知。要求传入的参数需要经过URL编码！！！
-            const val ANIME_NOTICE = "/app/notice"
-        }
-    }
-
     interface ShortCuts {
         companion object {
             const val ID_FAVORITE = "favorite"

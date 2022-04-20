@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover12Bean
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover12ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
 class AnimeCover12Proxy : VarietyAdapter.Proxy<AnimeCover12Bean, AnimeCover12ViewHolder>() {
@@ -28,14 +28,10 @@ class AnimeCover12Proxy : VarietyAdapter.Proxy<AnimeCover12Bean, AnimeCover12Vie
         holder.tvAnimeCover12Title.text = data.title
         holder.tvAnimeCover12Episode.text = data.episodeClickable.title
         holder.itemView.setOnClickListener {
-            activity?.also {
-                if (data.episodeClickable.actionUrl == data.actionUrl)
-                    Util.process(it, data.episodeClickable.actionUrl)
-                else Util.process(it, data.episodeClickable.actionUrl + data.actionUrl)
-            }
+            data.episodeClickable.route.route(activity)
         }
         holder.tvAnimeCover12Title.setOnClickListener {
-            activity?.also { Util.process(it, data.actionUrl) }
+            activity?.also { data.route.route(activity) }
         }
     }
 }

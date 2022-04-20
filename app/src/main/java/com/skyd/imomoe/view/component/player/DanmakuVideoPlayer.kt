@@ -137,6 +137,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                     return@setOnEditorActionListener false
                 }
                 v.text = ""
+                v.hideKeyboard()
                 sendDanmaku(text)
             }
             true
@@ -391,7 +392,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         success = true
                     }
                 }
-                if (success && dataList.isNotEmpty()) {
+                if (success) {
                     withContext(Dispatchers.Main) {
                         mDanmakuPlayer.updateData(dataList)
                         mDanmakuView.post {

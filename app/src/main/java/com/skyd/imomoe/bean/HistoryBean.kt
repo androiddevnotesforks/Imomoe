@@ -10,7 +10,7 @@ import java.io.Serializable
 @Entity(tableName = Const.Database.AppDataBase.HISTORY_TABLE_NAME)
 class HistoryBean(      //下面的url都是partUrl
     @ColumnInfo(name = "actionUrl")
-    override var actionUrl: String,
+    override var route: String,
     @PrimaryKey
     @ColumnInfo(name = "animeUrl")
     var animeUrl: String,
@@ -27,7 +27,7 @@ class HistoryBean(      //下面的url都是partUrl
 ) : BaseBean, Serializable, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is HistoryBean -> false
-        actionUrl == o.actionUrl && animeUrl == o.animeUrl && animeTitle == o.animeTitle &&
+        route == o.route && animeUrl == o.animeUrl && animeTitle == o.animeTitle &&
                 time == o.time && cover == o.cover && lastEpisodeUrl == o.lastEpisodeUrl &&
                 lastEpisode == o.lastEpisode -> true
         else -> false

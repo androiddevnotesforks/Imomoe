@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover7Bean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.route.Router.route
+import com.skyd.imomoe.route.processor.EpisodeDownloadProcessor
 import com.skyd.imomoe.util.AnimeCover7ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
 class AnimeCover7Proxy(
@@ -40,7 +40,7 @@ class AnimeCover7Proxy(
         } else {
             holder.tvAnimeCover7OldPath.gone()
         }
-        if (data.actionUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE)) {
+        if (data.route.startsWith(EpisodeDownloadProcessor.route, ignoreCase = true)) {
             holder.tvAnimeCover7Episodes.text = data.episodeCount
             holder.tvAnimeCover7Episodes.visible()
         } else {
@@ -50,7 +50,7 @@ class AnimeCover7Proxy(
             onLongClickListener?.invoke(holder, data, index) ?: false
         }
         holder.itemView.setOnClickListener {
-            Util.process(activity ?: return@setOnClickListener, "${data.actionUrl}/${data.pathType}")
+            data.route.route(activity ?: return@setOnClickListener)
         }
     }
 }

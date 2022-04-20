@@ -83,7 +83,7 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 } else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
                     if (viewModel.mldAnimeCoverList.value == null || force) {
-                        viewModel.getAnimeCoverEpisode(viewModel.directoryName, viewModel.path)
+                        viewModel.getAnimeCoverEpisode()
                     }
                 }
             }

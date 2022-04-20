@@ -13,8 +13,7 @@ import com.google.gson.Gson
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeCover10Bean
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RouteProcessor
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.Util.getWeekday
 import com.skyd.imomoe.util.showToast
 import java.util.*
@@ -29,9 +28,9 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == VIEW_CLICK_ACTION) {
             val item = Gson().fromJson(intent.getStringExtra(ITEM), AnimeCover10Bean::class.java)
-            if (item.episodeClickable?.actionUrl.equals(item.actionUrl))
-                startPlayActivity(context, item.episodeClickable?.actionUrl)
-            else startPlayActivity(context, item.episodeClickable?.actionUrl + item.actionUrl)
+            if (item.episodeClickable?.route.equals(item.route))
+                startPlayActivity(context, item.episodeClickable?.route)
+            else startPlayActivity(context, item.episodeClickable?.route + item.route)
         } else if (intent.action == REFRESH_ACTION) {
             val mgr: AppWidgetManager = AppWidgetManager.getInstance(context)
             val cn = ComponentName(context, EverydayAnimeWidgetProvider::class.java)
@@ -111,7 +110,7 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
 
     private fun startPlayActivity(context: Context, actionUrl: String?) {
         actionUrl ?: return
-        (DataSourceManager.getRouterProcessor() ?: RouteProcessor()).process(context, actionUrl)
+        actionUrl.route(context)
     }
 
     companion object {

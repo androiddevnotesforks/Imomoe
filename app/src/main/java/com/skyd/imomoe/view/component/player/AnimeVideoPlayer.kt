@@ -1134,7 +1134,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     class Speed1Bean(
-        override var actionUrl: String,
+        override var route: String,
         var title: String
     ) : BaseBean, Serializable
 

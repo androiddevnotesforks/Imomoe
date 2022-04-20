@@ -17,7 +17,9 @@ import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.Router.route
+import com.skyd.imomoe.route.processor.PlayActivityProcessor
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
@@ -49,12 +51,12 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                                 val url = v.tag
                                 if (url is String) {
                                     val const = DataSourceManager.getConst()
-                                    if (const != null && url.startsWith(const.actionUrl.ANIME_PLAY()))
-                                        Util.process(
-                                            this@AnimeDetailActivity,
-                                            url + viewModel.partUrl, url
-                                        )
-                                    else Util.process(this@AnimeDetailActivity, url, url)
+                                    if (const != null) {
+                                        PlayActivityProcessor.route.buildRouteUri {
+                                            appendQueryParameter("partUrl", url)
+                                            appendQueryParameter("detailPartUrl", viewModel.partUrl)
+                                        }.route(this@AnimeDetailActivity)
+                                    }
                                 }
                             }
                             visible()
@@ -75,10 +77,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                         showEpisodeSheetDialog(data.episodeList).show()
                     },
                     onAnimeEpisodeClickListener = { _, data, _ ->
-                        val const = DataSourceManager.getConst()
-                        if (const != null && data.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
-                            Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
-                        else Util.process(this, data.actionUrl, data.actionUrl)
+                        data.route.route(this)
                     })
             )
         )
@@ -178,10 +177,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         }
         recyclerView.adapter = VarietyAdapter(
             mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, _ ->
-                val const = DataSourceManager.getConst()
-                if (const != null && data.actionUrl.startsWith(const.actionUrl.ANIME_PLAY()))
-                    Util.process(this, data.actionUrl + viewModel.partUrl, data.actionUrl)
-                else Util.process(this, data.actionUrl, data.actionUrl)
+                data.route.route(this)
                 bottomSheetDialog.dismiss()
             }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
         ).apply { this.dataList = dataList.toMutableList().sortEpisodeTitle() }

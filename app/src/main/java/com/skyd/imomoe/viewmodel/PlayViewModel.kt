@@ -23,16 +23,10 @@ class PlayViewModel : ViewModel() {
     var playBean: PlayBean? = null
     var partUrl: String = ""
     var detailPartUrl: String = ""
-        set(value) {
+        get() {
             // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
-            field = if (value.isBlank() ||
-                value == (DataSourceManager.getConst()
-                    ?: com.skyd.imomoe.model.impls.Const()).actionUrl.ANIME_DETAIL() &&
-                partUrl.isNotBlank()
-            ) {
+            return field.ifBlank {
                 Util.getDetailLinkByEpisodeLink(partUrl)
-            } else {
-                value
             }
         }
     var animeCover: ImageBean? = null
@@ -64,7 +58,7 @@ class PlayViewModel : ViewModel() {
     fun playNextEpisode(): Boolean {
         if (currentEpisodeIndex + 1 in episodesList.indices) {
             playAnotherEpisode(
-                episodesList[currentEpisodeIndex + 1].actionUrl,
+                episodesList[currentEpisodeIndex + 1].route,
                 currentEpisodeIndex + 1
             )
             return true
@@ -80,12 +74,12 @@ class PlayViewModel : ViewModel() {
                 it ?: throw RuntimeException("html play class not found")
             }
         }, success = {
-            animeEpisodeDataBean.actionUrl = it.actionUrl.ifBlank { partUrl }
+            animeEpisodeDataBean.route = it.route.ifBlank { partUrl }
             animeEpisodeDataBean.title = it.title
             animeEpisodeDataBean.videoUrl = it.videoUrl
             mldPlayAnotherEpisode.postValue(true)
         }, error = {
-            animeEpisodeDataBean.actionUrl = "animeEpisode1"
+            animeEpisodeDataBean.route = "animeEpisode1"
             animeEpisodeDataBean.title = ""
             animeEpisodeDataBean.videoUrl = ""
             mldPlayAnotherEpisode.postValue(false)
@@ -109,10 +103,12 @@ class PlayViewModel : ViewModel() {
 
     fun getPlayData() {
         if (mldFavorite.value == null) queryFavorite()
-        if (animeCover == null) getAnimeCoverImageBean()
-        request(request = { playModel.getPlayData(partUrl, animeEpisodeDataBean) }, success = {
-            if (animeEpisodeDataBean.actionUrl.isBlank()) {
-                animeEpisodeDataBean.actionUrl = partUrl
+        request(request = {
+            if (animeCover == null) animeCover = playModel.getAnimeCoverImageBean(partUrl)
+            playModel.getPlayData(partUrl, animeEpisodeDataBean)
+        }, success = {
+            if (animeEpisodeDataBean.route.isBlank()) {
+                animeEpisodeDataBean.route = partUrl
             }
             episodesList.clear()
             episodesList.addAll(it.second)
@@ -144,7 +140,7 @@ class PlayViewModel : ViewModel() {
         request(request = {
             animeCover.let {
                 if (it == null) {
-                    playModel.getAnimeCoverImageBean(detailPartUrl).run {
+                    playModel.getAnimeCoverImageBean(partUrl).run {
                         val cover = this ?: ImageBean("", "", "")
                         HistoryBean(
                             "", detailPartUrl,
@@ -173,7 +169,7 @@ class PlayViewModel : ViewModel() {
 
     fun getAnimeCoverImageBean() {
         request(request = {
-            playModel.getAnimeCoverImageBean(detailPartUrl)
+            playModel.getAnimeCoverImageBean(partUrl)
         }, success = {
             it ?: return@request
             val cover = animeCover

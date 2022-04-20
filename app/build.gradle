@@ -259,26 +259,48 @@ andResGuard {
     // digestalg = "SHA-256"
 }
 
-//class转jar
-//删除之前打出的包，默认将包打在'build/libs/'下
+/**
+ * 下面是生成数据源Jar的过程。保证生成了数据源的class文件后，再直接运行makeAds任务即可
+ */
+// 1.删除之前打出的包，默认将包打在'build/libs/'下
 task deleteOldJar(type: Delete) {
     delete 'build/libs/CustomDataSource.jar'
 }
-//自定义数据源打包为普通的jar包操作
+
+// 2.使用d8将class打包为dex文件
+task makeDex(type: Exec) {
+    project.file('build/dex/').mkdirs()
+    commandLine 'cmd',"/c","d8 --output build/dex/ build/tmp/kotlin-classes/GithubDebug/com/skyd/imomoe/model/impls/custom/*.class"
+}
+
+// 3.将dex和CustomInfo文件一起打入jar
 task makeJar(type: Jar) {
     //要打成的包的名字
     baseName 'CustomDataSource'
     //选取要打包的文件夹
     from(
-            'build\\tmp\\kotlin-classes\\GithubDebug\\com\\skyd\\imomoe\\model\\impls\\custom',
-            'src\\main\\java\\com\\skyd\\imomoe\\model\\impls\\custom\\CustomInfo'
+            'build/dex/',
+            'src/main/java/com/skyd/imomoe/model/impls/custom/CustomInfo'
     )
-    //需要跟实际类的包名路径一样
-    into('com/skyd/imomoe/model/impls/custom')
-    //排除在外的文件
+    // dex文件和CustomInfo文件都存放在根目录即可
+    into('/')
+    // 排除在外的文件
     exclude('BuildConfig.class', 'R.class', 'MainActivity.class', 'TestClass.class')
-    //排除以R$开头的文件
+    // 排除以R$开头的文件
     exclude { it.name.startsWith('R$') }
 }
-//打包~
-makeJar.dependsOn(deleteOldJar)
+
+// 4.命名为ads
+task makeAds(type: Sync) {
+    from('build/libs/')
+    into('build/libs/')
+    include '*.jar'
+    rename { String filename ->
+        filename.replace(".jar", ".ads")
+    }
+}
+
+// 打包~
+makeDex.dependsOn(deleteOldJar)
+makeJar.dependsOn(makeDex)
+makeAds.dependsOn(makeJar)

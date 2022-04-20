@@ -4,7 +4,7 @@ import com.arialyy.aria.core.download.DownloadEntity
 import com.skyd.imomoe.view.adapter.variety.Diff
 
 class AnimeDownload1Bean(
-    override var actionUrl: String,
+    override var route: String,
     var title: String,
     var episode: String,
     var url: String,
@@ -24,7 +24,7 @@ class AnimeDownload1Bean(
     override fun contentSameAs(o: Any?): Boolean {
         return when {
             o !is AnimeDownload1Bean -> false
-            actionUrl == o.actionUrl && title == o.title && episode == o.episode &&
+            route == o.route && title == o.title && episode == o.episode &&
                     url == o.url && id == o.id &&
                     percent == o.percent &&
                     peerNum == o.peerNum &&
@@ -54,7 +54,7 @@ class AnimeDownload1Bean(
     }
 
     override fun hashCode(): Int {
-        var result = actionUrl.hashCode()
+        var result = route.hashCode()
         result = 31 * result + title.hashCode()
         result = 31 * result + episode.hashCode()
         result = 31 * result + url.hashCode()
@@ -75,7 +75,7 @@ class AnimeDownload1Bean(
             entity: DownloadEntity
         ): AnimeDownload1Bean {
             return AnimeDownload1Bean(
-                actionUrl = "",
+                route = "",
                 title = title,
                 episode = episode,
                 url = entity.url,

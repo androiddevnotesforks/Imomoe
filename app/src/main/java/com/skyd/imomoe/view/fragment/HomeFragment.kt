@@ -14,10 +14,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.route.Router.route
+import com.skyd.imomoe.route.processor.SearchActivityProcessor
 import com.skyd.imomoe.view.activity.*
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
@@ -78,8 +78,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
             btnHomeFragmentSearch.setOnClickListener {
                 activity?.let {
-                    val const = DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()
-                    process(it, const.actionUrl.ANIME_SEARCH() + "")
+                    SearchActivityProcessor.route.route(it)
                     it.overridePendingTransition(R.anim.anl_push_top_in, R.anim.anl_stay)
                 }
             }
@@ -116,7 +115,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         override fun createFragment(position: Int): Fragment {
             val fragment = AnimeShowFragment()
             val bundle = Bundle()
-            bundle.putString("partUrl", viewModel.mldAllTabList.value?.get(position)?.actionUrl)
+            bundle.putString("partUrl", viewModel.mldAllTabList.value?.get(position)?.route)
             fragment.arguments = bundle
             return fragment
         }

@@ -26,10 +26,10 @@ interface IPlayModel : IBase {
     /**
      * 获取此部番剧封面
      *
-     * @param detailPartUrl 页面部分url，不为null
+     * @param partUrl 播放页面部分url，不为null
      * @return ImageBean，可为null。番剧封面
      */
-    suspend fun getAnimeCoverImageBean(detailPartUrl: String): ImageBean?
+    suspend fun getAnimeCoverImageBean(partUrl: String): ImageBean?
 
     /**
      * 获取播放页面相关数据

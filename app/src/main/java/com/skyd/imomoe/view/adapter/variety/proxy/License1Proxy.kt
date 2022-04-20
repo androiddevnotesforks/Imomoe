@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.License1Bean
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.License1ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
 class License1Proxy : VarietyAdapter.Proxy<License1Bean, License1ViewHolder>() {
@@ -26,7 +26,7 @@ class License1Proxy : VarietyAdapter.Proxy<License1Bean, License1ViewHolder>() {
         holder.tvLicense1Name.text = data.title
         holder.tvLicense1License.text = data.license
         holder.itemView.setOnClickListener {
-            activity?.also { Util.process(activity, data.actionUrl + data.url) }
+            activity?.also { data.route.route(it) }
         }
     }
 }

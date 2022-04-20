@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover4Bean
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover4ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -32,7 +32,7 @@ class AnimeCover4Proxy : VarietyAdapter.Proxy<AnimeCover4Bean, AnimeCover4ViewHo
         }
         holder.tvAnimeCover4Title.text = data.title
         holder.itemView.setOnClickListener {
-            Util.process(activity ?: return@setOnClickListener, data.actionUrl)
+            data.route.route(activity)
         }
     }
 }

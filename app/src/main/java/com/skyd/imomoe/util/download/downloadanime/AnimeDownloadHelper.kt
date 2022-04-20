@@ -66,8 +66,7 @@ object AnimeDownloadHelper {
             // 1.得到DOM解析器的工厂实例
             val builderFactory = DocumentBuilderFactory.newInstance()
             // 2.从DOM工厂里获取DOM解析器
-            val documentBuilder: DocumentBuilder
-            documentBuilder = builderFactory.newDocumentBuilder()
+            val documentBuilder: DocumentBuilder = builderFactory.newDocumentBuilder()
             // 3.解析XML文档，得到DOM树
             val docs = documentBuilder.parse(file)
             val animeList = docs.getElementsByTagName("anime")

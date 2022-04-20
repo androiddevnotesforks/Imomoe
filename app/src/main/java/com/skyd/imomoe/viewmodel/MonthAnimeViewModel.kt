@@ -32,7 +32,7 @@ class MonthAnimeViewModel : ViewModel() {
     }
 
     fun loadMoreMonthAnimeData() {
-        val partUrl = pageNumberBean?.actionUrl
+        val partUrl = pageNumberBean?.route
         if (partUrl == null) {
             mldLoadMoreMonthAnimeList.postValue(ArrayList())
             appContext.getString(R.string.no_more_info).showToast()

@@ -64,7 +64,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
                     getSheetDialog("play").show()
                 }, onAnimeEpisodeClickListener = { _, data, index ->
-                    viewModel.playAnotherEpisode(data.actionUrl, index)
+                    viewModel.playAnotherEpisode(data.route, index)
                 })
             )
         )
@@ -216,7 +216,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     mutableListOf(
                         PlayerEpisode1Proxy(onBindViewHolder = { holder, data, index, _ ->
                             holder.tvTitle.text = data.title
-                            if (data.actionUrl == viewModel.animeEpisodeDataBean.actionUrl) {
+                            if (data.route == viewModel.animeEpisodeDataBean.route) {
                                 holder.tvTitle.setTextColor(getAttrColor(R.attr.colorPrimary))
                                 (mBinding.avpPlayActivity.currentPlayer as AnimeVideoPlayer)
                                     .rvEpisode?.scrollToPosition(index)
@@ -236,7 +236,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                                         enableDismissControlViewTimer(true)
                                     }
                                 }
-                                viewModel.playAnotherEpisode(data.actionUrl, index)
+                                viewModel.playAnotherEpisode(data.route, index)
                             }
                             true
                         })
@@ -442,11 +442,11 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         @Suppress("UNCHECKED_CAST") val adapter = VarietyAdapter(
             mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, index ->
                 if (action == "play") {
-                    viewModel.playAnotherEpisode(data.actionUrl, index)
+                    viewModel.playAnotherEpisode(data.route, index)
                     bottomSheetDialog.dismiss()
                 } else if (action == "download") {
                     getString(R.string.parsing_video).showToast()
-                    viewModel.getAnimeDownloadUrl(data.actionUrl, index)
+                    viewModel.getAnimeDownloadUrl(data.route, index)
                 }
             }, width = ViewGroup.LayoutParams.MATCH_PARENT))
         ).apply { dataList = viewModel.episodesList }

@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.bean.License1Bean
 import com.skyd.imomoe.bean.LicenseHeader1Bean
-import com.skyd.imomoe.config.Const.ActionUrl
 import com.skyd.imomoe.databinding.ActivityLicenseBinding
+import com.skyd.imomoe.route.Route
+import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.processor.OpenBrowserProcessor
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.License1Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.LicenseHeader1Proxy
@@ -21,98 +23,114 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
 
         list += LicenseHeader1Bean()
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://source.android.com/",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://source.android.com/")
+            }.toString(),
             "Android Open Source Project",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/jhy/jsoup",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/jhy/jsoup")
+            }.toString(),
             "jsoup",
             "MIT License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/coil-kt/coil",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/coil-kt/coil")
+            }.toString(),
             "coil",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/CarGuo/GSYVideoPlayer",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/CarGuo/GSYVideoPlayer")
+            }.toString(),
             "GSYVideoPlayer",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/square/okhttp",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/square/okhttp")
+            }.toString(),
             "okhttp",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/square/retrofit",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/square/retrofit")
+            }.toString(),
             "retrofit",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/getActivity/XXPermissions",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/getActivity/XXPermissions")
+            }.toString(),
             "XXPermissions",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/Kotlin/kotlinx.coroutines",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/Kotlin/kotlinx.coroutines")
+            }.toString(),
             "kotlinx.coroutines",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/AriaLyy/Aria",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/AriaLyy/Aria")
+            }.toString(),
             "Aria",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/4thline/cling",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/4thline/cling")
+            }.toString(),
             "cling",
             "LGPL License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/eclipse/jetty.project",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/eclipse/jetty.project")
+            }.toString(),
             "jetty.project",
             "EPL-2.0, Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/NanoHttpd/nanohttpd",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/NanoHttpd/nanohttpd")
+            }.toString(),
             "nanohttpd",
             "BSD-3-Clause License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/greenrobot/EventBus",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/greenrobot/EventBus")
+            }.toString(),
             "EventBus",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/scwang90/SmartRefreshLayout",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/scwang90/SmartRefreshLayout")
+            }.toString(),
             "SmartRefreshLayout",
             "Apache-2.0 License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/KwaiAppTeam/AkDanmaku",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/KwaiAppTeam/AkDanmaku")
+            }.toString(),
             "AkDanmaku",
             "MIT License"
         )
         list += License1Bean(
-            ActionUrl.ANIME_BROWSER,
-            "https://github.com/thegrizzlylabs/sardine-android",
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/thegrizzlylabs/sardine-android")
+            }.toString(),
             "sardine-android",
             "Apache-2.0 License"
         )

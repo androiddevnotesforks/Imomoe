@@ -21,22 +21,14 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
-import com.skyd.imomoe.config.Api
-import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.config.UnknownActionUrl
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.showInputDialog
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.impls.RouteProcessor
-import com.skyd.imomoe.view.activity.*
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLDecoder
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -341,7 +333,7 @@ object Util {
     }
 
     fun String.getSubString(s: String, e: String): List<String> {
-        val regex = s + "(.*?)" + e
+        val regex = "$s(.*?)$e"
         val p: Pattern = Pattern.compile(regex)
         val m: Matcher = p.matcher(this)
         val list: MutableList<String> = ArrayList()
@@ -436,150 +428,5 @@ object Util {
 
     fun String.isYearMonth(): Boolean {
         return Pattern.compile("[1-9][0-9]{3}(0[1-9]|1[0-2])").matcher(this).matches()
-    }
-
-    fun process(fragment: Fragment, actionUrl: String?, toastTitle: String = "") {
-        val activity = fragment.activity
-        if (activity != null)
-            process(activity, actionUrl, toastTitle)
-    }
-
-    fun process(activity: Activity, actionUrl: String?, toastTitle: String = "") {
-        actionUrl ?: return
-        val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
-        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouteProcessor()
-        // 没有处理跳转，则进入if体
-        if (!routerProcessor.process(activity, actionUrl)) {
-            when {
-                decodeUrl.startsWith(Api.MAIN_URL) -> {     // 打开网页对应页面
-                    process(activity, actionUrl.replaceFirst(Api.MAIN_URL, ""))
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
-                    openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE) -> { //缓存的每一集列表
-                    var directoryName: String
-                    var path: Int
-                    actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_EPISODE, "")
-                        .split("/").let {
-                            directoryName = it[0] + "/" + it[1]
-                            path = it.last().toInt()
-                        }
-                    activity.startActivity(
-                        Intent(activity, AnimeDownloadActivity::class.java)
-                            .putExtra("mode", 1)
-                            .putExtra("actionBarTitle", directoryName.replace("/", ""))
-                            .putExtra("directoryName", directoryName)
-                            .putExtra("path", path)
-                    )
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY) -> { //播放缓存的每一集
-                    val filePath =
-                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_PLAY + "/", "")
-                            .replace(Regex("/\\d+$"), "")
-                    val fileName = filePath.split("/").last()
-                    val title = fileName
-                    activity.startActivity(
-                        Intent(activity, SimplePlayActivity::class.java)
-                            .putExtra("url", "file://$filePath")
-                            .putExtra("title", title)
-                    )
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_ANIME_DOWNLOAD_M3U8) -> { //播放缓存的每一集M3U8
-                    "暂不支持m3u8格式 :(".showToast(Toast.LENGTH_LONG)
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
-                    val cls = Class.forName(
-                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
-                            .split("/").last()
-                    )
-                    activity.startActivity(Intent(activity, cls))
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE) -> { // 根据网址跳转
-                    var website = decodeUrl.replaceFirst(Const.ActionUrl.ANIME_SKIP_BY_WEBSITE, "")
-                    if (website.isBlank() || website == "/") {
-                        activity.showInputDialog(
-                            hint = activity.getString(R.string.input_a_website)
-                        ) { _, _, text ->
-                            try {
-                                var url = text.toString()
-                                if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
-                                process(activity, URL(url).file)
-                            } catch (e: Exception) {
-                                appContext.getString(R.string.website_format_error).showToast()
-                                e.printStackTrace()
-                            }
-                        }
-                    } else {
-                        try {
-                            if (!website.matches(Regex("^.+://.*"))) website = "http://$website"
-                            process(activity, URL(website).file)
-                        } catch (e: Exception) {
-                            appContext.getString(R.string.website_format_error)
-                                .showToast()
-                            e.printStackTrace()
-                        }
-                    }
-                }
-                else -> {
-                    val action = UnknownActionUrl.actionMap[decodeUrl]
-                    if (action != null) {
-                        action.action()
-                    } else {
-                        // 空内容
-                        if (decodeUrl.isBlank()) return
-                        appContext.getString(
-                            R.string.unknown_route,
-                            toastTitle.ifBlank { actionUrl }
-                        ).showToast()
-                    }
-                }
-            }
-        }
-    }
-
-    fun process(context: Context, actionUrl: String?, toastTitle: String = "") {
-        actionUrl ?: return
-        val decodeUrl = URLDecoder.decode(actionUrl, "UTF-8")
-        val routerProcessor = DataSourceManager.getRouterProcessor() ?: RouteProcessor()
-        // 没有处理跳转，则进入if体
-        if (!routerProcessor.process(context, actionUrl)) {
-            when {
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_BROWSER) -> {     //打开浏览器
-                    openBrowser(actionUrl.replaceFirst(Const.ActionUrl.ANIME_BROWSER, ""))
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY) -> { // 启动Activity
-                    val cls = Class.forName(
-                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_LAUNCH_ACTIVITY, "")
-                            .split("/").last()
-                    )
-                    context.startActivity(Intent(context, cls).addFlags(FLAG_ACTIVITY_NEW_TASK))
-                }
-                decodeUrl.startsWith(Const.ActionUrl.ANIME_NOTICE) -> { // 显示通知
-                    val paramString: String =
-                        actionUrl.replaceFirst(Const.ActionUrl.ANIME_NOTICE, "")
-                            .split("?").run {
-                                if (!isEmpty()) last()
-                                else ""
-                            }
-                    if (paramString.isBlank()) {
-                        appContext.getString(R.string.notice_activity_error_param).showToast()
-                        return
-                    }
-                    context.startActivity(
-                        Intent(context, NoticeActivity::class.java)
-                            .putExtra(NoticeActivity.PARAM, paramString)
-                            .addFlags(FLAG_ACTIVITY_NEW_TASK)
-                    )
-                }
-                else -> {
-                    if (decodeUrl.isBlank()) return
-                    appContext.getString(
-                        R.string.unknown_route,
-                        toastTitle.ifBlank { actionUrl }
-                    ).showToast()
-                }
-            }
-        }
     }
 }

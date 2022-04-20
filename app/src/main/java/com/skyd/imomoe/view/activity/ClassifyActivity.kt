@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyTab1Bean
@@ -89,7 +88,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 //自动选中第一个
                 if (viewModel.currentPartUrl.isEmpty() && it[0].classifyDataList.size > 0) {
                     val firstItem = it[0].classifyDataList[0]
-                    viewModel.currentPartUrl = firstItem.actionUrl
+                    viewModel.currentPartUrl = firstItem.route
                     viewModel.classifyTabTitle = it[0].toString()
                     viewModel.classifyTitle = firstItem.title
                     tabSelected(viewModel.currentPartUrl)
@@ -97,7 +96,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     var found = false
                     it.forEachIndexed { index, classifyBean ->
                         classifyBean.classifyDataList.forEach { item ->
-                            if (item.actionUrl == viewModel.currentPartUrl) {
+                            if (item.route == viewModel.currentPartUrl) {
                                 mBinding.spinnerClassifyActivity.setSelection(index, true)
                                 viewModel.classifyTabTitle = classifyBean.name
                                 viewModel.classifyTitle = item.title
@@ -153,6 +152,6 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             mBinding.spinnerClassifyActivity.selectedItemPosition
         ).toString()
         viewModel.classifyTitle = data.title
-        tabSelected(data.actionUrl)
+        tabSelected(data.route)
     }
 }

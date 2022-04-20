@@ -6,12 +6,11 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover5Bean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover5ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -57,22 +56,14 @@ class AnimeCover5Proxy : VarietyAdapter.Proxy<AnimeCover5Bean, AnimeCover5ViewHo
             }
         }
         holder.itemView.setOnClickListener {
-            activity ?: return@setOnClickListener
-            if (data.episodeClickable.actionUrl == data.actionUrl)
-                Util.process(activity, data.episodeClickable.actionUrl)
-            else Util.process(activity, data.episodeClickable.actionUrl + data.actionUrl)
+            data.episodeClickable.route.route(activity)
         }
         holder.tvAnimeCover5Area.setOnClickListener {
-            activity ?: return@setOnClickListener
-            val actionUrl = data.area.actionUrl.run {
-                if (endsWith("/")) "${this}${data.area.title}"
-                else "${this}/${data.area.title}"
-            }
-            Util.process(activity, Const.ActionUrl.ANIME_CLASSIFY + actionUrl)
+            data.area.route.route(activity)
         }
         holder.tvAnimeCover5Title.setOnClickListener {
             activity ?: return@setOnClickListener
-            Util.process(activity, data.actionUrl)
+            data.route.route(activity)
         }
     }
 }

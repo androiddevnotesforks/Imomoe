@@ -28,7 +28,7 @@
 
 ### 一 使用已有的自定义数据源
 
-### **>>已有的ads包可从[此处](https://github.com/SkyD666/Imomoe/releases)找到，请下载相应版本的ads包<<**
+### **>>已有的ads包可从[此处](https://github.com/SkyD666/DataSourceRepository)找到，请下载相应版本的ads包<<**
 
 #### 1.将ads包放入手机
 
@@ -91,7 +91,7 @@
 - ISearchModel
 - IRankListModel
 - IEverydayAnimeWidgetModel
-- IRouteProcessor
+- IRouter
 - IUtil
 - IConst
 
@@ -121,23 +121,19 @@
 | ---------------- | ------------------------------------------------------------ |
 | interfaceVersion | 此数据源实现接口的版本号。必须与APP内接口的一致，APP才能应用。 |
 
-每一行记录一条信息，使用“=”将名称与值分隔开，例如：interfaceVersion=202202121320
+每一行记录一条信息，使用“=”将名称与值分隔开，例如：interfaceVersion=202204191624
 
-#### 5.将实现类打包为普通的jar文件
+#### 5.将实现类生成class文件
 
-#### 6.生成含dex的jar文件
+只需rebuild以下工程即可（保证实现类生成了class文件即可）
 
-通过普通的jar文件生成含dex的jar文件，参考指令：dx --dex --output=G:\CustomDataSource.jar E:\Android\Imomoe\app\build\libs\CustomDataSource.jar
+#### 6.生成ads文件
 
-#### 7.将jar包后缀名改为ads
-
-例如CustomDataSource.jar改名为CustomDataSource.ads
+**执行**app\build.gradle文件内的**makeAds**任务，执行成功后，会在**app\build\libs目录下生成ads文件**
 
 ## 例子
 
-详细代码见下方链接内容，**[点击此处下载相应版本的ads包](https://github.com/SkyD666/Imomoe/releases)**。注：此ads包可直接导入（步骤6）供APP使用。**请自行在此仓库检查ads包更新**。
-
-**[示例1 (版本: 1.0.3)](sample1)       [示例2 (版本: 1.0.2)](sample1)**
+详细代码见下方链接内容，**[点击此处下载相应版本的ads包](https://github.com/SkyD666/Imomoe/releases)**或**[数据源仓库](https://github.com/SkyD666/DataSourceRepository)**。注：此ads包可直接导入（步骤6）供APP使用。**请自行在此仓库检查ads包更新**。
 
 ## 其他
 
@@ -152,6 +148,7 @@ com.skyd.imomoe.util.Util
 com.skyd.imomoe.util.ToastKt
 com.skyd.imomoe.bean.**
 com.skyd.imomoe.config.**
+com.skyd.imomoe.route.**
 org.jsoup.**
 org.greenrobot.eventbus.**
 kotlin.**

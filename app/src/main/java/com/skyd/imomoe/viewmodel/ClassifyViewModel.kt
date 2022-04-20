@@ -60,7 +60,7 @@ class ClassifyViewModel : ViewModel() {
     fun loadMoreClassifyData() {
         if (isRequesting) return
         isRequesting = true
-        val partUrl = pageNumberBean?.actionUrl
+        val partUrl = pageNumberBean?.route
         if (partUrl == null) {
             mldLoadMoreClassifyList.postValue(ArrayList())
             appContext.getString(R.string.no_more_info).showToast()

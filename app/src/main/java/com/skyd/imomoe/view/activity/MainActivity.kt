@@ -8,15 +8,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.navigation.NavigationBarView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.config.Route
+import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.databinding.ActivityMainBinding
 import com.skyd.imomoe.ext.fitsSystemWindows2
 import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
+import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
-import com.skyd.imomoe.util.Util.process
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
@@ -107,17 +107,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         doIntent(intent)
     }
 
+    // TODO
     private fun doIntent(intent: Intent?) {
         val uri: Uri = intent?.data ?: return
         runCatching {
-            val host: String = uri.host.orEmpty()
-            val scheme: String = uri.scheme.orEmpty()
-            if (scheme == Route.SCHEME) {
-                if (host == Route.ROUTE_OPEN_APP.host) {
-                    val url: String = uri.getQueryParameter("pageUrl").orEmpty()
-                    process(this, url)
-                }
-            }
+
         }.onFailure {
             logE(it.message.toString())
             it.message?.showToast()

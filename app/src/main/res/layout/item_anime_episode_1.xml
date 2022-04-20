@@ -8,7 +8,7 @@
         android:id="@+id/tv_anime_episode_1"
         style="@style/TextAppearance.Material3.TitleMedium"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:paddingHorizontal="12dp"
         android:paddingVertical="8.2dp"

@@ -11,7 +11,7 @@ typealias SearchHistory1Bean = SearchHistoryBean
 @Entity(tableName = Const.Database.AppDataBase.SEARCH_HISTORY_TABLE_NAME)
 class SearchHistoryBean(
     @ColumnInfo(name = "actionUrl")
-    override var actionUrl: String,
+    override var route: String,
     @PrimaryKey
     @ColumnInfo(name = "id")
     var timeStamp: Long,        //时间戳作为主键
@@ -27,12 +27,12 @@ class SearchHistoryBean(
 
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is SearchHistoryBean -> false
-        actionUrl == o.actionUrl && timeStamp == o.timeStamp && title == o.title -> true
+        route == o.route && timeStamp == o.timeStamp && title == o.title -> true
         else -> false
     }
 
     override fun hashCode(): Int {
-        var result = actionUrl.hashCode()
+        var result = route.hashCode()
         result = 31 * result + timeStamp.hashCode()
         result = 31 * result + title.hashCode()
         return result

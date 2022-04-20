@@ -9,12 +9,10 @@ import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.editor2
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.string
-//import com.skyd.imomoe.model.impls.custom.TestClass
 import com.skyd.imomoe.model.interfaces.IConst
-import com.skyd.imomoe.model.interfaces.IRouteProcessor
+import com.skyd.imomoe.model.interfaces.IRouter
 import com.skyd.imomoe.model.interfaces.IUtil
 import com.skyd.imomoe.model.interfaces.interfaceVersion
-import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import dalvik.system.DexClassLoader
@@ -59,7 +57,7 @@ object DataSourceManager {
                 val map: HashMap<String, String> = HashMap()
                 runCatching {
                     val jar = JarFile(getJarPath())
-                    jar.getInputStream(jar.getEntry("com/skyd/imomoe/model/impls/custom/CustomInfo"))
+                    jar.getInputStream(jar.getEntry("CustomInfo"))
                         .string().split("\n").forEach {
                             it.split("=").let { kv ->
                                 if (kv.size == 2) map[kv[0].trim()] = kv[1].trim()
@@ -96,12 +94,12 @@ object DataSourceManager {
         }
     }
 
-    fun getRouterProcessor(): IRouteProcessor? {
-        singletonCache[IRouteProcessor::class.java].let {
-            if (it != null && it is IRouteProcessor) return it
+    fun getRouter(): IRouter? {
+        singletonCache[IRouter::class.java].let {
+            if (it != null && it is IRouter) return it
         }
-        return create(IRouteProcessor::class.java).apply {
-            if (this != null) singletonCache.put(IRouteProcessor::class.java, this)
+        return create(IRouter::class.java).apply {
+            if (this != null) singletonCache.put(IRouter::class.java, this)
         }
     }
 
@@ -128,7 +126,7 @@ object DataSourceManager {
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
         if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
-        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !BuildConfig.DEBUG) {
+        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion")/* && !BuildConfig.DEBUG*/) {
             if (!showInterfaceVersionTip)
                 appContext.getString(R.string.data_source_interface_version_not_match)
                     .showToast(Toast.LENGTH_LONG)

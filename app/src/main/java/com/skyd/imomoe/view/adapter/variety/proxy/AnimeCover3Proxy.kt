@@ -7,12 +7,11 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover3Bean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover3ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -52,22 +51,14 @@ class AnimeCover3Proxy : VarietyAdapter.Proxy<AnimeCover3Bean, AnimeCover3ViewHo
                 ) as CardView
                 cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = type.title
                 cardView.setOnClickListener {
-                    if (type.actionUrl.isBlank()) return@setOnClickListener
-                    //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                    val actionUrl = type.actionUrl.run {
-                        if (endsWith("/")) "${this}${type.title}"
-                        else "${this}/${type.title}"
-                    }
-                    Util.process(
-                        activity,
-                        Const.ActionUrl.ANIME_CLASSIFY + actionUrl
-                    )
+                    if (type.route.isBlank()) return@setOnClickListener
+                    type.route.route(activity)
                 }
                 holder.flAnimeCover3Type.addView(cardView)
             }
         }
         holder.itemView.setOnClickListener {
-            if (activity != null) Util.process(activity, data.actionUrl)
+            data.route.route(activity)
         }
     }
 }

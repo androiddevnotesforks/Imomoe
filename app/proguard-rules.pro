@@ -115,6 +115,7 @@ public static final int *;
 -keep class com.skyd.imomoe.util.Util { *; }
 -keep class com.skyd.imomoe.bean.** { *; }
 -keep class com.skyd.imomoe.config.** { *; }
+-keep class com.skyd.imomoe.route.** { *; }
 -keep class com.skyd.imomoe.model.util.** { *; }
 -keep class com.skyd.imomoe.util.html.source.** { *; }
 -keep class com.skyd.imomoe.util.eventbus.** { *; }

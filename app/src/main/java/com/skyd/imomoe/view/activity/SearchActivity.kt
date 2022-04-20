@@ -12,6 +12,7 @@ import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.ext.fixKeyboardFitsSystemWindows
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.hideKeyboard
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -38,7 +39,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         super.onCreate(savedInstanceState)
 
         val pageNumber = intent.getStringExtra("pageNumber").orEmpty()
-        viewModel.keyWord = intent.getStringExtra("keyWord").orEmpty()
+        viewModel.keyword = intent.getStringExtra("keyword").orEmpty()
 
         mBinding.run {
             srlSearchActivity.setEnableRefresh(false)
@@ -61,6 +62,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                         if (System.currentTimeMillis() - lastRefreshTime > 500) {
                             lastRefreshTime = System.currentTimeMillis()
                             search(query)
+                            svSearchActivity.hideKeyboard()
                             true
                         } else {
                             false
@@ -86,7 +88,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
                 if (it != null) {
                     mBinding.tvSearchActivityTip.text = getString(
-                        R.string.search_activity_tip, viewModel.keyWord, it.size
+                        R.string.search_activity_tip, viewModel.keyword, it.size
                     )
                     adapter.dataList = it
                 }
@@ -100,7 +102,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                 if (it != null) {
                     mBinding.tvSearchActivityTip.text = getString(
                         R.string.search_activity_tip,
-                        viewModel.keyWord,
+                        viewModel.keyword,
                         adapter.dataList.size + it.size
                     )
                     adapter.dataList += it
@@ -133,10 +135,10 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             }
         }
 
-        if (viewModel.keyWord.isBlank()) {
+        if (viewModel.keyword.isBlank()) {
             if (viewModel.mldSearchHistoryList.value == null) viewModel.getSearchHistoryData()
         } else {
-            if (viewModel.mldSearchResultList.value == null) search(viewModel.keyWord, pageNumber)
+            if (viewModel.mldSearchResultList.value == null) search(viewModel.keyword, pageNumber)
         }
     }
 

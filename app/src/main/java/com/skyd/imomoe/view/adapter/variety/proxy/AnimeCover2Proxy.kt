@@ -7,8 +7,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover2Bean
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover2ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
 class AnimeCover2Proxy : VarietyAdapter.Proxy<AnimeCover2Bean, AnimeCover2ViewHolder>() {
@@ -27,7 +27,7 @@ class AnimeCover2Proxy : VarietyAdapter.Proxy<AnimeCover2Bean, AnimeCover2ViewHo
         holder.tvAnimeCover1Title.text = data.title
         holder.tvAnimeCover1Episode.gone()
         holder.itemView.setOnClickListener {
-            Util.process(activity ?: return@setOnClickListener, data.actionUrl)
+            activity?.let { data.route.route(it) }
         }
     }
 }

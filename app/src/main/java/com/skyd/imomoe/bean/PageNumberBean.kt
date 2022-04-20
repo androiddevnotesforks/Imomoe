@@ -1,7 +1,7 @@
 package com.skyd.imomoe.bean
 
 class PageNumberBean(
-    override var actionUrl: String,
+    override var route: String,
     var url: String,
     var title: String
 ) : BaseBean

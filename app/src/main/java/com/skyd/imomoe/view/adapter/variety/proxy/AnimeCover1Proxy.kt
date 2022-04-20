@@ -10,8 +10,8 @@ import com.skyd.imomoe.bean.AnimeCover1Bean
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeCover1ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -57,7 +57,7 @@ class AnimeCover1Proxy(
             holder.tvAnimeCover1Episode.text = data.episode
         }
         holder.itemView.setOnClickListener {
-            activity?.also { Util.process(it, data.actionUrl) }
+            activity?.also { data.route.route(it) }
         }
     }
 }

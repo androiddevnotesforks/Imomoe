@@ -32,7 +32,7 @@ class RankListViewModel : ViewModel() {
     }
 
     fun loadMoreRankListData() {
-        val partUrl = pageNumberBean?.actionUrl
+        val partUrl = pageNumberBean?.route
         if (partUrl == null) {
             mldLoadMoreRankData.postValue(emptyList())
             appContext.getString(R.string.no_more_info).showToast()

@@ -6,7 +6,7 @@ import com.skyd.imomoe.model.interfaces.interfaceVersion
 interface Api {
     companion object {
         val MAIN_URL
-            get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()).MAIN_URL()
+            get() = (DataSourceManager.getConst() ?: com.skyd.imomoe.model.impls.Const()).MAIN_URL
 
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/SkyD666/Imomoe/releases/latest"

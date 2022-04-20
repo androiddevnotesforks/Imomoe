@@ -78,7 +78,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
         override fun createFragment(position: Int): Fragment {
             val fragment = RankFragment()
             val bundle = Bundle()
-            bundle.putString("partUrl", viewModel.mldRankData.value?.get(position)?.actionUrl)
+            bundle.putString("partUrl", viewModel.mldRankData.value?.get(position)?.route)
             fragment.arguments = bundle
             return fragment
         }

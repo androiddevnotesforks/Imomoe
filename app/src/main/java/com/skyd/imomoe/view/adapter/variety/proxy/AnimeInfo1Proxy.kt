@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeInfo1Bean
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeInfo1ViewHolder
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
@@ -59,13 +58,8 @@ class AnimeInfo1Proxy(
             ) as CardView
             cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = type.title
             cardView.setOnClickListener {
-                if (type.actionUrl.isBlank()) return@setOnClickListener
-                //此处是”类型“，若要修改，需要注意Tab大分类是否还是”类型“
-                val actionUrl = type.actionUrl.run {
-                    if (endsWith("/")) "${this}${type.title}"
-                    else "${this}/${type.title}"
-                }
-                Util.process(activity, Const.ActionUrl.ANIME_CLASSIFY + actionUrl)
+                if (type.route.isBlank()) return@setOnClickListener
+                type.route.route(activity)
             }
             holder.flAnimeInfo1Type.addView(cardView)
         }
@@ -79,12 +73,7 @@ class AnimeInfo1Proxy(
             ) as CardView
             cardView.findViewById<TextView>(R.id.tv_anime_type_1).text = tag.title
             cardView.setOnClickListener {
-                //此处是”标签“，由于分类没有这一大项，因此传入”“串
-                val actionUrl = tag.actionUrl.run {
-                    if (endsWith("/")) "${this}${tag.title}"
-                    else "${this}/${tag.title}"
-                }
-                Util.process(activity, Const.ActionUrl.ANIME_CLASSIFY + actionUrl)
+                tag.route.route(activity)
             }
             holder.flAnimeInfo1Tag.addView(cardView)
         }

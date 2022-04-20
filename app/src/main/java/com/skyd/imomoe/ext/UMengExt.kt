@@ -3,8 +3,8 @@ package com.skyd.imomoe.ext
 import android.app.Activity
 import android.content.Context
 import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.PushHelper
-import com.skyd.imomoe.util.Util
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
 import com.umeng.message.PushAgent
@@ -32,7 +32,7 @@ fun Activity.initUM() {
         notificationClickHandler = object : UmengNotificationClickHandler() {
             override fun dealWithCustomAction(context: Context, msg: UMessage) {
                 super.dealWithCustomAction(context, msg)
-                Util.process(context, msg.custom)
+                msg.custom.route(context)
             }
         }
     }
