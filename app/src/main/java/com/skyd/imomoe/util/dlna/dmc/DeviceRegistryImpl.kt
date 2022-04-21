@@ -1,14 +1,13 @@
 package com.skyd.imomoe.util.dlna.dmc
 
 import android.os.Handler
-import org.fourthline.cling.registry.DefaultRegistryListener
-import com.skyd.imomoe.util.dlna.dmc.ILogger.DefaultLoggerImpl
 import android.os.Looper
+import com.skyd.imomoe.util.dlna.dmc.ILogger.DefaultLoggerImpl
 import org.fourthline.cling.model.meta.Device
-import org.fourthline.cling.model.meta.RemoteDevice
 import org.fourthline.cling.model.meta.LocalDevice
+import org.fourthline.cling.model.meta.RemoteDevice
+import org.fourthline.cling.registry.DefaultRegistryListener
 import org.fourthline.cling.registry.Registry
-import java.lang.Exception
 
 
 internal class DeviceRegistryImpl(private val mOnDeviceRegistryListener: OnDeviceRegistryListener) :

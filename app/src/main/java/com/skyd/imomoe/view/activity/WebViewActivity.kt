@@ -52,54 +52,50 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initSettings() {
         mBinding.wvWebViewActivity.settings.run {
-            setAllowFileAccess(true)
-            setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS)
+            allowFileAccess = true
+            layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS
             setSupportZoom(true)
-            setBuiltInZoomControls(true)
-            setUseWideViewPort(true)
+            builtInZoomControls = true
+            useWideViewPort = true
             setSupportMultipleWindows(false)
             setAppCacheEnabled(true)
-            setDomStorageEnabled(true)
-            setJavaScriptEnabled(true)
+            domStorageEnabled = true
+            javaScriptEnabled = true
             setGeolocationEnabled(true)
             setAppCacheMaxSize(Long.MAX_VALUE)
             setAppCachePath(getDir("appcache", 0).path)
-            setDatabasePath(getDir("databases", 0).path)
+            databasePath = getDir("databases", 0).path
             setGeolocationDatabasePath(
                 getDir("geolocation", 0)
                     .path
             )
-            setPluginState(WebSettings.PluginState.ON_DEMAND)
-            setLoadWithOverviewMode(true)
-            setCacheMode(WebSettings.LOAD_NO_CACHE)
-            val mUserAgent: String = getUserAgentString()
-            setUserAgentString("$mUserAgent App/AppName")
+            pluginState = WebSettings.PluginState.ON_DEMAND
+            loadWithOverviewMode = true
+            cacheMode = WebSettings.LOAD_NO_CACHE
+            val mUserAgent: String = userAgentString
+            userAgentString = "$mUserAgent App/AppName"
             syncCookie()
-            setUseWideViewPort(true)
-            setLoadWithOverviewMode(true)
+            useWideViewPort = true
+            loadWithOverviewMode = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK)
+                cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
             } else {
-                setCacheMode(WebSettings.LOAD_DEFAULT)
+                cacheMode = WebSettings.LOAD_DEFAULT
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                setDisplayZoomControls(false)
+                displayZoomControls = false
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                setLoadsImagesAutomatically(true)
-            } else {
-                setLoadsImagesAutomatically(false)
-            }
+            loadsImagesAutomatically = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW)
+                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) CookieManager.getInstance()
                 .setAcceptThirdPartyCookies(mBinding.wvWebViewActivity, true)
 
-            mBinding.wvWebViewActivity.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY)
-            mBinding.wvWebViewActivity.setHorizontalScrollBarEnabled(false)
-            mBinding.wvWebViewActivity.setHorizontalFadingEdgeEnabled(false)
-            mBinding.wvWebViewActivity.setVerticalFadingEdgeEnabled(false)
+            mBinding.wvWebViewActivity.scrollBarStyle = WebView.SCROLLBARS_INSIDE_OVERLAY
+            mBinding.wvWebViewActivity.isHorizontalScrollBarEnabled = false
+            mBinding.wvWebViewActivity.isHorizontalFadingEdgeEnabled = false
+            mBinding.wvWebViewActivity.isVerticalFadingEdgeEnabled = false
 
             mBinding.wvWebViewActivity.requestFocus()
 //            defaultTextEncodingName = "utf-8"

@@ -1,6 +1,6 @@
 package com.skyd.imomoe.model.impls
 
-import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.bean.TabBean
 import com.skyd.imomoe.model.interfaces.IEverydayAnimeModel
 
 class EverydayAnimeModel : IEverydayAnimeModel {

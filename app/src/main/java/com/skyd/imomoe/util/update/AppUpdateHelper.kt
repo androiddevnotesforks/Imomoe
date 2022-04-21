@@ -3,12 +3,11 @@ package com.skyd.imomoe.util.update
 import android.app.Activity
 import androidx.lifecycle.LiveData
 import com.skyd.imomoe.R
-import com.skyd.imomoe.model.AppUpdateModel
-import com.skyd.imomoe.util.Util.openBrowser
 import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
-import java.lang.Exception
+import com.skyd.imomoe.model.AppUpdateModel
+import com.skyd.imomoe.util.Util.openBrowser
 import java.text.SimpleDateFormat
 import java.util.*
 

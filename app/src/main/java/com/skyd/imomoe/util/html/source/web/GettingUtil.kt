@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.lang.ref.SoftReference
-import kotlin.collections.HashMap
 import kotlin.random.Random
 
 class GettingUtil private constructor() {

@@ -20,7 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RankFragment : BaseFragment<FragmentRankBinding>() {
-    private var partUrl: String = ""
     private val viewModel: RankListViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(AnimeCover3Proxy(), AnimeCover11Proxy()))
@@ -31,7 +30,9 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
 
         try {
             val arguments = arguments
-            partUrl = arguments?.getString("partUrl").orEmpty()
+            if (viewModel.partUrl.isBlank()) {
+                viewModel.partUrl = arguments?.getString("partUrl").orEmpty()
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             e.message?.showToast(Toast.LENGTH_LONG)
@@ -47,7 +48,7 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
             rvRankFragment.setHasFixedSize(true)
             rvRankFragment.adapter = adapter
-            srlRankFragment.setOnRefreshListener { viewModel.getRankListData(partUrl) }
+            srlRankFragment.setOnRefreshListener { viewModel.getRankListData() }
             srlRankFragment.setOnLoadMoreListener { viewModel.loadMoreRankListData() }
         }
 
@@ -56,7 +57,7 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             if (it == null) {
                 adapter.dataList = emptyList()
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getRankListData(partUrl)
+                    viewModel.getRankListData()
                     hideLoadFailedTip()
                 }
             } else {

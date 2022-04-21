@@ -2,7 +2,6 @@ package com.skyd.imomoe.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.skyd.imomoe.bean.FavoriteAnimeBean
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.config.Const.Database.AppDataBase.HISTORY_TABLE_NAME
 

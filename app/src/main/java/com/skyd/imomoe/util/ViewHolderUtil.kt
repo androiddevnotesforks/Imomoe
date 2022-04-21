@@ -2,13 +2,12 @@ package com.skyd.imomoe.util
 
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.skyd.imomoe.R
-import com.skyd.imomoe.view.component.bannerview.BannerView
 import com.skyd.imomoe.view.component.FlowLayout
+import com.skyd.imomoe.view.component.bannerview.BannerView
 
 //UP_TODO 2022/1/22 12:31 0 ViewHolder直接使用ViewBinding
 class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)

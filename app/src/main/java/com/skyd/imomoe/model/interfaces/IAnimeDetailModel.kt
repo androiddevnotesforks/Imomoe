@@ -1,7 +1,6 @@
 package com.skyd.imomoe.model.interfaces
 
 import com.skyd.imomoe.bean.ImageBean
-import java.util.*
 
 /**
  * 获取番剧详情数据接口

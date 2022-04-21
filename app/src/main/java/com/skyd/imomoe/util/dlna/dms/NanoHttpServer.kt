@@ -36,7 +36,7 @@ internal class NanoHttpServer(port: Int) : NanoHTTPD(port), IResourceServer {
             return newChunkedResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, null)
         }
         val type = uri.substring(min(uri.length, uri.lastIndexOf(".") + 1))
-            .toLowerCase(Locale.US)
+            .lowercase(Locale.US)
         var mimeType = MIME_TYPE[type]
         if (mimeType.isNullOrEmpty()) {
             mimeType = MIME_PLAINTEXT

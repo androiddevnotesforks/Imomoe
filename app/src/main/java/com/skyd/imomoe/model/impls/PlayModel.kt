@@ -1,7 +1,10 @@
 package com.skyd.imomoe.model.impls
 
 import android.app.Activity
-import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.bean.AnimeEpisodeDataBean
+import com.skyd.imomoe.bean.AnimeTitleBean
+import com.skyd.imomoe.bean.ImageBean
+import com.skyd.imomoe.bean.PlayBean
 import com.skyd.imomoe.model.interfaces.IPlayModel
 
 class PlayModel : IPlayModel {

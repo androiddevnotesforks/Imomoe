@@ -13,9 +13,9 @@ import com.skyd.imomoe.bean.HorizontalRecyclerView1Bean
 import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.AnimeEpisode1ViewHolder
 import com.skyd.imomoe.util.HorizontalRecyclerView1ViewHolder
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.view.adapter.decoration.HorizontalRecyclerViewDecoration
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
-import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 
 class HorizontalRecyclerView1Proxy(
     @IntRange(from = 0, to = 1) private val color: Int = THEME,

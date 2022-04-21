@@ -1,23 +1,19 @@
 package com.skyd.imomoe.util.dlna.dmc
 
-import com.skyd.imomoe.util.dlna.dmc.ICast.ICastVideo
-import org.fourthline.cling.support.model.ProtocolInfo
-import org.fourthline.cling.support.model.item.VideoItem
-import com.skyd.imomoe.util.dlna.dmc.ICast.ICastAudio
-import org.fourthline.cling.support.model.item.AudioItem
-import com.skyd.imomoe.util.dlna.dmc.ICast.ICastImage
-import org.fourthline.cling.support.model.item.ImageItem
-import org.fourthline.cling.support.model.DIDLObject
-import org.fourthline.cling.model.meta.RemoteDevice
-import org.fourthline.cling.android.AndroidUpnpService
 import android.content.ComponentName
 import android.os.IBinder
+import com.skyd.imomoe.util.dlna.dmc.ICast.*
 import okhttp3.internal.toHexString
+import org.fourthline.cling.android.AndroidUpnpService
 import org.fourthline.cling.model.meta.Action
+import org.fourthline.cling.model.meta.RemoteDevice
+import org.fourthline.cling.support.model.DIDLObject
+import org.fourthline.cling.support.model.ProtocolInfo
 import org.fourthline.cling.support.model.Res
+import org.fourthline.cling.support.model.item.AudioItem
+import org.fourthline.cling.support.model.item.ImageItem
+import org.fourthline.cling.support.model.item.VideoItem
 import org.seamless.util.MimeType
-import java.lang.Exception
-import java.lang.StringBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -240,6 +236,6 @@ object Utils {
     }
 
     private fun toHexString(hashCode: Int): String {
-        return hashCode.toHexString().toUpperCase(Locale.US)
+        return hashCode.toHexString().uppercase(Locale.US)
     }
 }

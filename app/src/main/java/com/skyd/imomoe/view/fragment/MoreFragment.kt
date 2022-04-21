@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.More1Bean
 import com.skyd.imomoe.databinding.FragmentMoreBinding
-import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.processor.JumpByUrlProcessor
 import com.skyd.imomoe.route.processor.StartActivityProcessor

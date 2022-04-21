@@ -1,11 +1,14 @@
 package com.skyd.imomoe.view.activity
 
-import android.content.*
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Process
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.skyd.imomoe.config.Const.Common.Companion.GITHUB_NEW_ISSUE_URL
+import com.skyd.imomoe.config.Const.Common.GITHUB_NEW_ISSUE_URL
+import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.util.Util.openBrowser
 import kotlin.system.exitProcess
 
@@ -31,25 +34,26 @@ class CrashActivity : AppCompatActivity() {
         val crashInfo = intent.getStringExtra(CRASH_INFO)
 
         val message = "CrashInfo:\n$crashInfo"
-        AlertDialog.Builder(this).apply {
-            setMessage(message)
-            setTitle("哦呼，樱花动漫崩溃了！快去GitHub提Issue吧")
-            setPositiveButton("复制信息打开GitHub") { _: DialogInterface, i: Int ->
-                val cm =
-                    this@CrashActivity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        showMessageDialog(
+            title = "哦呼，樱花动漫崩溃了！快去GitHub提Issue吧",
+            message = message,
+            cancelable = false,
+            positiveText = "复制信息打开GitHub",
+            onPositive = { _, _ ->
+                val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cm.setPrimaryClip(ClipData.newPlainText("exception trace stack", message))
                 openBrowser(GITHUB_NEW_ISSUE_URL)
-                this@CrashActivity.finish()
+                finish()
+                Process.killProcess(Process.myPid())
+                exitProcess(1)
+            },
+            negativeText = "退出",
+            onNegative = { _, _ ->
+                finish()
                 Process.killProcess(Process.myPid())
                 exitProcess(1)
             }
-            setNegativeButton("退出") { _: DialogInterface, i: Int ->
-                this@CrashActivity.finish()
-                Process.killProcess(Process.myPid())
-                exitProcess(1)
-            }
-            setCancelable(false)
-            setFinishOnTouchOutside(false)
-        }.show()
+        )
+        setFinishOnTouchOutside(false)
     }
 }

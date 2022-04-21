@@ -10,10 +10,10 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.ext.fixKeyboardFitsSystemWindows
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.hideKeyboard
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistory1Proxy

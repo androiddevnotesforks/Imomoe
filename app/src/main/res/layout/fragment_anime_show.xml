@@ -8,8 +8,7 @@
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_anime_show_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="blocksDescendants">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_anime_show_fragment"

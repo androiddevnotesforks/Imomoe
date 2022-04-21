@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.config.Const.DownloadAnime.Companion.animeFilePath
+import com.skyd.imomoe.config.Const.DownloadAnime.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.ANIME_EPISODE
@@ -16,7 +16,10 @@ import com.skyd.imomoe.util.showToast
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.transform.OutputKeys
@@ -27,7 +30,32 @@ import javax.xml.transform.stream.StreamResult
 
 object AnimeDownloadHelper {
 
-    fun createXml(folderName: String) {
+    fun downloadAnime(
+        activity: AppCompatActivity,
+        url: String,
+        animeTitle: String,
+        animeEpisode: String
+    ) {
+        if (activity.isFinishing) {
+            appContext.getString(R.string.do_not_finish_the_page_when_parse_download_data)
+                .showToast()
+            return
+        }
+        activity.requestManageExternalStorage {
+            onGranted {
+                activity.startService(
+                    Intent(activity, AnimeDownloadService::class.java)
+                        .putExtra(DOWNLOAD_URL_KEY, url)
+                        .putExtra(ANIME_TITLE, animeTitle)
+                        .putExtra(ANIME_EPISODE, animeEpisode)
+                        .putExtra(STORE_DIRECTORY_PATH_KEY, animeFilePath + animeTitle)
+                )
+            }
+            onDenied { activity.getString(R.string.anime_download_helper_no_storage).showToast() }
+        }
+    }
+
+    private fun createXml(folderName: String) {
         val builderFactory = DocumentBuilderFactory.newInstance()
         // 从DOM工厂里获取DOM解析器
         val documentBuilder: DocumentBuilder
@@ -220,31 +248,6 @@ object AnimeDownloadHelper {
             transformer.transform(domSource, result)
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-    }
-
-    fun downloadAnime(
-        activity: AppCompatActivity,
-        url: String,
-        animeTitle: String,
-        animeEpisode: String
-    ) {
-        if (activity.isFinishing) {
-            appContext.getString(R.string.do_not_finish_the_page_when_parse_download_data)
-                .showToast()
-            return
-        }
-        activity.requestManageExternalStorage {
-            onGranted {
-                activity.startService(
-                    Intent(activity, AnimeDownloadService::class.java)
-                        .putExtra(DOWNLOAD_URL_KEY, url)
-                        .putExtra(ANIME_TITLE, animeTitle)
-                        .putExtra(ANIME_EPISODE, animeEpisode)
-                        .putExtra(STORE_DIRECTORY_PATH_KEY, animeFilePath + animeTitle)
-                )
-            }
-            onDenied { activity.getString(R.string.anime_download_helper_no_storage).showToast() }
         }
     }
 }

@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.Banner1ViewHolder
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -80,7 +80,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeShowFragment.adapter = adapter
             srlAnimeShowFragment.setOnRefreshListener {
-                viewModel.getAnimeShowData(viewModel.partUrl)
+                viewModel.getAnimeShowData()
             }
             srlAnimeShowFragment.setOnLoadMoreListener {
                 viewModel.loadMoreAnimeShowData()
@@ -91,7 +91,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
             if (it == null) {
                 showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getAnimeShowData(viewModel.partUrl)
+                    viewModel.getAnimeShowData()
                     hideLoadFailedTip()
                 }
                 adapter.dataList = emptyList()

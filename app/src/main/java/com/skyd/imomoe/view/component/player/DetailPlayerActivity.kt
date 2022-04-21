@@ -1,14 +1,13 @@
 package com.skyd.imomoe.view.component.player
 
 import android.content.res.Configuration
-import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import androidx.viewbinding.ViewBinding
-import com.skyd.imomoe.view.activity.BaseActivity
 import com.shuyu.gsyvideoplayer.GSYVideoManager
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
-import com.shuyu.gsyvideoplayer.utils.OrientationOption
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
-import java.lang.NullPointerException
+import com.shuyu.gsyvideoplayer.utils.OrientationOption
+import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.skyd.imomoe.view.activity.BaseActivity
 
 /**
  * 详情模式播放页面基础类

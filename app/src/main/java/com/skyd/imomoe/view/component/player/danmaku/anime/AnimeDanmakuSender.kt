@@ -4,9 +4,9 @@ import android.widget.Toast
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.danmaku.DanmakuData
+import com.skyd.imomoe.ext.shield
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.DanmakuService
-import com.skyd.imomoe.ext.shield
 import com.skyd.imomoe.util.showToast
 
 object AnimeDanmakuSender {

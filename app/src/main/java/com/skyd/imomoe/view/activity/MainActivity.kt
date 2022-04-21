@@ -30,10 +30,13 @@ import com.skyd.imomoe.view.fragment.MoreFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
+    @Inject
+    lateinit var appUpdateHelper: AppUpdateHelper
     private var backPressTime = 0L
     private val adapter: VpAdapter by lazy { VpAdapter(this) }
     private lateinit var action: String
@@ -63,7 +66,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         action = intent.action.orEmpty()
 
         // 检查更新
-        val appUpdateHelper = AppUpdateHelper.instance
         appUpdateHelper.getUpdateStatus().observe(this) {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()

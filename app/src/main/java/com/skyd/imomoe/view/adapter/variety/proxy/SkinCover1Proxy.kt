@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinCover1Bean
-import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.theme.appThemeRes
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.SkinCover1ViewHolder
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter

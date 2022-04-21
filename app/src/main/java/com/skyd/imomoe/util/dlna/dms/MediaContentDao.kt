@@ -10,7 +10,6 @@ import org.fourthline.cling.support.model.item.Item
 import org.fourthline.cling.support.model.item.Movie
 import org.fourthline.cling.support.model.item.MusicTrack
 import java.io.File
-import java.util.*
 
 internal class MediaContentDao(private val mBaseUrl: String) : IMediaContentDao {
     @SuppressLint("Range")

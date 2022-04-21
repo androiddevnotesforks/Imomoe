@@ -6,7 +6,6 @@ import org.fourthline.cling.model.action.ActionInvocation
 import org.fourthline.cling.model.meta.Service
 import org.fourthline.cling.model.types.ErrorCode
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes
-import java.lang.Exception
 
 abstract class GetBrightness(service: Service<*, *>?) :
     ActionCallback(ActionInvocation(service?.getAction("GetBrightness"))) {

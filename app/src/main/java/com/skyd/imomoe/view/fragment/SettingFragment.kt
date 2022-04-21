@@ -18,24 +18,28 @@ import com.skyd.imomoe.ext.theme.selectDarkMode
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.DnsServer.selectDnsServer
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.compare.EpisodeTitleSort
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.selectEpisodeTitleSortMode
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
 import com.skyd.imomoe.view.component.player.PlayerCore
 import com.skyd.imomoe.view.component.player.PlayerCore.selectPlayerCore
-import com.skyd.imomoe.util.compare.EpisodeTitleSort
-import com.skyd.imomoe.util.compare.EpisodeTitleSort.selectEpisodeTitleSortMode
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.viewmodel.SettingViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SettingFragment : BasePreferenceFragment() {
     private val viewModel: SettingViewModel by viewModels()
     private var selfUpdateCheck = false
-    private val appUpdateHelper = AppUpdateHelper.instance
+    @Inject
+    lateinit var appUpdateHelper: AppUpdateHelper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

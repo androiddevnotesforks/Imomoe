@@ -14,7 +14,6 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
 import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
@@ -22,13 +21,14 @@ import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.PlayActivityProcessor
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
+import com.skyd.imomoe.util.coil.DarkBlurTransformation
+import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
-import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint

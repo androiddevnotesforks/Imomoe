@@ -13,10 +13,14 @@ import com.skyd.imomoe.util.Share.SHARE_QQ
 import com.skyd.imomoe.util.Share.SHARE_WECHAT
 import com.skyd.imomoe.util.Share.SHARE_WEIBO
 import com.skyd.imomoe.util.Share.share
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 open class ShareDialogFragment : BaseBottomSheetDialogFragment<FragmentShareDialogBinding>() {
+    @Inject
+    lateinit var activity: Activity
     private lateinit var shareContent: String
-    private lateinit var attachedActivity: Activity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,27 +30,24 @@ open class ShareDialogFragment : BaseBottomSheetDialogFragment<FragmentShareDial
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.let { act ->
-            attachedActivity = act
-            mBinding.tvToQq.setOnClickListener {
-                share(attachedActivity, shareContent, SHARE_QQ)
-                dismiss()
-            }
-            mBinding.tvToWechat.setOnClickListener {
-                share(attachedActivity, shareContent, SHARE_WECHAT)
-                dismiss()
-            }
-            mBinding.tvToWeibo.setOnClickListener {
-                share(attachedActivity, shareContent, SHARE_WEIBO)
-                dismiss()
-            }
-            mBinding.tvCopyLink.setOnClickListener {
-                share(attachedActivity, shareContent, SHARE_LINK)
-                dismiss()
-            }
-            mBinding.tvCancelShare.setOnClickListener {
-                dismiss()
-            }
+        mBinding.tvToQq.setOnClickListener {
+            share(activity, shareContent, SHARE_QQ)
+            dismiss()
+        }
+        mBinding.tvToWechat.setOnClickListener {
+            share(activity, shareContent, SHARE_WECHAT)
+            dismiss()
+        }
+        mBinding.tvToWeibo.setOnClickListener {
+            share(activity, shareContent, SHARE_WEIBO)
+            dismiss()
+        }
+        mBinding.tvCopyLink.setOnClickListener {
+            share(activity, shareContent, SHARE_LINK)
+            dismiss()
+        }
+        mBinding.tvCancelShare.setOnClickListener {
+            dismiss()
         }
     }
 

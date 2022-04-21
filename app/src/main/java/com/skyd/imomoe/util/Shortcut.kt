@@ -7,10 +7,10 @@ import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
 import com.skyd.imomoe.R
-import com.skyd.imomoe.config.Const.ShortCuts.Companion.ACTION_EVERYDAY
-import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_DOWNLOAD
-import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_EVERYDAY
-import com.skyd.imomoe.config.Const.ShortCuts.Companion.ID_FAVORITE
+import com.skyd.imomoe.config.Const.ShortCuts.ACTION_EVERYDAY
+import com.skyd.imomoe.config.Const.ShortCuts.ID_DOWNLOAD
+import com.skyd.imomoe.config.Const.ShortCuts.ID_EVERYDAY
+import com.skyd.imomoe.config.Const.ShortCuts.ID_FAVORITE
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
 import com.skyd.imomoe.view.activity.FavoriteActivity
 import com.skyd.imomoe.view.activity.MainActivity

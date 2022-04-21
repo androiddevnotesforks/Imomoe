@@ -6,7 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover7Bean
-import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.invisible
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.EpisodeDownloadProcessor
 import com.skyd.imomoe.util.AnimeCover7ViewHolder

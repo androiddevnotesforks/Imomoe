@@ -9,9 +9,7 @@ import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.helpers.XMLReaderFactory
 import java.io.IOException
 import java.io.InputStream
-import java.lang.NumberFormatException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class BilibiliDanmakuParser {
     init {
@@ -64,7 +62,7 @@ class BilibiliDanmakuParser {
             attributes: Attributes
         ) {
             var tagName = if (localName.isNotEmpty()) localName else qName
-            tagName = tagName.toLowerCase(Locale.getDefault()).trim { it <= ' ' }
+            tagName = tagName.lowercase(Locale.getDefault()).trim { it <= ' ' }
             if (tagName == "d") {
                 // <d p="23.826000213623,1,25,16777215,1422201084,0,057075e9,757076900">我从未见过如此厚颜无耻之猴</d>
                 // 0:时间(弹幕出现时间)

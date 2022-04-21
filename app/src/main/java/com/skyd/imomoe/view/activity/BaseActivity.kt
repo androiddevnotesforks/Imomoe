@@ -10,11 +10,13 @@ import com.efs.sdk.launch.LaunchManager
 import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.ext.theme.appThemeRes
+import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.util.Util
 import org.greenrobot.eventbus.EventBus
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {

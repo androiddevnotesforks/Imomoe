@@ -3,7 +3,6 @@ package com.skyd.imomoe.model.impls
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
-import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.processor.OpenBrowserProcessor
 

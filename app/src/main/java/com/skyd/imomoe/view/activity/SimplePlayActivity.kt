@@ -11,10 +11,9 @@ import com.shuyu.gsyvideoplayer.utils.GSYVideoType
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
-import com.skyd.imomoe.util.Util.setFullScreen
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.toMD5
-import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
+import com.skyd.imomoe.util.Util.setFullScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager

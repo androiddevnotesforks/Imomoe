@@ -1,7 +1,6 @@
 package com.skyd.imomoe.model.interfaces
 
 import com.skyd.imomoe.bean.PageNumberBean
-import java.util.*
 
 /**
  * 获取季度番剧数据的接口

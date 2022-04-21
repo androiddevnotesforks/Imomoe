@@ -13,8 +13,6 @@ import com.skyd.imomoe.util.showToast
 import com.thegrizzlylabs.sardineandroid.DavResource
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 import java.io.File
-import java.lang.IllegalArgumentException
-import java.lang.RuntimeException
 
 
 class WebDavViewModel : ViewModel() {

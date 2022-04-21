@@ -1,5 +1,6 @@
 package com.skyd.imomoe.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.skyd.imomoe.view.activity.CrashActivity
 import java.io.PrintWriter
@@ -36,6 +37,7 @@ class CrashHandler private constructor(val context: Context) : Thread.UncaughtEx
     }
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         private var instance: CrashHandler? = null
 
         /**

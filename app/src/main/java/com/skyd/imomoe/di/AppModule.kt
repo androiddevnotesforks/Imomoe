@@ -1,6 +1,6 @@
-package com.skyd.imomoe.hilt
+package com.skyd.imomoe.di
 
-import com.skyd.imomoe.net.RetrofitManager
+import com.skyd.imomoe.util.update.AppUpdateHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 object AppModule {
     @Singleton
     @Provides
-    fun provideRetrofitManager(): RetrofitManager {
-        return RetrofitManager.get()
+    fun provideAppUpdateHelper(): AppUpdateHelper {
+        return AppUpdateHelper.instance
     }
 }

@@ -4,24 +4,20 @@ import android.os.Environment
 import com.skyd.imomoe.appContext
 
 interface Const {
-    interface Common {
-        companion object {
-            const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
-            const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
-            const val USER_NOTICE_VERSION = 4
-        }
+    object Common {
+        const val GITHUB_URL = "https://github.com/SkyD666/Imomoe"
+        const val GITHUB_NEW_ISSUE_URL = "https://github.com/SkyD666/Imomoe/issues/new"
+        const val USER_NOTICE_VERSION = 4
     }
 
-    interface ShortCuts {
-        companion object {
-            const val ID_FAVORITE = "favorite"
-            const val ID_EVERYDAY = "everyday"
-            const val ID_DOWNLOAD = "download"
-            const val ACTION_EVERYDAY = "everyday"
-        }
+    object ShortCuts {
+        const val ID_FAVORITE = "favorite"
+        const val ID_EVERYDAY = "everyday"
+        const val ID_DOWNLOAD = "download"
+        const val ACTION_EVERYDAY = "everyday"
     }
 
-    interface Database {
+    object Database {
         object AppDataBase {
             const val APP_DATA_BASE_FILE_NAME = "app.db"
             const val ANIME_DOWNLOAD_TABLE_NAME = "animeDownloadList"
@@ -36,17 +32,15 @@ interface Const {
         }
     }
 
-    interface DownloadAnime {
-        companion object {
-            var new: Boolean = true
-            val animeFilePath: String
-                get() {
-                    return if (new) appContext.getExternalFilesDir(null)
-                        .toString() + "/DownloadAnime/"
-                    else Environment.getExternalStorageDirectory()
-                        .toString() + "/Imomoe/DownloadAnime/"
-                }
-        }
+    object DownloadAnime {
+        var new: Boolean = true
+        val animeFilePath: String
+            get() {
+                return if (new) appContext.getExternalFilesDir(null)
+                    .toString() + "/DownloadAnime/"
+                else Environment.getExternalStorageDirectory()
+                    .toString() + "/Imomoe/DownloadAnime/"
+            }
     }
 
     interface Request {

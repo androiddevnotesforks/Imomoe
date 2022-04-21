@@ -4,7 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
-import com.skyd.imomoe.bean.*
+import com.skyd.imomoe.bean.FavoriteAnimeBean
+import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel

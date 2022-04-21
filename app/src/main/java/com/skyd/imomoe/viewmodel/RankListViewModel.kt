@@ -17,11 +17,12 @@ import javax.inject.Inject
 class RankListViewModel @Inject constructor(
     private val rankModel: IRankListModel
 ) : ViewModel() {
+    var partUrl: String = ""
     var mldRankData: MutableLiveData<List<Any>?> = MutableLiveData()
     var mldLoadMoreRankData: MutableLiveData<List<Any>?> = MutableLiveData()
     private var pageNumberBean: PageNumberBean? = null
 
-    fun getRankListData(partUrl: String) {
+    fun getRankListData() {
         request(request = { rankModel.getRankListData(partUrl) }, success = {
             pageNumberBean = it.second
             mldRankData.postValue(it.first)

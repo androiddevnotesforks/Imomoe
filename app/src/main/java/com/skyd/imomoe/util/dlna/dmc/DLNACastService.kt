@@ -1,11 +1,11 @@
 package com.skyd.imomoe.util.dlna.dmc
 
-import org.fourthline.cling.android.AndroidUpnpServiceImpl
-import com.skyd.imomoe.util.dlna.dmc.ILogger.DefaultLoggerImpl
-import org.fourthline.cling.android.FixedAndroidLogHandler
 import android.content.Intent
+import com.skyd.imomoe.util.dlna.dmc.ILogger.DefaultLoggerImpl
 import org.fourthline.cling.UpnpServiceConfiguration
 import org.fourthline.cling.android.AndroidUpnpServiceConfiguration
+import org.fourthline.cling.android.AndroidUpnpServiceImpl
+import org.fourthline.cling.android.FixedAndroidLogHandler
 import org.seamless.util.logging.LoggingUtil
 
 

@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:menu="@menu/menu_home_fragment"
             app:navigationContentDescription="@string/home_fragment_menu_rank"
             app:navigationIcon="@drawable/ic_bar_chart_24">
@@ -54,8 +53,7 @@
         android:id="@+id/vp2_home_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/abl_home_fragment"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_below="@id/abl_home_fragment" />
 
     <ViewStub
         android:id="@+id/layout_home_fragment_load_failed"

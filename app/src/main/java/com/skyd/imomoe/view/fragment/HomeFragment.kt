@@ -14,11 +14,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.SearchActivityProcessor
-import com.skyd.imomoe.view.activity.*
+import com.skyd.imomoe.util.showToast
+import com.skyd.imomoe.view.activity.AnimeDownloadActivity
+import com.skyd.imomoe.view.activity.ClassifyActivity
+import com.skyd.imomoe.view.activity.FavoriteActivity
+import com.skyd.imomoe.view.activity.RankActivity
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint

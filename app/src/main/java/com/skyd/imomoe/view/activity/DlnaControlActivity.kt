@@ -11,7 +11,6 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.dlna.CastObject
 import com.skyd.imomoe.util.dlna.Utils
@@ -21,9 +20,11 @@ import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
 import com.skyd.imomoe.util.dlna.dmc.control.ICastInterface
 import com.skyd.imomoe.util.dlna.dmc.control.newGetInfoListener
 import com.skyd.imomoe.util.dlna.dms.MediaServer
+import com.skyd.imomoe.util.logE
+import com.skyd.imomoe.util.logI
+import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import org.fourthline.cling.model.meta.Device
-import kotlin.collections.HashMap
 
 class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
     private lateinit var layoutDlnaControlActivityLoading: RelativeLayout

@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.PageNumberBean
-import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.ext.request
+import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -21,7 +21,7 @@ class AnimeShowViewModel @Inject constructor(
     var mldLoadMoreAnimeShowList: MutableLiveData<List<Any>?> = MutableLiveData()
     private var pageNumberBean: PageNumberBean? = null
 
-    fun getAnimeShowData(partUrl: String) {
+    fun getAnimeShowData() {
         pageNumberBean = null
         request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
             pageNumberBean = it.second

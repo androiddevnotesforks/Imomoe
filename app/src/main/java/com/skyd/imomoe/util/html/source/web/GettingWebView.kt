@@ -5,9 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.webkit.*
-import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.util.html.source.GettingCallback
-import kotlin.random.Random
 
 @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
 class GettingWebView @JvmOverloads constructor(

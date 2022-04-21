@@ -1,4 +1,4 @@
-package com.skyd.imomoe.hilt
+package com.skyd.imomoe.di
 
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.model.impls.*

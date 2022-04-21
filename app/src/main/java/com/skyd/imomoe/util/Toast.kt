@@ -1,7 +1,6 @@
 package com.skyd.imomoe.util
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater

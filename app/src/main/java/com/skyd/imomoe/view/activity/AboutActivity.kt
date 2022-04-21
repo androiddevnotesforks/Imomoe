@@ -7,11 +7,11 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
-import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.ext.visible
-import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.util.Util
 import java.net.URL
 import java.util.*
 

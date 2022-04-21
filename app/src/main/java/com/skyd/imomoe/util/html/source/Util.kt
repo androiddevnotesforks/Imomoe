@@ -9,7 +9,6 @@ import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
-import kotlin.jvm.Throws
 
 object Util {
     const val HTMLFLAG = "<GettingVideo>GettingVideo</GettingVideo>"
