@@ -54,7 +54,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     protected open fun getLoadFailedTipView(): ViewStub? = null
 
     protected open fun showLoadFailedTip(
-        text: String,
+        text: String = getString(R.string.load_data_failed_click_to_retry),
         onClickListener: View.OnClickListener? = null
     ) {
         val loadFailedTipViewStub = getLoadFailedTipView() ?: return

@@ -9,10 +9,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityMainBinding
-import com.skyd.imomoe.ext.fitsSystemWindows2
-import com.skyd.imomoe.ext.initUM
-import com.skyd.imomoe.ext.showMessageDialog
-import com.skyd.imomoe.ext.toHtml
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
@@ -66,10 +63,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         action = intent.action.orEmpty()
 
         // 检查更新
-        appUpdateHelper.getUpdateStatus().observe(this) {
+        appUpdateHelper.getUpdateStatus().collectWithLifecycle(this) {
             when (it) {
                 AppUpdateStatus.UNCHECK -> appUpdateHelper.checkUpdate()
-                AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this)
+                AppUpdateStatus.DATED -> appUpdateHelper.noticeUpdate(this@MainActivity)
                 else -> Unit
             }
         }

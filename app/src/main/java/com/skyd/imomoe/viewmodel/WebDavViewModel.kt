@@ -1,7 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
 import androidx.core.net.toUri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.skyd.imomoe.R
@@ -12,6 +11,7 @@ import com.skyd.imomoe.util.killApplicationProcess
 import com.skyd.imomoe.util.showToast
 import com.thegrizzlylabs.sardineandroid.DavResource
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
+import kotlinx.coroutines.flow.MutableSharedFlow
 import java.io.File
 
 
@@ -24,9 +24,11 @@ class WebDavViewModel : ViewModel() {
     }
 
     var pwd: String = ""
-    var mldBackup: MutableLiveData<Pair<String, Boolean>> = MutableLiveData()
-    var mldRestore: MutableLiveData<Pair<String, Boolean>> = MutableLiveData()
-    var mldFileList: MutableLiveData<String> = MutableLiveData()
+    val backup: MutableSharedFlow<Pair<String, Boolean>> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    val restore: MutableSharedFlow<Pair<String, Boolean>> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    val fileList: MutableSharedFlow<String> = MutableSharedFlow(extraBufferCapacity = 1)
     val fileMap: HashMap<String, List<DavResource>?> = hashMapOf()
 
     private fun getAppDatabaseFile(): File {
@@ -53,11 +55,11 @@ class WebDavViewModel : ViewModel() {
                         !it.isDirectory && it.name.substringAfterLast(".").toInt() <= version
                     }
                     fileMap[type] = list
-                    mldFileList.postValue(type)
+                    fileList.tryEmit(type)
                 }
             } catch (e: Exception) {
                 fileMap[type] = null
-                mldFileList.postValue(type)
+                fileList.tryEmit(type)
                 e.printStackTrace()
                 e.message?.showToast()
             }
@@ -86,10 +88,10 @@ class WebDavViewModel : ViewModel() {
                         "*/*"
                     )
                     appDatabaseFile.delete()
-                    mldBackup.postValue(type to true)
+                    backup.tryEmit(type to true)
                 }
             } catch (e: Exception) {
-                mldBackup.postValue(type to false)
+                backup.tryEmit(type to false)
                 e.printStackTrace()
                 e.message?.showToast()
             }
@@ -122,7 +124,7 @@ class WebDavViewModel : ViewModel() {
                     appContext.killApplicationProcess()
                 }
             } catch (e: Exception) {
-                mldRestore.postValue(type to false)
+                restore.tryEmit(type to false)
                 e.printStackTrace()
                 e.message?.showToast()
             }
@@ -146,7 +148,7 @@ class WebDavViewModel : ViewModel() {
                     ?: throw IllegalArgumentException("$type list not exists")
                 if (list.remove(data)) fileMap[type] = list
                 else throw IllegalArgumentException("$type doesn't contain data: $data")
-                mldFileList.postValue(type)
+                fileList.tryEmit(type)
                 appContext.getString(R.string.delete_succeed).showToast()
             } catch (e: Exception) {
                 e.printStackTrace()

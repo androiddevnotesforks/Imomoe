@@ -14,10 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSourceFileBean
 import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
-import com.skyd.imomoe.ext.copyTo
-import com.skyd.imomoe.ext.requestManageExternalStorage
-import com.skyd.imomoe.ext.showMessageDialog
-import com.skyd.imomoe.ext.showSnackbar
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.view.fragment.LocalDataSourceFragment
@@ -60,7 +57,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             tabLayoutMediator.attach()
         }
 
-        viewModel.mldDeleteSource.observe(this) {
+        viewModel.deleteSource.collectWithLifecycle(this) {
             adapter.getFragment<LocalDataSourceFragment>(supportFragmentManager, 0)
                 ?.getDataSourceList()
         }

@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover8Proxy
@@ -27,21 +29,26 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
             rvFavoriteActivity.addItemDecoration(AnimeEpisodeItemDecoration())
         }
 
-        viewModel.mldFavoriteList.observe(this) {
-            mBinding.srlFavoriteActivity.isRefreshing = false
-            if (it != null) {
-                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_favorite))
-                adapter.dataList = it
+        viewModel.favoriteList.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Success -> {
+                    mBinding.srlFavoriteActivity.isRefreshing = false
+                    if (data.data.isEmpty()) showLoadFailedTip(getString(R.string.no_favorite))
+                    adapter.dataList = data.data
+                }
+                is DataState.Refreshing -> {
+                    mBinding.srlFavoriteActivity.isRefreshing = true
+                }
+                else -> {
+                    mBinding.srlFavoriteActivity.isRefreshing = false
+                }
             }
         }
 
-        mBinding.srlFavoriteActivity.isRefreshing = true
-        if (viewModel.mldFavoriteList.value == null) viewModel.getFavoriteData()
     }
 
     override fun getBinding() = ActivityFavoriteBinding.inflate(layoutInflater)
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutFavoriteActivityNoFavorite
-
 }
 

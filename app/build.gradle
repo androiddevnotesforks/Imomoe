@@ -149,7 +149,6 @@ dependencies {
     implementation deps.support.preference
     implementation deps.support.security_crypto
     implementation deps.jsoup.jsoup
-    implementation deps.lifecycle.lifecycle_livedata_ktx
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
     implementation deps.lifecycle.lifecycle_extensions

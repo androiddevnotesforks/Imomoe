@@ -1,6 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
@@ -15,12 +14,15 @@ import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.processor.EpisodeDownloadProcessor
 import com.skyd.imomoe.route.processor.PlayDownloadM3U8Processor
 import com.skyd.imomoe.route.processor.PlayDownloadProcessor
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.deleteAnimeFromXml
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.getAnimeFromXml
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.save2Xml
 import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
 
@@ -29,8 +31,8 @@ class AnimeDownloadViewModel : ViewModel() {
     var actionBarTitle = ""
     var directoryName = ""
     var path = 0
-    var mldAnimeCoverList: MutableLiveData<List<Any>?> = MutableLiveData()
-    var mldDelete: MutableLiveData<Pair<Boolean, String>> = MutableLiveData()
+    val animeCoverList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
+    val delete: MutableSharedFlow<Pair<Boolean, String>> = MutableSharedFlow(extraBufferCapacity = 1)
 
     fun getAnimeCover() {
         request(request = {
@@ -73,9 +75,9 @@ class AnimeDownloadViewModel : ViewModel() {
             }
             list
         }, success = {
-            mldAnimeCoverList.postValue(it)
+            animeCoverList.tryEmit(DataState.Success(it))
         }, error = {
-            mldAnimeCoverList.postValue(null)
+            animeCoverList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -91,7 +93,7 @@ class AnimeDownloadViewModel : ViewModel() {
                 p
             }
             val files = File(animeFilePath + directoryName).listFiles()
-            files?.let {
+            if (files != null) {
                 val animeList = getAnimeFromXml(directoryName, animeFilePath)
 
                 // xml里的文件名
@@ -99,7 +101,7 @@ class AnimeDownloadViewModel : ViewModel() {
                 // 文件夹下的文件名
                 val filesName: MutableList<String> = ArrayList()
                 // 获取文件夹下的文件名
-                for (file in it) filesName.add(file.name)
+                for (file in files) filesName.add(file.name)
                 //数据库中的数据
                 val animeMd5InDB = getAppDataBase().animeDownloadDao().getAnimeDownloadMd5List()
                 // 先删除xml里被用户删除的视频，再获取xml里的文件名（保证xml里的文件名都是存在的文件）
@@ -118,7 +120,7 @@ class AnimeDownloadViewModel : ViewModel() {
                     }
                 }
                 // 没有在xml里的视频
-                for (file in it) {
+                for (file in files) {
                     if (file.name !in animeFilesName) {
                         // 试图从数据库中取出不在xml里的视频的数据，如果没找到则是null
                         val unsavedAnime: AnimeDownloadEntity? =
@@ -160,11 +162,13 @@ class AnimeDownloadViewModel : ViewModel() {
                     )
                 }
                 list.sortEpisodeTitle()
+            } else {
+                emptyList()
             }
         }, success = {
-            mldAnimeCoverList.postValue(it)
+            animeCoverList.tryEmit(DataState.Success(it))
         }, error = {
-            mldAnimeCoverList.postValue(null)
+            animeCoverList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -180,9 +184,9 @@ class AnimeDownloadViewModel : ViewModel() {
             val file = File(path)
             file.deleteRecursively()
         }, success = {
-            mldDelete.postValue(it to path)
+            delete.tryEmit(it to path)
         }, error = {
-            mldDelete.postValue(false to path)
+            delete.tryEmit(false to path)
             it.message?.showToast()
         }, finish = { deleteJob = null })
     }

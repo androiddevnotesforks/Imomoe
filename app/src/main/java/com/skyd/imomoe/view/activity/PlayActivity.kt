@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,10 +25,12 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
@@ -173,7 +174,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             avpPlayActivity.playPositionMemoryStore = AnimeVideoPositionMemoryStore
         }
 
-        viewModel.mldFavorite.observe(this) {
+        viewModel.favorite.collectWithLifecycle(this) {
             mBinding.ivPlayActivityFavorite.setImageResource(
                 if (it) R.drawable.ic_star_24
                 else R.drawable.ic_star_border_24
@@ -181,40 +182,49 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         }
 
         mBinding.ivPlayActivityFavorite.setOnClickListener {
-            when (viewModel.mldFavorite.value) {
+            when (viewModel.favorite.value) {
                 true -> viewModel.deleteFavorite()
                 false -> viewModel.insertFavorite()
                 else -> {}
             }
         }
 
-        viewModel.mldPlayDataList.observe(this) {
-            mBinding.srlPlayActivity.isRefreshing = false
+        viewModel.playDataList.collectWithLifecycle(this) {
+            when (it) {
+                is DataState.Refreshing -> {
+                    mBinding.srlPlayActivity.isRefreshing = true
+                }
+                is DataState.Success -> {
+                    mBinding.srlPlayActivity.isRefreshing = false
+                    mBinding.tvPlayActivityTitle.text = viewModel.playBean?.title?.title
+                    adapter.dataList = it.data
+                    if (isFirstTime) {
+                        mBinding.avpPlayActivity.startPlay()
+                        isFirstTime = false
+                    }
+                }
+                else -> {
+                    mBinding.srlPlayActivity.isRefreshing = false
+                    adapter.dataList = emptyList()
 
-            mBinding.tvPlayActivityTitle.text = viewModel.playBean?.title?.title
-
-            adapter.dataList = it ?: emptyList()
-
-            if (isFirstTime) {
-                mBinding.avpPlayActivity.startPlay()
-                isFirstTime = false
+                }
             }
         }
 
-        viewModel.mldAnimeDownloadUrl.observe(this) {
+        viewModel.animeDownloadUrl.collectWithLifecycle(this) {
             AnimeDownloadHelper.downloadAnime(
-                this,
+                this@PlayActivity,
                 url = it.videoUrl,
                 animeTitle = viewModel.playBean?.title?.title.orEmpty(),
                 animeEpisode = it.title
             )
         }
 
-        viewModel.mldPlayAnotherEpisode.observe(this) {
+        viewModel.playAnotherEpisodeEvent.collectWithLifecycle(this) {
             if (it) mBinding.avpPlayActivity.currentPlayer.startPlay()
         }
 
-        viewModel.mldEpisodesList.observe(this) {
+        viewModel.episodesList.collectWithLifecycle(this) {
             mBinding.avpPlayActivity.setEpisodeAdapter(
                 VarietyAdapter(
                     mutableListOf(
@@ -227,7 +237,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                             } else {
                                 holder.tvTitle.setTextColor(
                                     ContextCompat.getColor(
-                                        this,
+                                        this@PlayActivity,
                                         android.R.color.white
                                     )
                                 )
@@ -245,7 +255,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                             true
                         })
                     )
-                ).apply { dataList = viewModel.episodesList }
+                ).apply { dataList = viewModel.episodesList.value.readOrNull().orEmpty() }
             )
         }
 
@@ -467,13 +477,12 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     viewModel.getAnimeDownloadUrl(data.route, index)
                 }
             }, width = ViewGroup.LayoutParams.MATCH_PARENT))
-        ).apply { dataList = viewModel.episodesList }
-        val observer = Observer<Boolean> {
+        ).apply { dataList = viewModel.episodesList.value.readOrNull().orEmpty() }
+        val job = viewModel.episodesList.collectWithLifecycle(this) {
             adapter.notifyDataSetChanged()
         }
-        viewModel.mldEpisodesList.observe(this, observer)
         bottomSheetDialog.setOnDismissListener {
-            viewModel.mldEpisodesList.removeObserver(observer)
+            job.cancel()
         }
         recyclerView.adapter = adapter
         return bottomSheetDialog
@@ -486,7 +495,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
                 mBinding.ivPlayActivityFavorite.setImageResource(
-                    if (viewModel.mldFavorite.value == true) {
+                    if (viewModel.favorite.value == true) {
                         R.drawable.ic_star_24
                     } else {
                         R.drawable.ic_star_border_24

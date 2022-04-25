@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.RefreshEvent
@@ -52,7 +53,7 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
     }
     private var offscreenPageLimit = 1
     private var selectedTabIndex = -1
-    private var lastRefreshTime: Long = System.currentTimeMillis()
+    private var lastRefreshTime: Long = 0L
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentEverydayAnimeBinding.inflate(inflater, container, false)
@@ -73,27 +74,29 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
 
             val tabLayoutMediator = TabLayoutMediator(
                 mBinding.tlEverydayAnimeFragment,
-                mBinding.vp2EverydayAnimeFragment//.getViewPager()
+                mBinding.vp2EverydayAnimeFragment
             ) { tab, position ->
-                tab.text = viewModel.mldTabList.value?.get(position)?.title
+                tab.text = viewModel.tabList.value.readOrNull().orEmpty()[position].title
             }
             tabLayoutMediator.attach()
         }
 
-        viewModel.mldHeader.observe(viewLifecycleOwner) {
-            mBinding.tbEverydayAnimeFragment.title = it
+        viewModel.header.collectWithLifecycle(viewLifecycleOwner) { data ->
+            mBinding.tbEverydayAnimeFragment.title = data
         }
 
-        viewModel.mldEverydayAnimeList.observe(viewLifecycleOwner) {
-            mBinding.srlEverydayAnimeFragment.closeHeaderOrFooter()//.isRefreshing = false
-
-            if (it != null) {
-                val selectedTabIndex = this.selectedTabIndex
-                activity?.let { _ ->
+        viewModel.everydayAnimeList.collectWithLifecycle(viewLifecycleOwner) { data ->
+            when (data) {
+                is DataState.Refreshing -> {
+                    mBinding.srlEverydayAnimeFragment.isRefreshing = true
+                }
+                is DataState.Success -> {
+                    mBinding.srlEverydayAnimeFragment.isRefreshing = false
+                    val selectedTabIndex = this@EverydayAnimeFragment.selectedTabIndex
                     //先隐藏
                     ObjectAnimator.ofFloat(mBinding.vp2EverydayAnimeFragment, "alpha", 1f, 0f)
                         .setDuration(270).start()
-                    adapter.dataList = it
+                    adapter.dataList = data.data
 
                     val tabCount = adapter.itemCount
                     mBinding.vp2EverydayAnimeFragment.post {
@@ -112,19 +115,18 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                         ObjectAnimator.ofFloat(mBinding.vp2EverydayAnimeFragment, "alpha", 0f, 1f)
                             .setDuration(270).start()
                     }
-                }
-                hideLoadFailedTip()
-            } else {
-                adapter.dataList = emptyList()
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getEverydayAnimeData()
                     hideLoadFailedTip()
+                }
+                else -> {
+                    mBinding.srlEverydayAnimeFragment.isRefreshing = true
                 }
             }
         }
 
-        if (viewModel.mldTabList.value == null || viewModel.mldEverydayAnimeList.value == null) {
-            mBinding.srlEverydayAnimeFragment.autoRefresh()
+        if (viewModel.tabList.value is DataState.Empty ||
+            viewModel.everydayAnimeList.value is DataState.Empty
+        ) {
+            refresh()
         }
     }
 
@@ -142,8 +144,6 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         if (System.currentTimeMillis() - lastRefreshTime > 500) {
             lastRefreshTime = System.currentTimeMillis()
             viewModel.getEverydayAnimeData()
-        } else {
-            mBinding.srlEverydayAnimeFragment.closeHeaderOrFooter()
         }
     }
 

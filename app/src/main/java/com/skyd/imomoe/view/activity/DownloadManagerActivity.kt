@@ -10,10 +10,13 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.databinding.ActivityDownloadManagerBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeDownload1Proxy
 import com.skyd.imomoe.viewmodel.DownloadManagerViewModel
+import kotlinx.coroutines.CoroutineScope
 
 class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
     private val viewModel: DownloadManagerViewModel by viewModels()
@@ -22,7 +25,7 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
             mutableListOf(
                 AnimeDownload1Proxy(
                     onCancelClickListener = { _, data, _ ->
-                        AnimeDownloadService.mldCancelTask.postValue(data.id to data.url)
+                        AnimeDownloadService.cancelTaskEvent.tryEmit(data.id to data.url)
                     }
                 )
             )
@@ -47,8 +50,15 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
             Context.BIND_AUTO_CREATE
         )
 
-        viewModel.mldDataList.observe(this) {
-            adapter.dataList = it.orEmpty()
+        viewModel.downloadDataList.collectWithLifecycle(this) {
+            when (it) {
+                is DataState.Success -> {
+                    adapter.dataList = it.data
+                }
+                else -> {
+                    adapter.dataList = emptyList()
+                }
+            }
         }
     }
 
@@ -57,20 +67,17 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
             binder = (service as? AnimeDownloadService.AnimeDownloadBinder)?.apply {
                 viewModel.initList(notCompleteList, animeTitleEpisodeMap)
 
-                mldOnTaskRunning.observe(this@DownloadManagerActivity) { task ->
-                    task ?: return@observe
+                onTaskRunningEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
                     viewModel.onTaskRunning(task.downloadEntity)
                 }
-                mldOnTaskComplete.observe(this@DownloadManagerActivity) { task ->
-                    task ?: return@observe
+                onTaskCompleteEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
                     viewModel.onTaskComplete(task.downloadEntity)
                 }
-                mldOnTaskCancel.observe(this@DownloadManagerActivity) { task ->
-                    task ?: return@observe
+                onTaskCancelEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
                     viewModel.onTaskCancel(task.downloadEntity)
                 }
-                mldOnTaskPre.observe(this@DownloadManagerActivity, onTaskPreStart)
-                mldOnTaskStart.observe(this@DownloadManagerActivity, onTaskPreStart)
+                onTaskPreEvent.collectWithLifecycle(this@DownloadManagerActivity, onTaskPreStart)
+                onTaskStartEvent.collectWithLifecycle(this@DownloadManagerActivity, onTaskPreStart)
             }
         }
 
@@ -78,9 +85,9 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
         }
     }
 
-    private val onTaskPreStart: (DownloadTask?) -> Unit = { task ->
-        val binder = this.binder
-        if (task != null && binder != null) {
+    private val onTaskPreStart: suspend CoroutineScope.(data: DownloadTask) -> Unit = { task ->
+        val binder = this@DownloadManagerActivity.binder
+        if (binder != null) {
             viewModel.onTaskPreStart(task.downloadEntity, binder.animeTitleEpisodeMap)
         }
     }

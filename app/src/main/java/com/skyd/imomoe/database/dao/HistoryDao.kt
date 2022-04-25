@@ -1,9 +1,9 @@
 package com.skyd.imomoe.database.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.skyd.imomoe.bean.HistoryBean
 import com.skyd.imomoe.config.Const.Database.AppDataBase.HISTORY_TABLE_NAME
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HistoryDao {
@@ -18,7 +18,7 @@ interface HistoryDao {
     fun getHistory(animeUrl: String): HistoryBean?
 
     @Query("SELECT * FROM $HISTORY_TABLE_NAME WHERE animeUrl = :animeUrl")
-    fun getHistoryLiveData(animeUrl: String): LiveData<HistoryBean?>
+    fun getHistoryFlow(animeUrl: String): Flow<HistoryBean?>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateHistory(historyBean: HistoryBean)

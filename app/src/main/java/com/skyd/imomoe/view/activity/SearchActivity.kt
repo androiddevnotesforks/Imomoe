@@ -9,10 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.databinding.ActivitySearchBinding
-import com.skyd.imomoe.ext.fixKeyboardFitsSystemWindows
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.hideKeyboard
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -84,47 +82,44 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             })
         }
 
-        viewModel.mldSearchResultList.observe(this) {
+        viewModel.searchResultList.collectWithLifecycle(this) { data ->
             mBinding.srlSearchActivity.closeHeaderOrFooter()
-            if (!searchHistoryListShow) {
-                if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
-                if (it != null) {
-                    mBinding.tvSearchActivityTip.text = getString(
-                        R.string.search_activity_tip, viewModel.keyword, it.size
-                    )
-                    adapter.dataList = it
+            when (data) {
+                is DataState.Success -> {
+                    if (!searchHistoryListShow) {
+                        if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized) {
+                            mLayoutCircleProgressTextTip1.gone()
+                        }
+                        mBinding.tvSearchActivityTip.text = getString(
+                            R.string.search_activity_tip, viewModel.keyword, data.data.size
+                        )
+                        adapter.dataList = data.data
+                    }
+                }
+                else -> {
+                    adapter.dataList = emptyList()
                 }
             }
         }
 
-        viewModel.mldLoadMoreSearchResultList.observe(this) {
-            mBinding.srlSearchActivity.closeHeaderOrFooter()
-            if (!searchHistoryListShow) {
-                if (this::mLayoutCircleProgressTextTip1.isInitialized) mLayoutCircleProgressTextTip1.gone()
-                if (it != null) {
-                    mBinding.tvSearchActivityTip.text = getString(
-                        R.string.search_activity_tip,
-                        viewModel.keyword,
-                        adapter.dataList.size + it.size
-                    )
-                    adapter.dataList += it
+        viewModel.searchHistoryList.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Success -> {
+                    if (searchHistoryListShow) {
+                        mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
+                        adapter.dataList = data.data
+                    }
+                }
+                else -> {
+                    adapter.dataList = emptyList()
                 }
             }
         }
 
-        viewModel.mldSearchHistoryList.observe(this) {
-            if (searchHistoryListShow) {
-                mBinding.tvSearchActivityTip.text = getString(R.string.search_history)
-                adapter.dataList = it ?: emptyList()
+        viewModel.deleteCompleted.collectWithLifecycle(this) { data ->
+            if (searchHistoryListShow && data != null && adapter.dataList.contains(data)) {
+                adapter.dataList -= data
             }
-        }
-
-        viewModel.mldDeleteCompleted.observe(this) {
-            if (searchHistoryListShow && adapter.dataList.contains(it)) adapter.dataList -= it
-        }
-
-        viewModel.mldInsertCompleted.observe(this) {
-            if (searchHistoryListShow) adapter.dataList = it ?: emptyList()
         }
 
         mBinding.tbSearchActivity.setOnMenuItemClickListener { item ->
@@ -138,9 +133,13 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         }
 
         if (viewModel.keyword.isBlank()) {
-            if (viewModel.mldSearchHistoryList.value == null) viewModel.getSearchHistoryData()
+            if (viewModel.searchHistoryList.value is DataState.Empty) {
+                viewModel.getSearchHistoryData()
+            }
         } else {
-            if (viewModel.mldSearchResultList.value == null) search(viewModel.keyword, pageNumber)
+            if (viewModel.searchResultList.value is DataState.Empty) {
+                search(viewModel.keyword, pageNumber)
+            }
         }
     }
 
@@ -176,7 +175,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
 
     private fun showSearchHistory() {
         searchHistoryListShow = true
-        adapter.dataList = viewModel.searchHistoryList.toList()
+        adapter.dataList = viewModel.searchHistoryList.value.readOrNull().orEmpty().toList()
         mBinding.srlSearchActivity.setEnableLoadMore(false)
     }
 

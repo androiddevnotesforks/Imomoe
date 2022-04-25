@@ -6,7 +6,9 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
 import com.skyd.imomoe.viewmodel.HistoryViewModel
@@ -48,32 +50,18 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
             rvHistoryActivity.adapter = adapter
         }
 
-        viewModel.mldHistoryList.observe(this) {
-            mBinding.srlHistoryActivity.isRefreshing = false
-            if (it != null) {
-                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_history))
-                adapter.dataList = it
-            }
-        }
-
-        viewModel.mldDeleteHistory.observe(this) {
-            if (it != null) {
-                adapter.dataList.let { list ->
-                    if (list.contains(it) && list.size == 1) {
-                        showLoadFailedTip(getString(R.string.no_history))
-                    }
-                    adapter.dataList -= it
+        viewModel.historyList.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Success -> {
+                    mBinding.srlHistoryActivity.isRefreshing = false
+                    if (data.data.isEmpty()) showLoadFailedTip(getString(R.string.no_history))
+                    adapter.dataList = data.data
+                }
+                else -> {
+                    mBinding.srlHistoryActivity.isRefreshing = false
                 }
             }
         }
-
-        viewModel.mldDeleteAllHistory.observe(this) {
-            showLoadFailedTip(getString(R.string.no_history))
-            adapter.dataList = emptyList()
-        }
-
-        mBinding.srlHistoryActivity.isRefreshing = true
-        if (viewModel.mldHistoryList.value == null) viewModel.getHistoryList()
     }
 
     override fun getBinding() = ActivityHistoryBinding.inflate(layoutInflater)

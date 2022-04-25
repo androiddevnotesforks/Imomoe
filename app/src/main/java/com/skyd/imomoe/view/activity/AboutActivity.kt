@@ -7,6 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityAboutBinding
+import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.ext.visible
@@ -124,6 +125,9 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                     message = "MaybeQHL提供弹幕服务器：\nhttps://github.com/MaybeQHL/my_danmu_pub",
                     onPositive = { dialog, _ -> dialog.dismiss() }
                 )
+            }
+            if (resources.getBoolean(R.bool.is_landscape)) {
+                ablAboutActivity.hideToolbarWhenCollapsed(tbAboutActivity)
             }
         }
     }

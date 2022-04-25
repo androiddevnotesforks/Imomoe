@@ -10,6 +10,7 @@ import com.efs.sdk.launch.LaunchManager
 import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.initUM
 import com.skyd.imomoe.ext.theme.appThemeRes
@@ -27,12 +28,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(activityThemeRes!!)
-        appThemeRes.observe(this) {
+        setTheme(activityThemeRes)
+        appThemeRes.collectWithLifecycle(this) {
             if (activityThemeRes != it) {
                 // 壁纸取色
                 if (it == R.style.Theme_Anime_Dynamic) {
-                    DynamicColors.applyToActivityIfAvailable(this)
+                    DynamicColors.applyToActivityIfAvailable(this@BaseActivity)
                 }
                 recreate()
             }
@@ -77,7 +78,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     protected open fun getLoadFailedTipView(): ViewStub? = null
 
     protected open fun showLoadFailedTip(
-        text: String, onClickListener: View.OnClickListener? = null
+        text: String = getString(R.string.load_data_failed_click_to_retry),
+        onClickListener: View.OnClickListener? = null
     ) {
         val loadFailedTipViewStub = getLoadFailedTipView() ?: return
         if (loadFailedTipViewStub.parent != null) {

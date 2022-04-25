@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.showMessageDialog
@@ -38,6 +38,7 @@ import javax.inject.Inject
 class SettingFragment : BasePreferenceFragment() {
     private val viewModel: SettingViewModel by viewModels()
     private var selfUpdateCheck = false
+
     @Inject
     lateinit var appUpdateHelper: AppUpdateHelper
 
@@ -45,36 +46,24 @@ class SettingFragment : BasePreferenceFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 清理历史记录
-        viewModel.mldDeleteAllHistory.observe(viewLifecycleOwner, Observer {
-            if (it == null) return@Observer
-            if (it) getString(R.string.delete_all_history_succeed).showToast()
-            else getString(R.string.delete_all_history_failed).showToast()
-            viewModel.mldDeleteAllHistory.postValue(null)
-        })
-        viewModel.mldAllHistoryCount.observe(viewLifecycleOwner) {
-            findPreference<Preference>("delete_all_history")?.summary =
-                getString(R.string.delete_all_history_summary, it)
+        viewModel.deleteAllHistory.collectWithLifecycle(viewLifecycleOwner) { data ->
+            data.second.showToast()
         }
-        viewModel.getAllHistoryCount()
+        viewModel.allHistoryCount.collectWithLifecycle(viewLifecycleOwner) { data ->
+            findPreference<Preference>("delete_all_history")?.summary =
+                getString(R.string.delete_all_history_summary, data)
+        }
 
         // 清理缓存文件
-        viewModel.mldCacheSize.observe(viewLifecycleOwner) {
+        viewModel.cacheSize.collectWithLifecycle(viewLifecycleOwner) { data ->
             findPreference<Preference>("clear_cache")?.summary =
-                getString(R.string.clear_cache_summary, it)
+                getString(R.string.clear_cache_summary, data)
         }
-        viewModel.mldClearAllCache.observe(viewLifecycleOwner, Observer {
-            if (it == null) return@Observer
-            lifecycleScope.launch(Dispatchers.IO) {
-                delay(1000)
-                viewModel.getCacheSize()
-                if (it) getString(R.string.clear_cache_succeed).showToast()
-                else getString(R.string.clear_cache_failed).showToast()
-            }
-            viewModel.mldClearAllCache.postValue(null)
-        })
-        viewModel.getCacheSize()
+        viewModel.clearAllCache.collectWithLifecycle(viewLifecycleOwner) { data ->
+            data.second.showToast()
+        }
 
-        appUpdateHelper.getUpdateStatus().observe(viewLifecycleOwner) {
+        appUpdateHelper.getUpdateStatus().collectWithLifecycle(viewLifecycleOwner) {
             val text1: String = when (it) {
                 AppUpdateStatus.UNCHECK -> {
                     getString(R.string.uncheck_update)
@@ -100,7 +89,6 @@ class SettingFragment : BasePreferenceFragment() {
                         if (selfUpdateCheck) showToast()
                     }
                 }
-                else -> ""
             }
             findPreference<Preference>("update")?.title =
                 getString(R.string.check_update_summary, text1)

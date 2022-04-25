@@ -1,6 +1,5 @@
 package com.skyd.imomoe.model
 
-import androidx.lifecycle.MutableLiveData
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.UpdateBean
 import com.skyd.imomoe.ext.editor
@@ -11,12 +10,13 @@ import com.skyd.imomoe.util.Util.isNewVersionByVersionCode
 import com.skyd.imomoe.util.logD
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
+import kotlinx.coroutines.flow.MutableStateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 object AppUpdateModel {
-    val status: MutableLiveData<AppUpdateStatus> = MutableLiveData()
+    val status: MutableStateFlow<AppUpdateStatus> = MutableStateFlow(AppUpdateStatus.UNCHECK)
     var updateBean: UpdateBean? = null
         private set
 
@@ -31,13 +31,9 @@ object AppUpdateModel {
             } else {
                 0
             }
-            mldUpdateServer.postValue(field)
         }
 
-    var mldUpdateServer: MutableLiveData<Int> = MutableLiveData()
-
     init {
-        status.value = AppUpdateStatus.UNCHECK
         updateServer =
             appContext.sharedPreferences("update").getInt(AppUpdateHelper.UPDATE_SERVER_SP_KEY, 0)
     }
@@ -52,20 +48,20 @@ object AppUpdateModel {
         check.enqueue(object : Callback<UpdateBean> {
             override fun onFailure(call: Call<UpdateBean>, t: Throwable) {
                 logD("checkUpdate", t.message ?: "")
-                status.postValue(AppUpdateStatus.ERROR)
+                status.tryEmit(AppUpdateStatus.ERROR)
             }
 
             override fun onResponse(call: Call<UpdateBean>, response: Response<UpdateBean>) {
                 updateBean = response.body()
                 updateBean?.let {
-                    status.postValue(
+                    status.tryEmit(
                         if (isNewVersionByVersionCode(updateBean?.tagName ?: "0"))
                             AppUpdateStatus.DATED
                         else AppUpdateStatus.VALID
                     )
                     return
                 }
-                status.postValue(AppUpdateStatus.ERROR)
+                status.tryEmit(AppUpdateStatus.ERROR)
             }
         })
     }

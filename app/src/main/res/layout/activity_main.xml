@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.activity.MainActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vp2_main_activity"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="1" />
+        app:layout_constraintBottom_toTopOf="@id/nv_main_activity"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nv_main_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_navigation" />
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

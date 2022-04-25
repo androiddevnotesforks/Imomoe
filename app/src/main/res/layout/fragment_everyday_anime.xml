@@ -31,7 +31,7 @@
             app:tabMode="scrollable" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/srl_everyday_anime_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -43,7 +43,7 @@
             android:id="@+id/vp2_everyday_anime_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ViewStub
         android:id="@+id/layout_everyday_anime_fragment_load_failed"

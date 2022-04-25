@@ -1,6 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
@@ -9,8 +8,10 @@ import com.skyd.imomoe.bean.ImageBean
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.interfaces.IAnimeDetailModel
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,19 +20,19 @@ class AnimeDetailViewModel @Inject constructor(
 ) : ViewModel() {
     var cover: ImageBean = ImageBean("", "", "")
     var title: String = ""
-    var mldAnimeDetailList: MutableLiveData<List<Any>?> = MutableLiveData()
+    var animeDetailList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
     var partUrl: String = ""
-    var mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
+    var favorite: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun getAnimeDetailData() {
         queryFavorite()
         request(request = { animeDetailModel.getAnimeDetailData(partUrl) }, success = {
             cover = it.first
             title = it.second
-            mldAnimeDetailList.postValue(it.third)
+            animeDetailList.tryEmit(DataState.Success(it.third))
             refreshAnimeCover()     // 更新数据库中番剧封面地址
         }, error = {
-            mldAnimeDetailList.postValue(null)
+            animeDetailList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -40,7 +41,7 @@ class AnimeDetailViewModel @Inject constructor(
     fun queryFavorite() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().getFavoriteAnime(partUrl)
-        }, success = { mldFavorite.postValue(it != null) })
+        }, success = { favorite.tryEmit(it != null) })
     }
 
     // 取消追番
@@ -49,7 +50,7 @@ class AnimeDetailViewModel @Inject constructor(
             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(partUrl)
         }, success = {
             appContext.getString(R.string.remove_favorite_succeed).showToast()
-            mldFavorite.postValue(false)
+            favorite.tryEmit(false)
         })
     }
 
@@ -67,7 +68,7 @@ class AnimeDetailViewModel @Inject constructor(
             )
         }, success = {
             appContext.getString(R.string.favorite_succeed).showToast()
-            mldFavorite.postValue(true)
+            favorite.tryEmit(true)
         })
     }
 

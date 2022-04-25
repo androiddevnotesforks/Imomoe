@@ -1,6 +1,5 @@
 package com.skyd.imomoe.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import coil.util.CoilUtils
 import com.skyd.imomoe.R
@@ -11,13 +10,24 @@ import com.skyd.imomoe.ext.formatSize
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.util.coil.CoilUtil
 import com.skyd.imomoe.util.showToast
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class SettingViewModel : ViewModel() {
-    var mldAllHistoryCount: MutableLiveData<Long> = MutableLiveData()
-    var mldDeleteAllHistory: MutableLiveData<Boolean> = MutableLiveData()
-    var mldClearAllCache: MutableLiveData<Boolean> = MutableLiveData()
-    var mldCacheSize: MutableLiveData<String> = MutableLiveData()
+    val allHistoryCount: MutableStateFlow<Long> = MutableStateFlow(-1L)
+    val cacheSize: MutableStateFlow<String> = MutableStateFlow("")
+
+    val deleteAllHistory: MutableSharedFlow<Pair<Boolean, String>> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    val clearAllCache: MutableSharedFlow<Pair<Boolean, String>> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+
+    init {
+        getAllHistoryCount()
+        getCacheSize()
+    }
 
     fun deleteAllHistory() {
         request(request = {
@@ -25,10 +35,10 @@ class SettingViewModel : ViewModel() {
             getAppDataBase().searchHistoryDao().deleteAllSearchHistory()
             getOfflineDatabase().playRecordDao().deleteAll()
         }, success = {
-            mldDeleteAllHistory.postValue(true)
+            deleteAllHistory.tryEmit(true to appContext.getString(R.string.delete_all_history_succeed))
             getAllHistoryCount()
         }, error = {
-            mldDeleteAllHistory.postValue(false)
+            deleteAllHistory.tryEmit(false to appContext.getString(R.string.clear_cache_failed))
             "${appContext.getString(R.string.delete_failed)}\n${it.message}".showToast()
         })
     }
@@ -38,19 +48,24 @@ class SettingViewModel : ViewModel() {
         request(request = {
             CoilUtils.createDefaultCache(appContext).directory.formatSize()
         }, success = {
-            mldCacheSize.postValue(it)
+            cacheSize.tryEmit(it)
         }, error = {
-            mldCacheSize.postValue(appContext.getString(R.string.get_cache_size_failed))
+            cacheSize.tryEmit(appContext.getString(R.string.get_cache_size_failed))
         })
     }
 
 
     fun clearAllCache() {
         request(request = { CoilUtil.clearMemoryDiskCache() }, success = {
-            mldClearAllCache.postValue(true)
+            clearAllCache.tryEmit(true to appContext.getString(R.string.clear_cache_succeed))
         }, error = {
-            mldClearAllCache.postValue(false)
+            clearAllCache.tryEmit(false to appContext.getString(R.string.clear_cache_failed))
             "${appContext.getString(R.string.delete_failed)}\n${it.message}".showToast()
+        }, finish = {
+            request(request = {
+                delay(1000)
+                getCacheSize()
+            })
         })
     }
 
@@ -59,8 +74,8 @@ class SettingViewModel : ViewModel() {
             getAppDataBase().historyDao().getHistoryCount() +
                     getAppDataBase().searchHistoryDao().getSearchHistoryCount() +
                     getOfflineDatabase().playRecordDao().getPlayRecordCount()
-        }, success = { mldAllHistoryCount.postValue(it) }, error = {
-            mldAllHistoryCount.postValue(-1)
+        }, success = { allHistoryCount.tryEmit(it) }, error = {
+            allHistoryCount.tryEmit(-1)
         })
     }
 }

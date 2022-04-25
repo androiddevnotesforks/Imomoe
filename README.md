@@ -74,6 +74,19 @@
 
 ![player](screenshot/player.jpg) 
 
+## 主要技术栈
+
+- MVVM
+- ViewModel
+- Flow
+- Kotlin Coroutine
+- Hilt
+- Room
+- Retrofit
+- Okhttp
+- Jsoup
+- ......
+
 ## 安全说明
 
 **请勿**私自**传播APK**安装包，GitHub仓库为唯一长期仓库，**请仅在GitHub仓库下载安装包**，请勿下载来历不明的应用与ads包，谨防隐私泄露，谨防受骗！

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
@@ -13,12 +12,14 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.PlayActivityProcessor
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
@@ -47,7 +48,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                     // 查找番剧播放历史决定是否可续播
                     holder.tvAnimeInfoContinuePlay.apply {
                         gone()
-                        getAppDataBase().historyDao().getHistoryLiveData(viewModel.partUrl).also {
+                        getAppDataBase().historyDao().getHistoryFlow(viewModel.partUrl).also {
                             setOnClickListener { v ->
                                 val url = v.tag
                                 if (url is String) {
@@ -61,7 +62,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                                 }
                             }
                             visible()
-                        }.observe(this@AnimeDetailActivity) { hb ->
+                        }.collectWithLifecycle(this@AnimeDetailActivity) { hb ->
                             //FIX_TODO 2022/1/22 14:53 0 这里没有在打开播放后更新，原因未知，所以暂时只能手动刷新
                             if (hb != null) {
                                 text = getString(R.string.play_last_time_episode, hb.lastEpisode)
@@ -116,7 +117,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 }
             }
             // 收藏
-            viewModel.mldFavorite.observe(this@AnimeDetailActivity) {
+            viewModel.favorite.collectWithLifecycle(this@AnimeDetailActivity) {
                 menu.findItem(R.id.menu_item_anime_detail_activity_favorite).apply {
                     isVisible = true
                     isChecked = it
@@ -135,11 +136,18 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
             srlAnimeDetailActivity.setOnRefreshListener { viewModel.getAnimeDetailData() }
         }
 
-        viewModel.mldAnimeDetailList.observe(this, Observer {
+        viewModel.animeDetailList.collectWithLifecycle(this) { data ->
             mBinding.srlAnimeDetailActivity.isRefreshing = false
-            adapter.dataList = it ?: emptyList()
+            when (data) {
+                is DataState.Success -> {
+                    adapter.dataList = data.data
+                }
+                else -> {
+                    adapter.dataList = emptyList()
+                }
+            }
 
-            if (viewModel.cover.url.isBlank()) return@Observer
+            if (viewModel.cover.url.isBlank()) return@collectWithLifecycle
             mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover.url) {
                 transformations(DarkBlurTransformation(this@AnimeDetailActivity))
                 addHeader("Referer", viewModel.cover.referer)
@@ -153,10 +161,10 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 )
             }
             mBinding.tbAnimeDetailActivity.title = viewModel.title
-        })
+        }
 
         mBinding.srlAnimeDetailActivity.isRefreshing = true
-        if (viewModel.mldAnimeDetailList.value == null) viewModel.getAnimeDetailData()
+        if (viewModel.animeDetailList.value is DataState.Empty) viewModel.getAnimeDetailData()
     }
 
     override fun getBinding(): ActivityAnimeDetailBinding =

@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentRankBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
@@ -52,29 +54,22 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             srlRankFragment.setOnLoadMoreListener { viewModel.loadMoreRankListData() }
         }
 
-        viewModel.mldRankData.observe(viewLifecycleOwner) {
-            mBinding.srlRankFragment.closeHeaderOrFooter()
-            if (it == null) {
-                adapter.dataList = emptyList()
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getRankListData()
+        viewModel.mldRankData.collectWithLifecycle(viewLifecycleOwner) { data ->
+            when (data) {
+                is DataState.Empty -> mBinding.srlRankFragment.autoRefresh()
+                is DataState.Success -> {
+                    mBinding.srlRankFragment.closeHeaderOrFooter()
+                    adapter.dataList = data.data
                     hideLoadFailedTip()
                 }
-            } else {
-                adapter.dataList = it
-                hideLoadFailedTip()
+                is DataState.Error -> {
+                    showLoadFailedTip {
+                        viewModel.getRankListData()
+                    }
+                }
+                else -> {}
             }
         }
-
-        viewModel.mldLoadMoreRankData.observe(viewLifecycleOwner) {
-            mBinding.srlRankFragment.closeHeaderOrFooter()
-            if (it != null) {
-                adapter.dataList += it
-                hideLoadFailedTip()
-            }
-        }
-
-        if (viewModel.mldRankData.value == null) mBinding.srlRankFragment.autoRefresh()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRankBinding =

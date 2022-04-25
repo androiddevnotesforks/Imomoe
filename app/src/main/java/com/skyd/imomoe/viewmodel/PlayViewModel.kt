@@ -1,7 +1,6 @@
 package com.skyd.imomoe.viewmodel
 
 import android.app.Activity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
@@ -9,10 +8,13 @@ import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.interfaces.IPlayModel
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 
@@ -29,20 +31,21 @@ class PlayViewModel @Inject constructor(
                 Util.getDetailLinkByEpisodeLink(partUrl)
             }
         }
-    var animeCover: ImageBean? = null
-    var mldAnimeCover: MutableLiveData<Boolean> = MutableLiveData()
-    var mldPlayDataList: MutableLiveData<List<Any>?> = MutableLiveData()
+    val animeCover: MutableStateFlow<ImageBean?> = MutableStateFlow(null)
+    val playDataList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
 
     // 当前播放集数的索引
     var currentEpisodeIndex = 0
 
     // 当前播放的集数
     val animeEpisodeDataBean = AnimeEpisodeDataBean("", "")
-    val episodesList: MutableList<AnimeEpisodeDataBean> = ArrayList()
-    val mldEpisodesList: MutableLiveData<Boolean> = MutableLiveData()
-    val mldPlayAnotherEpisode: MutableLiveData<Boolean> = MutableLiveData()
-    val mldAnimeDownloadUrl: MutableLiveData<AnimeEpisodeDataBean> = MutableLiveData()
-    val mldFavorite: MutableLiveData<Boolean> = MutableLiveData()
+    val episodesList: MutableStateFlow<DataState<List<AnimeEpisodeDataBean>>> =
+        MutableStateFlow(DataState.Empty)
+    val playAnotherEpisodeEvent: MutableSharedFlow<Boolean> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    val animeDownloadUrl: MutableSharedFlow<AnimeEpisodeDataBean> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    val favorite: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun setActivity(activity: Activity) {
         playModel.setActivity(activity)
@@ -56,9 +59,10 @@ class PlayViewModel @Inject constructor(
      * @return true if has next episode, false else.
      */
     fun playNextEpisode(): Boolean {
-        if (currentEpisodeIndex + 1 in episodesList.indices) {
+        val list = episodesList.value.readOrNull().orEmpty()
+        if (currentEpisodeIndex + 1 in list.indices) {
             playAnotherEpisode(
-                episodesList[currentEpisodeIndex + 1].route,
+                list[currentEpisodeIndex + 1].route,
                 currentEpisodeIndex + 1
             )
             return true
@@ -77,12 +81,12 @@ class PlayViewModel @Inject constructor(
             animeEpisodeDataBean.route = it.route.ifBlank { partUrl }
             animeEpisodeDataBean.title = it.title
             animeEpisodeDataBean.videoUrl = it.videoUrl
-            mldPlayAnotherEpisode.postValue(true)
+            playAnotherEpisodeEvent.tryEmit(true)
         }, error = {
             animeEpisodeDataBean.route = "animeEpisode1"
             animeEpisodeDataBean.title = ""
             animeEpisodeDataBean.videoUrl = ""
-            mldPlayAnotherEpisode.postValue(false)
+            playAnotherEpisodeEvent.tryEmit(false)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { this.currentEpisodeIndex = currentEpisodeIndex })
     }
@@ -93,31 +97,34 @@ class PlayViewModel @Inject constructor(
                 it ?: throw RuntimeException("getAnimeEpisodeUrlData return null")
             }
         }, success = {
-            episodesList[position].videoUrl = it
-            mldEpisodesList.postValue(true)
-            mldAnimeDownloadUrl.postValue(episodesList[position])
+            val episode = episodesList.value.readOrNull().orEmpty()[position]
+            episode.videoUrl = it
+            animeDownloadUrl.tryEmit(episode)
         }, error = {
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
 
     fun getPlayData() {
-        if (mldFavorite.value == null) queryFavorite()
+        if (favorite.value == null) queryFavorite()
         request(request = {
-            if (animeCover == null) animeCover = playModel.getAnimeCoverImageBean(partUrl)
+            if (animeCover.value == null) {
+                animeCover.tryEmit(playModel.getAnimeCoverImageBean(partUrl))
+            }
             playModel.getPlayData(partUrl, animeEpisodeDataBean)
         }, success = {
             if (animeEpisodeDataBean.route.isBlank()) {
                 animeEpisodeDataBean.route = partUrl
             }
-            episodesList.clear()
-            episodesList.addAll(it.second)
-            episodesList.sortEpisodeTitle()
+            val list = episodesList.value.readOrNull().orEmpty().toMutableList()
+            list.clear()
+            list.addAll(it.second)
+            list.sortEpisodeTitle()
             playBean = it.third
-            mldPlayDataList.postValue(it.first)
-            mldEpisodesList.postValue(true)
+            episodesList.tryEmit(DataState.Success(list))
+            playDataList.tryEmit(DataState.Success(it.first))
         }, error = {
-            mldPlayDataList.postValue(null)
+            playDataList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -138,7 +145,7 @@ class PlayViewModel @Inject constructor(
     // 插入观看历史记录
     fun insertHistoryData() {
         request(request = {
-            animeCover.let {
+            animeCover.value.let {
                 if (it == null) {
                     playModel.getAnimeCoverImageBean(partUrl).run {
                         val cover = this ?: ImageBean("", "", "")
@@ -172,16 +179,14 @@ class PlayViewModel @Inject constructor(
             playModel.getAnimeCoverImageBean(partUrl)
         }, success = {
             it ?: return@request
-            val cover = animeCover
+            val cover = animeCover.value
             if (cover == null) {
-                animeCover = ImageBean("", it.url, it.referer)
+                animeCover.tryEmit(ImageBean("", it.url, it.referer))
             } else {
                 cover.url = it.url
                 cover.referer = it.referer
             }
-            mldAnimeCover.postValue(true)
         }, error = {
-            mldAnimeCover.postValue(false)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -191,7 +196,7 @@ class PlayViewModel @Inject constructor(
     fun queryFavorite() {
         request(request = {
             getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-        }, success = { mldFavorite.postValue(it != null) })
+        }, success = { favorite.tryEmit(it != null) })
     }
 
     // 取消追番
@@ -200,13 +205,13 @@ class PlayViewModel @Inject constructor(
             getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
         }, success = {
             appContext.getString(R.string.remove_favorite_succeed).showToast()
-            mldFavorite.postValue(false)
+            favorite.tryEmit(false)
         })
     }
 
     // 追番
     fun insertFavorite() {
-        val cover = animeCover                  // 番剧封面
+        val cover = animeCover.value            // 番剧封面
         val title = playBean?.title?.title      // 番剧名，非集数名
         if (cover != null && title != null) {
             request(request = {
@@ -223,7 +228,7 @@ class PlayViewModel @Inject constructor(
                 )
             }, success = {
                 appContext.getString(R.string.favorite_succeed).showToast()
-                mldFavorite.postValue(true)
+                favorite.tryEmit(true)
             })
         } else {
             appContext.getString(R.string.insert_favorite_failed_in_play_activity).showToast()

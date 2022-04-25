@@ -1,5 +1,6 @@
 package com.skyd.imomoe.route.processor
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -12,7 +13,12 @@ import com.skyd.imomoe.view.activity.AnimeDetailActivity
 object DetailActivityProcessor : Processor() {
     override fun process(uri: Uri, context: Context?) {
         val partUrl = uri.getQueryParameter("partUrl")
-        context?.startActivity(
+        if (context is Activity) {
+            context.startActivity(
+                Intent(context, AnimeDetailActivity::class.java)
+                    .putExtra("partUrl", partUrl)
+            )
+        } else context?.startActivity(
             Intent(context, AnimeDetailActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra("partUrl", partUrl)

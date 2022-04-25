@@ -1,16 +1,19 @@
 package com.skyd.imomoe.viewmodel
 
 import android.app.Activity
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.PageNumberBean
 import com.skyd.imomoe.ext.request
+import com.skyd.imomoe.ext.tryEmitError
+import com.skyd.imomoe.ext.tryEmitLoadMore
 import com.skyd.imomoe.model.interfaces.IClassifyModel
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 
@@ -22,9 +25,9 @@ class ClassifyViewModel @Inject constructor(
     var classifyTitle: String = ""          //如 大陆
     var currentPartUrl: String = ""
     private var isRequesting = false
-    var mldClassifyTabList: MutableLiveData<List<ClassifyBean>?> = MutableLiveData()
-    var mldClassifyList: MutableLiveData<List<Any>?> = MutableLiveData()
-    var mldLoadMoreClassifyList: MutableLiveData<List<Any>?> = MutableLiveData()
+    val classifyTabList: MutableStateFlow<DataState<List<ClassifyBean>>> =
+        MutableStateFlow(DataState.Empty)
+    val classifyList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
     private var pageNumberBean: PageNumberBean? = null
 
     fun setActivity(activity: Activity) {
@@ -36,10 +39,11 @@ class ClassifyViewModel @Inject constructor(
     }
 
     fun getClassifyTabData() {
+        classifyTabList.tryEmit(DataState.Refreshing)
         request(request = { classifyModel.getClassifyTabData() }, success = {
-            mldClassifyTabList.postValue(it)
+            classifyTabList.tryEmit(DataState.Success(it))
         }, error = {
-            mldClassifyTabList.postValue(null)
+            classifyTabList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -47,12 +51,13 @@ class ClassifyViewModel @Inject constructor(
     fun getClassifyData(partUrl: String) {
         if (isRequesting) return
         isRequesting = true
+        classifyList.tryEmit(DataState.Refreshing)
         request(request = { classifyModel.getClassifyData(partUrl) }, success = {
             pageNumberBean = it.second
-            mldClassifyList.postValue(it.first)
+            classifyList.tryEmit(DataState.Success(it.first))
         }, error = {
             pageNumberBean = null
-            mldClassifyList.postValue(null)
+            classifyList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { isRequesting = false })
     }
@@ -60,19 +65,21 @@ class ClassifyViewModel @Inject constructor(
     fun loadMoreClassifyData() {
         if (isRequesting) return
         isRequesting = true
+        val oldData = classifyList.value
+        classifyList.tryEmit(DataState.Loading)
         val partUrl = pageNumberBean?.route
         if (partUrl == null) {
-            mldLoadMoreClassifyList.postValue(ArrayList())
+            classifyList.tryEmit(oldData)
             appContext.getString(R.string.no_more_info).showToast()
             isRequesting = false
             return
         }
         request(request = { classifyModel.getClassifyData(partUrl) }, success = {
             pageNumberBean = it.second
-            mldLoadMoreClassifyList.postValue(it.first)
+            classifyList.tryEmitLoadMore(oldData = oldData, newData = it.first)
         }, error = {
             pageNumberBean = null
-            mldLoadMoreClassifyList.postValue(null)
+            classifyList.tryEmitError(oldData, it.message)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         }, finish = { isRequesting = false })
     }

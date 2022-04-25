@@ -13,10 +13,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.SearchActivityProcessor
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
 import com.skyd.imomoe.view.activity.ClassifyActivity
@@ -43,8 +45,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             val tabLayoutMediator = TabLayoutMediator(
                 tlHomeFragment, vp2HomeFragment.getViewPager()
             ) { tab, position ->
-                if (position < viewModel.mldAllTabList.value?.size ?: 0)
-                    tab.text = viewModel.mldAllTabList.value?.get(position)?.title
+                val list = viewModel.allTabList.value.readOrNull().orEmpty()
+                if (position < list.size) {
+                    tab.text = list[position].title
+                }
             }
             tabLayoutMediator.attach()
 
@@ -95,32 +99,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             ablHomeFragment.hideToolbarWhenCollapsed(tbHomeFragment)
         }
 
-        viewModel.mldAllTabList.observe(viewLifecycleOwner) {
-            if (it == null) {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getAllTabData()
+        viewModel.allTabList.collectWithLifecycle(viewLifecycleOwner) { data ->
+            when (data) {
+                is DataState.Success -> {
                     hideLoadFailedTip()
+                    if (data.data.isNotEmpty()) {
+                        mBinding.vp2HomeFragment.offscreenPageLimit = data.data.size
+                    }
                 }
-            } else {
-                hideLoadFailedTip()
-                if (it.isNotEmpty()) mBinding.vp2HomeFragment.offscreenPageLimit = it.size
+                is DataState.Error -> {
+                    showLoadFailedTip {
+                        viewModel.getAllTabData()
+                    }
+                }
+                else -> {}
             }
             adapter.notifyDataSetChanged()
         }
-
-        if (viewModel.mldAllTabList.value == null) viewModel.getAllTabData()
     }
 
     override fun getLoadFailedTipView(): ViewStub = mBinding.layoutHomeFragmentLoadFailed
 
     inner class VpAdapter : FragmentStateAdapter(this) {
 
-        override fun getItemCount() = viewModel.mldAllTabList.value?.size ?: 0
+        override fun getItemCount() = viewModel.allTabList.value.readOrNull().orEmpty().size
 
         override fun createFragment(position: Int): Fragment {
             val fragment = AnimeShowFragment()
             val bundle = Bundle()
-            bundle.putString("partUrl", viewModel.mldAllTabList.value?.get(position)?.route)
+            bundle.putString(
+                "partUrl",
+                viewModel.allTabList.value.readOrNull().orEmpty()[position].route
+            )
             fragment.arguments = bundle
             return fragment
         }

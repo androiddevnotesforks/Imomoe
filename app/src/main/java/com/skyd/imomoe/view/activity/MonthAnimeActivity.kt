@@ -6,6 +6,8 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -42,28 +44,24 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             srlMonthAnimeActivity.setOnLoadMoreListener { viewModel.loadMoreMonthAnimeData() }
         }
 
-        viewModel.mldMonthAnimeList.observe(this) {
-            mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
-            if (it == null) {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getMonthAnimeData(viewModel.partUrl)
+        viewModel.monthAnimeList.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Empty -> mBinding.srlMonthAnimeActivity.autoRefresh()
+                is DataState.Success -> {
                     hideLoadFailedTip()
+                    mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
+                    adapter.dataList = data.data
                 }
-            } else {
-                hideLoadFailedTip()
-            }
-            adapter.dataList = it ?: emptyList()
-        }
-
-        viewModel.mldLoadMoreMonthAnimeList.observe(this) {
-            mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
-            if (it != null) {
-                hideLoadFailedTip()
-                adapter.dataList += it
+                is DataState.Error -> {
+                    adapter.dataList = emptyList()
+                    showLoadFailedTip {
+                        viewModel.getMonthAnimeData(viewModel.partUrl)
+                    }
+                    mBinding.srlMonthAnimeActivity.closeHeaderOrFooter()
+                }
+                else -> {}
             }
         }
-
-        if (viewModel.mldMonthAnimeList.value == null) mBinding.srlMonthAnimeActivity.autoRefresh()
     }
 
     override fun getBinding() = ActivityMonthAnimeBinding.inflate(layoutInflater)

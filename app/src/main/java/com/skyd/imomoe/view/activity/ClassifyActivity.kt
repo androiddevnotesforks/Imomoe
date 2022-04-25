@@ -9,7 +9,9 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyTab1Bean
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -22,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
     private val viewModel: ClassifyViewModel by viewModels()
-    private var lastRefreshTime: Long = System.currentTimeMillis() - 500
+    private var lastRefreshTime: Long = 0L
     private val spinnerAdapter: ArrayAdapter<ClassifyBean> by lazy {
         ArrayAdapter(this, R.layout.item_spinner_item_1)
     }
@@ -49,7 +51,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {
                     lastRefreshTime = System.currentTimeMillis()
-                    if (viewModel.mldClassifyTabList.value?.isEmpty() == false)
+                    if (!viewModel.classifyTabList.value.readOrNull().isNullOrEmpty())
                         viewModel.getClassifyData(viewModel.currentPartUrl)
                     else viewModel.getClassifyTabData()
                 } else {
@@ -58,8 +60,11 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             }
             srlClassifyActivity.setOnLoadMoreListener { viewModel.loadMoreClassifyData() }
 
-            rvClassifyActivityTab.layoutManager =
-                GridLayoutManager(this@ClassifyActivity, 2, GridLayoutManager.HORIZONTAL, false)
+            rvClassifyActivityTab.layoutManager = GridLayoutManager(
+                this@ClassifyActivity, 2,
+                if (resources.getBoolean(R.bool.is_landscape)) GridLayoutManager.VERTICAL
+                else GridLayoutManager.HORIZONTAL, false
+            )
             rvClassifyActivityTab.adapter = classifyTabAdapter
 
             rvClassifyActivity.layoutManager = GridLayoutManager(this@ClassifyActivity, 4)
@@ -77,63 +82,75 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             ablClassifyActivity.hideToolbarWhenCollapsed(tbClassifyActivity)
         }
 
-        viewModel.mldClassifyTabList.observe(this) {
+        viewModel.classifyTabList.collectWithLifecycle(this) { data ->
             mBinding.srlClassifyActivity.finishRefresh()
-            if (it != null && it.isEmpty()) {
-                spinnerAdapter.clear()
-                spinnerAdapter.notifyDataSetChanged()
-            } else if (it != null) {
-                spinnerAdapter.clear()
-                spinnerAdapter.addAll(it)
-                spinnerAdapter.notifyDataSetChanged()
+            when (data) {
+                is DataState.Success -> {
+                    spinnerAdapter.clear()
+                    spinnerAdapter.addAll(data.data)
+                    spinnerAdapter.notifyDataSetChanged()
 
-                //自动选中第一个
-                if (viewModel.currentPartUrl.isEmpty() && it[0].classifyDataList.size > 0) {
-                    val firstItem = it[0].classifyDataList[0]
-                    viewModel.currentPartUrl = firstItem.route
-                    viewModel.classifyTabTitle = it[0].toString()
-                    viewModel.classifyTitle = firstItem.title
-                    tabSelected(viewModel.currentPartUrl)
-                } else {
-                    var found = false
-                    it.forEachIndexed { index, classifyBean ->
-                        classifyBean.classifyDataList.forEach { item ->
-                            if (item.route == viewModel.currentPartUrl) {
-                                mBinding.spinnerClassifyActivity.setSelection(index, true)
-                                viewModel.classifyTabTitle = classifyBean.name
-                                viewModel.classifyTitle = item.title
-                                tabSelected(viewModel.currentPartUrl)
-                                found = true
-                                return@forEachIndexed
+                    //自动选中第一个
+                    if (viewModel.currentPartUrl.isEmpty() && data.data[0].classifyDataList.size > 0) {
+                        val firstItem = data.data[0].classifyDataList[0]
+                        viewModel.currentPartUrl = firstItem.route
+                        viewModel.classifyTabTitle = data.data[0].toString()
+                        viewModel.classifyTitle = firstItem.title
+                        tabSelected(viewModel.currentPartUrl)
+                    } else {
+                        var found = false
+                        data.data.forEachIndexed { index, classifyBean ->
+                            classifyBean.classifyDataList.forEach { item ->
+                                if (item.route == viewModel.currentPartUrl) {
+                                    mBinding.spinnerClassifyActivity.setSelection(index, true)
+                                    viewModel.classifyTabTitle = classifyBean.name
+                                    viewModel.classifyTitle = item.title
+                                    tabSelected(viewModel.currentPartUrl)
+                                    found = true
+                                    return@forEachIndexed
+                                }
                             }
                         }
+                        if (!found) tabSelected(viewModel.currentPartUrl)
                     }
-                    if (!found) tabSelected(viewModel.currentPartUrl)
                 }
+                is DataState.Error -> {
+                    spinnerAdapter.clear()
+                    spinnerAdapter.notifyDataSetChanged()
+                }
+                else -> {}
             }
         }
 
-        viewModel.mldClassifyList.observe(this) {
+        viewModel.classifyList.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Success -> {
+                    classifyAdapter.dataList = data.data
+                    mBinding.tbClassifyActivity.title =
+                        if (viewModel.classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  ${viewModel.classifyTitle}"
+                        else "${getString(R.string.anime_classify)}  ${
+                            if (viewModel.classifyTabTitle.endsWith(":") ||
+                                viewModel.classifyTabTitle.endsWith("：")
+                            ) {
+                                viewModel.classifyTabTitle.substring(
+                                    0, viewModel.classifyTabTitle.length - 1
+                                )
+                            } else {
+                                viewModel.classifyTabTitle
+                            }
+                        }：${viewModel.classifyTitle}"
+                }
+                is DataState.Error -> {
+                    classifyAdapter.dataList = emptyList()
+                }
+                else -> {}
+            }
             mBinding.srlClassifyActivity.closeHeaderOrFooter()
-            classifyAdapter.dataList = it ?: emptyList()
-            mBinding.tbClassifyActivity.title =
-                if (viewModel.classifyTabTitle.isEmpty()) "${getString(R.string.anime_classify)}  ${viewModel.classifyTitle}"
-                else "${getString(R.string.anime_classify)}  ${
-                    if (viewModel.classifyTabTitle.endsWith(":") ||
-                        viewModel.classifyTabTitle.endsWith("：")
-                    ) viewModel.classifyTabTitle.substring(0, viewModel.classifyTabTitle.length - 1)
-                    else viewModel.classifyTabTitle
-                }：${viewModel.classifyTitle}"
-        }
-
-        viewModel.mldLoadMoreClassifyList.observe(this) {
-            mBinding.srlClassifyActivity.closeHeaderOrFooter()
-            classifyAdapter.dataList += (it ?: emptyList())
         }
 
         viewModel.setActivity(this)
 
-        if (viewModel.mldClassifyTabList.value == null) viewModel.getClassifyTabData()
+        if (viewModel.classifyTabList.value is DataState.Empty) viewModel.getClassifyTabData()
     }
 
     override fun onDestroy() {

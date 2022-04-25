@@ -8,7 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityRankBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.fragment.RankFragment
 import com.skyd.imomoe.view.listener.dsl.addOnTabSelectedListener
 import com.skyd.imomoe.viewmodel.RankViewModel
@@ -38,8 +40,10 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
             val tabLayoutMediator = TabLayoutMediator(
                 tlRankActivity, vp2RankActivity.getViewPager()
             ) { tab, position ->
-                if (position < viewModel.mldRankData.value?.size ?: 0)
-                    tab.text = viewModel.mldRankData.value?.get(position)?.title
+                val list = viewModel.rankData.value.readOrNull().orEmpty()
+                if (position < list.size) {
+                    tab.text = list[position].title
+                }
             }
             tabLayoutMediator.attach()
 
@@ -47,21 +51,25 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
         }
 
 
-        viewModel.mldRankData.observe(this) {
-            if (it != null) {
-                hideLoadFailedTip()
-                if (it.isNotEmpty()) mBinding.vp2RankActivity.offscreenPageLimit = it.size
-            } else {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getRankTabData()
+        viewModel.rankData.collectWithLifecycle(this) { data ->
+            when (data) {
+                is DataState.Success -> {
                     hideLoadFailedTip()
+                    val list = data.data
+                    if (!list.isNullOrEmpty()) {
+                        mBinding.vp2RankActivity.offscreenPageLimit = list.size
+                    }
+                    adapter.notifyDataSetChanged()
                 }
+                is DataState.Error -> {
+                    showLoadFailedTip {
+                        viewModel.getRankTabData()
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+                else -> {}
             }
-            adapter.notifyDataSetChanged()
-            viewModel.isRequesting = false
         }
-
-        if (viewModel.mldRankData.value == null) viewModel.getRankTabData()
     }
 
     override fun getBinding() = ActivityRankBinding.inflate(layoutInflater)
@@ -75,12 +83,15 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
 
     inner class VpAdapter : FragmentStateAdapter(this) {
 
-        override fun getItemCount() = viewModel.mldRankData.value?.size ?: 0
+        override fun getItemCount() = viewModel.rankData.value.readOrNull().orEmpty().size
 
         override fun createFragment(position: Int): Fragment {
             val fragment = RankFragment()
             val bundle = Bundle()
-            bundle.putString("partUrl", viewModel.mldRankData.value?.get(position)?.route)
+            bundle.putString(
+                "partUrl",
+                viewModel.rankData.value.readOrNull().orEmpty()[position].route
+            )
             fragment.arguments = bundle
             return fragment
         }

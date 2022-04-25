@@ -38,7 +38,6 @@ retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:2.9.0"
 deps.retrofit2 = retrofit2
 
 def lifecycle = [:]
-lifecycle.lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 lifecycle.lifecycle_extensions = 'androidx.lifecycle:lifecycle-extensions:2.2.0'

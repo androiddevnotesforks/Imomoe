@@ -1,20 +1,22 @@
 package com.skyd.imomoe.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.arialyy.aria.core.download.DownloadEntity
 import com.skyd.imomoe.bean.AnimeDownload1Bean
 import com.skyd.imomoe.ext.request
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class DownloadManagerViewModel : ViewModel() {
-    val mldDataList: MutableLiveData<List<Any>> = MutableLiveData()
+    val downloadDataList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
 
     fun initList(
         notCompleteList: List<DownloadEntity>,
         animeTitleEpisodeMap: HashMap<String, Pair<String, String>>
     ) {
+        downloadDataList.tryEmit(DataState.Refreshing)
         request(request = {
             val dataList = ArrayList<AnimeDownload1Bean>()
             notCompleteList.forEach { entity ->
@@ -32,8 +34,9 @@ class DownloadManagerViewModel : ViewModel() {
             }
             dataList
         }, success = {
-            mldDataList.postValue(it)
+            downloadDataList.tryEmit(DataState.Success(it))
         }, error = {
+            downloadDataList.tryEmit(DataState.Error(it.message.orEmpty()))
             it.message?.showToast()
         })
     }
@@ -44,7 +47,7 @@ class DownloadManagerViewModel : ViewModel() {
     ) {
         request(request = {
             var contain = false
-            val dataList = mldDataList.value.orEmpty().toMutableList()
+            val dataList = downloadDataList.value.readOrNull().orEmpty().toMutableList()
             // 根据url和下载任务id查找是否已经添加
             dataList.forEach {
                 if (it is AnimeDownload1Bean) {
@@ -74,7 +77,7 @@ class DownloadManagerViewModel : ViewModel() {
             }
             dataList
         }, success = {
-            mldDataList.postValue(it)
+            downloadDataList.tryEmit(DataState.Success(it))
         }, error = {
             it.message?.showToast()
         })
@@ -82,7 +85,7 @@ class DownloadManagerViewModel : ViewModel() {
 
     fun onTaskRunning(entity: DownloadEntity) {
         request(request = {
-            var dataList = mldDataList.value.orEmpty()
+            var dataList = downloadDataList.value.readOrNull().orEmpty()
             dataList = dataList.toMutableList().map {
                 var result: Any = it
                 if (it is AnimeDownload1Bean && it.url == entity.url) {
@@ -96,14 +99,14 @@ class DownloadManagerViewModel : ViewModel() {
             }
             dataList
         }, success = {
-            mldDataList.postValue(it)
+            downloadDataList.tryEmit(DataState.Success(it))
         })
         // onTaskRunning Toast显示错误体验不佳
     }
 
     fun onTaskComplete(entity: DownloadEntity) {
         request(request = {
-            var dataList = mldDataList.value.orEmpty()
+            var dataList = downloadDataList.value.readOrNull().orEmpty()
             dataList = dataList.filter {
                 if (it is AnimeDownload1Bean) {
                     // 如果是下载完成任务的id，则从list中移除
@@ -112,7 +115,7 @@ class DownloadManagerViewModel : ViewModel() {
             }
             dataList
         }, success = {
-            mldDataList.postValue(it)
+            downloadDataList.tryEmit(DataState.Success(it))
         }, error = {
             it.message?.showToast()
         })
@@ -120,7 +123,7 @@ class DownloadManagerViewModel : ViewModel() {
 
     fun onTaskCancel(entity: DownloadEntity) {
         request(request = {
-            var dataList = mldDataList.value.orEmpty()
+            var dataList = downloadDataList.value.readOrNull().orEmpty()
             dataList = dataList.filter {
                 // 如果是取消任务的id，则从list中移除
                 if (it is AnimeDownload1Bean) {
@@ -129,7 +132,7 @@ class DownloadManagerViewModel : ViewModel() {
             }
             dataList
         }, success = {
-            mldDataList.postValue(it)
+            downloadDataList.tryEmit(DataState.Success(it))
         }, error = {
             it.message?.showToast()
         })

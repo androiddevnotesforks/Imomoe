@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.fragment
 
+import com.skyd.imomoe.ext.collectWithLifecycle
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,8 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -54,10 +55,19 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         val arguments = arguments
 
         runCatching {
-            viewModel.partUrl = arguments?.getString("partUrl").orEmpty()
+            if (viewModel.partUrl.isBlank()) {
+                viewModel.partUrl = arguments?.getString("partUrl").orEmpty()
+            }
         }.onFailure {
             it.printStackTrace()
             it.message?.showToast(Toast.LENGTH_LONG)
+        }
+        mBinding.apply {
+            rvAnimeShowFragment.adapter = adapter
+            rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, 4).apply {
+                spanSizeLookup = AnimeShowSpanSize(adapter)
+            }
+            rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
         }
     }
 
@@ -74,11 +84,6 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
 
     private fun initData() {
         mBinding.run {
-            rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, 4).apply {
-                spanSizeLookup = AnimeShowSpanSize(adapter)
-            }
-            rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())
-            rvAnimeShowFragment.adapter = adapter
             srlAnimeShowFragment.setOnRefreshListener {
                 viewModel.getAnimeShowData()
             }
@@ -87,29 +92,26 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             }
         }
 
-        viewModel.mldAnimeShowList.observe(viewLifecycleOwner) {
-            mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
-            if (it == null) {
-                showLoadFailedTip(getString(R.string.load_data_failed_click_to_retry)) {
-                    viewModel.getAnimeShowData()
+        viewModel.animeShowList.collectWithLifecycle(viewLifecycleOwner) { data ->
+            when (data) {
+                is DataState.Empty -> refresh()
+                is DataState.Success -> {
+                    adapter.dataList = data.data
                     hideLoadFailedTip()
+                    mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
                 }
-                adapter.dataList = emptyList()
-            } else {
-                adapter.dataList = it
-                hideLoadFailedTip()
+                is DataState.Error -> {
+                    adapter.dataList = emptyList()
+                    showLoadFailedTip {
+                        viewModel.getAnimeShowData()
+                    }
+                    mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
+                }
+                else -> {
+                    mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
+                }
             }
         }
-
-        viewModel.mldLoadMoreAnimeShowList.observe(viewLifecycleOwner) {
-            mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
-            if (it != null) {
-                adapter.dataList += it
-                hideLoadFailedTip()
-            }
-        }
-
-        if (viewModel.mldAnimeShowList.value == null) refresh()
     }
 
     fun refresh(): Boolean {

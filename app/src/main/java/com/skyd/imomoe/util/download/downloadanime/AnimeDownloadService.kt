@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.MutableLiveData
 import com.arialyy.annotations.Download
 import com.arialyy.aria.core.Aria
 import com.arialyy.aria.core.common.HttpOption
@@ -14,6 +13,7 @@ import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.HtmlService
@@ -21,6 +21,7 @@ import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.save2Xml
 import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -28,9 +29,12 @@ import java.io.File
 
 class AnimeDownloadService : LifecycleService() {
     companion object {
-        val mldStopTask: MutableLiveData<Long> = MutableLiveData(-1L)
-        val mldCancelTask: MutableLiveData<Pair<Long, String>> = MutableLiveData(-1L to "")
-        val mldResumeTask: MutableLiveData<Long> = MutableLiveData(-1L)
+        val stopTaskEvent: MutableSharedFlow<Long> =
+            MutableSharedFlow(extraBufferCapacity = 1)
+        val cancelTaskEvent: MutableSharedFlow<Pair<Long, String>> =
+            MutableSharedFlow(extraBufferCapacity = 1)
+        val resumeTaskEvent: MutableSharedFlow<Long> =
+            MutableSharedFlow(extraBufferCapacity = 1)
 
         const val DOWNLOAD_URL_KEY = "downloadUrl"
         const val STORE_DIRECTORY_PATH_KEY = "storeFilePath"
@@ -44,13 +48,20 @@ class AnimeDownloadService : LifecycleService() {
         CoroutineScope(Dispatchers.IO)
     }
 
-    private val mldOnTaskPre: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskStart: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskComplete: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskRunning: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskStop: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskCancel: MutableLiveData<DownloadTask> = MutableLiveData()
-    private val mldOnTaskFail: MutableLiveData<DownloadTask> = MutableLiveData()
+    private val onTaskPreEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskStartEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskCompleteEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskRunningEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskStopEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskCancelEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskFailEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
 
     private val notifyMap = hashMapOf<String, AnimeDownloadNotification>()
     private val animeTitleEpisodeMap = hashMapOf<String, Pair<String, String>>()
@@ -63,20 +74,20 @@ class AnimeDownloadService : LifecycleService() {
         val notCompleteList: List<DownloadEntity>
             get() = Aria.download(this).allNotCompleteTask.orEmpty()
 
-        val mldOnTaskPre: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskPre
-        val mldOnTaskStart: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskStart
-        val mldOnTaskComplete: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskComplete
-        val mldOnTaskRunning: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskRunning
-        val mldOnTaskStop: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskStop
-        val mldOnTaskCancel: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskCancel
-        val mldOnTaskFail: MutableLiveData<DownloadTask>
-            get() = this@AnimeDownloadService.mldOnTaskFail
+        val onTaskPreEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskPreEvent
+        val onTaskStartEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskStartEvent
+        val onTaskCompleteEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskCompleteEvent
+        val onTaskRunningEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskRunningEvent
+        val onTaskStopEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskStopEvent
+        val onTaskCancelEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskCancelEvent
+        val onTaskFailEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskFailEvent
     }
 
     private val animeDownloadBinder: Binder = AnimeDownloadBinder()
@@ -177,9 +188,9 @@ class AnimeDownloadService : LifecycleService() {
         super.onCreate()
         Aria.download(this).register()
 
-        mldStopTask.observe(this) { stopTask(it) }
-        mldCancelTask.observe(this) { cancelTask(it.first, it.second) }
-        mldResumeTask.observe(this) { resumeTask(it) }
+        stopTaskEvent.collectWithLifecycle(this) { stopTask(it) }
+        cancelTaskEvent.collectWithLifecycle(this) { cancelTask(it.first, it.second) }
+        resumeTaskEvent.collectWithLifecycle(this) { resumeTask(it) }
     }
 
     override fun onDestroy() {
@@ -189,93 +200,91 @@ class AnimeDownloadService : LifecycleService() {
 
     @Download.onPre
     fun onPre(task: DownloadTask?) {
-        mldOnTaskPre.postValue(task)
+        task ?: return
+        onTaskPreEvent.tryEmit(task)
     }
 
     @Download.onTaskPre
     fun onTaskPre(task: DownloadTask?) {
-        mldOnTaskPre.postValue(task)
+        task ?: return
+        onTaskPreEvent.tryEmit(task)
     }
 
     @Download.onTaskStart
     fun onTaskStart(task: DownloadTask?) {
-        if (task != null) {
-            animeTitleEpisodeMap[task.downloadEntity.url]?.run {
-                getString(
-                    R.string.anime_download_service_start_download,
-                    "$first - $second"
-                ).showToast()
-            }
+        task ?: return
+        animeTitleEpisodeMap[task.downloadEntity.url]?.run {
+            getString(
+                R.string.anime_download_service_start_download,
+                "$first - $second"
+            ).showToast()
         }
-        mldOnTaskStart.postValue(task)
+        onTaskStartEvent.tryEmit(task)
     }
 
     @Download.onTaskStop
     fun onTaskStop(task: DownloadTask?) {
-        mldOnTaskStop.postValue(task)
+        task ?: return
+        onTaskStopEvent.tryEmit(task)
     }
 
     @Download.onTaskCancel
     fun onTaskCancel(task: DownloadTask?) {
-        mldOnTaskCancel.postValue(task)
-        if (task != null) {
-            notifyMap[task.downloadEntity?.url]?.cancel()
-        }
+        task ?: return
+        onTaskCancelEvent.tryEmit(task)
+        notifyMap[task.downloadEntity?.url]?.cancel()
     }
 
     @Download.onTaskFail
     fun onTaskFail(task: DownloadTask?) {
-        if (task != null) {
-            notifyMap[task.downloadEntity?.url]?.cancel()
-            animeTitleEpisodeMap[task.downloadEntity?.url]?.run {
-                getString(
-                    R.string.anime_download_service_download_failed,
-                    "$first - $second"
-                ).showToast()
-            }
+        task ?: return
+        notifyMap[task.downloadEntity?.url]?.cancel()
+        animeTitleEpisodeMap[task.downloadEntity?.url]?.run {
+            getString(
+                R.string.anime_download_service_download_failed,
+                "$first - $second"
+            ).showToast()
         }
-        mldOnTaskFail.postValue(task)
+        onTaskFailEvent.tryEmit(task)
     }
 
     @Download.onTaskComplete
     fun onTaskComplete(task: DownloadTask?) {
-        if (task != null) {
-            notifyMap[task.downloadEntity?.url]?.cancel()
-            val p = animeTitleEpisodeMap[task.downloadEntity?.url]
-            if (p != null) {
-                runCatching {
-                    coroutineScope.launch {
-                        val file = File(task.downloadEntity.m3U8Entity.filePath)
-                        file.toMD5()?.let {
-                            val entity = AnimeDownloadEntity(it, p.second, file.name)
-                            getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
-                            save2Xml((file.parent ?: p.first).substringAfterLast("/"), entity)
-                        }
+        task ?: return
+        notifyMap[task.downloadEntity?.url]?.cancel()
+        val p = animeTitleEpisodeMap[task.downloadEntity?.url]
+        if (p != null) {
+            runCatching {
+                coroutineScope.launch {
+                    val file = File(task.downloadEntity.m3U8Entity.filePath)
+                    file.toMD5()?.let {
+                        val entity = AnimeDownloadEntity(it, p.second, file.name)
+                        getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
+                        save2Xml((file.parent ?: p.first).substringAfterLast("/"), entity)
                     }
-                }.onFailure {
-                    it.printStackTrace()
-                    it.message?.showToast()
                 }
-            } else {
-                getString(R.string.anime_download_service_get_title_failed).showToast()
+            }.onFailure {
+                it.printStackTrace()
+                it.message?.showToast()
             }
+        } else {
+            getString(R.string.anime_download_service_get_title_failed).showToast()
         }
-        mldOnTaskComplete.postValue(task)
+        onTaskCompleteEvent.tryEmit(task)
     }
 
     @Download.onTaskRunning
     fun onTaskRunning(task: DownloadTask?) {
-        if (task != null) {
-            val m3U8Entity = task.downloadEntity?.m3U8Entity
-            if (m3U8Entity == null) {
-                val len: Long = task.fileSize
-                val p = (task.currentProgress * 100.0 / len).toInt()
-                notifyMap[task.downloadEntity.url]?.upload(p)
-            } else {
-                val p = ((m3U8Entity.peerIndex + 1) * 100.0 / m3U8Entity.peerNum).toInt()
-                notifyMap[task.downloadEntity.url]?.upload(p)
-            }
+        task ?: return
+        val m3U8Entity = task.downloadEntity?.m3U8Entity
+        if (m3U8Entity == null) {
+            val len: Long = task.fileSize
+            val p = (task.currentProgress * 100.0 / len).toInt()
+            notifyMap[task.downloadEntity.url]?.upload(p)
+        } else {
+            val p = ((m3U8Entity.peerIndex + 1) * 100.0 / m3U8Entity.peerNum).toInt()
+            notifyMap[task.downloadEntity.url]?.upload(p)
         }
-        mldOnTaskRunning.postValue(task)
+        onTaskRunningEvent.tryEmit(task)
     }
 }

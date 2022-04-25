@@ -6,7 +6,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentLocalDataSourceBinding
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.showSnackbar
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.DataSource1Proxy
@@ -56,11 +58,14 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
             rvLocalDataSourceFragment.adapter = adapter
         }
 
-        viewModel.mldDataSourceList.observe(viewLifecycleOwner) {
-            adapter.dataList = (it ?: emptyList())
+        viewModel.dataSourceList.collectWithLifecycle(viewLifecycleOwner) { data ->
+            when (data) {
+                is DataState.Success -> {
+                    adapter.dataList = data.data
+                }
+                else -> {}
+            }
         }
-
-        if (viewModel.mldDataSourceList.value == null) viewModel.getDataSourceList()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =

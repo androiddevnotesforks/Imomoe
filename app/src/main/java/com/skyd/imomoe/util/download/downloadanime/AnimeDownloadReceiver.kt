@@ -24,7 +24,7 @@ class AnimeDownloadReceiver : BroadcastReceiver() {
                 val taskId = intent.getLongExtra(TASK_ID, -1)
                 val taskUrl = intent.getStringExtra(TASK_URL).orEmpty()
                 if (taskId != -1L) {
-                    AnimeDownloadService.mldCancelTask.postValue(taskId to taskUrl)
+                    AnimeDownloadService.cancelTaskEvent.tryEmit(taskId to taskUrl)
                 }
             }
         }

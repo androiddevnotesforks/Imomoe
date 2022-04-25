@@ -5,10 +5,13 @@ import android.content.res.TypedArray
 import android.os.Build
 import android.util.TypedValue
 import androidx.annotation.StyleRes
-import androidx.lifecycle.MutableLiveData
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 private val map = hashMapOf(
@@ -28,7 +31,9 @@ private fun getKeyByValue(v: Int): String? {
     return null
 }
 
-var appThemeRes: MutableLiveData<Int> = object : MutableLiveData<Int>(
+private val coroutineScope by lazy { CoroutineScope(Dispatchers.IO) }
+
+var appThemeRes: MutableStateFlow<Int> = MutableStateFlow(
     // getOrDefault method was added in API level 24
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         map.getOrDefault(
@@ -37,31 +42,15 @@ var appThemeRes: MutableLiveData<Int> = object : MutableLiveData<Int>(
         )
     } else {
         val v = sharedPreferences().getString("themeRes", null)
-        if (map[v] != null) {
-            map[v]
-        } else {
-            R.style.Theme_Anime_Pink
-        }
+        map[v] ?: R.style.Theme_Anime_Pink
     }
-) {
-    override fun postValue(@StyleRes value: Int?) {
-        sharedPreferences().editor {
-            putString(
-                "themeRes",
-                getKeyByValue(value ?: R.style.Theme_Anime_Pink)
-            )
+).apply {
+    coroutineScope.launch {
+        collect {
+            sharedPreferences().editor {
+                putString("themeRes", getKeyByValue(value))
+            }
         }
-        super.postValue(value)
-    }
-
-    override fun setValue(value: Int?) {
-        sharedPreferences().editor {
-            putString(
-                "themeRes",
-                getKeyByValue(value ?: R.style.Theme_Anime_Pink)
-            )
-        }
-        super.setValue(value)
     }
 }
 

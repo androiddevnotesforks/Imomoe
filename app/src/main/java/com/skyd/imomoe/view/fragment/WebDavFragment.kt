@@ -20,6 +20,8 @@ import com.skyd.imomoe.view.adapter.variety.proxy.RestoreFile1Proxy
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.viewmodel.WebDavViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.cancel
 
 class WebDavFragment : BasePreferenceFragment() {
     private val viewModel: WebDavViewModel by viewModels()
@@ -31,7 +33,7 @@ class WebDavFragment : BasePreferenceFragment() {
             R.string.backup_app_database_to_cloud, ""
         )
 
-        viewModel.mldBackup.observe(viewLifecycleOwner) {
+        viewModel.backup.collectWithLifecycle(viewLifecycleOwner) {
             if (it.first == WebDavViewModel.TYPE_APP_DATABASE_DIR) {
                 findPreference<Preference>("backup_app_database_to_cloud")?.title = getString(
                     R.string.backup_app_database_to_cloud,
@@ -216,12 +218,11 @@ class WebDavFragment : BasePreferenceFragment() {
                 true
             }))
         )
-        val observer = Observer<String> {
-            adapter.dataList = viewModel.fileMap[it] ?: emptyList()
+        val job = viewModel.fileList.collectWithLifecycle(this) {
+            adapter.dataList = viewModel.fileMap[it].orEmpty()
         }
-        viewModel.mldFileList.observe(this, observer)
         bottomSheetDialog.setOnDismissListener {
-            viewModel.mldFileList.removeObserver(observer)
+            job.cancel()
         }
         recyclerView.adapter = adapter
         logE(bottomSheetDialog.toString())

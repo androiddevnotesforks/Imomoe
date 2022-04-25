@@ -13,6 +13,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover7Bean
 import com.skyd.imomoe.databinding.ActivityAnimeDownloadBinding
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover7Proxy
@@ -53,15 +54,18 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
                 getString(R.string.read_download_data_file)
         }
 
-        viewModel.mldAnimeCoverList.observe(this) {
+        viewModel.animeCoverList.collectWithLifecycle(this) { data ->
             mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.gone()
-            if (it != null) {
-                if (it.isEmpty()) showLoadFailedTip(getString(R.string.no_download_video))
-                adapter.dataList = it
+            when (data) {
+                is DataState.Success -> {
+                    if (data.data.isEmpty()) showLoadFailedTip(getString(R.string.no_download_video))
+                    adapter.dataList = data.data
+                }
+                else -> {}
             }
         }
 
-        viewModel.mldDelete.observe(this) {
+        viewModel.delete.collectWithLifecycle(this) {
             dismissWaitingDialog()
             initData(force = true)
             showSnackbar(
@@ -77,12 +81,12 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         requestManageExternalStorage {
             onGranted {
                 if (viewModel.mode == 0) {
-                    if (viewModel.mldAnimeCoverList.value == null || force) {
+                    if (viewModel.animeCoverList.value is DataState.Empty || force) {
                         viewModel.getAnimeCover()
                     }
                 } else if (viewModel.mode == 1) {
                     mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
-                    if (viewModel.mldAnimeCoverList.value == null || force) {
+                    if (viewModel.animeCoverList.value is DataState.Empty || force) {
                         viewModel.getAnimeCoverEpisode()
                     }
                 }

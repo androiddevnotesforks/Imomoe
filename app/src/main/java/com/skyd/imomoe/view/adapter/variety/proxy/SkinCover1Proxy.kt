@@ -51,7 +51,7 @@ class SkinCover1Proxy : VarietyAdapter.Proxy<SkinCover1Bean, SkinCover1ViewHolde
             selectedItem?.ivSkinCover1Selected?.gone()
             selectedItem = holder
             selectedItemPosition = index
-            appThemeRes.postValue(data.themeRes)
+            appThemeRes.tryEmit(data.themeRes)
             holder.itemView.activity?.recreate()
         }
     }
