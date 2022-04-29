@@ -28,7 +28,7 @@ class AnimeCover12Proxy : VarietyAdapter.Proxy<AnimeCover12Bean, AnimeCover12Vie
         holder.tvAnimeCover12Title.text = data.title
         holder.tvAnimeCover12Episode.text = data.episodeClickable.title
         holder.itemView.setOnClickListener {
-            data.episodeClickable.route.route(activity)
+            data.episodeClickable.route.ifBlank { data.route }.route(activity)
         }
         holder.tvAnimeCover12Title.setOnClickListener {
             activity?.also { data.route.route(activity) }

@@ -28,9 +28,8 @@ class EverydayAnimeWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == VIEW_CLICK_ACTION) {
             val item = Gson().fromJson(intent.getStringExtra(ITEM), AnimeCover10Bean::class.java)
-            if (item.episodeClickable?.route.equals(item.route))
-                startPlayActivity(context, item.episodeClickable?.route)
-            else startPlayActivity(context, item.episodeClickable?.route + item.route)
+            val route = item.episodeClickable?.route.orEmpty().ifBlank { item.route }
+            startPlayActivity(context, route)
         } else if (intent.action == REFRESH_ACTION) {
             val mgr: AppWidgetManager = AppWidgetManager.getInstance(context)
             val cn = ComponentName(context, EverydayAnimeWidgetProvider::class.java)

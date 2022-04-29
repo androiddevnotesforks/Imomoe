@@ -62,6 +62,11 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(serviceConnection)
+    }
+
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder?) {
             binder = (service as? AnimeDownloadService.AnimeDownloadBinder)?.apply {

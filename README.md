@@ -82,6 +82,7 @@
 - Kotlin Coroutine
 - Hilt
 - Room
+- DiffUtil
 - Retrofit
 - Okhttp
 - Jsoup

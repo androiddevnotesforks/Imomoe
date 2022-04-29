@@ -18,6 +18,7 @@ import com.skyd.imomoe.ext.toMD5
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.net.service.HtmlService
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.save2Xml
+import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -122,22 +123,28 @@ class AnimeDownloadService : LifecycleService() {
         val storeDirectoryPath = intent.getStringExtra(STORE_DIRECTORY_PATH_KEY).orEmpty()
         val animeTitle = intent.getStringExtra(ANIME_TITLE).orEmpty()
         val animeEpisode = intent.getStringExtra(ANIME_EPISODE).orEmpty()
-        val fileName = downloadUrl.substringAfterLast("/", animeEpisode)
+        val fileName = downloadUrl.substringAfterLast("/", animeEpisode).ifBlank { animeEpisode }
 
         coroutineScope.launch {
-            val contentType = RetrofitManager
-                .get()
-                .create(HtmlService::class.java)
-                .getResponseHeader(downloadUrl)
-                .headers()["Content-Type"]
-            withContext(Dispatchers.Main) {
-                addTask(
-                    downloadUrl = downloadUrl,
-                    filePath = "$storeDirectoryPath/$fileName",
-                    animeTitle = animeTitle,
-                    animeEpisode = animeEpisode,
-                    isM3u8 = contentType.equals(M3U8_CONTENT_TYPE, ignoreCase = true)
-                )
+            logE("111")
+            runCatching {
+                val contentType = RetrofitManager
+                    .get()
+                    .create(HtmlService::class.java)
+                    .getResponseHeader(downloadUrl)
+                    .headers()["Content-Type"]
+                withContext(Dispatchers.Main) {
+                    addTask(
+                        downloadUrl = downloadUrl,
+                        filePath = "$storeDirectoryPath/$fileName",
+                        animeTitle = animeTitle,
+                        animeEpisode = animeEpisode,
+                        isM3u8 = contentType.equals(M3U8_CONTENT_TYPE, ignoreCase = true)
+                    )
+                }
+            }.onFailure {
+                it.printStackTrace()
+                it.message?.showToast()
             }
         }
 
@@ -256,7 +263,9 @@ class AnimeDownloadService : LifecycleService() {
         if (p != null) {
             runCatching {
                 coroutineScope.launch {
-                    val file = File(task.downloadEntity.m3U8Entity.filePath)
+                    val file = File(
+                        task.downloadEntity.m3U8Entity?.filePath ?: task.downloadEntity.filePath
+                    )
                     file.toMD5()?.let {
                         val entity = AnimeDownloadEntity(it, p.second, file.name)
                         getAppDataBase().animeDownloadDao().insertAnimeDownload(entity)
