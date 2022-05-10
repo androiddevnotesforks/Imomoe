@@ -13,6 +13,8 @@ class AnimeDownload1Bean(
     var peerIndex: Int = -1,
     var percent: Int = 0,
     var fileSize: Long = 0,
+    var state: Int = 0,
+    var speed: Long = 0,
 ) : BaseBean, Diff {
     val isM3U8: Boolean
         get() = peerIndex != -1 && peerNum != -1
@@ -28,29 +30,35 @@ class AnimeDownload1Bean(
                     url == o.url && id == o.id &&
                     percent == o.percent &&
                     peerNum == o.peerNum &&
-                    peerIndex == o.peerIndex -> true
+                    peerIndex == o.peerIndex &&
+                    state == o.state &&
+                    speed == o.speed -> true
             else -> false
         }
     }
 
     override fun diff(o: Any?): Any? {
-        return when {
-            o !is AnimeDownload1Bean -> null
-            peerIndex != o.peerIndex -> PEER_INDEX
-            percent != o.percent -> PERCENT
-            else -> null
-        }
+        if (o !is AnimeDownload1Bean) return null
+
+        val list: MutableList<Any> = mutableListOf()
+        if (peerIndex != o.peerIndex) list += PEER_INDEX
+        if (percent != o.percent) list += PERCENT
+        if (state != o.state) list += STATE
+        if (speed != o.speed) list += SPEED
+        return list.ifEmpty { null }
     }
 
     override fun equals(other: Any?): Boolean {
         return (other is AnimeDownload1Bean && url == other.url && id == other.id &&
                 peerIndex == other.peerIndex && peerNum == other.peerNum &&
                 percent == other.percent && fileSize == other.fileSize &&
-                episode == other.episode && title == other.title) ||
+                episode == other.episode && title == other.title &&
+                state == other.state && speed == other.speed) ||
                 (other is DownloadEntity && url == other.url && id == other.id &&
                         peerIndex == other.m3U8Entity?.peerIndex &&
                         peerNum == other.m3U8Entity?.peerNum &&
-                        percent == other.percent && fileSize == other.fileSize)
+                        percent == other.percent && fileSize == other.fileSize &&
+                        state == other.state && speed == other.speed)
     }
 
     override fun hashCode(): Int {
@@ -62,12 +70,17 @@ class AnimeDownload1Bean(
         result = 31 * result + peerNum
         result = 31 * result + peerIndex
         result = 31 * result + percent
+        result = 31 * result + fileSize.hashCode()
+        result = 31 * result + state
+        result = 31 * result + speed.hashCode()
         return result
     }
 
     companion object {
         const val PEER_INDEX = "peerIndex"
         const val PERCENT = "percent"
+        const val STATE = "state"
+        const val SPEED = "speed"
 
         fun create(
             title: String,
@@ -79,7 +92,9 @@ class AnimeDownload1Bean(
                 title = title,
                 episode = episode,
                 url = entity.url,
-                id = entity.id
+                id = entity.id,
+                state = entity.state,
+                speed = entity.speed
             ).apply {
                 val m3U8Entity = entity.m3U8Entity
                 if (m3U8Entity != null) {

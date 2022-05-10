@@ -200,6 +200,8 @@ class AnimeDownload1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeDownload1Episode: TextView = view.findViewById(R.id.tv_anime_download_1_episode)
     val tvAnimeDownload1Size: TextView = view.findViewById(R.id.tv_anime_download_1_size)
     val tvAnimeDownload1Percent: TextView = view.findViewById(R.id.tv_anime_download_1_percent)
+    val tvAnimeDownload1Speed: TextView = view.findViewById(R.id.tv_anime_download_1_speed)
     val pbAnimeDownload1: LinearProgressIndicator = view.findViewById(R.id.pb_anime_download_1)
+    val ivAnimeDownload1State: ImageView = view.findViewById(R.id.iv_anime_download_1_state)
     val ivAnimeDownload1Cancel: ImageView = view.findViewById(R.id.iv_anime_download_1_cancel)
 }

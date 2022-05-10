@@ -2,6 +2,7 @@ package com.skyd.imomoe.viewmodel
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
@@ -15,6 +16,7 @@ import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -35,7 +37,7 @@ class PlayViewModel @Inject constructor(
     val playDataList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
 
     // 当前播放集数的索引
-    var currentEpisodeIndex = 0
+    var currentEpisodeIndex: MutableStateFlow<Int> = MutableStateFlow(0)
 
     // 当前播放的集数
     val animeEpisodeDataBean = AnimeEpisodeDataBean("", "")
@@ -60,10 +62,10 @@ class PlayViewModel @Inject constructor(
      */
     fun playNextEpisode(): Boolean {
         val list = episodesList.value.readOrNull().orEmpty()
-        if (currentEpisodeIndex + 1 in list.indices) {
+        if (currentEpisodeIndex.value + 1 in list.indices) {
             playAnotherEpisode(
-                list[currentEpisodeIndex + 1].route,
-                currentEpisodeIndex + 1
+                list[currentEpisodeIndex.value + 1].route,
+                currentEpisodeIndex.value + 1
             )
             return true
         }
@@ -88,7 +90,7 @@ class PlayViewModel @Inject constructor(
             animeEpisodeDataBean.videoUrl = ""
             playAnotherEpisodeEvent.tryEmit(false)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
-        }, finish = { this.currentEpisodeIndex = currentEpisodeIndex })
+        }, finish = { this.currentEpisodeIndex.tryEmit(currentEpisodeIndex) })
     }
 
     fun getAnimeDownloadUrl(partUrl: String, position: Int) {
@@ -106,23 +108,31 @@ class PlayViewModel @Inject constructor(
     }
 
     fun getPlayData() {
-        if (favorite.value == null) queryFavorite()
+        queryFavorite()
         request(request = {
             if (animeCover.value == null) {
                 animeCover.tryEmit(playModel.getAnimeCoverImageBean(partUrl))
             }
             playModel.getPlayData(partUrl, animeEpisodeDataBean)
         }, success = {
-            if (animeEpisodeDataBean.route.isBlank()) {
-                animeEpisodeDataBean.route = partUrl
+            viewModelScope.launch {
+                if (animeEpisodeDataBean.route.isBlank()) {
+                    animeEpisodeDataBean.route = partUrl
+                }
+                val list = episodesList.value.readOrNull().orEmpty().toMutableList()
+                list.clear()
+                list.addAll(it.second)
+                list.sortEpisodeTitle()
+                playBean = it.third
+                list.forEachIndexed { index, item ->
+                    if (playBean?.episode?.videoUrl == item.videoUrl) {
+                        currentEpisodeIndex.tryEmit(index)
+                        return@forEachIndexed
+                    }
+                }
+                episodesList.tryEmit(DataState.Success(list))
+                playDataList.tryEmit(DataState.Success(it.first))
             }
-            val list = episodesList.value.readOrNull().orEmpty().toMutableList()
-            list.clear()
-            list.addAll(it.second)
-            list.sortEpisodeTitle()
-            playBean = it.third
-            episodesList.tryEmit(DataState.Success(list))
-            playDataList.tryEmit(DataState.Success(it.first))
         }, error = {
             playDataList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()

@@ -63,6 +63,8 @@ class AnimeDownloadService : LifecycleService() {
         MutableSharedFlow(extraBufferCapacity = 1)
     private val onTaskFailEvent: MutableSharedFlow<DownloadTask> =
         MutableSharedFlow(extraBufferCapacity = 1)
+    private val onTaskResumeEvent: MutableSharedFlow<DownloadTask> =
+        MutableSharedFlow(extraBufferCapacity = 1)
 
     private val notifyMap = hashMapOf<String, AnimeDownloadNotification>()
     private val animeTitleEpisodeMap = hashMapOf<String, Pair<String, String>>()
@@ -85,6 +87,8 @@ class AnimeDownloadService : LifecycleService() {
             get() = this@AnimeDownloadService.onTaskRunningEvent
         val onTaskStopEvent: MutableSharedFlow<DownloadTask>
             get() = this@AnimeDownloadService.onTaskStopEvent
+        val onTaskResumeEvent: MutableSharedFlow<DownloadTask>
+            get() = this@AnimeDownloadService.onTaskResumeEvent
         val onTaskCancelEvent: MutableSharedFlow<DownloadTask>
             get() = this@AnimeDownloadService.onTaskCancelEvent
         val onTaskFailEvent: MutableSharedFlow<DownloadTask>
@@ -126,7 +130,6 @@ class AnimeDownloadService : LifecycleService() {
         val fileName = downloadUrl.substringAfterLast("/", animeEpisode).ifBlank { animeEpisode }
 
         coroutineScope.launch {
-            logE("111")
             runCatching {
                 val contentType = RetrofitManager
                     .get()
@@ -295,5 +298,11 @@ class AnimeDownloadService : LifecycleService() {
             notifyMap[task.downloadEntity.url]?.upload(p)
         }
         onTaskRunningEvent.tryEmit(task)
+    }
+
+    @Download.onTaskResume
+    fun onTaskResume(task: DownloadTask?) {
+        task ?: return
+        onTaskResumeEvent.tryEmit(task)
     }
 }

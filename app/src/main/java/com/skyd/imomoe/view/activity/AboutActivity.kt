@@ -13,6 +13,7 @@ import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.openBrowser
 import java.net.URL
 import java.util.*
 
@@ -123,7 +124,9 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 showMessageDialog(
                     title = getString(R.string.about_activity_thanks),
                     message = "MaybeQHL提供弹幕服务器：\nhttps://github.com/MaybeQHL/my_danmu_pub",
-                    onPositive = { dialog, _ -> dialog.dismiss() }
+                    positiveText = getString(R.string.about_activity_open_danmaku_server_page),
+                    onPositive = { _, _ -> openBrowser("https://github.com/MaybeQHL/my_danmu_pub") },
+                    onNegative = { dialog, _ -> dialog.dismiss() }
                 )
             }
             if (resources.getBoolean(R.bool.is_landscape)) {

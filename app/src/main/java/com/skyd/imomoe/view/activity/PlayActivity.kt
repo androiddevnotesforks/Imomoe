@@ -185,7 +185,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             when (viewModel.favorite.value) {
                 true -> viewModel.deleteFavorite()
                 false -> viewModel.insertFavorite()
-                else -> {}
             }
         }
 
@@ -467,7 +466,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         if (recyclerView.itemDecorationCount == 0) {
             recyclerView.addItemDecoration(AnimeEpisodeItemDecoration())
         }
-        @Suppress("UNCHECKED_CAST") val adapter = VarietyAdapter(
+        val adapter = VarietyAdapter(
             mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, index ->
                 if (action == "play") {
                     viewModel.playAnotherEpisode(data.route, index)
@@ -495,7 +494,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 currentNightMode = it
                 adapter.notifyDataSetChanged()
                 mBinding.ivPlayActivityFavorite.setImageResource(
-                    if (viewModel.favorite.value == true) {
+                    if (viewModel.favorite.value) {
                         R.drawable.ic_star_24
                     } else {
                         R.drawable.ic_star_border_24

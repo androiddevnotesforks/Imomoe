@@ -281,5 +281,6 @@
     <string name="anime_download_service_get_title_failed">未获取到番剧标题，无法存储缓存视频信息</string>
     <string name="danmaku_video_player_unsupport_send_danmaku">不支持发送弹幕！</string>
     <string name="about_activity_thanks">致谢</string>
+    <string name="about_activity_open_danmaku_server_page">打开链接</string>
 
 </resources>

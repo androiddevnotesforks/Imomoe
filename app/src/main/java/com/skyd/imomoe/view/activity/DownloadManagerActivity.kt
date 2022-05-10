@@ -26,6 +26,10 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
                 AnimeDownload1Proxy(
                     onCancelClickListener = { _, data, _ ->
                         AnimeDownloadService.cancelTaskEvent.tryEmit(data.id to data.url)
+                    }, onPauseClickListener = { _, data, _ ->
+                        AnimeDownloadService.stopTaskEvent.tryEmit(data.id)
+                    }, onResumeClickListener = { _, data, _ ->
+                        AnimeDownloadService.resumeTaskEvent.tryEmit(data.id)
                     }
                 )
             )
@@ -81,12 +85,19 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
                 onTaskCancelEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
                     viewModel.onTaskCancel(task.downloadEntity)
                 }
+                onTaskStopEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
+                    viewModel.onTaskStateChanged(task.downloadEntity)
+                }
+                onTaskResumeEvent.collectWithLifecycle(this@DownloadManagerActivity) { task ->
+                    viewModel.onTaskStateChanged(task.downloadEntity)
+                }
                 onTaskPreEvent.collectWithLifecycle(this@DownloadManagerActivity, onTaskPreStart)
                 onTaskStartEvent.collectWithLifecycle(this@DownloadManagerActivity, onTaskPreStart)
             }
         }
 
         override fun onServiceDisconnected(name: ComponentName) {
+            binder = null
         }
     }
 

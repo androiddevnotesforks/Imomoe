@@ -137,4 +137,27 @@ class DownloadManagerViewModel : ViewModel() {
             it.message?.showToast()
         })
     }
+
+    fun onTaskStateChanged(entity: DownloadEntity) {
+        request(request = {
+            var dataList = downloadDataList.value.readOrNull().orEmpty()
+            dataList = dataList.toMutableList().map {
+                var result: Any = it
+                if (result is AnimeDownload1Bean && result.id == entity.id) {
+                    // 若最新数据有变化，则new一个新的bean替换之前的bean
+                    // 注意：此处必须要new，不能直接更改之前的bean，否则Diff检测不出差异（旧数据被更改）
+                    if (it != entity) {
+                        result =
+                            AnimeDownload1Bean.create(result.title, result.episode, entity = entity)
+                    }
+                }
+                result
+            }
+            dataList
+        }, success = {
+            downloadDataList.tryEmit(DataState.Success(it))
+        }, error = {
+            it.message?.showToast()
+        })
+    }
 }
