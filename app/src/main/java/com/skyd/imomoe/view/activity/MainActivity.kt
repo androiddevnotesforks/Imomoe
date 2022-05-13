@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.navigation.NavigationBarView
@@ -39,6 +40,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     private lateinit var action: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Handle the splash screen transition.
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {

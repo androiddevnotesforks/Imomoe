@@ -160,7 +160,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         initVideoBuilderMode()
 
         viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
-        viewModel.detailPartUrl = intent.getStringExtra("detailPartUrl").orEmpty()
+//        viewModel.detailPartUrl = intent.getStringExtra("detailPartUrl").orEmpty()
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)

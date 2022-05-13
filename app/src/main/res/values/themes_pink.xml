@@ -40,4 +40,16 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background, animated icon, and animation duration. -->
+        <item name="windowSplashScreenBackground">@color/background_pink</item>
+
+        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an -->
+        <!-- animated drawable. One of these is required. -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_akarin_icon</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <item name="postSplashScreenTheme">@style/Theme.Anime.Pink</item>
+    </style>
 </resources>

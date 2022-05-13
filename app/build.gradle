@@ -148,6 +148,7 @@ dependencies {
     implementation deps.support.viewpager2
     implementation deps.support.preference
     implementation deps.support.security_crypto
+    implementation deps.support.core_splashscreen
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx

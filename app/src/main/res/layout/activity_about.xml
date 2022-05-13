@@ -46,11 +46,12 @@
 
             <ImageView
                 android:id="@+id/iv_about_activity_icon"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="50dp"
                 android:importantForAccessibility="no"
-                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_akarin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +59,7 @@
             <ImageView
                 android:id="@+id/iv_about_activity_icon_egg"
                 android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_height="50dp"
                 android:importantForAccessibility="no"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/iv_about_activity_icon"
@@ -293,20 +294,6 @@
                     android:src="@drawable/ic_arrow_right_24"
                     app:tint="?attr/colorPrimary" />
             </RelativeLayout>
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.Material3.LabelLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:text="@string/app_icon_describe"
-                android:textColor="?attr/colorSecondary"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rl_about_activity_thanks" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -30,6 +30,7 @@ support.fragment_ktx = "androidx.fragment:fragment-ktx:1.4.1"
 support.preference = "androidx.preference:preference:1.2.0"
 support.security_crypto = "androidx.security:security-crypto:1.1.0-alpha03"
 support.legacy_support_v4 = "androidx.legacy:legacy-support-v4:1.0.0"
+support.core_splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
 deps.support = support
 
 def retrofit2 = [:]

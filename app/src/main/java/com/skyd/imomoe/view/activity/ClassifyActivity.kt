@@ -91,7 +91,10 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
                     spinnerAdapter.notifyDataSetChanged()
 
                     //自动选中第一个
-                    if (viewModel.currentPartUrl.isEmpty() && data.data[0].classifyDataList.size > 0) {
+                    if (viewModel.currentPartUrl.isEmpty() &&
+                        data.data.isNotEmpty() &&
+                        data.data[0].classifyDataList.size > 0
+                    ) {
                         val firstItem = data.data[0].classifyDataList[0]
                         viewModel.currentPartUrl = firstItem.route
                         viewModel.classifyTabTitle = data.data[0].toString()

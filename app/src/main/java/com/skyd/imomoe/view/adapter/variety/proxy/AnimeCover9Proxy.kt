@@ -6,10 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeCover9Bean
 import com.skyd.imomoe.ext.activity
-import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
-import com.skyd.imomoe.route.processor.DetailActivityProcessor
-import com.skyd.imomoe.route.processor.PlayActivityProcessor
 import com.skyd.imomoe.util.AnimeCover9ViewHolder
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
@@ -39,27 +36,17 @@ class AnimeCover9Proxy(
         holder.tvAnimeCover9Episodes.text = data.lastEpisode
         holder.tvAnimeCover9Time.text = Util.time2Now(data.time)
         holder.tvAnimeCover9DetailPage.setOnClickListener {
-            activity?.also {
-                DetailActivityProcessor.route.buildRouteUri {
-                    appendQueryParameter("partUrl", data.animeUrl)
-                }.route(it)
-            }
+            data.animeUrl.route(activity)
         }
         holder.ivAnimeCover9Delete.setOnClickListener {
             onDeleteButtonClickListener?.invoke(holder, data, index)
         }
         holder.itemView.setOnClickListener {
-            if (data.lastEpisodeUrl != null)
-                activity?.also {
-                    PlayActivityProcessor.route.buildRouteUri {
-                        appendQueryParameter("partUrl", data.lastEpisodeUrl)
-                        appendQueryParameter("detailPartUrl", data.animeUrl)
-                    }.route(it)
-                }
-            else activity?.also {
-                DetailActivityProcessor.route.buildRouteUri {
-                    appendQueryParameter("partUrl", data.animeUrl)
-                }.route(it)
+            val lastEpisodeUrl = data.lastEpisodeUrl
+            if (lastEpisodeUrl != null) {
+                lastEpisodeUrl.route(activity)
+            } else {
+                data.animeUrl.route(activity)
             }
         }
     }
