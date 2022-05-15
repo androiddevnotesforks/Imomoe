@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
+import com.shuyu.gsyvideoplayer.listener.LockClickListener
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -78,6 +79,11 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
         mBinding.avpSimplePlayActivity.run {
             //设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
+            // 锁定后不随屏幕旋转而旋转视频
+            setLockClickListener { _, lock ->
+                orientationUtils.isEnable = !lock
+                currentPlayer.isRotateViewAuto = !lock
+            }
             setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
             //是否开启自动旋转

@@ -82,6 +82,7 @@
 - Kotlin Coroutine
 - Hilt
 - Room
+- SplashScreen
 - DiffUtil
 - Retrofit
 - Okhttp

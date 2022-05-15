@@ -29,6 +29,11 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
             // 初始化不打开外部的旋转
             isEnable = false
         }
+        // 锁定后不随屏幕旋转而旋转视频
+        getGSYVideoPlayer().setLockClickListener { _, lock ->
+            orientationUtils?.isEnable = !lock
+            getGSYVideoPlayer().currentPlayer.isRotateViewAuto = !lock
+        }
         if (getGSYVideoPlayer().fullscreenButton != null) {
             getGSYVideoPlayer().fullscreenButton.setOnClickListener {
                 showFull()

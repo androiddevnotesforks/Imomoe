@@ -47,7 +47,7 @@
 
         <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an -->
         <!-- animated drawable. One of these is required. -->
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_akarin_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_akarin_padding</item>
         <item name="windowSplashScreenAnimationDuration">200</item>
         <!-- Set the theme of the Activity that directly follows your splash screen. -->
         <item name="postSplashScreenTheme">@style/Theme.Anime.Pink</item>

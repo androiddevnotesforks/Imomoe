@@ -906,6 +906,12 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     override fun onTouch(v: View?, event: MotionEvent): Boolean {
+        if (mIfCurrentIsFullscreen && mLockCurScreen && mNeedLockFull) {
+            onClickUiToggle(event)
+            startDismissControlViewTimer()
+            return true
+        }
+
         // ---长按逻辑开始
         if (event.pointerCount == 1) {
             if (event.action == MotionEvent.ACTION_UP) {

@@ -82,11 +82,12 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
             onGranted {
                 if (viewModel.mode == 0) {
                     if (viewModel.animeCoverList.value is DataState.Empty || force) {
+                        mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
                         viewModel.getAnimeCover()
                     }
                 } else if (viewModel.mode == 1) {
-                    mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
                     if (viewModel.animeCoverList.value is DataState.Empty || force) {
+                        mBinding.layoutAnimeDownloadLoading.layoutCircleProgressTextTip1.visible()
                         viewModel.getAnimeCoverEpisode()
                     }
                 }

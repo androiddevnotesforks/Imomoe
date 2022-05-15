@@ -44,11 +44,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_gray_transparent_angle_90"
-        android:paddingTop="20dp"
-        android:paddingBottom="5dp">
+        android:fitsSystemWindows="true"
+        android:paddingTop="20dp">
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/progress"
@@ -66,7 +66,7 @@
         <ImageView
             android:id="@+id/start"
             android:layout_width="48dp"
-            android:layout_height="0px"
+            android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:paddingHorizontal="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -77,9 +77,9 @@
 
         <ImageView
             android:id="@+id/iv_next"
-            android:layout_width="40dp"
-            android:layout_height="0px"
-            android:paddingHorizontal="5dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:paddingHorizontal="9dp"
             android:src="@drawable/ic_skip_next_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start"
@@ -274,6 +274,7 @@
         android:layout_width="match_parent"
         android:layout_height="68dp"
         android:background="@drawable/shape_gray_transparent_angle_270"
+        android:fitsSystemWindows="true"
         android:gravity="center_vertical"
         android:paddingBottom="20dp">
 
