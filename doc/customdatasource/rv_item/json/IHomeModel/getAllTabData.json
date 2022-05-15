@@ -1,0 +1,62 @@
+[
+    {
+        "route": "/",
+        "title": "首页",
+        "url": "http://xxx.xxx.xxx/"
+    },
+    {
+        "route": "/ribendongman/",
+        "title": "日本动漫",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/guochandongman/",
+        "title": "国产动漫",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/meiguodongman/",
+        "title": "美国动漫",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/movie/",
+        "title": "动漫电影",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/qinzi/",
+        "title": "亲子动漫",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/2022/",
+        "title": "新番动漫",
+        "url": "http://xxx.xxx.xxx/2022/"
+    },
+    {
+        "route": "/37/",
+        "title": "剧场版",
+        "url": "http://xxx.xxx.xxx/37/"
+    },
+    {
+        "route": "/36/",
+        "title": "OVA版",
+        "url": "http://xxx.xxx.xxx/36/"
+    },
+    {
+        "route": "/38/",
+        "title": "真人版",
+        "url": "http://xxx.xxx.xxx/38/"
+    },
+    {
+        "route": "/topic/",
+        "title": "动漫专题",
+        "url": "http://xxx.xxx.xxx/xxx/"
+    },
+    {
+        "route": "/new/",
+        "title": "最新更新",
+        "url": "http://xxx.xxx.xxx/new/"
+    }
+]

@@ -1,0 +1,459 @@
+{
+    "first": [
+        {
+            "route": "",
+            "title": "播放列表"
+        },
+        {
+            "episodeList": [
+                {
+                    "route": "/v/5453-6.html",
+                    "title": "第06集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-5.html",
+                    "title": "第05集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-4.html",
+                    "title": "第04集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-3.html",
+                    "title": "第03集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-2.html",
+                    "title": "第02集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-1.html",
+                    "title": "第01集",
+                    "videoUrl": ""
+                },
+                {
+                    "route": "/v/5453-pv1.html",
+                    "title": "PV",
+                    "videoUrl": ""
+                }
+            ],
+            "route": ""
+        },
+        {
+            "route": "",
+            "title": "推荐动漫"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2021/11/03/20211103113625406.jpg"
+            },
+            "episode": "第6集",
+            "route": "/show/5453.html",
+            "title": "间谍过家家",
+            "url": "http://xxx.xxx.xxx/show/5453.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402101428520.jpg"
+            },
+            "episode": "第7集",
+            "route": "/show/5542.html",
+            "title": "Love Live! 虹咲学园校园偶像同好会 第二季",
+            "url": "http://xxx.xxx.xxx/show/5542.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2021/09/08/20210908095445224.jpg"
+            },
+            "episode": "第6集",
+            "route": "/show/5373.html",
+            "title": "舞动不止",
+            "url": "http://xxx.xxx.xxx/show/5373.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402101002687.jpg"
+            },
+            "episode": "第7集",
+            "route": "/show/5541.html",
+            "title": "Love All Play",
+            "url": "http://xxx.xxx.xxx/show/5541.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/07/17/20210717112154268.jpg"
+            },
+            "episode": "第208集",
+            "route": "/show/4066.html",
+            "title": "斗罗大陆",
+            "url": "http://xxx.xxx.xxx/show/4066.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2021/12/14/20211214060840198.jpg"
+            },
+            "episode": "第18集",
+            "route": "/show/5476.html",
+            "title": "CUE!指名",
+            "url": "http://xxx.xxx.xxx/show/5476.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/08/01/20210801010025989.jpg"
+            },
+            "episode": "第7集",
+            "route": "/show/5343.html",
+            "title": "测不准的阿波连同学",
+            "url": "http://xxx.xxx.xxx/show/5343.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/A26178468259707.jpg"
+            },
+            "episode": "第6集",
+            "route": "/show/5093.html",
+            "title": "辉夜大小姐想让我告白：天才们的恋爱头脑战 第三季",
+            "url": "http://xxx.xxx.xxx/show/5093.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/02/02/20210202025454794.jpg"
+            },
+            "episode": "第7集",
+            "route": "/show/5170.html",
+            "title": "处刑少女的生存之道",
+            "url": "http://xxx.xxx.xxx/show/5170.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/04/01/20220401110824745.jpg"
+            },
+            "episode": "第7集",
+            "route": "/show/5540.html",
+            "title": "理科生坠入情网故尝试证明 第二季",
+            "url": "http://xxx.xxx.xxx/show/5540.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/08/05/20210805094812354.jpg"
+            },
+            "episode": "第6集",
+            "route": "/show/5348.html",
+            "title": "恋爱要在世界征服后",
+            "url": "http://xxx.xxx.xxx/show/5348.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/03/07/20210307075417257.jpg"
+            },
+            "episode": "第6集",
+            "route": "/show/5206.html",
+            "title": "约会大作战 第四季",
+            "url": "http://xxx.xxx.xxx/show/5206.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402102038719.jpg"
+            },
+            "episode": "第3集",
+            "route": "/show/5545.html",
+            "title": "杜鹃的婚约",
+            "url": "http://xxx.xxx.xxx/show/5545.html"
+        },
+        {
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/08/09/20210809053959743.jpg"
+            },
+            "episode": "第5集",
+            "route": "/show/5353.html",
+            "title": "夏日重现",
+            "url": "http://xxx.xxx.xxx/show/5353.html"
+        }
+    ],
+    "second": [
+        {
+            "route": "/v/5453-6.html",
+            "title": "第06集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-5.html",
+            "title": "第05集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-4.html",
+            "title": "第04集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-3.html",
+            "title": "第03集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-2.html",
+            "title": "第02集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-1.html",
+            "title": "第01集",
+            "videoUrl": ""
+        },
+        {
+            "route": "/v/5453-pv1.html",
+            "title": "PV",
+            "videoUrl": ""
+        }
+    ],
+    "third": {
+        "data": [
+            {
+                "route": "",
+                "title": "播放列表"
+            },
+            {
+                "episodeList": [
+                    {
+                        "route": "/v/5453-6.html",
+                        "title": "第06集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-5.html",
+                        "title": "第05集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-4.html",
+                        "title": "第04集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-3.html",
+                        "title": "第03集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-2.html",
+                        "title": "第02集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-1.html",
+                        "title": "第01集",
+                        "videoUrl": ""
+                    },
+                    {
+                        "route": "/v/5453-pv1.html",
+                        "title": "PV",
+                        "videoUrl": ""
+                    }
+                ],
+                "route": ""
+            },
+            {
+                "route": "",
+                "title": "推荐动漫"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2021/11/03/20211103113625406.jpg"
+                },
+                "episode": "第6集",
+                "route": "/show/5453.html",
+                "title": "间谍过家家",
+                "url": "http://xxx.xxx.xxx/show/5453.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402101428520.jpg"
+                },
+                "episode": "第7集",
+                "route": "/show/5542.html",
+                "title": "Love Live! 虹咲学园校园偶像同好会 第二季",
+                "url": "http://xxx.xxx.xxx/show/5542.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2021/09/08/20210908095445224.jpg"
+                },
+                "episode": "第6集",
+                "route": "/show/5373.html",
+                "title": "舞动不止",
+                "url": "http://xxx.xxx.xxx/show/5373.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402101002687.jpg"
+                },
+                "episode": "第7集",
+                "route": "/show/5541.html",
+                "title": "Love All Play",
+                "url": "http://xxx.xxx.xxx/show/5541.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/07/17/20210717112154268.jpg"
+                },
+                "episode": "第208集",
+                "route": "/show/4066.html",
+                "title": "斗罗大陆",
+                "url": "http://xxx.xxx.xxx/show/4066.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2021/12/14/20211214060840198.jpg"
+                },
+                "episode": "第18集",
+                "route": "/show/5476.html",
+                "title": "CUE!指名",
+                "url": "http://xxx.xxx.xxx/show/5476.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/08/01/20210801010025989.jpg"
+                },
+                "episode": "第7集",
+                "route": "/show/5343.html",
+                "title": "测不准的阿波连同学",
+                "url": "http://xxx.xxx.xxx/show/5343.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/down/1/A26178468259707.jpg"
+                },
+                "episode": "第6集",
+                "route": "/show/5093.html",
+                "title": "辉夜大小姐想让我告白：天才们的恋爱头脑战 第三季",
+                "url": "http://xxx.xxx.xxx/show/5093.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/02/02/20210202025454794.jpg"
+                },
+                "episode": "第7集",
+                "route": "/show/5170.html",
+                "title": "处刑少女的生存之道",
+                "url": "http://xxx.xxx.xxx/show/5170.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2022/04/01/20220401110824745.jpg"
+                },
+                "episode": "第7集",
+                "route": "/show/5540.html",
+                "title": "理科生坠入情网故尝试证明 第二季",
+                "url": "http://xxx.xxx.xxx/show/5540.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/08/05/20210805094812354.jpg"
+                },
+                "episode": "第6集",
+                "route": "/show/5348.html",
+                "title": "恋爱要在世界征服后",
+                "url": "http://xxx.xxx.xxx/show/5348.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/03/07/20210307075417257.jpg"
+                },
+                "episode": "第6集",
+                "route": "/show/5206.html",
+                "title": "约会大作战 第四季",
+                "url": "http://xxx.xxx.xxx/show/5206.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402102038719.jpg"
+                },
+                "episode": "第3集",
+                "route": "/show/5545.html",
+                "title": "杜鹃的婚约",
+                "url": "http://xxx.xxx.xxx/show/5545.html"
+            },
+            {
+                "cover": {
+                    "referer": "http://xxx.xxx.xxx/v/5453-6.html",
+                    "actionUrl": "",
+                    "url": "http://xxx.xxx.xxx/acg/2021/08/09/20210809053959743.jpg"
+                },
+                "episode": "第5集",
+                "route": "/show/5353.html",
+                "title": "夏日重现",
+                "url": "http://xxx.xxx.xxx/show/5353.html"
+            }
+        ],
+        "episode": {
+            "route": "",
+            "title": "第06集",
+            "videoUrl": ""
+        },
+        "route": "",
+        "title": {
+            "route": "/show/5453.html",
+            "title": "间谍过家家"
+        }
+    }
+}

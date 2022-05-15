@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_horizontal_recycler_view_2"
+        android:id="@+id/rv_horizontal_recycler_view_1"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -17,7 +17,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ImageView
-        android:id="@+id/iv_horizontal_recycler_view_2_more"
+        android:id="@+id/iv_horizontal_recycler_view_1_more"
         android:layout_width="50dp"
         android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"

@@ -1,0 +1,159 @@
+{
+    "first": [
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F149%2F&classifyTitle=%E6%88%98%E6%96%97",
+                    "title": "战斗",
+                    "url": "http://xxx.xxx.xxx/149/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/search/jojo/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/08/09/20210809061705839.jpg"
+            },
+            "describe": "2011年，美国佛罗里达州——当Jolyne Cujoh和她的男友在开车时发生事故时，她被诬陷犯罪并被判处15年监禁。她能从这座监狱——这石海中解脱出来吗？乔斯塔家族和迪奥的命运交织在一起，跨世纪的最后一战开始了！...",
+            "episode": "12全集",
+            "route": "/show/5354.html",
+            "title": "JOJO的奇妙冒险第六部 石之海",
+            "url": "http://xxx.xxx.xxx/show/5354.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F66%2F&classifyTitle=%E7%83%AD%E8%A1%80",
+                    "title": "热血",
+                    "url": "http://xxx.xxx.xxx/66/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F139%2F&classifyTitle=%E5%8A%A8%E4%BD%9C",
+                    "title": "动作",
+                    "url": "http://xxx.xxx.xxx/139/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/search/jojo/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/comic/acg/2016/12/13/1a4979e884f1a0b2189611f97aa575c656e53923.jpg"
+            },
+            "describe": "东方仗助居住的小镇杜王町因为迪奥遗留下来的弓箭的影响出现了很多替身使者，仗助与朋友追查弓箭的途中遇见各式各样的替身使者的故事。",
+            "episode": "39集全",
+            "route": "/show/2453.html",
+            "title": "JOJO的奇妙冒险第四部",
+            "url": "http://xxx.xxx.xxx/show/2453.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F66%2F&classifyTitle=%E7%83%AD%E8%A1%80",
+                    "title": "热血",
+                    "url": "http://xxx.xxx.xxx/66/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F139%2F&classifyTitle=%E5%8A%A8%E4%BD%9C",
+                    "title": "动作",
+                    "url": "http://xxx.xxx.xxx/139/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/search/jojo/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/comic/acg/2018/10/01/201810010178.jpg"
+            },
+            "describe": "公元2001年，意大利那不勒斯的少年乔鲁诺‧乔巴拿（DIO的儿子），为了达成梦想、成为一名黑道巨星，而加入了黑手党组织“热情”，并成为布加拉提小队的成员。本作和以往的JOJO不同，除了在初期登场的第三部主角空...",
+            "episode": "39集全",
+            "route": "/show/4281.html",
+            "title": "JOJO的奇妙冒险第五部",
+            "url": "http://xxx.xxx.xxx/show/4281.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F64%2F&classifyTitle=%E6%A0%BC%E6%96%97",
+                    "title": "格斗",
+                    "url": "http://xxx.xxx.xxx/64/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F75%2F&classifyTitle=%E7%A7%91%E5%B9%BB",
+                    "title": "科幻",
+                    "url": "http://xxx.xxx.xxx/75/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/search/jojo/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/comic/acg/2016/12/13/b701041c51c13aafa97a192bddabb16bde045a26.jpg"
+            },
+            "describe": "主要讲述1984年，迪奥·布兰度和乔纳斯·乔斯达所在的沉船被打捞上来，迪奥·布兰度由此苏醒。在之前近100年的时间中，他攫取了乔斯纳的身体，一直在海底生存着。更在奈亚婆婆的帮助下，更拥有了强大的替身：具有...",
+            "episode": "48集全",
+            "route": "/show/107.html",
+            "title": "JOJO的奇妙冒险第三部",
+            "url": "http://xxx.xxx.xxx/show/107.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F64%2F&classifyTitle=%E6%A0%BC%E6%96%97",
+                    "title": "格斗",
+                    "url": "http://xxx.xxx.xxx/64/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F75%2F&classifyTitle=%E7%A7%91%E5%B9%BB",
+                    "title": "科幻",
+                    "url": "http://xxx.xxx.xxx/75/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/search/jojo/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/comic/acg/2016/12/13/c592a3402910a43d02748a6e32960e67256a4928.jpg"
+            },
+            "describe": "英国贵族乔纳森·乔斯达，是个以绅士精神为目标的少年；下层阶级出身的迪奥，是企图夺取乔斯达家产，在外佯装好人的俊美男子。在他被收为养子后，处处迫害乔纳森。乔纳森为了打倒因意外得到神秘的石鬼面具而变为...",
+            "episode": "26集全",
+            "route": "/show/158.html",
+            "title": "JOJO的奇妙冒险",
+            "url": "http://xxx.xxx.xxx/show/158.html"
+        }
+    ]
+}

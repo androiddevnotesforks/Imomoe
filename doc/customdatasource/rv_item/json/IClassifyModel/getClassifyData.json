@@ -1,0 +1,389 @@
+{
+    "first": [
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F143%2F&classifyTitle=%E6%B2%BB%E6%84%88",
+                    "title": "治愈",
+                    "url": "http://xxx.xxx.xxx/143/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/03/28/20220328115254427.jpg"
+            },
+            "describe": "从小就是个超级书痴的女大学生丽乃，爱书爱到希望在书堆里死去。该说是“梦想成真”吗？好不容易应征上图书馆工作的她，没想到却在地震时被掉落的书给活埋…… 当她再度醒过来，发现自己竟然转生到了陌生的异世界...",
+            "episode": "更新至28集",
+            "route": "/show/5534.html",
+            "title": "爱书的下克上～为了成为图书管理员不择手段～ 第三季",
+            "url": "http://xxx.xxx.xxx/show/5534.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F144%2F&classifyTitle=%E6%81%90%E6%80%96",
+                    "title": "恐怖",
+                    "url": "http://xxx.xxx.xxx/144/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F151%2F&classifyTitle=%E6%B3%A1%E9%9D%A2%E7%95%AA",
+                    "title": "泡面番",
+                    "url": "http://xxx.xxx.xxx/151/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/news/2022/01/11/20220111113951998.jpg"
+            },
+            "describe": "以我們周遭詭異的都市傳說為主題，將現今變得彌足珍貴的紙上劇場，透過數位方式來呈現，充滿昭和風味的新式驚悚動畫短片。",
+            "episode": "更新至13集",
+            "route": "/show/5510.html",
+            "title": "暗芝居 第十季",
+            "url": "http://xxx.xxx.xxx/show/5510.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F75%2F&classifyTitle=%E7%A7%91%E5%B9%BB",
+                    "title": "科幻",
+                    "url": "http://xxx.xxx.xxx/75/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F149%2F&classifyTitle=%E6%88%98%E6%96%97",
+                    "title": "战斗",
+                    "url": "http://xxx.xxx.xxx/149/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/06/24/20210624122800794.jpg"
+            },
+            "describe": "电视动画《暗夜第六感 2041》改编自同名动画作品《暗夜第六感》，于2020年11月宣布动画化，由白组负责制作。 哥哥雾原直人和弟第雾原直也是所谓的超能力者，雾原直人的能力是“念动力”，雾原直也的能力则为“读...",
+            "episode": "12全集",
+            "route": "/show/5286.html",
+            "title": "暗夜第六感 2041",
+            "url": "http://xxx.xxx.xxx/show/5286.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F144%2F&classifyTitle=%E6%81%90%E6%80%96",
+                    "title": "恐怖",
+                    "url": "http://xxx.xxx.xxx/144/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/06/25/20210625033611979.jpg"
+            },
+            "describe": "根据《暗芝居》官方所公布的消息，《暗芝居》第九季已经制作完毕，还是从前的味道，还是一如既往的恐怖故事。动画作品将于7月份播出，对此官方发布了很多预告，将第九季精彩的画面重现出来，还是十分具有效果的。...",
+            "episode": "13全集",
+            "route": "/show/5288.html",
+            "title": "暗芝居 第九季",
+            "url": "http://xxx.xxx.xxx/show/5288.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F75%2F&classifyTitle=%E7%A7%91%E5%B9%BB",
+                    "title": "科幻",
+                    "url": "http://xxx.xxx.xxx/75/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F150%2F&classifyTitle=%E7%89%B9%E6%91%84",
+                    "title": "特摄",
+                    "url": "http://xxx.xxx.xxx/150/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F149%2F&classifyTitle=%E6%88%98%E6%96%97",
+                    "title": "战斗",
+                    "url": "http://xxx.xxx.xxx/149/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/01/16/20210116101406368.png"
+            },
+            "describe": "重回过去，再现奇迹。 泽塔奥特曼是赛罗奥特曼的徒弟，拥有着和赛罗一样的热心肠，是一位非常积极向上的奥特英雄。而且，泽塔非常崇拜他的师父赛罗。赛罗虽然嘴上不承认这个徒弟，但其实心里还是很看好泽塔的。...",
+            "episode": "更新至25集",
+            "route": "/show/5154.html",
+            "title": "奥特英雄传泽塔 英雄之路",
+            "url": "http://xxx.xxx.xxx/show/5154.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F156%2F&classifyTitle=%E8%80%BD%E7%BE%8E",
+                    "title": "耽美",
+                    "url": "http://xxx.xxx.xxx/156/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "https://ae01.alicdn.com/kf/U9ab1cff7a6ba4c34ab1be75afb867f9eD.jpg"
+            },
+            "describe": "故事讲述了作为普通大学毕业生的主人公姜爻在追查友人失踪案件中，意外得知自己本因在十年前就已死去的事实，而自己也因“擅改天命”被地府烙下『死亡刻印』，遭到阎王的追捕。为了查清友人失踪的真相，也为了摆...",
+            "episode": "更新至19集",
+            "route": "/show/5153.html",
+            "title": "暗界神使",
+            "url": "http://xxx.xxx.xxx/show/5153.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F144%2F&classifyTitle=%E6%81%90%E6%80%96",
+                    "title": "恐怖",
+                    "url": "http://xxx.xxx.xxx/144/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F151%2F&classifyTitle=%E6%B3%A1%E9%9D%A2%E7%95%AA",
+                    "title": "泡面番",
+                    "url": "http://xxx.xxx.xxx/151/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/111489589545767.jpg"
+            },
+            "describe": "TV动画《 暗芝居 》第八季将于2021年1月播出！",
+            "episode": "13全集",
+            "route": "/show/5143.html",
+            "title": "暗芝居 第八季",
+            "url": "http://xxx.xxx.xxx/show/5143.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F67%2F&classifyTitle=%E6%90%9E%E7%AC%91",
+                    "title": "搞笑",
+                    "url": "http://xxx.xxx.xxx/67/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/comic/acg/2017/09/26/20170926083606513.jpg"
+            },
+            "describe": "在原作基础上把时间轴转移到了六胞胎已经成年后的背景下。然而他们却一如既往地选择了家里蹲，每天过着无所事事的日子。作品在维持了原作风格的同时，大胆融入了各种NETA和现实要素。",
+            "episode": "25全集",
+            "route": "/show/3953.html",
+            "title": "阿松第三季",
+            "url": "http://xxx.xxx.xxx/show/3953.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F345%2F&classifyTitle=%E5%81%B6%E5%83%8F",
+                    "title": "偶像",
+                    "url": "http://xxx.xxx.xxx/345/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F147%2F&classifyTitle=%E7%99%BE%E5%90%88",
+                    "title": "百合",
+                    "url": "http://xxx.xxx.xxx/147/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F140%2F&classifyTitle=%E6%AD%8C%E8%88%9E",
+                    "title": "歌舞",
+                    "url": "http://xxx.xxx.xxx/140/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2021/01/05/20210105014940277.jpg"
+            },
+            "describe": "原创电视动画 「演剧偶像」公开剧中剧「Alice in Deadly School」PV，剧中剧特别版与该动画的第1话将于2021年1月4日作为新春特别节目放送，电视动画将从2021年1月5日起正式播出。",
+            "episode": "全集",
+            "route": "/show/5130.html",
+            "title": "Alice in deadly school",
+            "url": "http://xxx.xxx.xxx/show/5130.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F156%2F&classifyTitle=%E8%80%BD%E7%BE%8E",
+                    "title": "耽美",
+                    "url": "http://xxx.xxx.xxx/156/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F290%2F&classifyTitle=%E5%A5%B3%E6%80%A7%E5%90%91",
+                    "title": "女性向",
+                    "url": "http://xxx.xxx.xxx/290/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/226397957235489.jpg"
+            },
+            "describe": "动画《爱情可以分割吗？》改编自一穗ミチ著、竹美家らら插画同名小说作品，于2019年10月31日宣布了动画化的决定。2020年12月日本公映。 人气青年主播国江田计有着极端的双重人格。他的外在完美到被人称颂为王子，...",
+            "episode": "全集",
+            "route": "/show/5199.html",
+            "title": "爱情可以分割吗",
+            "url": "http://xxx.xxx.xxx/show/5199.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F61%2F&classifyTitle=%E5%86%92%E9%99%A9",
+                    "title": "冒险",
+                    "url": "http://xxx.xxx.xxx/61/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F66%2F&classifyTitle=%E7%83%AD%E8%A1%80",
+                    "title": "热血",
+                    "url": "http://xxx.xxx.xxx/66/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/acg/2020/04/05/20200405124822741.jpg"
+            },
+            "describe": "岸边露伴一动不动动画全集改编自荒木飞吕彦作画的漫画，完全新作OVA，将作为《JOJO的奇妙冒险第四部 不灭钻石》的BD DVD全卷购入特典收录在DVD中。 拥有替身「天堂之门」的岸边露伴，是个16岁就出道的天才漫画...",
+            "episode": "全集",
+            "route": "/show/4957.html",
+            "title": "岸边露伴一动不动",
+            "url": "http://xxx.xxx.xxx/show/4957.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F67%2F&classifyTitle=%E6%90%9E%E7%AC%91",
+                    "title": "搞笑",
+                    "url": "http://xxx.xxx.xxx/67/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F60%2F&classifyTitle=%E5%A5%87%E5%B9%BB",
+                    "title": "奇幻",
+                    "url": "http://xxx.xxx.xxx/60/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/C15218516089278.jpg"
+            },
+            "describe": "とーとつですが、ここはエジプト神たちの世界。アヌビスやトトを始めとする古代エジプトの有名な神々たちがそれはもう自由に暮らしておりました。どれくらい自由かというといきなり現れて歌い踊るバステト、いつ...",
+            "episode": "10全集",
+            "route": "/show/5110.html",
+            "title": "埃及神明们的日常",
+            "url": "http://xxx.xxx.xxx/show/5110.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F77%2F&classifyTitle=%E5%89%A7%E6%83%85",
+                    "title": "剧情",
+                    "url": "http://xxx.xxx.xxx/77/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F75%2F&classifyTitle=%E7%A7%91%E5%B9%BB",
+                    "title": "科幻",
+                    "url": "http://xxx.xxx.xxx/75/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/C02748490771228.jpg"
+            },
+            "describe": "本不可能存在的神秘凶恶怪兽·宇宙人们来袭了！赛罗、利布特、泰迦、泽塔、爱迪、麦克斯、梦比优斯、葛雷、帕瓦特、格丽乔 还有更多的奥特英雄将共同加入战斗，向震撼全宇宙的令人费解的事件发起挑战...",
+            "episode": "10集全",
+            "route": "/show/5106.html",
+            "title": "奥特银河格斗：巨大的阴谋",
+            "url": "http://xxx.xxx.xxx/show/5106.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F361%2F&classifyTitle=%E9%9F%B3%E4%B9%90",
+                    "title": "音乐",
+                    "url": "http://xxx.xxx.xxx/361/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F345%2F&classifyTitle=%E5%81%B6%E5%83%8F",
+                    "title": "偶像",
+                    "url": "http://xxx.xxx.xxx/345/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/A13600110516855.jpg"
+            },
+            "describe": "东京郊外的街道——天鹅绒町，这里有着被剧团成员们称之为天鹅绒之路的圣地。身为原舞台演员、因一纸来信而站在此地的你，将会遇到的是……负债累累！没有客人！团员只有一位！失去过去辉煌即将倒闭的落魄剧团！...",
+            "episode": "12全集",
+            "route": "/show/5083.html",
+            "title": "A3！满开剧团 秋&冬",
+            "url": "http://xxx.xxx.xxx/show/5083.html"
+        },
+        {
+            "animeType": [
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F70%2F&classifyTitle=%E6%A0%A1%E5%9B%AD",
+                    "title": "校园",
+                    "url": "http://xxx.xxx.xxx/70/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F147%2F&classifyTitle=%E7%99%BE%E5%90%88",
+                    "title": "百合",
+                    "url": "http://xxx.xxx.xxx/147/"
+                },
+                {
+                    "route": "anime://classify.anime.app?partUrl=%2F143%2F&classifyTitle=%E6%B2%BB%E6%84%88",
+                    "title": "治愈",
+                    "url": "http://xxx.xxx.xxx/143/"
+                }
+            ],
+            "cover": {
+                "referer": "http://xxx.xxx.xxx/a/",
+                "actionUrl": "",
+                "url": "http://xxx.xxx.xxx/down/1/jC27264737289022.jpg"
+            },
+            "describe": "电视动画《安达与岛村》改编自入间人间著作同名小说，于2019年5月7日宣布动画化决定，2020年播出。 高一女学生安达与岛村是好朋友，她们总是腻在一起聊天，偶尔打乒乓球，培育着名为友情的情感。 然而某天夜晚，...",
+            "episode": "12全集",
+            "route": "/show/4829.html",
+            "title": "安达与岛村",
+            "url": "http://xxx.xxx.xxx/show/4829.html"
+        }
+    ],
+    "second": {
+        "route": "/a/2.html",
+        "title": "2",
+        "url": "http://xxx.xxx.xxx/a/2.html"
+    }
+}

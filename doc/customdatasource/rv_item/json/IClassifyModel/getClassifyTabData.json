@@ -1,0 +1,377 @@
+[
+    {
+        "classifyDataList": [
+            {
+                "route": "/a/",
+                "title": "A",
+                "url": "http://xxx.xxx.xxx/a/"
+            },
+            {
+                "route": "/b/",
+                "title": "B",
+                "url": "http://xxx.xxx.xxx/b/"
+            },
+            {
+                "route": "/c/",
+                "title": "C",
+                "url": "http://xxx.xxx.xxx/c/"
+            },
+            {
+                "route": "/d/",
+                "title": "D",
+                "url": "http://xxx.xxx.xxx/d/"
+            },
+            {
+                "route": "/e/",
+                "title": "E",
+                "url": "http://xxx.xxx.xxx/e/"
+            },
+            {
+                "route": "/f/",
+                "title": "F",
+                "url": "http://xxx.xxx.xxx/f/"
+            },
+            {
+                "route": "/g/",
+                "title": "G",
+                "url": "http://xxx.xxx.xxx/g/"
+            },
+            {
+                "route": "/h/",
+                "title": "H",
+                "url": "http://xxx.xxx.xxx/h/"
+            },
+            {
+                "route": "/i/",
+                "title": "I",
+                "url": "http://xxx.xxx.xxx/i/"
+            },
+            {
+                "route": "/j/",
+                "title": "J",
+                "url": "http://xxx.xxx.xxx/j/"
+            },
+            {
+                "route": "/k/",
+                "title": "K",
+                "url": "http://xxx.xxx.xxx/k/"
+            },
+            {
+                "route": "/l/",
+                "title": "L",
+                "url": "http://xxx.xxx.xxx/l/"
+            },
+            {
+                "route": "/m/",
+                "title": "M",
+                "url": "http://xxx.xxx.xxx/m/"
+            },
+            {
+                "route": "/n/",
+                "title": "N",
+                "url": "http://xxx.xxx.xxx/n/"
+            },
+            {
+                "route": "/o/",
+                "title": "O",
+                "url": "http://xxx.xxx.xxx/o/"
+            },
+            {
+                "route": "/p/",
+                "title": "P",
+                "url": "http://xxx.xxx.xxx/p/"
+            },
+            {
+                "route": "/q/",
+                "title": "Q",
+                "url": "http://xxx.xxx.xxx/q/"
+            },
+            {
+                "route": "/r/",
+                "title": "R",
+                "url": "http://xxx.xxx.xxx/r/"
+            },
+            {
+                "route": "/s/",
+                "title": "S",
+                "url": "http://xxx.xxx.xxx/s/"
+            },
+            {
+                "route": "/t/",
+                "title": "T",
+                "url": "http://xxx.xxx.xxx/t/"
+            },
+            {
+                "route": "/u/",
+                "title": "U",
+                "url": "http://xxx.xxx.xxx/u/"
+            },
+            {
+                "route": "/v/",
+                "title": "V",
+                "url": "http://xxx.xxx.xxx/v/"
+            },
+            {
+                "route": "/w/",
+                "title": "W",
+                "url": "http://xxx.xxx.xxx/w/"
+            },
+            {
+                "route": "/x/",
+                "title": "X",
+                "url": "http://xxx.xxx.xxx/x/"
+            },
+            {
+                "route": "/y/",
+                "title": "Y",
+                "url": "http://xxx.xxx.xxx/y/"
+            },
+            {
+                "route": "/z/",
+                "title": "Z",
+                "url": "http://xxx.xxx.xxx/z/"
+            },
+            {
+                "route": "/0/",
+                "title": "其他",
+                "url": "http://xxx.xxx.xxx/0/"
+            }
+        ],
+        "name": "字母:",
+        "route": ""
+    },
+    {
+        "classifyDataList": [
+            {
+                "route": "/2022/",
+                "title": "2022",
+                "url": "http://xxx.xxx.xxx/2022/"
+            },
+            {
+                "route": "/2021/",
+                "title": "2021",
+                "url": "http://xxx.xxx.xxx/2021/"
+            },
+            {
+                "route": "/2020/",
+                "title": "2020",
+                "url": "http://xxx.xxx.xxx/2020/"
+            },
+            {
+                "route": "/2019/",
+                "title": "2019",
+                "url": "http://xxx.xxx.xxx/2019/"
+            },
+            {
+                "route": "/2018/",
+                "title": "2018",
+                "url": "http://xxx.xxx.xxx/2018/"
+            },
+            {
+                "route": "/2017/",
+                "title": "2017",
+                "url": "http://xxx.xxx.xxx/2017/"
+            },
+            {
+                "route": "/2016/",
+                "title": "2016",
+                "url": "http://xxx.xxx.xxx/2016/"
+            },
+            {
+                "route": "/2015/",
+                "title": "2015",
+                "url": "http://xxx.xxx.xxx/2015/"
+            },
+            {
+                "route": "/2014/",
+                "title": "2014",
+                "url": "http://xxx.xxx.xxx/2014/"
+            }
+        ],
+        "name": "年代:",
+        "route": ""
+    },
+    {
+        "classifyDataList": [
+            {
+                "route": "/japan/",
+                "title": "日本",
+                "url": "http://xxx.xxx.xxx/japan/"
+            },
+            {
+                "route": "/china/",
+                "title": "大陆",
+                "url": "http://xxx.xxx.xxx/china/"
+            },
+            {
+                "route": "/american/",
+                "title": "美国",
+                "url": "http://xxx.xxx.xxx/american/"
+            },
+            {
+                "route": "/england/",
+                "title": "英国",
+                "url": "http://xxx.xxx.xxx/england/"
+            },
+            {
+                "route": "/korea/",
+                "title": "韩国",
+                "url": "http://xxx.xxx.xxx/korea/"
+            }
+        ],
+        "name": "地区:",
+        "route": ""
+    },
+    {
+        "classifyDataList": [
+            {
+                "route": "/29/",
+                "title": "日语",
+                "url": "http://xxx.xxx.xxx/29/"
+            },
+            {
+                "route": "/30/",
+                "title": "国语",
+                "url": "http://xxx.xxx.xxx/30/"
+            },
+            {
+                "route": "/31/",
+                "title": "粤语",
+                "url": "http://xxx.xxx.xxx/31/"
+            },
+            {
+                "route": "/32/",
+                "title": "英语",
+                "url": "http://xxx.xxx.xxx/32/"
+            },
+            {
+                "route": "/33/",
+                "title": "韩语",
+                "url": "http://xxx.xxx.xxx/33/"
+            },
+            {
+                "route": "/34/",
+                "title": "方言",
+                "url": "http://xxx.xxx.xxx/34/"
+            }
+        ],
+        "name": "语言:",
+        "route": ""
+    },
+    {
+        "classifyDataList": [
+            {
+                "route": "/66/",
+                "title": "热血",
+                "url": "http://xxx.xxx.xxx/66/"
+            },
+            {
+                "route": "/64/",
+                "title": "格斗",
+                "url": "http://xxx.xxx.xxx/64/"
+            },
+            {
+                "route": "/91/",
+                "title": "恋爱",
+                "url": "http://xxx.xxx.xxx/91/"
+            },
+            {
+                "route": "/70/",
+                "title": "校园",
+                "url": "http://xxx.xxx.xxx/70/"
+            },
+            {
+                "route": "/67/",
+                "title": "搞笑",
+                "url": "http://xxx.xxx.xxx/67/"
+            },
+            {
+                "route": "/111/",
+                "title": "LOLI",
+                "url": "http://xxx.xxx.xxx/111/"
+            },
+            {
+                "route": "/83/",
+                "title": "神魔",
+                "url": "http://xxx.xxx.xxx/83/"
+            },
+            {
+                "route": "/81/",
+                "title": "机战",
+                "url": "http://xxx.xxx.xxx/81/"
+            },
+            {
+                "route": "/75/",
+                "title": "科幻",
+                "url": "http://xxx.xxx.xxx/75/"
+            },
+            {
+                "route": "/74/",
+                "title": "真人",
+                "url": "http://xxx.xxx.xxx/74/"
+            },
+            {
+                "route": "/84/",
+                "title": "青春",
+                "url": "http://xxx.xxx.xxx/84/"
+            },
+            {
+                "route": "/73/",
+                "title": "魔法",
+                "url": "http://xxx.xxx.xxx/73/"
+            },
+            {
+                "route": "/72/",
+                "title": "美少女",
+                "url": "http://xxx.xxx.xxx/72/"
+            },
+            {
+                "route": "/102/",
+                "title": "神话",
+                "url": "http://xxx.xxx.xxx/102/"
+            },
+            {
+                "route": "/61/",
+                "title": "冒险",
+                "url": "http://xxx.xxx.xxx/61/"
+            },
+            {
+                "route": "/69/",
+                "title": "运动",
+                "url": "http://xxx.xxx.xxx/69/"
+            },
+            {
+                "route": "/62/",
+                "title": "竞技",
+                "url": "http://xxx.xxx.xxx/62/"
+            },
+            {
+                "route": "/103/",
+                "title": "童话",
+                "url": "http://xxx.xxx.xxx/103/"
+            },
+            {
+                "route": "/85/",
+                "title": "励志",
+                "url": "http://xxx.xxx.xxx/85/"
+            },
+            {
+                "route": "/99/",
+                "title": "后宫",
+                "url": "http://xxx.xxx.xxx/99/"
+            },
+            {
+                "route": "/80/",
+                "title": "战争",
+                "url": "http://xxx.xxx.xxx/80/"
+            },
+            {
+                "route": "/119/",
+                "title": "吸血鬼",
+                "url": "http://xxx.xxx.xxx/119/"
+            }
+        ],
+        "name": "类型:",
+        "route": ""
+    }
+]

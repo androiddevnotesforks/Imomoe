@@ -159,9 +159,9 @@ class AnimeInfo1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class HorizontalRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val rvHorizontalRecyclerView1: RecyclerView =
-        view.findViewById(R.id.rv_horizontal_recycler_view_2)
+        view.findViewById(R.id.rv_horizontal_recycler_view_1)
     val ivHorizontalRecyclerView1More: ImageView =
-        view.findViewById(R.id.iv_horizontal_recycler_view_2_more)
+        view.findViewById(R.id.iv_horizontal_recycler_view_1_more)
 }
 
 class AnimeEpisode1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

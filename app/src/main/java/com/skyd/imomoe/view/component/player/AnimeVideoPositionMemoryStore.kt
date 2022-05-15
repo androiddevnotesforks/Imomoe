@@ -20,5 +20,5 @@ object AnimeVideoPositionMemoryStore : AnimeVideoPlayer.PlayPositionMemoryDataSt
 
     override fun positionFormat(position: Long): String =
         if (position < 0L) appContext.getString(R.string.episode_play_completed)
-        else CommonUtil.stringForTime(position.toInt())
+        else CommonUtil.stringForTime(position)
 }
