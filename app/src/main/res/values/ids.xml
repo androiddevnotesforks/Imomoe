@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="image_view_tag" type="id" />
+    <item name="inset_left" type="id" />
+    <item name="inset_right" type="id" />
+    <item name="inset_top" type="id" />
+    <item name="inset_bottom" type="id" />
 </resources>

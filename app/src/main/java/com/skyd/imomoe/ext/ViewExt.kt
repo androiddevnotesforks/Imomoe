@@ -3,6 +3,7 @@ package com.skyd.imomoe.ext
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Rect
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
@@ -69,4 +70,18 @@ fun View.hideKeyboard() {
     val inputManager =
         appContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputManager.hideSoftInputFromWindow(this.windowToken, 0)
+}
+
+/**
+ * 判断View和给定的Rect是否重叠（边和点不计入）
+ * @return true if overlap
+ */
+fun View.overlap(rect: Rect): Boolean {
+    val location = IntArray(2)
+    getLocationOnScreen(location)
+    val left = location[0]
+    val right = location[0] + width
+    val top = location[1]
+    val bottom = location[1] + height
+    return !(left > rect.right || right < rect.left || top > rect.bottom || bottom < rect.top)
 }

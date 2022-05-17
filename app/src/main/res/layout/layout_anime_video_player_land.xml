@@ -47,7 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_gray_transparent_angle_90"
-        android:fitsSystemWindows="true"
         android:paddingTop="20dp">
 
         <androidx.appcompat.widget.AppCompatSeekBar
@@ -91,7 +90,7 @@
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_next"
@@ -206,7 +205,7 @@
             android:layout_height="0px"
             android:layout_marginEnd="10dp"
             android:adjustViewBounds="true"
-            android:padding="12dp"
+            android:padding="13dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/progress"
@@ -272,9 +271,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape_gray_transparent_angle_270"
-        android:fitsSystemWindows="true"
         android:gravity="center_vertical"
         android:paddingBottom="20dp">
 

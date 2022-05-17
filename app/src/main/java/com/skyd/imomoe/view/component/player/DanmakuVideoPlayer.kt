@@ -371,8 +371,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         if (url.isEmpty()) return
 
-        runCatching {
-            coroutineScope.launch {
+        coroutineScope.launch {
+            runCatching {
                 var success = false
                 val dataList: MutableList<DanmakuItemData> = arrayListOf()
 
@@ -405,10 +405,10 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 }
                 mDanmakuSourceType = danmakuSourceType
                 mDanmakuUrl = url
+            }.onFailure {
+                it.printStackTrace()
+                it.message?.showToast()
             }
-        }.onFailure {
-            it.printStackTrace()
-            it.message?.showToast()
         }
     }
 
@@ -477,24 +477,29 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         time: Long = gsyVideoManager.currentPosition
     ) {
         coroutineScope.launch {
-            when (val danmakuSourceType = mDanmakuSourceType) {
-                is DanmakuType.AnimeType -> {
-                    val episode = danmakuSourceType.data?.episode ?: return@launch
-                    AnimeDanmakuSender.send(
-                        content = content,
-                        episodeId = episode.id,
-                        time = time
-                    )?.let {
-                        val data = it.toDanmakuItemData(DANMAKU_STYLE_ICON_UP)
-                        withContext(Dispatchers.Main) {
-                            mDanmakuPlayer.send(data)
+            runCatching {
+                when (val danmakuSourceType = mDanmakuSourceType) {
+                    is DanmakuType.AnimeType -> {
+                        val episode = danmakuSourceType.data?.episode ?: return@launch
+                        AnimeDanmakuSender.send(
+                            content = content,
+                            episodeId = episode.id,
+                            time = time
+                        )?.let {
+                            val data = it.toDanmakuItemData(DANMAKU_STYLE_ICON_UP)
+                            withContext(Dispatchers.Main) {
+                                mDanmakuPlayer.send(data)
+                            }
                         }
                     }
+                    else -> {
+                        context.getString(R.string.danmaku_video_player_unsupport_send_danmaku)
+                            .showToast()
+                    }
                 }
-                else -> {
-                    context.getString(R.string.danmaku_video_player_unsupport_send_danmaku)
-                        .showToast()
-                }
+            }.onFailure {
+                it.printStackTrace()
+                it.message?.showToast()
             }
         }
     }

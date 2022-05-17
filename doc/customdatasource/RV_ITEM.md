@@ -41,8 +41,31 @@
 |      SpinnerItem1       | <img src="rv_item/image/spinner_item_1.jpg" alt="spinner_item_1" style="zoom:33%;" /> |                 ClassifyBean                 |      目前仅用作**分类页面的分类**，如**字母**、**地区**      |
 |      ClassifyTab1       | <img src="rv_item/image/classify_tab_1.jpg" alt="classify_tab_1" style="zoom:33%;" /> |               ClassifyTab1Bean               | 目前仅用作**分类页面分类的子类型**，如字母的**A**，地区的**大陆** |
 |    GridRecyclerView1    |               只是一个能显示其他Item的**列表**               |         GridRecyclerView1/ArrayList          |                 目前仅在**每日更新页面**使用                 |
+|           Tab           | <img src="rv_item/image/tab.jpg" alt="classify_tab_1" style="zoom:33%;" /> |                   TabBean                    |                   首页和排行榜上方的Tab等                    |
+
+
 
 ## 页面可用类型对应 及 数据源接口方法对应示例JSON
+
+### ⚠注意⚠：后端返回的JSON中，每个Object必须带有一个type字段，其值为Item对应的实体类名，以便APP能够区分将Object解析为哪个实体类（⚠给出的示例JSON未包含type字段）
+
+### 例如：下方代码包括两个Object，其type分别为"AnimeCover1Bean"和"ImageBean"
+
+```json
+{
+	"type": "AnimeCover1Bean",
+    "cover": {
+    	"type": "ImageBean",
+        "referer": "http://xxx.xxx.xxx/",
+        "actionUrl": "",
+        "url": "http://xxx.xxx.xxx/news/2022/04/03/20220403104341348.jpg"
+    },
+    "episode": "第10集",
+    "route": "/show/5548.html",
+    "title": "武映三千道",
+    "url": "http://xxx.xxx.xxx/show/5548.html"
+}
+```
 
 ### 首页（HomeFragment、AnimeShowFragment）
 
@@ -50,40 +73,44 @@
 
 [IAnimeShowModel](rv_item/json/IAnimeShowModel)
 
-|    类型     |
-| :---------: |
-| AnimeCover1 |
-| AnimeCover3 |
-| AnimeCover4 |
-| AnimeCover5 |
-|   Banner1   |
-|   Header1   |
+| HomeFragment支持的类型 |
+| :--------------------: |
+|          Tab           |
+
+| AnimeShowFragment支持的类型 |
+| :-------------------------: |
+|         AnimeCover1         |
+|         AnimeCover3         |
+|         AnimeCover4         |
+|         AnimeCover5         |
+|           Banner1           |
+|           Header1           |
 
 ### 每日更新页面（EverydayAnimeFragment）
 
 [IEverydayAnimeModel](rv_item/json/IEverydayAnimeModel)
 
-|       类型        |
-| :---------------: |
-| GridRecyclerView1 |
+| EverydayAnimeFragment支持的类型 |
+| :-----------------------------: |
+|        GridRecyclerView1        |
 
 ### 动漫详情页面（AnimeDetailActivity）
 
 [IAnimeDetailModel](rv_item/json/IAnimeDetailModel)
 
-|          类型           |
-| :---------------------: |
-|       AnimeCover1       |
-|     AnimeDescribe1      |
-|       AnimeInfo1        |
-|         Header1         |
-| HorizontalRecyclerView1 |
+| AnimeDetailActivity支持的类型 |
+| :---------------------------: |
+|          AnimeCover1          |
+|        AnimeDescribe1         |
+|          AnimeInfo1           |
+|            Header1            |
+|    HorizontalRecyclerView1    |
 
 ### 播放页面（PlayActivity）
 
 [IPlayModel](rv_item/json/IPlayModel)
 
-|                        类型                         |
+|               PlayActivity支持的类型                |
 | :-------------------------------------------------: |
 |                     AnimeCover1                     |
 | AnimeCover2（**未测试**是否安全和有效，不建议使用） |
@@ -94,19 +121,19 @@
 
 [ISearchModel](rv_item/json/ISearchModel)
 
-|    类型     |
-| :---------: |
-| AnimeCover3 |
+| SearchActivity支持的类型 |
+| :----------------------: |
+|       AnimeCover3        |
 
 ### 分类页面（ClassifyActivity）
 
 [IClassifyModel](rv_item/json/IClassifyModel)
 
-|     类型     |
-| :----------: |
-| AnimeCover3  |
-| SpinnerItem1 |
-| ClassifyTab1 |
+| ClassifyActivity支持的类型 |
+| :------------------------: |
+|        AnimeCover3         |
+|        SpinnerItem1        |
+|        ClassifyTab1        |
 
 ### 排行榜页面（RankActivity、RankFragment）
 
@@ -114,24 +141,28 @@
 
 [IRankListModel](rv_item/json/IRankListModel)
 
-|     类型     |
-| :----------: |
-| AnimeCover3  |
-| AnimeCover11 |
+| RankActivity支持的类型 |
+| :--------------------: |
+|          Tab           |
+
+| RankFragment支持的类型 |
+| :--------------------: |
+|      AnimeCover3       |
+|      AnimeCover11      |
 
 ### 季度更新动漫页面（MonthAnimeActivity）
 
 [IMonthAnimeModel](rv_item/json/IMonthAnimeModel)
 
-|    类型     |
-| :---------: |
-| AnimeCover3 |
+| MonthAnimeActivity支持的类型 |
+| :--------------------------: |
+|         AnimeCover3          |
 
 ### 每日更新微件（小组件）
 
 [IEverydayAnimeWidgetModel](rv_item/json/IEverydayAnimeWidgetModel)
 
-|     类型     |
+|  支持的类型  |
 | :----------: |
 | AnimeCover10 |
 

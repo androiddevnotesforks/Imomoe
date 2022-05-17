@@ -33,6 +33,10 @@
         <item name="colorErrorContainer">@color/error_container_lemon</item>
         <item name="colorOnErrorContainer">@color/on_error_container_lemon</item>
         <item name="colorOutline">@color/outline_lemon</item>
+
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">
+            shortEdges
+        </item>
     </style>
 
     <style name="Theme.Anime.Lemon" parent="Theme.Lemon">

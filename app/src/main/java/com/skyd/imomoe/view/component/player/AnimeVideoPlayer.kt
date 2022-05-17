@@ -1,11 +1,14 @@
 package com.skyd.imomoe.view.component.player
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
+import android.os.Build
 import android.util.AttributeSet
 import android.view.*
 import android.view.View.OnClickListener
@@ -14,6 +17,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
@@ -30,6 +34,8 @@ import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.getResDrawable
 import com.skyd.imomoe.util.Util.getScreenBrightness
+import com.skyd.imomoe.util.Util.getScreenHeight
+import com.skyd.imomoe.util.Util.getScreenWidth
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.DlnaActivity
@@ -63,7 +69,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         val coroutineScope by lazy(LazyThreadSafetyMode.NONE) {
             CoroutineScope(Dispatchers.Default)
         }
-
     }
 
     // 番剧名称（不是每一集的名称）
@@ -528,6 +533,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         touchSurfaceUp()
         player.setRestoreScreenTextViewVisibility()
         player.resolveTypeUI()
+        player.supportDisplayCutouts()
         return player
     }
 
@@ -575,6 +581,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             player.touchSurfaceUp()
             setRestoreScreenTextViewVisibility()
             resolveTypeUI()
+            supportDisplayCutouts()
         }
     }
 
@@ -722,6 +729,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     }
 
     override fun changeUiToPauseShow() {
+        // 防止锁定后从桌面进入仍然显示界面的问题
+        if (mLockCurScreen && mNeedLockFull) {
+            mLockScreen?.visible()
+            return
+        }
         super.changeUiToPauseShow()
         viewTopContainerShadow?.visible()
         mUiCleared = false
@@ -744,13 +756,14 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     //播放中
     override fun changeUiToPlayingShow() {
+        initFirstLoad = false
+        // 防止锁定后从桌面进入仍然显示界面的问题
+        if (mLockCurScreen && mNeedLockFull) {
+            mLockScreen?.visible()
+            return
+        }
         super.changeUiToPlayingShow()
         viewTopContainerShadow?.visible()
-//        if (initFirstLoad) {
-//            mBottomContainer.gone()
-//            mStartButton.gone()
-//        }
-        initFirstLoad = false
         mUiCleared = false
     }
 
@@ -808,7 +821,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 mVideoAllCallBack.let {
                     if (it is MyVideoAllCallBack) it.onVideoResume()
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
@@ -1137,6 +1150,128 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     fun enableDismissControlViewTimer(start: Boolean) {
         if (start) super.startDismissControlViewTimer()
         else super.cancelDismissControlViewTimer()
+    }
+
+    /**
+     * 适配刘海屏，防止重要内容落入刘海内被遮挡
+     */
+    protected open fun supportDisplayCutouts() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val decorView: View = (activity ?: return).window.decorView
+            decorView.post {
+                val displayCutout = decorView.rootWindowInsets.displayCutout ?: return@post
+                mTopContainer?.updateSafeInset(displayCutout)
+                mBottomContainer?.updateSafeInset(displayCutout)
+            }
+        }
+    }
+
+    @TargetApi(28)
+    protected fun View.updateSafeInset(displayCutout: DisplayCutout) {
+        coroutineScope.launch(Dispatchers.Main) {
+            delay(500)
+            val location = IntArray(2)
+            getLocationOnScreen(location)
+            val left = location[0]
+            val right = location[0] + width
+            val top = location[1]
+            val bottom = location[1] + height
+
+            val insetLeft: Int = getTag(R.id.inset_left) as? Int ?: 0
+            val insetRight: Int = getTag(R.id.inset_right) as? Int ?: 0
+            val insetTop: Int = getTag(R.id.inset_top) as? Int ?: 0
+            val insetBottom: Int = getTag(R.id.inset_bottom) as? Int ?: 0
+            val oldPaddingLeft = paddingLeft - insetLeft
+            val oldPaddingRight = paddingRight - insetRight
+            val oldPaddingTop = paddingTop - insetTop
+            val oldPaddingBottom = paddingBottom - insetBottom
+            var newPaddingLeft = oldPaddingLeft
+            var newPaddingRight = oldPaddingRight
+            var newPaddingTop = oldPaddingTop
+            var newPaddingBottom = oldPaddingBottom
+
+            // left
+            if (!inSafeInset(displayCutout) &&
+                left + oldPaddingLeft < displayCutout.safeInsetLeft
+            ) {
+                val deltaPadding = displayCutout.safeInsetLeft - left - oldPaddingLeft
+                newPaddingLeft = oldPaddingLeft + deltaPadding
+                setTag(R.id.inset_left, deltaPadding)
+            }
+            ValueAnimator.ofInt(paddingLeft, newPaddingLeft)
+                .setDuration(200)
+                .apply {
+                    addUpdateListener { animation ->
+                        updatePadding(left = animation.animatedValue as Int)
+                    }
+                }.start()
+
+            // right
+            if (!inSafeInset(displayCutout) &&
+                right - oldPaddingRight >
+                getScreenWidth(true) - displayCutout.safeInsetRight
+            ) {
+                val deltaPadding = right - oldPaddingRight -
+                        (getScreenWidth(true) - displayCutout.safeInsetRight)
+                newPaddingRight = oldPaddingRight + deltaPadding
+                setTag(R.id.inset_right, deltaPadding)
+            }
+            ValueAnimator.ofInt(paddingRight, newPaddingRight)
+                .setDuration(200)
+                .apply {
+                    addUpdateListener { animation ->
+                        updatePadding(right = animation.animatedValue as Int)
+                    }
+                }.start()
+
+            // top
+            if (!inSafeInset(displayCutout) &&
+                top + oldPaddingTop < displayCutout.safeInsetTop
+            ) {
+                val deltaPadding = displayCutout.safeInsetTop - top - oldPaddingTop
+                newPaddingTop = oldPaddingTop + deltaPadding
+                setTag(R.id.inset_top, deltaPadding)
+            }
+            ValueAnimator.ofInt(paddingTop, newPaddingTop)
+                .setDuration(200)
+                .apply {
+                    addUpdateListener { animation ->
+                        updatePadding(top = animation.animatedValue as Int)
+                    }
+                }.start()
+
+            // bottom
+            if (!inSafeInset(displayCutout) &&
+                bottom - oldPaddingBottom >
+                getScreenHeight(true) - displayCutout.safeInsetBottom
+            ) {
+                val deltaPadding = bottom - oldPaddingBottom -
+                        (getScreenHeight(true) - displayCutout.safeInsetBottom)
+                newPaddingBottom = oldPaddingBottom + deltaPadding
+                setTag(R.id.inset_bottom, deltaPadding)
+            }
+            ValueAnimator.ofInt(paddingBottom, newPaddingBottom)
+                .setDuration(200)
+                .apply {
+                    addUpdateListener { animation ->
+                        updatePadding(bottom = animation.animatedValue as Int)
+                    }
+                }.start()
+        }
+    }
+
+    @TargetApi(28)
+    protected fun View.inSafeInset(displayCutout: DisplayCutout): Boolean {
+        displayCutout.boundingRects.forEach {
+            if (overlap(it)) return false
+        }
+        return true
+    }
+
+    override fun onApplyWindowInsets(insets: WindowInsets?): WindowInsets {
+        return super.onApplyWindowInsets(insets).also {
+            supportDisplayCutouts()
+        }
     }
 
     class Speed1Bean(

@@ -33,6 +33,10 @@
         <item name="colorErrorContainer">@color/error_container_pink</item>
         <item name="colorOnErrorContainer">@color/on_error_container_pink</item>
         <item name="colorOutline">@color/outline_pink</item>
+
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">
+            shortEdges
+        </item>
     </style>
 
     <style name="Theme.Anime.Pink" parent="Theme.Pink">
