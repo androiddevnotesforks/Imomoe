@@ -10,7 +10,6 @@ import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.interfaces.IPlayModel
 import com.skyd.imomoe.state.DataState
-import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.util.showToast
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,15 +23,8 @@ import javax.inject.Inject
 class PlayViewModel @Inject constructor(
     private val playModel: IPlayModel
 ) : ViewModel() {
-    var playBean: PlayBean? = null
+    lateinit var playBean: PlayBean
     var partUrl: String = ""
-    var detailPartUrl: String = ""
-        get() {
-            // 如果没有传入详情页面的网址，则通过播放页面的网址计算出详情页面的网址
-            return field.ifBlank {
-                Util.getDetailLinkByEpisodeLink(partUrl)
-            }
-        }
     val animeCover: MutableStateFlow<ImageBean?> = MutableStateFlow(null)
     val playDataList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
 
@@ -108,7 +100,6 @@ class PlayViewModel @Inject constructor(
     }
 
     fun getPlayData() {
-        queryFavorite()
         request(request = {
             if (animeCover.value == null) {
                 animeCover.tryEmit(playModel.getAnimeCoverImageBean(partUrl))
@@ -125,13 +116,14 @@ class PlayViewModel @Inject constructor(
                 list.sortEpisodeTitle()
                 playBean = it.third
                 list.forEachIndexed { index, item ->
-                    if (playBean?.episode?.videoUrl == item.videoUrl) {
+                    if (playBean.episode.videoUrl == item.videoUrl) {
                         currentEpisodeIndex.tryEmit(index)
                         return@forEachIndexed
                     }
                 }
                 episodesList.tryEmit(DataState.Success(list))
                 playDataList.tryEmit(DataState.Success(it.first))
+                queryFavorite()
             }
         }, error = {
             playDataList.tryEmit(DataState.Error(it.message.orEmpty()))
@@ -141,15 +133,19 @@ class PlayViewModel @Inject constructor(
 
     // 更新追番集数数据
     fun updateFavoriteData() {
-        request(request = {
-            getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-        }, success = {
-            it ?: return@request
-            it.lastEpisode = animeEpisodeDataBean.title
-            it.lastEpisodeUrl = partUrl
-            it.time = System.currentTimeMillis()
-            request({ getAppDataBase().favoriteAnimeDao().updateFavoriteAnime(it) })
-        })
+        if (playBean.detailPartUrl.isNotBlank()) {
+            request(request = {
+                getAppDataBase().favoriteAnimeDao().getFavoriteAnime(playBean.detailPartUrl)
+            }, success = {
+                it ?: return@request
+                it.lastEpisode = animeEpisodeDataBean.title
+                it.lastEpisodeUrl = partUrl
+                it.time = System.currentTimeMillis()
+                request({ getAppDataBase().favoriteAnimeDao().updateFavoriteAnime(it) })
+            })
+        } else {
+            appContext.getString(R.string.delete_favorite_failed_in_play_activity).showToast()
+        }
     }
 
     // 插入观看历史记录
@@ -160,8 +156,8 @@ class PlayViewModel @Inject constructor(
                     playModel.getAnimeCoverImageBean(partUrl).run {
                         val cover = this ?: ImageBean("", "", "")
                         HistoryBean(
-                            "", detailPartUrl,
-                            playBean?.title?.title ?: "",
+                            "", playBean.detailPartUrl,
+                            playBean.title.title,
                             System.currentTimeMillis(),
                             cover,
                             partUrl,
@@ -170,8 +166,8 @@ class PlayViewModel @Inject constructor(
                     }
                 } else {
                     HistoryBean(
-                        "", detailPartUrl,
-                        playBean?.title?.title ?: "",
+                        "", playBean.detailPartUrl,
+                        playBean.title.title,
                         System.currentTimeMillis(),
                         it,
                         partUrl,
@@ -204,31 +200,39 @@ class PlayViewModel @Inject constructor(
 
     // 查询是否追番
     fun queryFavorite() {
-        request(request = {
-            getAppDataBase().favoriteAnimeDao().getFavoriteAnime(detailPartUrl)
-        }, success = { favorite.tryEmit(it != null) })
+        if (playBean.detailPartUrl.isNotBlank()) {
+            request(request = {
+                getAppDataBase().favoriteAnimeDao().getFavoriteAnime(playBean.detailPartUrl)
+            }, success = { favorite.tryEmit(it != null) })
+        } else {
+            appContext.getString(R.string.delete_favorite_failed_in_play_activity).showToast()
+        }
     }
 
     // 取消追番
     fun deleteFavorite() {
-        request(request = {
-            getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(detailPartUrl)
-        }, success = {
-            appContext.getString(R.string.remove_favorite_succeed).showToast()
-            favorite.tryEmit(false)
-        })
+        if (playBean.detailPartUrl.isNotBlank()) {
+            request(request = {
+                getAppDataBase().favoriteAnimeDao().deleteFavoriteAnime(playBean.detailPartUrl)
+            }, success = {
+                appContext.getString(R.string.remove_favorite_succeed).showToast()
+                favorite.tryEmit(false)
+            })
+        } else {
+            appContext.getString(R.string.delete_favorite_failed_in_play_activity).showToast()
+        }
     }
 
     // 追番
     fun insertFavorite() {
         val cover = animeCover.value            // 番剧封面
-        val title = playBean?.title?.title      // 番剧名，非集数名
-        if (cover != null && title != null) {
+        if (this::playBean.isInitialized && cover != null && playBean.detailPartUrl.isNotBlank()) {
+            val title = playBean.title.title      // 番剧名，非集数名
             request(request = {
                 getAppDataBase().favoriteAnimeDao().insertFavoriteAnime(
                     FavoriteAnimeBean(
                         "",
-                        detailPartUrl,
+                        playBean.detailPartUrl,
                         title,
                         System.currentTimeMillis(),
                         cover,

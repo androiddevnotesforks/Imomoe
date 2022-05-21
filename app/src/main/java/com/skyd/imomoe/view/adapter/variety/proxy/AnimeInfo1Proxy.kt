@@ -9,6 +9,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.AnimeInfo1Bean
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.util.AnimeInfo1ViewHolder
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
@@ -35,21 +37,26 @@ class AnimeInfo1Proxy(
     ) {
         if (onBindViewHolder?.invoke(holder, data, index) == true) return
         val activity = holder.itemView.activity
-        holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, data.cover.url)
-        if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == data.cover.url) {
+        holder.ivAnimeInfo1Cover.setTag(R.id.image_view_tag, data.cover?.url)
+        if (holder.ivAnimeInfo1Cover.getTag(R.id.image_view_tag) == data.cover?.url) {
             holder.ivAnimeInfo1Cover.loadImage(
-                data.cover.url, referer = data.cover.referer, placeholder = 0, error = 0
+                data.cover?.url, referer = data.cover?.referer, placeholder = 0, error = 0
             )
         }
         holder.tvAnimeInfo1Title.text = data.title
         holder.tvAnimeInfo1Alias.text = data.alias
         holder.tvAnimeInfo1Area.text = data.area
         holder.tvAnimeInfo1Year.text = data.year
-        holder.tvAnimeInfo1Index.text =
-            appContext.getString(R.string.anime_detail_index, data.index)
+        if (data.index.isNullOrBlank()) {
+            holder.tvAnimeInfo1Index.gone()
+        } else {
+            holder.tvAnimeInfo1Index.visible()
+            holder.tvAnimeInfo1Index.text =
+                appContext.getString(R.string.anime_detail_index, data.index)
+        }
         holder.tvAnimeInfo1Info.text = data.info
         holder.flAnimeInfo1Type.removeAllViews()
-        data.animeType.forEach { type ->
+        data.animeType?.forEach { type ->
             activity ?: return@forEach
             val cardView = activity.layoutInflater.inflate(
                 R.layout.item_anime_type_1,
@@ -64,7 +71,7 @@ class AnimeInfo1Proxy(
             holder.flAnimeInfo1Type.addView(cardView)
         }
         holder.flAnimeInfo1Tag.removeAllViews()
-        data.tag.forEach { tag ->
+        data.tag?.forEach { tag ->
             activity ?: return@forEach
             val cardView = activity.layoutInflater.inflate(
                 R.layout.item_anime_type_1,

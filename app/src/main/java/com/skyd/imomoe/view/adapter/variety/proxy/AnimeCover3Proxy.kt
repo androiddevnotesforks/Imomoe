@@ -28,10 +28,10 @@ class AnimeCover3Proxy : VarietyAdapter.Proxy<AnimeCover3Bean, AnimeCover3ViewHo
         action: ((Any?) -> Unit)?
     ) {
         val activity = holder.itemView.activity
-        holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, data.cover.url)
+        holder.ivAnimeCover3Cover.setTag(R.id.image_view_tag, data.cover?.url)
         holder.tvAnimeCover3Title.text = data.title
         holder.tvAnimeCover3Describe.text = data.describe
-        if (data.episode.isBlank()) {
+        if (data.episode.isNullOrBlank()) {
             holder.tvAnimeCover3Episode.gone()
         } else {
             holder.tvAnimeCover3Episode.visible()
@@ -39,11 +39,11 @@ class AnimeCover3Proxy : VarietyAdapter.Proxy<AnimeCover3Bean, AnimeCover3ViewHo
         }
         holder.flAnimeCover3Type.removeAllViews()
         if (activity != null) {
-            if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == data.cover.url) {
-                holder.ivAnimeCover3Cover.loadImage(data.cover.url, referer = data.cover.referer)
+            if (holder.ivAnimeCover3Cover.getTag(R.id.image_view_tag) == data.cover?.url) {
+                holder.ivAnimeCover3Cover.loadImage(data.cover?.url, referer = data.cover?.referer)
             }
 
-            data.animeType.forEach { type ->
+            data.animeType.orEmpty().forEach { type ->
                 val cardView = activity.layoutInflater.inflate(
                     R.layout.item_anime_type_1,
                     holder.flAnimeCover3Type,

@@ -120,7 +120,11 @@ public static final int *;
 -keep class com.skyd.imomoe.util.html.source.** { *; }
 -keep class com.skyd.imomoe.util.eventbus.** { *; }
 -keep class com.skyd.imomoe.util.ToastKt { *; }
+-keep class com.skyd.imomoe.net.RetrofitManager { *; }
+-keep class com.skyd.imomoe.net.RetrofitManager$Companion { *; }
+-keep class retrofit2.** { *; }
 # 与自定义数据源相关的库不应该被混淆
+-keep class com.google.gson.** { *; }
 -keep class org.jsoup.** { *; }
 -keep class org.greenrobot.eventbus.** { *; }
 # kotlin

@@ -52,6 +52,7 @@ deps.hilt = hilt
 def okhttp3 = [:]
 okhttp3.okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
 okhttp3.okhttp_dnsoverhttps = "com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0"
+okhttp3.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
 deps.okhttp3 = okhttp3
 
 def room = [:]

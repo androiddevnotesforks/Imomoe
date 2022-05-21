@@ -32,14 +32,14 @@ class AnimeCover2Bean(
 }
 
 class AnimeCover3Bean(
-    override var route: String,
+    override var route: String = "",
     // 网页地址
-    var url: String,
-    var title: String,
-    var cover: ImageBean,
-    var episode: String,
-    var describe: String,
-    var animeType: List<AnimeTypeBean>
+    var url: String? = null,
+    var title: String? = null,
+    var cover: ImageBean? = null,
+    var episode: String? = null,
+    var describe: String? = null,
+    var animeType: List<AnimeTypeBean>? = null
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeCover3Bean -> false

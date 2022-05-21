@@ -23,7 +23,7 @@ class RetrofitManager private constructor() {
             }
 
         @Synchronized
-        fun get(): RetrofitManager{
+        fun get(): RetrofitManager {
             return instance!!
         }
     }
@@ -32,7 +32,9 @@ class RetrofitManager private constructor() {
 //        }
 
     private val builder = Retrofit.Builder()
-        .baseUrl(Api.MAIN_URL)
+        .baseUrl(Api.MAIN_URL.run {
+            if (endsWith("/")) this else "$this/"
+        })
         .addConverterFactory(GsonConverterFactory.create()) //设置数据解析器
 
     private var mRetrofit: Retrofit = builder.client(okhttpClient).build()

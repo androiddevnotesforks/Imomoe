@@ -27,7 +27,7 @@ class AnimeCover5Proxy : VarietyAdapter.Proxy<AnimeCover5Bean, AnimeCover5ViewHo
         action: ((Any?) -> Unit)?
     ) {
         val activity = holder.itemView.activity
-        if (data.area.title.isBlank()) {
+        if (data.area.title.isNullOrBlank()) {
             holder.tvAnimeCover5Area.gone()
             holder.tvAnimeCover5Date.post {
                 holder.tvAnimeCover5Date.setPadding(0, 0, 0, 0)

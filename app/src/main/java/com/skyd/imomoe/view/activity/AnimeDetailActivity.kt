@@ -147,10 +147,12 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 }
             }
 
-            if (viewModel.cover.url.isBlank()) return@collectWithLifecycle
+            if (viewModel.cover.url.isNullOrBlank()) return@collectWithLifecycle
             mBinding.ivAnimeDetailActivityBackground.loadImage(viewModel.cover.url) {
                 transformations(DarkBlurTransformation(this@AnimeDetailActivity))
-                addHeader("Referer", viewModel.cover.referer)
+                viewModel.cover.referer?.let { referer ->
+                    addHeader("Referer", referer)
+                }
                 addHeader("Host", URL(viewModel.cover.url).host)
                 addHeader("Accept", "*/*")
                 addHeader("Accept-Encoding", "gzip, deflate")

@@ -8,18 +8,20 @@ object EpisodeTitleCompareUtil {
 
     var asc: Boolean = true
 
-    // 计算出数字的结尾下标，可以包括一个小数点
+    // 计算出数字的结尾下标，最多可以包括一个小数点。不能只包含小数点
     private fun findDigitEndIndex(arrChar: String, at: Int): Int {
         var k = at
         var c: Char
         var hasDot = false
+        var hasNumber = false
         while (k < arrChar.length) {
             c = arrChar[k]
             if (c == '.' && !hasDot) hasDot = true
             else if (c > '9' || c < '0') break
+            else if ((c <= '9' || c >= '0') && !hasNumber) hasNumber = true
             k++
         }
-        return k
+        return if (hasNumber) k else at
     }
 
     fun compare(a: String, b: String): Int {

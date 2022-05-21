@@ -4,6 +4,7 @@ class PlayBean(
     override var route: String,
     var title: AnimeTitleBean,
     var episode: AnimeEpisodeDataBean,
+    var detailPartUrl: String,
     var data: List<Any>
 ) : BaseBean
 

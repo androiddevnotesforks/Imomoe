@@ -146,9 +146,13 @@ com.skyd.imomoe.util.html.source.**
 com.skyd.imomoe.util.eventbus.**
 com.skyd.imomoe.util.Util
 com.skyd.imomoe.util.ToastKt
+com.skyd.imomoe.net.RetrofitManager
+com.skyd.imomoe.net.RetrofitManager$Companion
 com.skyd.imomoe.bean.**
 com.skyd.imomoe.config.**
 com.skyd.imomoe.route.**
+retrofit2.**
+com.google.gson.**
 org.jsoup.**
 org.greenrobot.eventbus.**
 kotlin.**

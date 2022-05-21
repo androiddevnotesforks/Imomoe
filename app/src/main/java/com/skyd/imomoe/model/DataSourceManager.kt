@@ -9,10 +9,12 @@ import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.editor2
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.string
+//import com.skyd.imomoe.model.impls.custom.TestClass
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouter
 import com.skyd.imomoe.model.interfaces.IUtil
 import com.skyd.imomoe.model.interfaces.interfaceVersion
+import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import dalvik.system.DexClassLoader
@@ -124,7 +126,7 @@ object DataSourceManager {
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
         if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
-        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion")/* && !BuildConfig.DEBUG*/) {
+        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !BuildConfig.DEBUG) {
             if (!showInterfaceVersionTip)
                 appContext.getString(R.string.data_source_interface_version_not_match)
                     .showToast(Toast.LENGTH_LONG)
@@ -166,19 +168,19 @@ object DataSourceManager {
             o = clz.newInstance() as T
         } catch (e: Exception) {
             e.printStackTrace()
-//            debug {
-//                o = getTestClass(clazz)
-//            }
+            debug {
+                o = getTestClass(clazz)
+            }
         }
         if (clz != null) cache.put(clazz, clz)
         return o
     }
 
-//    private fun <T> getTestClass(clazz: Class<T>): T? {
-//        var o: T? = null
+    private fun <T> getTestClass(clazz: Class<T>): T? {
+        var o: T? = null
 //        TestClass.classMap[clazz.simpleName].let {
 //            if (it != null) o = it.newInstance() as T
 //        }
-//        return o
-//    }
+        return o
+    }
 }

@@ -18,6 +18,7 @@ class PlayModel : IPlayModel {
                 "",
                 AnimeTitleBean("", ""),
                 AnimeEpisodeDataBean("", ""),
+                "",
                 ArrayList()
             )
         )

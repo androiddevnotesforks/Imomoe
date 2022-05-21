@@ -189,7 +189,10 @@
     <string name="confirm_delete_all_watch_history">确定要删除所有观看历史记录？</string>
     <string name="get_cache_size_failed">获取缓存大小失败</string>
     <string name="play_last_time_episode">续播 %s</string>
-    <string name="insert_favorite_failed_in_play_activity">数据获取失败，无法追番，请刷新后重试…</string>
+    <string name="insert_favorite_failed_in_play_activity">数据获取失败或数据未到达，无法追番，请刷新或稍后重试…</string>
+    <string name="delete_favorite_failed_in_play_activity">未获取到番剧链接，请刷新后重试…</string>
+    <string name="query_favorite_failed_in_play_activity">未获取到番剧链接，无法得知是否已追番…</string>
+    <string name="update_favorite_failed_in_play_activity">未获取到番剧链接，无法更新追番状态…</string>
     <string name="data_source_interface_version_not_match">数据源版本与APP版本不匹配，请更新数据源！</string>
     <string name="data_source_interface_version">数据源接口版本: %s</string>
     <string name="no_browser_found">未找到浏览器！网址: %s</string>

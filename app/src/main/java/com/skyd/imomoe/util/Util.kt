@@ -61,17 +61,6 @@ object Util {
     )
     fun getEncodedUrl(url: String): String = url.toEncodedUrl()
 
-    /**
-     * 通过播放页面的网址获取详情页面的网址
-     *
-     * @param episodeUrl 播放页面的网址
-     * @return 详情页面的网址
-     */
-    fun getDetailLinkByEpisodeLink(episodeUrl: String): String {
-        return (DataSourceManager.getUtil()
-            ?: com.skyd.imomoe.model.impls.Util()).getDetailLinkByEpisodeLink(episodeUrl)
-    }
-
     fun restartApp() {
         val i = appContext.packageManager.getLaunchIntentForPackage(appContext.packageName)
         i?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

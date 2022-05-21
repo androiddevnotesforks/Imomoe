@@ -49,6 +49,8 @@
 
 ### ⚠注意⚠：后端返回的JSON中，每个Object必须带有一个type字段，其值为Item对应的实体类名，以便APP能够区分将Object解析为哪个实体类（⚠给出的示例JSON未包含type字段）
 
+### ⚠注意⚠：若实体不对应某个列表子项，那么这个JsonObject的type即为这个实体的类名，例如PlayBean的type为"PlayBean"字符串
+
 ### 例如：下方代码包括两个Object，其type分别为"AnimeCover1Bean"和"ImageBean"
 
 ```json

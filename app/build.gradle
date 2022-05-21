@@ -156,6 +156,7 @@ dependencies {
     implementation deps.hilt.hilt_android
     kapt deps.hilt.hilt_android_compiler
     implementation deps.okhttp3.okhttp
+    implementation deps.okhttp3.logging_interceptor
     implementation deps.shuyu.GSYVideoPlayer
     implementation deps.retrofit2.retrofit
     implementation deps.retrofit2.converter_gson
@@ -274,6 +275,7 @@ task deleteOldJar(type: Delete) {
 // 要保证已经将.../Android/Sdk/build-tools/xx.x.x加入环境变量
 task makeDex(type: Exec) {
     project.file('build/dex/').mkdirs()
+    // 根据需求更改
     commandLine 'cmd', "/c", "d8 --output build/dex/ build/tmp/kotlin-classes/GithubDebug/com/skyd/imomoe/model/impls/custom/*.class"
 }
 

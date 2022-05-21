@@ -10,7 +10,7 @@ interface IUtil : IBase {
      * @param episodeUrl 播放页面的网址，不为null
      * @return 详情页面的网址，不可为null
      */
-    fun getDetailLinkByEpisodeLink(episodeUrl: String): String
+    // fun getDetailLinkByEpisodeLink(episodeUrl: String): String
 
     companion object {
         const val implName = "Util"

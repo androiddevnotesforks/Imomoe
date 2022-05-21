@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
+import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.ext.showInputDialog
 import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.route.Router.route
@@ -25,7 +26,9 @@ object JumpByUrlProcessor : Processor() {
                 try {
                     var url = text.toString()
                     if (!url.matches(Regex("^.+://.*"))) url = "http://$url"
-                    URL(url).file.route(context)
+                    if (url.startsWith(Api.MAIN_URL)) {
+                        url.replace(Api.MAIN_URL, "").route(context)
+                    } else URL(url).file.route(context)
                 } catch (e: Exception) {
                     appContext.getString(R.string.website_format_error).showToast()
                     e.printStackTrace()

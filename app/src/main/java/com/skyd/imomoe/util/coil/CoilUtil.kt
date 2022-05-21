@@ -38,23 +38,30 @@ object CoilUtil {
     }
 
     fun ImageView.loadImage(
-        url: String,
+        url: String?,
         builder: ImageRequest.Builder.() -> Unit = {},
     ) {
-        if (url.isEmpty()) {
+        if (url.isNullOrBlank()) {
             logE("loadImage", "cover image url must not be null or empty")
             return
         }
 
-        this.load(url, builder = builder)
+        val newUrl = if (url.startsWith("//")) url.replaceFirst("//", "https://") else url
+
+        this.load(newUrl, builder = builder)
     }
 
     fun ImageView.loadImage(
-        url: String,
+        url: String?,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,
         @DrawableRes error: Int = R.drawable.ic_warning_24
     ) {
+        if (url.isNullOrBlank()) {
+            logE("loadImage", "cover image url must not be null or empty")
+            return
+        }
+
         // 是本地drawable
         url.toIntOrNull()?.let { drawableResId ->
             load(drawableResId) {
@@ -64,24 +71,32 @@ object CoilUtil {
             return
         }
 
-        // 是网络图片
-        var amendReferer = referer ?: MAIN_URL
-        if (!amendReferer.startsWith(MAIN_URL))
-            amendReferer = MAIN_URL//"http://www.yhdm.io/"
-        if (referer == MAIN_URL || referer == MAIN_URL) amendReferer += "/"
+        val newUrl = if (url.startsWith("//")) url.replaceFirst("//", "https://") else url
 
-        loadImage(url) {
-            placeholder(placeholder)
-            error(error)
-            addHeader("Referer", amendReferer.toEncodedUrl())
-            addHeader("Host", URL(url).host)
-            addHeader("Accept", "*/*")
-            addHeader("Accept-Encoding", "gzip, deflate")
-            addHeader("Connection", "keep-alive")
-            addHeader(
-                "User-Agent",
-                Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
-            )
+        // 是网络图片
+        var amendReferer: String? = referer
+        if (amendReferer?.startsWith(MAIN_URL) == false)
+            amendReferer = MAIN_URL//"http://www.yhdm.io/"
+        if (referer == MAIN_URL) amendReferer += "/"
+
+        runCatching {
+            loadImage(newUrl) {
+                placeholder(placeholder)
+                error(error)
+                amendReferer?.let { ref ->
+                    addHeader("Referer", ref.toEncodedUrl())
+                }
+                addHeader("Host", URL(newUrl).host)
+                addHeader("Accept", "*/*")
+                addHeader("Accept-Encoding", "gzip, deflate")
+                addHeader("Connection", "keep-alive")
+                addHeader(
+                    "User-Agent",
+                    Const.Request.USER_AGENT_ARRAY[Random.nextInt(Const.Request.USER_AGENT_ARRAY.size)]
+                )
+            }
+        }.onFailure {
+            it.printStackTrace()
         }
     }
 

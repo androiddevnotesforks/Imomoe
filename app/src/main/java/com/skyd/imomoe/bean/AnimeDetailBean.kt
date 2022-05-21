@@ -5,15 +5,15 @@ import com.skyd.imomoe.view.adapter.variety.Diff
 
 class AnimeInfo1Bean(
     override var route: String,
-    var title: String,
-    var cover: ImageBean,
-    var alias: String,
-    var area: String,
-    var year: String,
-    var index: String,
-    var animeType: List<AnimeTypeBean>,
-    var tag: List<AnimeTypeBean>,
-    var info: String
+    var title: String?,
+    var cover: ImageBean?,
+    var alias: String?,
+    var area: String?,
+    var year: String?,
+    var index: String?,
+    var animeType: List<AnimeTypeBean>?,
+    var tag: List<AnimeTypeBean>?,
+    var info: String?
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeInfo1Bean -> false
