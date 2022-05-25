@@ -185,7 +185,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 return@setOnClickListener
             }
             mDanmakuProgressDelta -= 2000L
-            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+            seekDanmaku(currentPlayer.currentPositionWhenPlaying)
         }
 
         tvForwardDanmakuProgress?.setOnClickListener {
@@ -194,12 +194,12 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 return@setOnClickListener
             }
             mDanmakuProgressDelta += 2000L
-            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+            seekDanmaku(currentPlayer.currentPositionWhenPlaying)
         }
 
         tvResetDanmakuProgress?.setOnClickListener {
             mDanmakuProgressDelta = 0L
-            seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+            seekDanmaku(currentPlayer.currentPositionWhenPlaying)
         }
 
         sbDanmakuTextScale?.setOnSeekBarChangeListener {
@@ -315,7 +315,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
             )
         }
-        player.seekDanmaku(currentPositionWhenPlaying.toLong())
+        player.seekDanmaku(currentPositionWhenPlaying)
         pauseDanmaku()
 
         return player
@@ -351,7 +351,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                     player.mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
                 )
             }
-            seekDanmaku(player.currentPositionWhenPlaying.toLong())
+            seekDanmaku(player.currentPositionWhenPlaying)
             player.pauseDanmaku()
         }
     }
@@ -397,7 +397,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         mDanmakuPlayer.updateData(dataList)
                         mDanmakuView.post {
                             if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING) {
-                                seekDanmaku(currentPlayer.currentPositionWhenPlaying.toLong())
+                                seekDanmaku(currentPlayer.currentPositionWhenPlaying)
                                 playDanmaku()
                             }
                         }
@@ -571,12 +571,17 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      */
     private fun showBottomDanmakuController() {
         vgDanmakuController?.let { danmakuController ->
-            if (danmakuController.layoutParams.height == 0) {
-                danmakuController.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                danmakuController.requestLayout()
-                mDanmakuControllerHeight = danmakuController.height
-                layoutParams.height = height + danmakuController.height
-                requestLayout()
+            val dcLayoutParams = danmakuController.layoutParams
+            if (dcLayoutParams.height == 0) {
+                post {
+                    dcLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    mDanmakuControllerHeight = danmakuController.height
+                    val playerLayoutParams = this.layoutParams
+                    playerLayoutParams.height = height + danmakuController.height
+
+                    danmakuController.layoutParams = dcLayoutParams
+                    this.layoutParams = playerLayoutParams
+                }
             }
         }
     }

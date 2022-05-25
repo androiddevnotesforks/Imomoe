@@ -107,9 +107,10 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
                     }
                     mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
                 }
-                else -> {
-                    mBinding.srlAnimeShowFragment.closeHeaderOrFooter()
+                is DataState.Loading -> {
+                    mBinding.srlAnimeShowFragment.autoLoadMoreAnimationOnly()
                 }
+                else -> {}
             }
         }
     }

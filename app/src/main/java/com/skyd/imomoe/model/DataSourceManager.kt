@@ -9,12 +9,10 @@ import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.editor2
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.ext.string
-//import com.skyd.imomoe.model.impls.custom.TestClass
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouter
 import com.skyd.imomoe.model.interfaces.IUtil
 import com.skyd.imomoe.model.interfaces.interfaceVersion
-import com.skyd.imomoe.util.debug
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import dalvik.system.DexClassLoader
@@ -23,6 +21,12 @@ import java.util.jar.JarFile
 
 
 object DataSourceManager {
+
+    /**
+     * 测试模式，仅供测试使用，设置为true并在APP内设置默认数据源后
+     * 即会使用com.skyd.imomoe.model.impls.custom目录下的数据源
+     */
+    val testMode: Boolean = false
 
     const val DEFAULT_DATA_SOURCE = ""
 
@@ -125,11 +129,13 @@ object DataSourceManager {
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (dataSourceName == DEFAULT_DATA_SOURCE && !BuildConfig.DEBUG) return null
-        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !BuildConfig.DEBUG) {
-            if (!showInterfaceVersionTip)
-                appContext.getString(R.string.data_source_interface_version_not_match)
-                    .showToast(Toast.LENGTH_LONG)
+        if (dataSourceName == DEFAULT_DATA_SOURCE && !testMode) return null
+        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !testMode) {
+            if (!showInterfaceVersionTip) appContext.getString(
+                R.string.data_source_interface_version_not_match,
+                customDataSourceInfo?.get("interfaceVersion"),
+                interfaceVersion
+            ).showToast(Toast.LENGTH_LONG)
             showInterfaceVersionTip = true
             return null
         }
@@ -166,9 +172,9 @@ object DataSourceManager {
             // 该方法将Class文件加载到内存时,并不会执行类的初始化,直到这个类第一次使用时才进行初始化.该方法因为需要得到一个ClassLoader对象
             clz = classLoader.loadClass(getBinaryName(clazz))
             o = clz.newInstance() as T
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             e.printStackTrace()
-            debug {
+            if (testMode) {
                 o = getTestClass(clazz)
             }
         }
@@ -176,11 +182,33 @@ object DataSourceManager {
         return o
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun <T> getTestClass(clazz: Class<T>): T? {
         var o: T? = null
-//        TestClass.classMap[clazz.simpleName].let {
-//            if (it != null) o = it.newInstance() as T
-//        }
+        classMap[clazz.simpleName].let {
+            if (it != null) {
+                o = Class
+                    .forName("com.skyd.imomoe.model.impls.$it")
+                    .newInstance() as T
+            }
+        }
         return o
     }
+
+    val classMap = hashMapOf(
+        "IAnimeDetailModel" to "CustomAnimeDetailModel",
+        "IAnimeShowModel" to "CustomAnimeShowModel",
+        "IClassifyModel" to "CustomClassifyModel",
+        "IEverydayAnimeModel" to "CustomEverydayAnimeModel",
+        "IHomeModel" to "CustomHomeModel",
+        "IMonthAnimeModel" to "CustomMonthAnimeModel",
+        "IPlayModel" to "CustomPlayModel",
+        "IRankModel" to "CustomRankModel",
+        "ISearchModel" to "CustomSearchModel",
+        "IConst" to "CustomConst",
+        "IUtil" to "CustomUtil",
+        "IRouter" to "CustomRouter",
+        "IRankListModel" to "CustomRankListModel",
+        "IEverydayAnimeWidgetModel" to "CustomEverydayAnimeWidgetModel"
+    )
 }

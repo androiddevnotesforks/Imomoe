@@ -28,7 +28,7 @@ class AnimeShowViewModel @Inject constructor(
         animeShowList.tryEmit(DataState.Refreshing)
         request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
             pageNumberBean = it.second
-            animeShowList.tryEmit(DataState.Success(it.first))
+            animeShowList.tryEmit(DataState.Success(it.first.toMutableList()))
         }, error = {
             animeShowList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
@@ -46,7 +46,7 @@ class AnimeShowViewModel @Inject constructor(
         }
         request(request = { animeShowModel.getAnimeShowData(partUrl) }, success = {
             pageNumberBean = it.second
-            animeShowList.tryEmitLoadMore(oldData, it.first)
+            animeShowList.tryEmitLoadMore(oldData, it.first.toMutableList())
         }, error = {
             animeShowList.tryEmitError(oldData, it.message)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()

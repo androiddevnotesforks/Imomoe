@@ -81,11 +81,11 @@ class AnimeCover5Bean(
 }
 
 class AnimeCover6Bean(
-    override var route: String,
-    var title: String,
-    var cover: ImageBean,
-    var describe: String,
-    var episodeClickable: AnimeEpisodeDataBean?
+    override var route: String = "",
+    var title: String? = null,
+    var cover: ImageBean? = null,
+    var describe: String? = null,
+    var episodeClickable: AnimeEpisodeDataBean? = null
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
         o !is AnimeCover6Bean -> false

@@ -35,7 +35,7 @@ class SearchViewModel @Inject constructor(
         request(request = { searchModel.getSearchData(keyWord, partUrl) }, success = {
             pageNumberBean = it.second
             this@SearchViewModel.keyword = keyWord
-            searchResultList.tryEmit(DataState.Success(it.first))
+            searchResultList.tryEmit(DataState.Success(it.first.toMutableList()))
         }, error = {
             searchResultList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
@@ -53,7 +53,7 @@ class SearchViewModel @Inject constructor(
         }
         request(request = { searchModel.getSearchData(keyword, partUrl) }, success = {
             pageNumberBean = it.second
-            searchResultList.tryEmitLoadMore(oldData, it.first)
+            searchResultList.tryEmitLoadMore(oldData, it.first.toMutableList())
         }, error = {
             searchResultList.tryEmitError(oldData, it.message)
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()

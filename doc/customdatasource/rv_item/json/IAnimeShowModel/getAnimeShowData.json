@@ -1,8 +1,9 @@
 {
     "first": [
         {
+            "type": "Banner1",
             "animeCoverList": [
-                {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -18,6 +19,7 @@
                     "title": "妖精的尾巴"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -33,6 +35,7 @@
                     "title": "宠物小精灵 太阳·月亮"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -48,6 +51,7 @@
                     "title": "游戏王vrains"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -63,6 +67,7 @@
                     "title": "名侦探柯南"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -78,6 +83,7 @@
                     "title": "海贼王"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -93,6 +99,7 @@
                     "title": "你遭难了吗？"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -108,6 +115,7 @@
                     "title": "魔术学姐"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -123,6 +131,7 @@
                     "title": "一拳超人第二季"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -138,6 +147,7 @@
                     "title": "奥特英雄新生代英雄传"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -153,6 +163,7 @@
                     "title": "魔法禁书目录第三季 第21话"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -168,6 +179,7 @@
                     "title": "火影忍者 博人传之火影次世代 第95话"
                 },
                 {
+                    "type": "AnimeCover6",
                     "cover": {
                         "referer": "http://xxx.xxx.xxx/",
                         "actionUrl": "",
@@ -186,10 +198,12 @@
             "route": ""
         },
         {
+            "type": "Header1",
             "route": "/new/",
             "title": "最新更新"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -201,17 +215,7 @@
             "url": "http://xxx.xxx.xxx/show/5031.html"
         },
         {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/01/20/20220120101859115.jpg"
-            },
-            "episode": "第37集",
-            "route": "/show/5514.html",
-            "title": "我的异界之旅",
-            "url": "http://xxx.xxx.xxx/show/5514.html"
-        },
-        {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -223,131 +227,12 @@
             "url": "http://xxx.xxx.xxx/show/5350.html"
         },
         {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/10/20220410085824363.jpg"
-            },
-            "episode": "第6集",
-            "route": "/show/5562.html",
-            "title": "王者天下 第四季",
-            "url": "http://xxx.xxx.xxx/show/5562.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/01/20220501104743508.jpg"
-            },
-            "episode": "第4集",
-            "route": "/show/5574.html",
-            "title": "武动乾坤 第三季",
-            "url": "http://xxx.xxx.xxx/show/5574.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/down/1/B04565188984531.jpg"
-            },
-            "episode": "第166集",
-            "route": "/show/5097.html",
-            "title": "绝世武魂",
-            "url": "http://xxx.xxx.xxx/show/5097.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/acg/2020/03/24/20200324035337604.jpg"
-            },
-            "episode": "第231集",
-            "route": "/show/4939.html",
-            "title": "武神主宰",
-            "url": "http://xxx.xxx.xxx/show/4939.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/03/20220403104341348.jpg"
-            },
-            "episode": "第10集",
-            "route": "/show/5548.html",
-            "title": "武映三千道",
-            "url": "http://xxx.xxx.xxx/show/5548.html"
-        },
-        {
+            "type": "Header1",
             "route": "/japan/",
             "title": "日本动漫"
         },
         {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/acg/2016/12/13/414cf1da374075dd241e77d2f8f231f665f23dc8.jpg"
-            },
-            "episode": "第1017集",
-            "route": "/show/2.html",
-            "title": "海贼王",
-            "url": "http://xxx.xxx.xxx/show/2.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2021/09/05/20210905104102532.jpg"
-            },
-            "episode": "第35集",
-            "route": "/show/5370.html",
-            "title": "假面骑士Revice",
-            "url": "http://xxx.xxx.xxx/show/5370.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/06/20220406085653572.jpg"
-            },
-            "episode": "第6集",
-            "route": "/show/5555.html",
-            "title": "朋友游戏",
-            "url": "http://xxx.xxx.xxx/show/5555.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/down/1/108210097748345.jpg"
-            },
-            "episode": "第6集",
-            "route": "/show/5135.html",
-            "title": "我家女友可不止可爱呢",
-            "url": "http://xxx.xxx.xxx/show/5135.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402102205566.jpg"
-            },
-            "episode": "第18集",
-            "route": "/show/5546.html",
-            "title": "Build Divide -#FFFFFF-",
-            "url": "http://xxx.xxx.xxx/show/5546.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/02/20220402102038719.jpg"
-            },
-            "episode": "第4集",
-            "route": "/show/5545.html",
-            "title": "杜鹃的婚约",
-            "url": "http://xxx.xxx.xxx/show/5545.html"
-        },
-        {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -359,6 +244,7 @@
             "url": "http://xxx.xxx.xxx/show/5563.html"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -370,10 +256,12 @@
             "url": "http://xxx.xxx.xxx/show/5547.html"
         },
         {
+            "type": "Header1",
             "route": "/china/",
             "title": "国产动漫"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -385,6 +273,7 @@
             "url": "http://xxx.xxx.xxx/show/5464.html"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -396,6 +285,7 @@
             "url": "http://xxx.xxx.xxx/show/5568.html"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -407,6 +297,7 @@
             "url": "http://xxx.xxx.xxx/show/5457.html"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -418,6 +309,7 @@
             "url": "http://xxx.xxx.xxx/show/3878.html"
         },
         {
+            "type": "AnimeCover1",
             "cover": {
                 "referer": "http://xxx.xxx.xxx/",
                 "actionUrl": "",
@@ -427,223 +319,6 @@
             "route": "/show/5378.html",
             "title": "万御封神",
             "url": "http://xxx.xxx.xxx/show/5378.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/acg/2019/01/01/20190101512.jpg"
-            },
-            "episode": "第232集",
-            "route": "/show/4380.html",
-            "title": "万界神主",
-            "url": "http://xxx.xxx.xxx/show/4380.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/acg/2021/07/17/20210717112154268.jpg"
-            },
-            "episode": "第208集",
-            "route": "/show/4066.html",
-            "title": "斗罗大陆",
-            "url": "http://xxx.xxx.xxx/show/4066.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/07/20220507110723696.jpg"
-            },
-            "episode": "第4集",
-            "route": "/show/5580.html",
-            "title": "凹凸世界 第四季",
-            "url": "http://xxx.xxx.xxx/show/5580.html"
-        },
-        {
-            "route": "/american/",
-            "title": "美国动漫"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2021/08/30/20210830014427285.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5367.html",
-            "title": "猎魔人：狼之噩梦",
-            "url": "http://xxx.xxx.xxx/show/5367.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/down/1/jC01118527008897.jpg"
-            },
-            "episode": "13全集",
-            "route": "/show/4807.html",
-            "title": "红白黑黄 第七季",
-            "url": "http://xxx.xxx.xxx/show/4807.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j330785141333678.jpg"
-            },
-            "episode": "12集全",
-            "route": "/show/4407.html",
-            "title": "大炮破坏者",
-            "url": "http://xxx.xxx.xxx/show/4407.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j418467109069774.jpg"
-            },
-            "episode": "",
-            "route": "/show/4543.html",
-            "title": "少年泰坦出击第五季",
-            "url": "http://xxx.xxx.xxx/show/4543.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j402034099129790.jpg"
-            },
-            "episode": "",
-            "route": "/show/4470.html",
-            "title": "星蝶公主 第四季",
-            "url": "http://xxx.xxx.xxx/show/4470.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j331461418304056.jpg"
-            },
-            "episode": "第20集",
-            "route": "/show/4460.html",
-            "title": "开心汉堡店 第九季",
-            "url": "http://xxx.xxx.xxx/show/4460.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j502700744868258.jpg"
-            },
-            "episode": "第29集",
-            "route": "/show/4566.html",
-            "title": "铁卫雄狮第二季",
-            "url": "http://xxx.xxx.xxx/show/4566.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/comic/image/j507273062034616.jpg"
-            },
-            "episode": "20集全",
-            "route": "/show/4583.html",
-            "title": "怪诞小镇第二季",
-            "url": "http://xxx.xxx.xxx/show/4583.html"
-        },
-        {
-            "route": "/movie/",
-            "title": "动漫电影"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/12/20220512081806392.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5582.html",
-            "title": "咒术回战 0",
-            "url": "http://xxx.xxx.xxx/show/5582.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/10/20220510072604430.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5581.html",
-            "title": "渔港的肉子酱",
-            "url": "http://xxx.xxx.xxx/show/5581.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/02/06/20220206092038940.jpg"
-            },
-            "episode": "第9集",
-            "route": "/show/5519.html",
-            "title": "Delicious Party 光之美少女",
-            "url": "http://xxx.xxx.xxx/show/5519.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/02/20220502063417865.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5575.html",
-            "title": "黄金拼图 Thank you!!",
-            "url": "http://xxx.xxx.xxx/show/5575.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/05/01/20220501094612205.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5573.html",
-            "title": "假面骑士OOO 10th 复活的核心硬币",
-            "url": "http://xxx.xxx.xxx/show/5573.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/29/20220429092537682.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5570.html",
-            "title": "泡泡",
-            "url": "http://xxx.xxx.xxx/show/5570.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/acg/2020/02/29/20200229033813136.jpg"
-            },
-            "episode": "第2集",
-            "route": "/show/4913.html",
-            "title": "公主准则 Crown Handler",
-            "url": "http://xxx.xxx.xxx/show/4913.html"
-        },
-        {
-            "cover": {
-                "referer": "http://xxx.xxx.xxx/",
-                "actionUrl": "",
-                "url": "http://xxx.xxx.xxx/news/2022/04/08/20220408075027598.jpg"
-            },
-            "episode": "全集",
-            "route": "/show/5561.html",
-            "title": "夏日幽灵",
-            "url": "http://xxx.xxx.xxx/show/5561.html"
         }
     ]
 }

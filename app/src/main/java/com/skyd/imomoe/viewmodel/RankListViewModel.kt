@@ -27,7 +27,7 @@ class RankListViewModel @Inject constructor(
     fun getRankListData() {
         request(request = { rankModel.getRankListData(partUrl) }, success = {
             pageNumberBean = it.second
-            mldRankData.tryEmit(DataState.Success(it.first))
+            mldRankData.tryEmit(DataState.Success(it.first.toMutableList()))
         }, error = {
             mldRankData.tryEmit(DataState.Error(it.message.orEmpty()))
             it.message?.showToast(Toast.LENGTH_LONG)
@@ -45,7 +45,7 @@ class RankListViewModel @Inject constructor(
         }
         request(request = { rankModel.getRankListData(partUrl) }, success = {
             pageNumberBean = it.second
-            mldRankData.tryEmitLoadMore(oldData, it.first)
+            mldRankData.tryEmitLoadMore(oldData, it.first.toMutableList())
         }, error = {
             mldRankData.tryEmitError(oldData, it.message)
             it.message?.showToast(Toast.LENGTH_LONG)

@@ -48,7 +48,6 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             rvRankFragment.layoutManager = GridLayoutManager(activity, 4)
                 .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
-            rvRankFragment.setHasFixedSize(true)
             rvRankFragment.adapter = adapter
             srlRankFragment.setOnRefreshListener { viewModel.getRankListData() }
             srlRankFragment.setOnLoadMoreListener { viewModel.loadMoreRankListData() }
@@ -58,14 +57,18 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
             when (data) {
                 is DataState.Empty -> mBinding.srlRankFragment.autoRefresh()
                 is DataState.Success -> {
-                    mBinding.srlRankFragment.closeHeaderOrFooter()
                     adapter.dataList = data.data
                     hideLoadFailedTip()
+                    mBinding.srlRankFragment.closeHeaderOrFooter()
                 }
                 is DataState.Error -> {
                     showLoadFailedTip {
                         viewModel.getRankListData()
                     }
+                    mBinding.srlRankFragment.closeHeaderOrFooter()
+                }
+                is DataState.Loading -> {
+                    mBinding.srlRankFragment.autoLoadMoreAnimationOnly()
                 }
                 else -> {}
             }

@@ -27,13 +27,13 @@
 |       AnimeCover3       | <img src="rv_item/image/anime_cover_3.jpg" alt="anime_cover_3" style="zoom:33%;" /> |               AnimeCover3Bean                |                                                              |
 |       AnimeCover4       | <img src="rv_item/image/anime_cover_4.jpg" alt="anime_cover_4" style="zoom:33%;" /> |               AnimeCover4Bean                |                                                              |
 |       AnimeCover5       | <img src="rv_item/image/anime_cover_5.jpg" alt="anime_cover_5" style="zoom:33%;" /> |               AnimeCover5Bean                |                                                              |
-|       AnimeCover6       | <img src="rv_item/image/anime_cover_6.jpg" alt="anime_cover_6" style="zoom:33%;" /> |               AnimeCover6Bean                |                   注意**与Banner1的区别**                    |
+|       AnimeCover6       | <img src="rv_item/image/anime_cover_6.jpg" alt="anime_cover_6" style="zoom:33%;" /> |               AnimeCover6Bean                |         注意**与Banner1的区别**，为Banner1的**子项**         |
 |      AnimeCover10       | <img src="rv_item/image/anime_cover_10.jpg" alt="anime_cover_10" style="zoom:33%;" /> |               AnimeCover10Bean               | 与**AnimeCover12基本一样**，但**不支持换肤**，建议仅用做**桌面微件** |
 |      AnimeCover11       | <img src="rv_item/image/anime_cover_11.jpg" alt="anime_cover_11" style="zoom:33%;" /> |               AnimeCover11Bean               |                                                              |
 |      AnimeCover12       | <img src="rv_item/image/anime_cover_12.jpg" alt="anime_cover_12" style="zoom:33%;" /> |               AnimeCover12Bean               |                                                              |
 |     AnimeDescribe1      | <img src="rv_item/image/anime_describe_1.jpg" alt="anime_describe_1" style="zoom:33%;" /> |              AnimeDescribe1Bean              |                                                              |
 |         Header1         | <img src="rv_item/image/header_1.jpg" alt="header_1" style="zoom: 33%;" /> |                 Header1Bean                  |                                                              |
-|         Banner1         | <img src="rv_item/image/banner_1.jpg" alt="banner_1" style="zoom: 33%;" /> |                 Banner1Bean                  |                                                              |
+|         Banner1         | <img src="rv_item/image/banner_1.jpg" alt="banner_1" style="zoom: 33%;" /> |                 Banner1Bean                  |                 注意**与AnimeCover6的区别**                  |
 |      AnimeEpisode1      | <img src="rv_item/image/anime_episode_1.jpg" alt="anime_episode_1" style="zoom:33%;" /> |              AnimeEpisode1Bean               |     目前仅用作**HorizontalRecyclerView1**类型的**子项**      |
 |       AnimeInfo1        | <img src="rv_item/image/anime_info_1.jpg" alt="anime_info_1" style="zoom:33%;" /> |                AnimeInfo1Bean                |                                                              |
 |       AnimeType1        | <img src="rv_item/image/anime_type_1.jpg" alt="anime_type_1" style="zoom:33%;" /> |                AnimeTypeBean                 |         **AnimeInfo1**中的**标签内容**“TV”、“搞笑”等         |
@@ -47,7 +47,7 @@
 
 ## 页面可用类型对应 及 数据源接口方法对应示例JSON
 
-### ⚠注意⚠：后端返回的JSON中，每个Object必须带有一个type字段，其值为Item对应的实体类名，以便APP能够区分将Object解析为哪个实体类（⚠给出的示例JSON未包含type字段）
+### ⚠注意⚠：后端返回的JSON中，每个Object必须带有一个type字段，其值为Item对应的实体类名，以便APP能够区分将Object解析为哪个实体类（⚠给出的部分示例JSON未包含type字段）
 
 ### ⚠注意⚠：若实体不对应某个列表子项，那么这个JsonObject的type即为这个实体的类名，例如PlayBean的type为"PlayBean"字符串
 

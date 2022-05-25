@@ -1159,7 +1159,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val decorView: View = (activity ?: return).window.decorView
             decorView.post {
-                val displayCutout = decorView.rootWindowInsets.displayCutout ?: return@post
+                val displayCutout = decorView.rootWindowInsets?.displayCutout ?: return@post
                 mTopContainer?.updateSafeInset(displayCutout)
                 mBottomContainer?.updateSafeInset(displayCutout)
             }

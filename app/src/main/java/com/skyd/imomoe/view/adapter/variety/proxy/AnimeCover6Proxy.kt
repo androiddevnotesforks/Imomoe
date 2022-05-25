@@ -35,10 +35,10 @@ class AnimeCover6Proxy(
         action: ((Any?) -> Unit)?
     ) {
         val activity = holder.itemView.activity
-        holder.ivAnimeCover6Cover.loadImage(data.cover.url, referer = data.cover.referer)
+        holder.ivAnimeCover6Cover.loadImage(data.cover?.url, referer = data.cover?.referer)
         holder.tvAnimeCover6Title.text = data.title
         holder.tvAnimeCover6Episode.text = data.episodeClickable?.title
-        if (data.describe.isEmpty()) {
+        if (data.describe.isNullOrEmpty()) {
             holder.tvAnimeCover6Describe.gone()
         } else {
             holder.tvAnimeCover6Describe.visible()

@@ -62,7 +62,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                         if (System.currentTimeMillis() - lastRefreshTime > 500) {
                             lastRefreshTime = System.currentTimeMillis()
                             search(query)
-                            svSearchActivity.hideKeyboard()
                             true
                         } else {
                             false
@@ -83,22 +82,23 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         }
 
         viewModel.searchResultList.collectWithLifecycle(this) { data ->
-            mBinding.srlSearchActivity.closeHeaderOrFooter()
             when (data) {
                 is DataState.Success -> {
                     if (!searchHistoryListShow) {
+                        adapter.dataList = data.data
                         if (this@SearchActivity::mLayoutCircleProgressTextTip1.isInitialized) {
                             mLayoutCircleProgressTextTip1.gone()
                         }
                         mBinding.tvSearchActivityTip.text = getString(
                             R.string.search_activity_tip, viewModel.keyword, data.data.size
                         )
-                        adapter.dataList = data.data
+                        mBinding.srlSearchActivity.closeHeaderOrFooter()
                     }
                 }
-                else -> {
-                    adapter.dataList = emptyList()
+                is DataState.Loading -> {
+                    mBinding.srlSearchActivity.autoLoadMoreAnimationOnly()
                 }
+                else -> {}
             }
         }
 
@@ -110,9 +110,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
                         adapter.dataList = data.data
                     }
                 }
-                else -> {
-                    adapter.dataList = emptyList()
-                }
+                else -> {}
             }
         }
 
@@ -148,6 +146,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
     fun search(key: String, partUrl: String = "") {
         //setText一定要在加载布局之前，否则progressbar会被gone掉
         mBinding.run {
+            svSearchActivity.hideKeyboard()
             svSearchActivity.setQuery(key, false)
             if (this@SearchActivity::tvCircleProgressTextTip1.isInitialized) {
                 mLayoutCircleProgressTextTip1.visible()
