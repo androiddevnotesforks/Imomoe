@@ -195,7 +195,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 }
                 is DataState.Success -> {
                     mBinding.srlPlayActivity.isRefreshing = false
-                    mBinding.tvPlayActivityTitle.text = viewModel.playBean?.title?.title
+                    mBinding.tvPlayActivityTitle.text = viewModel.playBean.title.title
                     adapter.dataList = it.data
                     if (isFirstTime) {
                         mBinding.avpPlayActivity.startPlay()
@@ -214,7 +214,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             AnimeDownloadHelper.downloadAnime(
                 this@PlayActivity,
                 url = it.videoUrl,
-                animeTitle = viewModel.playBean?.title?.title.orEmpty(),
+                animeTitle = viewModel.playBean.title.title,
                 animeEpisode = it.title
             )
         }
@@ -278,7 +278,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         if (isDestroyed) return
         val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
         val episodeTitle = viewModel.animeEpisodeDataBean.title
-        val animeTitle = viewModel.playBean?.title?.title.orEmpty()
+        val animeTitle = viewModel.playBean.title.title
         if (this is AnimeVideoPlayer) {
             this.animeTitle = animeTitle
         }

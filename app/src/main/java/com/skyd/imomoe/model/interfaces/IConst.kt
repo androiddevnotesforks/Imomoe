@@ -8,24 +8,25 @@ interface IConst : IBase {
         const val implName = "Const"
     }
 
+    @Suppress("PropertyName")
     val MAIN_URL: String
 
     /**
-     * @return jar包的关于信息
+     * @return ads包的关于信息
      */
     fun about(): String {
         return MAIN_URL
     }
 
     /**
-     * @return jar包的版本名信息
+     * @return ads包的版本名信息
      */
     fun versionName(): String? {
         return null
     }
 
     /**
-     * @return jar包的版本号信息
+     * @return ads包的版本号信息
      */
     fun versionCode(): Int {
         return 0

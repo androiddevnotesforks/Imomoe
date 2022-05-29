@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_lemon">#EDB409</color>
+    <color name="primary_lemon">#795900</color>
     <color name="on_primary_lemon">#FFFFFF</color>
-    <color name="primary_inverse_lemon">#FFDDA9</color>
-    <color name="primary_container_lemon">#ECBD77</color>
-    <color name="on_primary_container_lemon">#B57F2E</color>
-    <color name="secondary_lemon">#EFC582</color>
+    <color name="primary_container_lemon">#FFDF98</color>
+    <color name="on_primary_container_lemon">#261A00</color>
+    <color name="secondary_lemon">#6B5D3F</color>
     <color name="on_secondary_lemon">#FFFFFF</color>
-    <color name="secondary_container_lemon">#F4D8AD</color>
-    <color name="on_secondary_container_lemon">#D39027</color>
-    <color name="tertiary_lemon">#CA9547</color>
+    <color name="secondary_container_lemon">#F4E0BB</color>
+    <color name="on_secondary_container_lemon">#241A04</color>
+    <color name="tertiary_lemon">#4A6547</color>
     <color name="on_tertiary_lemon">#FFFFFF</color>
-    <color name="tertiary_container_lemon">#C1A274</color>
-    <color name="on_tertiary_container_lemon">#DF9F3E</color>
-    <color name="surface_lemon">#FFF4E4</color>
-    <color name="on_surface_lemon">#FFA721</color>
-    <color name="surface_variant_lemon">#FFEAC9</color>
-    <color name="on_surface_variant_lemon">#E49F36</color>
-    <color name="inverse_surface_lemon">#EC9E27</color>
-    <color name="inverse_on_surface_lemon">#FFF4E3</color>
-    <color name="background_lemon">#FFF3E1</color>
-    <color name="on_background_lemon">#150F05</color>
-    <color name="error_lemon">#B61E1E</color>
+    <color name="tertiary_container_lemon">#CCEBC5</color>
+    <color name="on_tertiary_container_lemon">#082009</color>
+    <color name="error_lemon">#BA1B1B</color>
+    <color name="error_container_lemon">#FFDAD4</color>
     <color name="on_error_lemon">#FFFFFF</color>
-    <color name="error_container_lemon">#FFF0DA</color>
-    <color name="on_error_container_lemon">#4E0E0E</color>
-    <color name="outline_lemon">#37EDB409</color>
+    <color name="on_error_container_lemon">#410001</color>
+    <color name="background_lemon">#FFFBF8</color>
+    <color name="on_background_lemon">#1E1B16</color>
+    <color name="surface_lemon">#FFFBF8</color>
+    <color name="on_surface_lemon">#1E1B16</color>
+    <color name="surface_variant_lemon">#EDE1CF</color>
+    <color name="on_surface_variant_lemon">#4D4639</color>
+    <color name="outline_lemon">#7F7667</color>
+    <color name="inverse_on_surface_lemon">#F8F0E7</color>
+    <color name="inverse_surface_lemon">#34302A</color>
+    <color name="inverse_primary_lemon">#F8BE1C</color>
+    <color name="shadow_lemon">#000000</color>
+    <color name="primary_inverse_lemon">#F8BE1C</color>
 
 </resources>

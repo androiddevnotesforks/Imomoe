@@ -5,16 +5,15 @@ import com.skyd.imomoe.view.adapter.variety.Diff
 import java.io.File
 import java.io.Serializable
 
-typealias DataSource1Bean = DataSourceFileBean
 typealias DataSource2Bean = DataSourceRepositoryBean
 
-class DataSourceFileBean(
+class DataSource1Bean(
     override var route: String,
     var file: File,
     var selected: Boolean = false
 ) : BaseBean, Diff {
     override fun contentSameAs(o: Any?): Boolean = when {
-        o !is DataSourceFileBean -> false
+        o !is DataSource1Bean -> false
         route == o.route && file == o.file && selected == o.selected -> true
         else -> false
     }

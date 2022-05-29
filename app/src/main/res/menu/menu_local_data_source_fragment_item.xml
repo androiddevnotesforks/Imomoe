@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_item_local_data_source_fragment_delete_item"
+        android:enabled="true"
+        android:icon="@drawable/ic_share_24"
+        android:title="@string/local_data_source_fragment_delete_item"
+        app:iconTint="@android:color/white" />
+</menu>

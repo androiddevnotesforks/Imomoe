@@ -117,6 +117,7 @@ fun Fragment.showInputDialog(
     prefill: CharSequence? = null,
     icon: Drawable? = null,
     cancelable: Boolean = true,
+    canEmpty: Boolean = false,     // 是否可以什么都不输入
     negativeText: String = getString(R.string.cancel),
     neutralText: String? = null,
     positiveText: String = getString(R.string.ok),
@@ -130,6 +131,7 @@ fun Fragment.showInputDialog(
         prefill = prefill,
         icon = icon,
         cancelable = cancelable,
+        empty = canEmpty,
         negativeText = negativeText,
         neutralText = neutralText,
         positiveText = positiveText,
@@ -145,6 +147,8 @@ fun Activity.showInputDialog(
     prefill: CharSequence? = null,
     icon: Drawable? = null,
     cancelable: Boolean = true,
+    empty: Boolean = false,     // 是否可以什么都不输入
+    multipleLine: Boolean = false,     // 是否可以换行
     negativeText: String = getString(R.string.cancel),
     neutralText: String? = null,
     positiveText: String = getString(R.string.ok),
@@ -176,9 +180,10 @@ fun Activity.showInputDialog(
         ?.apply {
             findViewById<TextInputLayout>(R.id.til_input_dialog)?.hint = hint
             findViewById<TextInputEditText>(R.id.et_input_dialog)?.also {
+                if (multipleLine) it.setSingleLine()
                 it.doOnTextChanged { t, _, _, _ ->
-                    if (!t.isNullOrEmpty()) {
-                        text = t
+                    if (t != null && t.isNotEmpty() || empty) {
+                        text = t ?: ""
                         positionButton?.isEnabled = true
                     } else {
                         positionButton?.isEnabled = false
@@ -190,7 +195,7 @@ fun Activity.showInputDialog(
                 it.selectAll()
             }
             positionButton = getButton(AlertDialog.BUTTON_POSITIVE)
-            positionButton?.isEnabled = false
+            if (!empty) positionButton?.isEnabled = false
         }
 }
 

@@ -42,4 +42,16 @@ class AnimeEpisodeDataBean(
         if (actionUrlComp != 0) return actionUrlComp
         return EpisodeTitleCompareUtil.compare(title, other.title)
     }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other !is AnimeEpisodeDataBean) false
+        else route == other.route && title == other.title && videoUrl == other.videoUrl
+    }
+
+    override fun hashCode(): Int {
+        var result = route.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + videoUrl.hashCode()
+        return result
+    }
 }

@@ -1,16 +1,18 @@
 package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.bean.DataSourceFileBean
+import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.ext.request
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.state.DataState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.io.File
 
 
 class LocalDataSourceViewModel : ViewModel() {
     var dataSourceList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
+    var customMainUrl: MutableSharedFlow<String?> = MutableSharedFlow(extraBufferCapacity = 1)
 
     init {
         getDataSourceList()
@@ -30,7 +32,7 @@ class LocalDataSourceViewModel : ViewModel() {
                 dataSourceList.tryEmit(
                     DataState.Success(
                         jarList.orEmpty().map {
-                            DataSourceFileBean(
+                            DataSource1Bean(
                                 "", it, it.name == DataSourceManager.dataSourceName
                             )
                         }.toList()

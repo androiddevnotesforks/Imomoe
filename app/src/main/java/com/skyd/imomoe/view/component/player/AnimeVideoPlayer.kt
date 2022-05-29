@@ -10,6 +10,7 @@ import android.content.Intent
 import android.graphics.Matrix
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -1156,7 +1157,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      * 适配刘海屏，防止重要内容落入刘海内被遮挡
      */
     protected open fun supportDisplayCutouts() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (currentPlayer == this && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val decorView: View = (activity ?: return).window.decorView
             decorView.post {
                 val displayCutout = decorView.rootWindowInsets?.displayCutout ?: return@post
@@ -1191,9 +1192,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             var newPaddingBottom = oldPaddingBottom
 
             // left
-            if (!inSafeInset(displayCutout) &&
-                left + oldPaddingLeft < displayCutout.safeInsetLeft
-            ) {
+            if (inSafeInset(displayCutout)) {
+                setTag(R.id.inset_left, 0)
+            } else if (left + oldPaddingLeft < displayCutout.safeInsetLeft) {
                 val deltaPadding = displayCutout.safeInsetLeft - left - oldPaddingLeft
                 newPaddingLeft = oldPaddingLeft + deltaPadding
                 setTag(R.id.inset_left, deltaPadding)
@@ -1207,8 +1208,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 }.start()
 
             // right
-            if (!inSafeInset(displayCutout) &&
-                right - oldPaddingRight >
+            if (inSafeInset(displayCutout)) {
+                setTag(R.id.inset_right, 0)
+            } else if (right - oldPaddingRight >
                 getScreenWidth(true) - displayCutout.safeInsetRight
             ) {
                 val deltaPadding = right - oldPaddingRight -
@@ -1225,9 +1227,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 }.start()
 
             // top
-            if (!inSafeInset(displayCutout) &&
-                top + oldPaddingTop < displayCutout.safeInsetTop
-            ) {
+            if (inSafeInset(displayCutout)) {
+                setTag(R.id.inset_top, 0)
+            } else if (top + oldPaddingTop < displayCutout.safeInsetTop) {
                 val deltaPadding = displayCutout.safeInsetTop - top - oldPaddingTop
                 newPaddingTop = oldPaddingTop + deltaPadding
                 setTag(R.id.inset_top, deltaPadding)
@@ -1241,8 +1243,9 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                 }.start()
 
             // bottom
-            if (!inSafeInset(displayCutout) &&
-                bottom - oldPaddingBottom >
+            if (inSafeInset(displayCutout)) {
+                setTag(R.id.inset_bottom, 0)
+            } else if (bottom - oldPaddingBottom >
                 getScreenHeight(true) - displayCutout.safeInsetBottom
             ) {
                 val deltaPadding = bottom - oldPaddingBottom -

@@ -84,5 +84,11 @@
             app:key="dns_server"
             app:summary="@string/dns_server_describe"
             app:title="@string/dns_over_https" />
+
+        <Preference
+            app:icon="@drawable/ic_link_24"
+            app:key="url_map"
+            app:summary="@string/url_map_summary"
+            app:title="@string/url_map" />
     </PreferenceCategory>
 </androidx.preference.PreferenceScreen>

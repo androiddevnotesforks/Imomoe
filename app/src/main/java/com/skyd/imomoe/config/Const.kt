@@ -24,6 +24,7 @@ interface Const {
             const val FAVORITE_ANIME_TABLE_NAME = "favoriteAnimeList"
             const val HISTORY_TABLE_NAME = "historyList"
             const val SEARCH_HISTORY_TABLE_NAME = "searchHistoryList"
+            const val URL_MAP_TABLE_NAME = "urlMapList"
         }
 
         object OfflineDataBase {

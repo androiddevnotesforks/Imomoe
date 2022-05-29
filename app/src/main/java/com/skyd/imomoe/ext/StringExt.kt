@@ -25,3 +25,8 @@ fun String.toHtml(@SuppressLint("InlinedApi") flag: Int = Html.FROM_HTML_MODE_LE
         Html.fromHtml(this)
     }
 }
+
+fun String.isUrl(): Boolean {
+    return Regex("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
+        .matches(this)
+}

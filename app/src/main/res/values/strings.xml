@@ -52,6 +52,7 @@
     <string name="qq">QQ</string>
     <string name="copy_url">复制链接</string>
     <string name="cancel">取消</string>
+    <string name="add">添加</string>
     <string name="not_install_qq">未安装QQ</string>
     <string name="not_install_wechat">未安装微信</string>
     <string name="not_install_weibo">未安装微博</string>
@@ -285,5 +286,17 @@
     <string name="danmaku_video_player_unsupport_send_danmaku">不支持发送弹幕！</string>
     <string name="about_activity_thanks">致谢</string>
     <string name="about_activity_open_danmaku_server_page">打开链接</string>
+    <string name="local_data_source_fragment_delete_item">删除当前数据源</string>
+    <string name="local_data_source_fragment_set_item_main_url">更改当前数据源地址前缀</string>
+    <string name="local_data_source_fragment_please_input_main_url">请输入数据源地址的新前缀</string>
+    <string name="local_data_source_fragment_set_main_url_success">更改成功！</string>
+    <string name="local_data_source_fragment_set_main_url_failed">更改当前数据源地址前缀失败！</string>
+    <string name="title_url_map_activity">URL前缀替换</string>
+    <string name="url_map">URL前缀替换</string>
+    <string name="url_map_summary">替换APP内指定的请求URL</string>
+    <string name="new_url_map_activity">替换为：\n%s</string>
+    <string name="input_old_url_map_activity">请输入需要替换的URL</string>
+    <string name="input_new_url_map_activity">请输入替换成的内容</string>
+    <string name="delete_url_map_activity">确定要删除此项吗？</string>
 
 </resources>

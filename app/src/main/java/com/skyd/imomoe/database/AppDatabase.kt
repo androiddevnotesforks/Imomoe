@@ -14,15 +14,18 @@ import com.skyd.imomoe.database.converter.AnimeDownloadStatusConverter
 import com.skyd.imomoe.database.converter.ImageBeanConverter
 import com.skyd.imomoe.database.dao.*
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
+import com.skyd.imomoe.database.entity.UrlMapEntity
 import com.skyd.imomoe.database.migration.Migration1To2
 import com.skyd.imomoe.database.migration.Migration2To3
 import com.skyd.imomoe.database.migration.Migration3To4
+import com.skyd.imomoe.database.migration.Migration4To5
 
 @Database(
     entities = [SearchHistoryBean::class,
         AnimeDownloadEntity::class,
         FavoriteAnimeBean::class,
-        HistoryBean::class], version = 4
+        HistoryBean::class,
+        UrlMapEntity::class], version = 5
 )
 @TypeConverters(
     value = [AnimeDownloadStatusConverter::class,
@@ -34,12 +37,15 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun animeDownloadDao(): AnimeDownloadDao
     abstract fun favoriteAnimeDao(): FavoriteAnimeDao
     abstract fun historyDao(): HistoryDao
+    abstract fun urlMapDao(): UrlMapDao
     abstract fun utilDao(): UtilDao
 
     companion object {
         private var instance: AppDatabase? = null
 
-        private val migrations = arrayOf(Migration1To2(), Migration2To3(), Migration3To4())
+        private val migrations = arrayOf(
+            Migration1To2(), Migration2To3(), Migration3To4(), Migration4To5()
+        )
 
         fun getInstance(context: Context): AppDatabase {
             if (instance == null) {

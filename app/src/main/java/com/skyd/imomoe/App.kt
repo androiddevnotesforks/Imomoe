@@ -2,6 +2,7 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.efs.sdk.launch.LaunchManager
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader

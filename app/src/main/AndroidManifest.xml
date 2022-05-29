@@ -34,6 +34,9 @@
         android:theme="@style/Theme.Anime.Pink"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".view.activity.UrlMapActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.activity.DownloadManagerActivity"
             android:exported="false" />
         <activity android:name=".view.activity.BackupRestoreActivity" />

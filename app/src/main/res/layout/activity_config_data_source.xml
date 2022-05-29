@@ -17,7 +17,6 @@
             android:id="@+id/tb_config_data_source_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:menu="@menu/menu_config_data_source_activity"
             app:navigationIcon="@drawable/ic_arrow_back_24"

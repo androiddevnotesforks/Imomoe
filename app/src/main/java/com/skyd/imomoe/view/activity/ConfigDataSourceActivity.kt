@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.DataSourceFileBean
+import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
@@ -106,7 +106,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         onSuccess: ((File) -> Unit)? = null,
         onFailed: ((Exception) -> Unit)? = null
     ) {
-        val dataSourceSuffix = (uri.path ?: "").substringAfterLast(".", "")
+
+        val dataSourceSuffix = uri.fileSuffixName(contentResolver)
         if (!dataSourceSuffix.equals("ads", true)) {
             showSnackbar(
                 text = getString(R.string.invalid_data_source_suffix, dataSourceSuffix),
@@ -121,7 +122,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             cancelable = false,
             onPositive = { _, _ ->
                 try {
-                    val sourceFileName = uri.path!!.substringAfterLast("/")
+                    val sourceFileName = uri.fileName(contentResolver)
                     val directory = File(DataSourceManager.getJarDirectory())
                     if (!directory.exists()) directory.mkdirs()
                     val target = File(
@@ -203,7 +204,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         )
     }
 
-    fun deleteDataSource(bean: DataSourceFileBean) {
+    fun deleteDataSource(bean: DataSource1Bean) {
         showMessageDialog(
             title = getString(R.string.warning),
             icon = R.drawable.ic_category_24,

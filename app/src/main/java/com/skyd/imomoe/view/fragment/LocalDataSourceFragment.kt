@@ -1,10 +1,14 @@
 package com.skyd.imomoe.view.fragment
 
 import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
+import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.databinding.FragmentLocalDataSourceBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.showSnackbar
@@ -30,13 +34,8 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
                     }
                 }
             },
-            onLongClickListener = { _, data, _ ->
-                val configDataSourceActivity = activity ?: return@DataSource1Proxy true
-                if (configDataSourceActivity is ConfigDataSourceActivity) {
-                    configDataSourceActivity.deleteDataSource(data)
-                } else {
-                    configDataSourceActivity.showSnackbar(getString(R.string.activity_is_not_config_data_source_activity))
-                }
+            onLongClickListener = { holder, data, _ ->
+                showItemMenu(holder.itemView, data)
                 true
             }
         )))
@@ -66,6 +65,27 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
                 else -> {}
             }
         }
+    }
+
+    private fun showItemMenu(v: View, data: DataSource1Bean) {
+        val popup = PopupMenu(requireContext(), v)
+        popup.menuInflater.inflate(R.menu.menu_local_data_source_fragment_item, popup.menu)
+
+        popup.setOnMenuItemClickListener { menuItem: MenuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_item_local_data_source_fragment_delete_item -> {
+                    val activity = this.activity ?: return@setOnMenuItemClickListener true
+                    if (activity is ConfigDataSourceActivity) {
+                        activity.deleteDataSource(data)
+                    } else {
+                        activity.showSnackbar(getString(R.string.activity_is_not_config_data_source_activity))
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?) =

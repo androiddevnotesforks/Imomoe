@@ -1,7 +1,7 @@
 package com.skyd.imomoe.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.skyd.imomoe.bean.DataSourceFileBean
+import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.RetrofitManager
 import com.skyd.imomoe.util.Util
@@ -25,7 +25,7 @@ class ConfigDataSourceViewModel : ViewModel() {
         Util.restartApp()
     }
 
-    fun deleteDataSource(bean: DataSourceFileBean) {
+    fun deleteDataSource(bean: DataSource1Bean) {
         deleteSource.tryEmit(bean.file.delete())
     }
 }

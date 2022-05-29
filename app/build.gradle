@@ -52,6 +52,10 @@ android {
         manifestPlaceholders = secret.manifestPlaceholders
 
         resConfigs "xxxhdpi", "anydpi-v26"
+
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     signingConfigs {
@@ -127,10 +131,17 @@ android {
         exclude 'XPP3_1.1.3.3_VERSION'
         exclude 'kotlin-tooling-metadata.json'
         exclude 'build-data.properties'
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 
     buildFeatures {
         viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
     }
 }
 
@@ -149,11 +160,17 @@ dependencies {
     implementation deps.support.preference
     implementation deps.support.security_crypto
     implementation deps.support.core_splashscreen
+    implementation deps.compose.ui
+    implementation deps.compose.material3
+    implementation deps.compose.ui_tooling_preview
+    implementation deps.compose.runtime_livedata
+    implementation deps.compose.compose_theme_adapter
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
     implementation deps.lifecycle.lifecycle_extensions
     implementation deps.hilt.hilt_android
+    implementation deps.hilt.hilt_navigation_compose
     kapt deps.hilt.hilt_android_compiler
     implementation deps.okhttp3.okhttp
     implementation deps.okhttp3.logging_interceptor

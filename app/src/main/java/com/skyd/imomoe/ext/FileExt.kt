@@ -1,7 +1,10 @@
 package com.skyd.imomoe.ext
 
+import android.content.ContentResolver
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
 import com.skyd.imomoe.appContext
 import java.io.File
@@ -25,6 +28,21 @@ fun File.fileSize(): Long {
         s = fis.available().toLong()
     }
     return s
+}
+
+fun Uri.fileName(contentResolver: ContentResolver): String {
+    contentResolver.query(
+        this, null, null, null, null
+    )?.use { cursor ->
+        val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+        cursor.moveToFirst()
+        return cursor.getString(nameIndex)
+    }
+    return path!!.substringAfterLast("/", "")
+}
+
+fun Uri.fileSuffixName(contentResolver: ContentResolver): String {
+    return fileName(contentResolver).substringAfterLast(".")
 }
 
 fun File.directorySize(): Long {

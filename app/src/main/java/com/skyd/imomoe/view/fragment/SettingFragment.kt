@@ -24,6 +24,7 @@ import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
+import com.skyd.imomoe.view.activity.UrlMapActivity
 import com.skyd.imomoe.view.component.player.PlayerCore
 import com.skyd.imomoe.view.component.player.PlayerCore.selectPlayerCore
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
@@ -241,6 +242,13 @@ class SettingFragment : BasePreferenceFragment() {
                 true
             }
             isVisible = PlayerCore.playerCore.playManager == IjkPlayerManager::class.java
+        }
+
+        findPreference<Preference>("url_map")?.apply {
+            setOnPreferenceClickListener {
+                startActivity(Intent(activity, UrlMapActivity::class.java))
+                false
+            }
         }
     }
 }

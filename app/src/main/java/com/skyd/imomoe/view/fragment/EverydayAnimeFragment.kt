@@ -90,6 +90,13 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
                 is DataState.Refreshing -> {
                     mBinding.srlEverydayAnimeFragment.isRefreshing = true
                 }
+                is DataState.Error -> {
+                    mBinding.srlEverydayAnimeFragment.isRefreshing = false
+                    showLoadFailedTip {
+                        mBinding.srlEverydayAnimeFragment.isRefreshing = true
+                        refresh()
+                    }
+                }
                 is DataState.Success -> {
                     mBinding.srlEverydayAnimeFragment.isRefreshing = false
                     val selectedTabIndex = this@EverydayAnimeFragment.selectedTabIndex

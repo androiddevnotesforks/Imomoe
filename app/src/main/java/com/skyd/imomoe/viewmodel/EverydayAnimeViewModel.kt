@@ -40,10 +40,10 @@ class EverydayAnimeViewModel @Inject constructor(
             ) - 1
             tabList.tryEmit(DataState.Success(it.first))
             everydayAnimeList.tryEmit(DataState.Success(it.second))
-            header.tryEmit(it.third)
+            header.tryEmit(it.third.ifBlank { appContext.getString(R.string.everyday_anime_list) })
         }, error = {
             selectedTabIndex = -1
-            everydayAnimeList.tryEmit(DataState.Empty)
+            everydayAnimeList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast(Toast.LENGTH_LONG)
         })
     }

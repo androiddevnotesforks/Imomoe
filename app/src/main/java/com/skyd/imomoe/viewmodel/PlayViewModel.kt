@@ -115,10 +115,14 @@ class PlayViewModel @Inject constructor(
                 list.addAll(it.second)
                 list.sortEpisodeTitle()
                 playBean = it.third
-                list.forEachIndexed { index, item ->
-                    if (playBean.episode.videoUrl == item.videoUrl) {
-                        currentEpisodeIndex.tryEmit(index)
-                        return@forEachIndexed
+                run loop@{
+                    list.forEachIndexed { index, item ->
+                        if (animeEpisodeDataBean == item ||
+                            item.route.isNotBlank() && animeEpisodeDataBean.route == item.route
+                        ) {
+                            currentEpisodeIndex.tryEmit(index)
+                            return@loop
+                        }
                     }
                 }
                 episodesList.tryEmit(DataState.Success(list))
