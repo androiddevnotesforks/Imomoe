@@ -33,7 +33,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                             message = "本软件免费开源，严禁商用，支持Android 5.0+！仅在GitHub仓库长期发布！\n不介意的话可以给我的GitHub仓库点个Star",
                             positiveText = "去点Star",
                             negativeText = getString(R.string.cancel),
-                            onPositive = { _, _ -> Util.openBrowser(Const.Common.GITHUB_URL) },
+                            onPositive = { _, _ -> openBrowser(Const.Common.GITHUB_URL) },
                             onNegative = { dialog, _ -> dialog.dismiss() }
                         )
                         true
@@ -67,7 +67,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
                 showMessageDialog(
                     message = warningString,
                     positiveText = getString(R.string.still_to_visit),
-                    onPositive = { _, _ -> Util.openBrowser(Api.MAIN_URL) },
+                    onPositive = { _, _ -> openBrowser(Api.MAIN_URL) },
                     onNegative = { dialog, _ -> dialog.dismiss() }
                 )
             }
@@ -94,7 +94,7 @@ class AboutActivity : BaseActivity<ActivityAboutBinding>() {
             }
 
             rlAboutActivityGithub.setOnClickListener {
-                Util.openBrowser(Const.Common.GITHUB_URL)
+                openBrowser(Const.Common.GITHUB_URL)
             }
 
             rlAboutActivityLicense.setOnClickListener {

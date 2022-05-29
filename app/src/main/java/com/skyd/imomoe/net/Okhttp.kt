@@ -1,6 +1,8 @@
 package com.skyd.imomoe.net
 
+import android.widget.Toast
 import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.ext.editor
@@ -33,13 +35,17 @@ private val bootstrapClient = OkHttpClient.Builder().cache(okhttpCache).apply {
         if (!urlMapEnabled) return@Interceptor chain.proceed(request)
 
         val builder: Request.Builder = request.newBuilder()
-        run loop@{
+        runCatching loop@{
             getAppDataBase().urlMapDao().getAllEnabled().forEach {
                 if (request.url.toString().startsWith(it.oldUrl)) {
                     builder.url(request.url.toString().replaceFirst(it.oldUrl, it.newUrl))
                     return@loop
                 }
             }
+        }.onFailure {
+            it.printStackTrace()
+            appContext.getString(R.string.url_map_error_okhttp, it.message.toString())
+                .showToast(Toast.LENGTH_LONG)
         }
         return@Interceptor chain.proceed(builder.build())
     })

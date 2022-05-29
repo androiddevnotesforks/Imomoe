@@ -300,5 +300,6 @@
     <string name="delete_url_map_activity">确定要删除此项吗？</string>
     <string name="enable_url_map_activity">启用此功能</string>
     <string name="enable_disadvantage_url_map_activity">此功能可能会在一定程度上导致请求数据时变慢</string>
+    <string name="url_map_error_okhttp">在进行URL替换时发生错误，将使用原URL进行请求\n\n%s</string>
 
 </resources>

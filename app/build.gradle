@@ -222,8 +222,10 @@ efs {
             "AnimeDownloadActivity",
             "ClassifyActivity",
             "CrashActivity",
+            "ConfigDataSourceActivity",
             "DlnaActivity",
             "DlnaControlActivity",
+            "DownloadManagerActivity",
             "FavoriteActivity",
             "HistoryActivity",
             "LicenseActivity",
@@ -238,6 +240,7 @@ efs {
             "WebViewActivity",
             "SkinActivity",
             "NoticeActivity",
+            "UrlMapActivity",
             "BackupRestoreActivity"
     ]
 }
