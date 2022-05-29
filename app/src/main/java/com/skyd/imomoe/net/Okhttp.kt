@@ -1,7 +1,10 @@
 package com.skyd.imomoe.net
 
 import com.skyd.imomoe.BuildConfig
+import com.skyd.imomoe.appContext
 import com.skyd.imomoe.database.getAppDataBase
+import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.util.coil.CoilUtil
 import com.skyd.imomoe.util.showToast
 import okhttp3.Cache
@@ -13,10 +16,22 @@ import okhttp3.dnsoverhttps.DnsOverHttps
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 
+var urlMapEnabled: Boolean = appContext.sharedPreferences().getBoolean("urlMapEnabled", false)
+    set(value) {
+        if (field == value) return
+        appContext.sharedPreferences().editor {
+            putBoolean("urlMapEnabled", value)
+        }
+        field = value
+    }
+
 private val okhttpCache = Cache(File("cacheDir", "okhttpcache"), 10 * 1024 * 1024L)
 private val bootstrapClient = OkHttpClient.Builder().cache(okhttpCache).apply {
     addInterceptor(Interceptor { chain ->
         val request: Request = chain.request()
+        // 不使用URL变换时，直接return
+        if (!urlMapEnabled) return@Interceptor chain.proceed(request)
+
         val builder: Request.Builder = request.newBuilder()
         run loop@{
             getAppDataBase().urlMapDao().getAllEnabled().forEach {

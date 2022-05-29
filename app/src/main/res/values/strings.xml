@@ -298,5 +298,7 @@
     <string name="input_old_url_map_activity">请输入需要替换的URL</string>
     <string name="input_new_url_map_activity">请输入替换成的内容</string>
     <string name="delete_url_map_activity">确定要删除此项吗？</string>
+    <string name="enable_url_map_activity">启用此功能</string>
+    <string name="enable_disadvantage_url_map_activity">此功能可能会在一定程度上导致请求数据时变慢</string>
 
 </resources>

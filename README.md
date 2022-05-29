@@ -84,6 +84,7 @@
 - Kotlin Coroutine
 - Hilt
 - Room
+- 少部分Jetpack Compose
 - SplashScreen
 - DiffUtil
 - Retrofit

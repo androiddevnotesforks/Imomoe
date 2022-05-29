@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -86,6 +87,54 @@ class UrlMapActivity : BaseActivity<ActivityUrlMapBinding>() {
 }
 
 /**
+ * URL替换总开关
+ */
+private var urlMapEnabled by mutableStateOf(com.skyd.imomoe.net.urlMapEnabled)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UrlMapEnabledCard() {
+    Card(
+        modifier = Modifier
+            .padding(vertical = 7.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable {
+                    com.skyd.imomoe.net.urlMapEnabled = !urlMapEnabled
+                    urlMapEnabled = !urlMapEnabled
+                }
+                .padding(15.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 15.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.enable_url_map_activity),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    modifier = Modifier.padding(top = 7.dp),
+                    text = stringResource(id = R.string.enable_disadvantage_url_map_activity),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+            Switch(
+                checked = urlMapEnabled,
+                onCheckedChange = {
+                    com.skyd.imomoe.net.urlMapEnabled = it
+                    urlMapEnabled = it
+                }
+            )
+        }
+    }
+}
+
+/**
  * 展示列表
  */
 @Composable
@@ -98,6 +147,9 @@ fun UrlMapList(paddingValues: PaddingValues) {
             .fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
+        item {
+            UrlMapEnabledCard()
+        }
         when (urlMapListState) {
             is DataState.Success -> {
                 val list = urlMapListState.read()
@@ -123,29 +175,32 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
         modifier = Modifier
             .padding(vertical = 7.dp)
             .fillMaxWidth()
-            .combinedClickable(
-                onLongClick = {
-                    showWarnDeleteDialog.value = true
-                    warnDeleteDialogOldUrl.value = urlMapEntity.oldUrl
-                },
-                onClick = { enabled = !enabled }
-            )
     ) {
         Row(
-            modifier = Modifier.padding(15.dp),
+            modifier = Modifier
+                .combinedClickable(
+                    onLongClick = {
+                        showWarnDeleteDialog.value = true
+                        warnDeleteDialogOldUrl.value = urlMapEntity.oldUrl
+                    },
+                    onClick = { if (urlMapEnabled) enabled = !enabled }
+                )
+                .padding(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 15.dp)
             ) {
                 Text(
                     text = urlMapEntity.oldUrl,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    modifier = Modifier.padding(top = 3.dp),
+                    modifier = Modifier.padding(top = 17.dp),
                     text = stringResource(R.string.new_url_map_activity, urlMapEntity.newUrl),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             Switch(
@@ -153,7 +208,8 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
                 onCheckedChange = {
                     enabled = it
                     viewModel.enabledUrlMap(urlMapEntity.oldUrl, it)
-                }
+                },
+                enabled = urlMapEnabled
             )
         }
     }
