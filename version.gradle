@@ -1,6 +1,6 @@
 ext.version_code = 22
 ext.version_name = "1.5.0_Akarin"
-ext.compose_version = '1.2.0-beta01'
+ext.compose_version = '1.2.0-beta02'
 
 def build_versions = [:]
 build_versions.compile_sdk = 31
@@ -37,6 +37,7 @@ deps.support = support
 def compose = [:]
 compose.ui = "androidx.compose.ui:ui:$compose_version"
 compose.material3 = "androidx.compose.material3:material3:1.0.0-alpha11"
+compose.material3_windo_size_class = "androidx.compose.material3:material3-window-size-class:1.0.0-alpha11"
 compose.compose_theme_adapter = "com.google.android.material:compose-theme-adapter-3:1.0.10"
 compose.ui_tooling_preview = "androidx.compose.ui:ui-tooling-preview:$compose_version"
 compose.ui_tooling = "androidx.compose.ui:ui-tooling:$compose_version"

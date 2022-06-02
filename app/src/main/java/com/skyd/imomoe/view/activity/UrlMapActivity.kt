@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,18 +21,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.entity.UrlMapEntity
-import com.skyd.imomoe.databinding.ActivityUrlMapBinding
+import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.showInputDialog
 import com.skyd.imomoe.state.DataState
-import com.skyd.imomoe.view.component.compose.AnimeSmallTopBar
+import com.skyd.imomoe.view.component.compose.AnimeTopBar
+import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
 import com.skyd.imomoe.view.component.compose.TopBarIcon
 import com.skyd.imomoe.viewmodel.UrlMapViewModel
 
-class UrlMapActivity : BaseActivity<ActivityUrlMapBinding>() {
+class UrlMapActivity : BaseComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        mBinding.composeViewUrlMapActivity.setContent {
+        setContent {
             Mdc3Theme(
                 setTextColors = true,
                 setDefaultFontFamily = true
@@ -39,50 +41,51 @@ class UrlMapActivity : BaseActivity<ActivityUrlMapBinding>() {
             }
         }
     }
+}
 
-    override fun getBinding() = ActivityUrlMapBinding.inflate(layoutInflater)
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
-        Scaffold(topBar = {
-            AnimeSmallTopBar(
-                title = {
-                    Text(text = stringResource(R.string.title_url_map_activity))
-                },
-                navigationIcon = {
-                    TopBarIcon(
-                        painter = painterResource(id = R.drawable.ic_arrow_back_24),
-                        contentDescription = null,
-                        onClick = { finish() }
-                    )
-                }
-            )
-        }, floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = {
-                    Text(text = stringResource(id = R.string.add))
-                },
-                icon = {
-                    Icon(Icons.Rounded.Add, null)
-                },
-                onClick = {
-                    showInputDialog(
-                        hint = getString(R.string.input_old_url_map_activity),
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+    Scaffold(topBar = {
+        AnimeTopBar(
+            style = AnimeTopBarStyle.Small,
+            title = {
+                Text(text = stringResource(R.string.title_url_map_activity))
+            },
+            navigationIcon = {
+                TopBarIcon(
+                    painter = painterResource(id = R.drawable.ic_arrow_back_24),
+                    contentDescription = null,
+                    onClick = { context.activity.finish() }
+                )
+            }
+        )
+    }, floatingActionButton = {
+        ExtendedFloatingActionButton(
+            text = {
+                Text(text = stringResource(id = R.string.add))
+            },
+            icon = {
+                Icon(Icons.Rounded.Add, null)
+            },
+            onClick = {
+                val activity = context.activity
+                activity.showInputDialog(
+                    hint = activity.getString(R.string.input_old_url_map_activity),
+                    multipleLine = true
+                ) { _, _, old ->
+                    activity.showInputDialog(
+                        hint = activity.getString(R.string.input_new_url_map_activity),
                         multipleLine = true
-                    ) { _, _, old ->
-                        showInputDialog(
-                            hint = getString(R.string.input_new_url_map_activity),
-                            multipleLine = true
-                        ) { _, _, new ->
-                            viewModel.setUrlMap(old.toString(), new.toString())
-                        }
+                    ) { _, _, new ->
+                        viewModel.setUrlMap(old.toString(), new.toString())
                     }
-                },
-            )
-        }) {
-            UrlMapList(it)
-        }
+                }
+            },
+        )
+    }) {
+        UrlMapList(it)
     }
 }
 

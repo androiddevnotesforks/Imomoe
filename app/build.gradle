@@ -165,6 +165,7 @@ dependencies {
     implementation deps.compose.ui_tooling_preview
     implementation deps.compose.runtime_livedata
     implementation deps.compose.compose_theme_adapter
+    implementation deps.compose.material3_windo_size_class
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
@@ -310,10 +311,6 @@ task makeJar(type: Jar) {
     )
     // dex文件和CustomInfo文件都存放在根目录即可
     into('/')
-    // 排除在外的文件
-    exclude('BuildConfig.class', 'R.class', 'MainActivity.class', 'TestClass.class')
-    // 排除以R$开头的文件
-    exclude { it.name.startsWith('R$') }
 }
 
 // 4.命名为ads

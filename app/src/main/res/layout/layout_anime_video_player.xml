@@ -25,7 +25,8 @@
         android:id="@+id/danmaku_view"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller" />
+        app:layout_constraintBottom_toTopOf="@id/cl_danmaku_controller"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/thumb"

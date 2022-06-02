@@ -45,17 +45,8 @@ fun View.clickScale(scale: Float = 0.75f, duration: Long = 100) {
         }.start()
 }
 
-val View.activity: Activity?
-    get() {
-        var context: Context = context
-        while (context is ContextWrapper) {
-            if (context is Activity) {
-                return context
-            }
-            context = context.baseContext
-        }
-        return null
-    }
+val View.activity: Activity
+    get() = context.activity
 
 fun View.showKeyboard() {
     isFocusable = true

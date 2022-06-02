@@ -1170,7 +1170,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     @TargetApi(28)
     protected fun View.updateSafeInset(displayCutout: DisplayCutout) {
         coroutineScope.launch(Dispatchers.Main) {
-            delay(500)
             val location = IntArray(2)
             getLocationOnScreen(location)
             val left = location[0]
@@ -1178,88 +1177,29 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             val top = location[1]
             val bottom = location[1] + height
 
-            val insetLeft: Int = getTag(R.id.inset_left) as? Int ?: 0
-            val insetRight: Int = getTag(R.id.inset_right) as? Int ?: 0
-            val insetTop: Int = getTag(R.id.inset_top) as? Int ?: 0
-            val insetBottom: Int = getTag(R.id.inset_bottom) as? Int ?: 0
-            val oldPaddingLeft = paddingLeft - insetLeft
-            val oldPaddingRight = paddingRight - insetRight
-            val oldPaddingTop = paddingTop - insetTop
-            val oldPaddingBottom = paddingBottom - insetBottom
-            var newPaddingLeft = oldPaddingLeft
-            var newPaddingRight = oldPaddingRight
-            var newPaddingTop = oldPaddingTop
-            var newPaddingBottom = oldPaddingBottom
-
-            // left
             if (inSafeInset(displayCutout)) {
-                setTag(R.id.inset_left, 0)
-            } else if (left + oldPaddingLeft < displayCutout.safeInsetLeft) {
-                val deltaPadding = displayCutout.safeInsetLeft - left - oldPaddingLeft
-                newPaddingLeft = oldPaddingLeft + deltaPadding
-                setTag(R.id.inset_left, deltaPadding)
-            }
-            ValueAnimator.ofInt(paddingLeft, newPaddingLeft)
-                .setDuration(200)
-                .apply {
-                    addUpdateListener { animation ->
-                        updatePadding(left = animation.animatedValue as Int)
-                    }
-                }.start()
+                updatePadding(left = 0, right = 0, top = 0, bottom = 0)
+            } else {
+                // left
+                if (left + paddingLeft < displayCutout.safeInsetLeft) {
+                    updatePadding(left = displayCutout.safeInsetLeft)
+                }
 
-            // right
-            if (inSafeInset(displayCutout)) {
-                setTag(R.id.inset_right, 0)
-            } else if (right - oldPaddingRight >
-                getScreenWidth(true) - displayCutout.safeInsetRight
-            ) {
-                val deltaPadding = right - oldPaddingRight -
-                        (getScreenWidth(true) - displayCutout.safeInsetRight)
-                newPaddingRight = oldPaddingRight + deltaPadding
-                setTag(R.id.inset_right, deltaPadding)
-            }
-            ValueAnimator.ofInt(paddingRight, newPaddingRight)
-                .setDuration(200)
-                .apply {
-                    addUpdateListener { animation ->
-                        updatePadding(right = animation.animatedValue as Int)
-                    }
-                }.start()
+                // right
+                if (right - paddingRight > getScreenWidth(true) - displayCutout.safeInsetRight) {
+                    updatePadding(right = displayCutout.safeInsetRight)
+                }
 
-            // top
-            if (inSafeInset(displayCutout)) {
-                setTag(R.id.inset_top, 0)
-            } else if (top + oldPaddingTop < displayCutout.safeInsetTop) {
-                val deltaPadding = displayCutout.safeInsetTop - top - oldPaddingTop
-                newPaddingTop = oldPaddingTop + deltaPadding
-                setTag(R.id.inset_top, deltaPadding)
-            }
-            ValueAnimator.ofInt(paddingTop, newPaddingTop)
-                .setDuration(200)
-                .apply {
-                    addUpdateListener { animation ->
-                        updatePadding(top = animation.animatedValue as Int)
-                    }
-                }.start()
+                // top
+                if (top + paddingTop < displayCutout.safeInsetTop) {
+                    updatePadding(top = displayCutout.safeInsetTop)
+                }
 
-            // bottom
-            if (inSafeInset(displayCutout)) {
-                setTag(R.id.inset_bottom, 0)
-            } else if (bottom - oldPaddingBottom >
-                getScreenHeight(true) - displayCutout.safeInsetBottom
-            ) {
-                val deltaPadding = bottom - oldPaddingBottom -
-                        (getScreenHeight(true) - displayCutout.safeInsetBottom)
-                newPaddingBottom = oldPaddingBottom + deltaPadding
-                setTag(R.id.inset_bottom, deltaPadding)
+                // bottom
+                if (bottom - paddingBottom > getScreenHeight(true) - displayCutout.safeInsetBottom) {
+                    updatePadding(bottom = displayCutout.safeInsetBottom)
+                }
             }
-            ValueAnimator.ofInt(paddingBottom, newPaddingBottom)
-                .setDuration(200)
-                .apply {
-                    addUpdateListener { animation ->
-                        updatePadding(bottom = animation.animatedValue as Int)
-                    }
-                }.start()
         }
     }
 
