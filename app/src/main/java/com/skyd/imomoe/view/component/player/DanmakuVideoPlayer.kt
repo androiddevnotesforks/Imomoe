@@ -56,6 +56,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         layoutFilter = createLayoutFilters()
     }
 
+    private val danmakuDataList: MutableList<DanmakuItemData> = mutableListOf()
+
     // 是否在显示弹幕
     private var mDanmakuShow = true
 
@@ -167,7 +169,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             ) { _, _, text ->
                 try {
                     val url = URL(text.toString()).toString()
-//                        val url = URL("http://api.bilibili.com/x/v1/dm/list.so?oid=431625080").toString()
                     if (url.contains("bili", true)) {
                         setDanmakuUrl(url, DanmakuType.BilibiliType)
                     }
@@ -309,12 +310,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
         player.mDanmakuShow = mDanmakuShow
         player.resolveDanmakuShow()
-        if (player.mDanmakuUrl != mDanmakuUrl) {
-            player.setDanmakuUrl(
-                mDanmakuUrl, mDanmakuSourceType,
-                mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
-            )
-        }
+        player.updatePlayerDanmakuState(this)
         player.seekDanmaku(currentPositionWhenPlaying)
         pauseDanmaku()
 
@@ -344,13 +340,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
             mDanmakuShow = player.mDanmakuShow
             resolveDanmakuShow()
-            if (mDanmakuUrl != player.mDanmakuUrl) {
-                setDanmakuUrl(
-                    player.mDanmakuUrl,
-                    player.mDanmakuSourceType,
-                    player.mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
-                )
-            }
+            updatePlayerDanmakuState(player)
             seekDanmaku(player.currentPositionWhenPlaying)
             player.pauseDanmaku()
         }
@@ -364,6 +354,20 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         return vgDanmakuController?.height ?: 0
     }
 
+    /**
+     * 将old状态赋值给new
+     */
+    fun updatePlayerDanmakuState(old: DanmakuVideoPlayer) {
+        mDanmakuUrl = old.mDanmakuUrl
+        mDanmakuSourceType = old.mDanmakuSourceType
+        config = old.config.copy()
+        danmakuDataList.clear()
+        danmakuDataList += old.danmakuDataList
+        mDanmakuPlayer.updateData(danmakuDataList)
+        mDanmakuPlayer.start(config)
+        onDanmakuStart()
+    }
+
     fun setDanmakuUrl(
         url: String = ANIME_DANMAKU_URL,
         danmakuSourceType: DanmakuType = DanmakuType.AnimeType(),
@@ -371,10 +375,11 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         if (url.isEmpty()) return
 
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             runCatching {
                 var success = false
                 val dataList: MutableList<DanmakuItemData> = arrayListOf()
+                mDanmakuSourceType = danmakuSourceType
 
                 when (danmakuSourceType) {
                     is DanmakuType.AnimeType -> {
@@ -392,19 +397,24 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         success = true
                     }
                 }
+                mDanmakuUrl = url
                 if (success) {
                     withContext(Dispatchers.Main) {
                         mDanmakuPlayer.updateData(dataList)
-                        mDanmakuView.post {
-                            if (autoPlayIfVideoIsPlaying && mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING) {
-                                seekDanmaku(currentPlayer.currentPositionWhenPlaying)
-                                playDanmaku()
-                            }
+                        danmakuDataList.clear()
+                        danmakuDataList += dataList
+                        if (autoPlayIfVideoIsPlaying &&
+                            mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING &&
+                            currentPlayer == this@DanmakuVideoPlayer
+                        ) {
+                            playDanmaku()
+                            seekDanmaku(currentPlayer.currentPositionWhenPlaying)
+                        } else if (currentPlayer != this@DanmakuVideoPlayer) {
+                            (currentPlayer as DanmakuVideoPlayer)
+                                .updatePlayerDanmakuState(this@DanmakuVideoPlayer)
                         }
                     }
                 }
-                mDanmakuSourceType = danmakuSourceType
-                mDanmakuUrl = url
             }.onFailure {
                 it.printStackTrace()
                 it.message?.showToast()

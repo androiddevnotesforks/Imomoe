@@ -310,7 +310,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     }
 
     override fun onDanmakuStart() {
-
         resizePlayer()
     }
 
