@@ -10,12 +10,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
-import com.kuaishou.akdanmaku.DanmakuConfig
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.data.DanmakuItemData.Companion.DANMAKU_STYLE_ICON_UP
-import com.kuaishou.akdanmaku.ecs.component.filter.*
-import com.kuaishou.akdanmaku.render.SimpleRenderer
-import com.kuaishou.akdanmaku.ui.DanmakuPlayer
 import com.kuaishou.akdanmaku.ui.DanmakuView
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
@@ -24,6 +20,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.showToast
+import com.skyd.imomoe.view.component.player.danmaku.DanmakuManager
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuType
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser.Companion.toDanmakuItemData
@@ -45,24 +42,12 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         const val ANIME_DANMAKU_URL = Api.DANMAKU_URL
     }
 
-    private var mDanmakuUrl: String = ""
     private lateinit var mDanmakuView: DanmakuView          //弹幕view
-    private lateinit var mDanmakuPlayer: DanmakuPlayer
-    private val colorFilter = TextColorFilter()
-    private var dataFilters = emptyMap<Int, DanmakuFilter>()
-    private var config = DanmakuConfig().apply {
-        dataFilter = createDataFilters()
-        dataFilters = dataFilter.associateBy { it.filterParams }
-        layoutFilter = createLayoutFilters()
-    }
 
-    private val danmakuDataList: MutableList<DanmakuItemData> = mutableListOf()
+    private lateinit var danmakuManager: DanmakuManager
 
     // 是否在显示弹幕
     private var mDanmakuShow = true
-
-    // 弹幕源类型
-    private var mDanmakuSourceType: DanmakuType = DanmakuType.AnimeType()
 
     // 弹幕输入文本框
     private var etDanmakuInput: EditText? = null
@@ -113,9 +98,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     override fun init(context: Context?) {
         super.init(context)
         mDanmakuView = findViewById(R.id.danmaku_view)
-        mDanmakuPlayer = DanmakuPlayer(SimpleRenderer()).also {
-            it.bindView(mDanmakuView)
-        }
+        danmakuManager = DanmakuManager(mDanmakuView)
         ivShowDanmaku = findViewById(R.id.iv_show_danmaku)
         etDanmakuInput = findViewById(R.id.et_input_danmaku)
         vgDanmakuController = findViewById(R.id.cl_danmaku_controller)
@@ -288,7 +271,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      */
     override fun onSpeedChanged(speed: Float) {
         super.onSpeedChanged(speed)
-        mDanmakuPlayer.updatePlaySpeed(speed)
+        danmakuManager.danmakuPlayer.updatePlaySpeed(speed)
     }
 
     /**
@@ -308,9 +291,12 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         player.sbDanmakuTextScale?.progress = mDanmakuTextScalePercent - mDanmakuTextScaleMinPercent
         player.setTextSizeScale(mDanmakuTextScalePercent / 100f)
 
+
+        // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
+        player.danmakuManager.recreatePlayer()
         player.mDanmakuShow = mDanmakuShow
         player.resolveDanmakuShow()
-        player.updatePlayerDanmakuState(this)
+        player.updatePlayerDanmakuState()
         player.seekDanmaku(currentPositionWhenPlaying)
         pauseDanmaku()
 
@@ -338,9 +324,11 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 player.mDanmakuTextScalePercent - player.mDanmakuTextScaleMinPercent
             setTextSizeScale(player.mDanmakuTextScalePercent / 100f)
 
+            // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
+            danmakuManager.recreatePlayer()
             mDanmakuShow = player.mDanmakuShow
             resolveDanmakuShow()
-            updatePlayerDanmakuState(player)
+            updatePlayerDanmakuState()
             seekDanmaku(player.currentPositionWhenPlaying)
             player.pauseDanmaku()
         }
@@ -357,14 +345,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     /**
      * 将old状态赋值给new
      */
-    fun updatePlayerDanmakuState(old: DanmakuVideoPlayer) {
-        mDanmakuUrl = old.mDanmakuUrl
-        mDanmakuSourceType = old.mDanmakuSourceType
-        config = old.config.copy()
-        danmakuDataList.clear()
-        danmakuDataList += old.danmakuDataList
-        mDanmakuPlayer.updateData(danmakuDataList)
-        mDanmakuPlayer.start(config)
+    fun updatePlayerDanmakuState() {
+        danmakuManager.danmakuPlayer.updateData(DanmakuManager.danmakuDataList)
+        danmakuManager.danmakuPlayer.start(DanmakuManager.config)
         onDanmakuStart()
     }
 
@@ -375,11 +358,15 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         if (url.isEmpty()) return
 
+        DanmakuManager.danmakuDataList.clear()
+        // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
+        (currentPlayer as DanmakuVideoPlayer).danmakuManager.recreatePlayer()
+
         coroutineScope.launch(Dispatchers.IO) {
             runCatching {
                 var success = false
                 val dataList: MutableList<DanmakuItemData> = arrayListOf()
-                mDanmakuSourceType = danmakuSourceType
+                DanmakuManager.danmakuSourceType = danmakuSourceType
 
                 when (danmakuSourceType) {
                     is DanmakuType.AnimeType -> {
@@ -397,21 +384,20 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         success = true
                     }
                 }
-                mDanmakuUrl = url
+                DanmakuManager.danmakuUrl = url
                 if (success) {
                     withContext(Dispatchers.Main) {
-                        mDanmakuPlayer.updateData(dataList)
-                        danmakuDataList.clear()
-                        danmakuDataList += dataList
-                        if (autoPlayIfVideoIsPlaying &&
-                            mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING &&
-                            currentPlayer == this@DanmakuVideoPlayer
-                        ) {
-                            playDanmaku()
-                            seekDanmaku(currentPlayer.currentPositionWhenPlaying)
-                        } else if (currentPlayer != this@DanmakuVideoPlayer) {
-                            (currentPlayer as DanmakuVideoPlayer)
-                                .updatePlayerDanmakuState(this@DanmakuVideoPlayer)
+                        (currentPlayer as DanmakuVideoPlayer).also {
+                            it.danmakuManager.danmakuPlayer.updateData(dataList)
+                            DanmakuManager.danmakuDataList.clear()
+                            DanmakuManager.danmakuDataList += dataList
+                            it.updatePlayerDanmakuState()
+                            if (autoPlayIfVideoIsPlaying &&
+                                it.mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING
+                            ) {
+                                it.playDanmaku()
+                            }
+                            it.seekDanmaku(currentPlayer.currentPositionWhenPlaying)
                         }
                     }
                 }
@@ -438,8 +424,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     }
 
     private fun setDanmakuVisibility(visible: Boolean) {
-        config = config.copy(visibility = visible)
-        mDanmakuPlayer.updateConfig(config)
+        DanmakuManager.config = DanmakuManager.config.copy(visibility = visible)
+        danmakuManager.danmakuPlayer.updateConfig(DanmakuManager.config)
     }
 
     /**
@@ -454,7 +440,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         sbDanmakuTextScale?.visible()
         tvDanmakuTextScaleHeader?.visible()
         tvDanmakuTextScale?.visible()
-        if (mDanmakuSourceType is DanmakuType.AnimeType) {
+        if (DanmakuManager.danmakuSourceType is DanmakuType.AnimeType) {
             etDanmakuInput?.enable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
         } else {
@@ -473,9 +459,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 播放弹幕，要保证只在次方法内调用mDanmakuPlayer.start(config)
      */
     protected open fun playDanmaku() {
-        if (mDanmakuUrl.isBlank()) return
+        if (DanmakuManager.danmakuUrl.isBlank()) return
         // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
-        mDanmakuPlayer.start(config)
+        if (currentPlayer.isInPlayingState) danmakuManager.danmakuPlayer.start(DanmakuManager.config)
         onDanmakuStart()
     }
 
@@ -488,7 +474,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         coroutineScope.launch {
             runCatching {
-                when (val danmakuSourceType = mDanmakuSourceType) {
+                when (val danmakuSourceType = DanmakuManager.danmakuSourceType) {
                     is DanmakuType.AnimeType -> {
                         val episode = danmakuSourceType.data?.episode ?: return@launch
                         AnimeDanmakuSender.send(
@@ -498,7 +484,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         )?.let {
                             val data = it.toDanmakuItemData(DANMAKU_STYLE_ICON_UP)
                             withContext(Dispatchers.Main) {
-                                mDanmakuPlayer.send(data)
+                                danmakuManager.danmakuPlayer.send(data)
                             }
                         }
                     }
@@ -518,16 +504,16 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 暂停弹幕
      */
     protected open fun pauseDanmaku() {
-        mDanmakuPlayer.pause()
+        danmakuManager.danmakuPlayer.pause()
     }
 
     /**
      * 停止弹幕
      */
     protected open fun stopDanmaku() {
-        mDanmakuPlayer.stop()
+        danmakuManager.danmakuPlayer.stop()
         // 加此句是因为stop后会seek 0，又会播放
-        mDanmakuPlayer.pause()
+        danmakuManager.danmakuPlayer.pause()
     }
 
     /**
@@ -539,7 +525,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         if (time + mDanmakuProgressDelta < 0L) {
             mDanmakuProgressDelta = 0L - time
         }
-        mDanmakuPlayer.seekTo(time + mDanmakuProgressDelta)
+        danmakuManager.danmakuPlayer.seekTo(time + mDanmakuProgressDelta)
         // 由于上面一条语句会导致弹幕开始播放，因此要判断是否暂停
         if (pauseDanmaku || mCurrentState == GSYVideoView.CURRENT_STATE_PAUSE ||
             mCurrentState == GSYVideoView.CURRENT_STATE_PLAYING_BUFFERING_START
@@ -557,15 +543,15 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * @param scale 缩放倍数，例如2.7f指的是弹幕字号乘2.7
      */
     private fun setTextSizeScale(scale: Float) {
-        config = config.copy(textSizeScale = scale)
-        mDanmakuPlayer.updateConfig(config)
+        DanmakuManager.config = DanmakuManager.config.copy(textSizeScale = scale)
+        danmakuManager.danmakuPlayer.updateConfig(DanmakuManager.config)
     }
 
     /**
      * 释放弹幕控件
      */
     private fun releaseDanmaku() {
-        mDanmakuPlayer.release()
+        danmakuManager.danmakuPlayer.release()
     }
 
     /**
@@ -612,16 +598,4 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             }
         }
     }
-
-    private fun createDataFilters(): List<DanmakuDataFilter> =
-        listOf(
-            TypeFilter(),
-            colorFilter,
-            UserIdFilter(),
-            GuestFilter(),
-            BlockedTextFilter { it == 0L },
-            DuplicateMergedFilter()
-        )
-
-    private fun createLayoutFilters(): List<DanmakuLayoutFilter> = emptyList()
 }

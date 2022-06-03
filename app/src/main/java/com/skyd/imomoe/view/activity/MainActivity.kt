@@ -11,15 +11,13 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityMainBinding
 import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.util.*
 import com.skyd.imomoe.util.Util.getUserNoticeContent
 import com.skyd.imomoe.util.Util.lastReadUserNoticeVersion
 import com.skyd.imomoe.util.Util.setReadUserNoticeVersion
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.eventbus.MessageEvent
 import com.skyd.imomoe.util.eventbus.SelectHomeTabEvent
-import com.skyd.imomoe.util.logE
-import com.skyd.imomoe.util.registerShortcuts
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.util.update.AppUpdateHelper
 import com.skyd.imomoe.util.update.AppUpdateStatus
 import com.skyd.imomoe.view.fragment.EverydayAnimeFragment

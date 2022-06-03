@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -198,7 +199,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     mBinding.tvPlayActivityTitle.text = viewModel.playBean.title.title
                     adapter.dataList = it.data
                     if (isFirstTime) {
-                        mBinding.avpPlayActivity.startPlay()
+                        mBinding.avpPlayActivity.currentPlayer.startPlay()
                         isFirstTime = false
                     }
                 }
@@ -258,6 +259,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             )
         }
 
+        viewModel.loadingEpisodeData.collectWithLifecycle(this) {
+            mBinding.avpPlayActivity.currentPlayer.release()
+        }
+
         mBinding.avpPlayActivity.onPlayNextEpisode = {
             if (!viewModel.playNextEpisode()) {
                 getString(R.string.have_no_next_episode).showToast()
@@ -276,26 +281,28 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
-        val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
-        val episodeTitle = viewModel.animeEpisodeDataBean.title
-        val animeTitle = viewModel.playBean.title.title
-        if (this is AnimeVideoPlayer) {
-            this.animeTitle = animeTitle
-        }
-        mBinding.tbPlayActivity.title = episodeTitle
-        // 设置播放URL
-        viewModel.updateFavoriteData()
-        viewModel.insertHistoryData()
-        currentPlayer.setUp(videoUrl, false, episodeTitle)
-        lifecycleScope.launch {
-            val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
-            // 若用户设置了自动跳转 且 没有播放完
-            if (playPosition != null && playPosition != -1L && sharedPreferences()
-                    .getBoolean("autoJumpToLastPosition", false)
-            ) currentPlayer.seekOnStart = playPosition
-            withContext(Dispatchers.Main) {
-                // 开始播放
-                currentPlayer.startPlayLogic()
+        currentPlayer.apply {
+            val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
+            val episodeTitle = viewModel.animeEpisodeDataBean.title
+            val animeTitle = viewModel.playBean.title.title
+            if (this is AnimeVideoPlayer) {
+                this.animeTitle = animeTitle
+            }
+            mBinding.tbPlayActivity.title = episodeTitle
+            // 设置播放URL
+            viewModel.updateFavoriteData()
+            viewModel.insertHistoryData()
+            setUp(videoUrl, false, episodeTitle)
+            lifecycleScope.launch {
+                val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
+                // 若用户设置了自动跳转 且 没有播放完
+                if (playPosition != null && playPosition != -1L && sharedPreferences()
+                        .getBoolean("autoJumpToLastPosition", false)
+                ) seekOnStart = playPosition
+                withContext(Dispatchers.Main) {
+                    // 开始播放
+                    startPlayLogic()
+                }
             }
         }
     }

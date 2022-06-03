@@ -39,6 +39,8 @@ class PlayViewModel @Inject constructor(
         MutableSharedFlow(extraBufferCapacity = 1)
     val animeDownloadUrl: MutableSharedFlow<AnimeEpisodeDataBean> =
         MutableSharedFlow(extraBufferCapacity = 1)
+    val loadingEpisodeData: MutableSharedFlow<String> =
+        MutableSharedFlow(extraBufferCapacity = 1)
     val favorite: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     fun setActivity(activity: Activity) {
@@ -67,6 +69,7 @@ class PlayViewModel @Inject constructor(
     // 播放另一集（页面切换到另一集，因此partUrl要更新）
     fun playAnotherEpisode(partUrl: String, currentEpisodeIndex: Int) {
         this.partUrl = partUrl
+        loadingEpisodeData.tryEmit(partUrl)
         request(request = {
             playModel.playAnotherEpisode(partUrl).let {
                 it ?: throw RuntimeException("html play class not found")

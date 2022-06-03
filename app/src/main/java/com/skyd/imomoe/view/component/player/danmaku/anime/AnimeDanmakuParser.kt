@@ -24,7 +24,7 @@ class AnimeDanmakuParser(private var data: List<DanmakuData.Data>) {
                 danmakuId = this.id.hashCode().toLong(),
                 textColor = parseColor(this.color ?: "#FFFFFF"),
                 position = (this.time * 1000L).roundToLong(),
-                textSize = 19,
+                textSize = 20,
                 danmakuStyle = danmakuStyle,
                 mode = getMode(this.type),
             )
