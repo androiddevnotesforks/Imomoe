@@ -132,6 +132,7 @@
     <string name="import_data_source_failed">导入数据源失败</string>
     <string name="import_data_source_success">导入数据源成功：%s</string>
     <string name="import_data_source_label">导入数据源</string>
+    <string name="play_video_label">播放视频</string>
     <string name="ask_delete_data_source">确认删除此数据源？</string>
     <string name="request_restart_app">需要重启App，是否继续？</string>
     <string name="skin_center">皮肤中心</string>
@@ -266,6 +267,7 @@
     <string name="theme_blue_title">\u2642\uFE0F深蓝幻想</string>
     <string name="theme_lemon_title">\uD83C\uDF4B柠檬酸</string>
     <string name="theme_purple_title">\uD83E\uDD3A基佬紫</string>
+    <string name="theme_green_title">\uD83D\uDC9A原谅绿</string>
     <string name="play_activity_menu_share">分享</string>
     <string name="play_activity_menu_download">缓存</string>
     <string name="play_activity_menu_more">更多</string>
@@ -291,15 +293,16 @@
     <string name="local_data_source_fragment_please_input_main_url">请输入数据源地址的新前缀</string>
     <string name="local_data_source_fragment_set_main_url_success">更改成功！</string>
     <string name="local_data_source_fragment_set_main_url_failed">更改当前数据源地址前缀失败！</string>
-    <string name="title_url_map_activity">URL前缀替换</string>
+    <string name="url_map_activity_title">URL前缀替换</string>
     <string name="url_map">URL前缀替换</string>
     <string name="url_map_summary">替换APP内指定的请求URL</string>
-    <string name="new_url_map_activity">替换为：\n%s</string>
-    <string name="input_old_url_map_activity">请输入需要替换的URL</string>
-    <string name="input_new_url_map_activity">请输入替换成的内容</string>
-    <string name="delete_url_map_activity">确定要删除此项吗？</string>
-    <string name="enable_url_map_activity">启用此功能</string>
-    <string name="enable_disadvantage_url_map_activity">此功能可能会在一定程度上导致请求数据时变慢</string>
+    <string name="url_map_activity_new">替换为：\n%s</string>
+    <string name="url_map_activity_input_old">请输入需要替换的URL</string>
+    <string name="url_map_activity_input_new">请输入替换成的内容</string>
+    <string name="url_map_activity_delete">确定要删除此项吗？</string>
+    <string name="url_map_activity_enable">启用此功能</string>
+    <string name="url_map_activity_enable_disadvantage">此功能可能会在一定程度上导致请求数据时变慢</string>
     <string name="url_map_error_okhttp">在进行URL替换时发生错误，将使用原URL进行请求\n\n%s</string>
+    <string name="input_dialog_error_message">输入内容的格式不符合规则</string>
 
 </resources>

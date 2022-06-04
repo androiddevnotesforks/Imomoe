@@ -22,3 +22,5 @@ fun Double.percentage(pattern: String = "0.##"): String {
  * 乘100后拼接百分号
  */
 fun Int.toPercentage(): String = "${this * 100}%"
+
+fun Int.toBoolean(): Boolean = this != 0

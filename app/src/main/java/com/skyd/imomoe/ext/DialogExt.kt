@@ -117,7 +117,10 @@ fun Fragment.showInputDialog(
     prefill: CharSequence? = null,
     icon: Drawable? = null,
     cancelable: Boolean = true,
-    canEmpty: Boolean = false,     // 是否可以什么都不输入
+    empty: Boolean = false,     // 是否可以什么都不输入
+    multipleLine: Boolean = false,     // 是否可以换行
+    validator: ((CharSequence?) -> Boolean)? = null,
+    validatorErrorMessage: String = getString(R.string.input_dialog_error_message),
     negativeText: String = getString(R.string.cancel),
     neutralText: String? = null,
     positiveText: String = getString(R.string.ok),
@@ -131,7 +134,10 @@ fun Fragment.showInputDialog(
         prefill = prefill,
         icon = icon,
         cancelable = cancelable,
-        empty = canEmpty,
+        empty = empty,
+        multipleLine = multipleLine,
+        validator = validator,
+        validatorErrorMessage = validatorErrorMessage,
         negativeText = negativeText,
         neutralText = neutralText,
         positiveText = positiveText,
@@ -149,6 +155,8 @@ fun Activity.showInputDialog(
     cancelable: Boolean = true,
     empty: Boolean = false,     // 是否可以什么都不输入
     multipleLine: Boolean = false,     // 是否可以换行
+    validator: ((CharSequence?) -> Boolean)? = null,
+    validatorErrorMessage: String = getString(R.string.input_dialog_error_message),
     negativeText: String = getString(R.string.cancel),
     neutralText: String? = null,
     positiveText: String = getString(R.string.ok),
@@ -187,6 +195,13 @@ fun Activity.showInputDialog(
                         positionButton?.isEnabled = true
                     } else {
                         positionButton?.isEnabled = false
+                    }
+
+                    if (validator?.invoke(t) == false) {
+                        it.error = validatorErrorMessage
+                        positionButton?.isEnabled = false
+                    } else {
+                        positionButton?.isEnabled = true
                     }
                 }
                 autoShowKeyboard(this@showInputDialog, it)

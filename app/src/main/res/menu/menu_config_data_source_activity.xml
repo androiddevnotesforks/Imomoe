@@ -4,7 +4,7 @@
     <item
         android:id="@+id/menu_item_config_data_source_activity_reset"
         android:enabled="true"
-        android:icon="@drawable/ic_refresh_24"
+        android:icon="@drawable/ic_restore_24"
         android:title="@string/config_data_source_activity_menu_reset"
         app:showAsAction="always" />
 </menu>

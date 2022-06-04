@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_green">#7CDD68</color>
+    <color name="on_primary_green">#003A00</color>
+    <color name="primary_container_green">#005300</color>
+    <color name="on_primary_container_green">#97FA81</color>
+    <color name="secondary_green">#BBCBB2</color>
+    <color name="on_secondary_green">#273422</color>
+    <color name="secondary_container_green">#3C4B37</color>
+    <color name="on_secondary_container_green">#D7E7CD</color>
+    <color name="tertiary_green">#A0CFD2</color>
+    <color name="on_tertiary_green">#00373A</color>
+    <color name="tertiary_container_green">#1E4D50</color>
+    <color name="on_tertiary_container_green">#BCEBEE</color>
+    <color name="error_green">#FFB4A9</color>
+    <color name="error_container_green">#930006</color>
+    <color name="on_error_green">#680003</color>
+    <color name="on_error_container_green">#FFDAD4</color>
+    <color name="background_green">#1A1C19</color>
+    <color name="on_background_green">#E2E3DC</color>
+    <color name="surface_green">#1A1C19</color>
+    <color name="on_surface_green">#E2E3DC</color>
+    <color name="surface_variant_green">#43493F</color>
+    <color name="on_surface_variant_green">#C3C9BC</color>
+    <color name="outline_green">#8D9388</color>
+    <color name="inverse_on_surface_green">#1A1C19</color>
+    <color name="inverse_surface_green">#E2E3DC</color>
+    <color name="inverse_primary_green">#006F00</color>
+    <color name="shadow_green">#000000</color>
+    <color name="primary_inverse_green">#006F00</color>
+
+</resources>

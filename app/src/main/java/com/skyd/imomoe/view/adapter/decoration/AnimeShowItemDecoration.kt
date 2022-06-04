@@ -44,6 +44,20 @@ class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
                     outRect.right = 16.dp
                 }
             }
+        } else if (spanSize == 2) {
+            outRect.top = 7.dp
+            outRect.bottom = 7.dp
+            when (spanIndex) {
+                0 -> {
+                    outRect.left = 16.dp
+                    outRect.right = 7.dp
+                }
+                // 每一项占两个，因此第二个不是1而是2
+                2 -> {
+                    outRect.left = 7.dp
+                    outRect.right = 16.dp
+                }
+            }
         }
     }
 }

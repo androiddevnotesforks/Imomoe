@@ -9,9 +9,7 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.applyCanvas
-import coil.bitmap.BitmapPool
 import coil.size.Size
 import coil.transform.Transformation
 
@@ -23,7 +21,6 @@ import coil.transform.Transformation
  * @param sampling The sampling multiplier used to scale the image. Values > 1
  *  will downscale the image. Values between 0 and 1 will upscale the image.
  */
-@RequiresApi(18)
 class DarkBlurTransformation @JvmOverloads constructor(
     private val context: Context,
     private val radius: Float = DEFAULT_RADIUS,
@@ -37,14 +34,14 @@ class DarkBlurTransformation @JvmOverloads constructor(
         require(dark > 0) { "dark must be > 0." }
     }
 
-    override fun key(): String = "${DarkBlurTransformation::class.java.name}-$radius-$sampling"
+    override val cacheKey: String = "${DarkBlurTransformation::class.java.name}-$radius-$sampling"
 
-    override suspend fun transform(pool: BitmapPool, input: Bitmap, size: Size): Bitmap {
+    override suspend fun transform(input: Bitmap, size: Size): Bitmap {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG)
 
         val scaledWidth = (input.width / sampling).toInt()
         val scaledHeight = (input.height / sampling).toInt()
-        val output = pool.get(scaledWidth, scaledHeight, input.safeConfig)
+        val output = Bitmap.createBitmap(scaledWidth, scaledHeight, input.safeConfig)
         output.applyCanvas {
             scale(1 / sampling, 1 / sampling)
             val f = ColorMatrixColorFilter(ColorMatrix().apply {

@@ -1,9 +1,12 @@
 package com.skyd.imomoe.view.component
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -13,6 +16,8 @@ class ZoomView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
+    var useAnimate: Boolean = true
+
     private var scale = 1f      // 伸缩比例
     private var mTranslationX = 0f // 移动X
     private var mTranslationY = 0f // 移动Y
@@ -37,11 +42,18 @@ class ZoomView @JvmOverloads constructor(
         degree = 0f
         moveType = 0
 
-        translationX = 0f
-        translationY = 0f
-        scaleX = 1f
-        scaleY = 1f
-        rotation = 0f
+        val rotation = ObjectAnimator.ofFloat(this, "rotation", rotation, 0f)
+        val translationX = ObjectAnimator.ofFloat(this, "translationX", translationX, 0f)
+        val translationY = ObjectAnimator.ofFloat(this, "translationY", translationY, 0f)
+        val scaleX = ObjectAnimator.ofFloat(this, "scaleX", scaleX, 1f)
+        val scaleY = ObjectAnimator.ofFloat(this, "scaleY", scaleY, 1f)
+
+        AnimatorSet().apply {
+            playTogether(rotation, translationX, translationY, scaleX, scaleY)
+            duration = if (useAnimate) 260 else 0
+            interpolator = DecelerateInterpolator()
+            start()
+        }
     }
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {

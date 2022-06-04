@@ -34,13 +34,11 @@
 
 ## [>>必看使用说明(自定义数据源)<<](doc/customdatasource/README.md)
 
-### 可以选择将自制数据源共享到[DataSourceRepository](https://github.com/SkyD666/DataSourceRepository)仓库
+## Discard频道：https://discord.gg/MyaRtRGEzr
 
-### 自制数据源/后端[帮助文档](doc/customdatasource/RV_ITEM.md)
+### 可以选择将自制数据源共享到[DataSourceRepository](https://github.com/SkyD666/DataSourceRepository)仓库，自制数据源/后端[帮助文档](doc/customdatasource/RV_ITEM.md)
 
 ## [>>必看安全说明<<](#安全说明)
-
-## [>>关于http网站或数据源的安全问题<<](doc/about_http_security.md)
 
 ## 特色功能
 

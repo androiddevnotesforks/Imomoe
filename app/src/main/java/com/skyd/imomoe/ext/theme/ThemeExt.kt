@@ -20,6 +20,7 @@ private val map = hashMapOf(
     "Blue" to R.style.Theme_Anime_Blue,
     "Lemon" to R.style.Theme_Anime_Lemon,
     "Purple" to R.style.Theme_Anime_Purple,
+    "Green" to R.style.Theme_Anime_Green,
 )
 
 private fun getKeyByValue(v: Int): String? {

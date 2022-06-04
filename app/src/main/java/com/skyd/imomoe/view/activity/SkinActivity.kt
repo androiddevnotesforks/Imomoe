@@ -73,6 +73,13 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
             appThemeRes.value == R.style.Theme_Anime_Purple,
             R.style.Theme_Anime_Purple
         )
+        list += SkinCover1Bean(
+            "",
+            ContextCompat.getColor(this, R.color.primary_green),
+            getString(R.string.theme_green_title),
+            appThemeRes.value == R.style.Theme_Anime_Green,
+            R.style.Theme_Anime_Green
+        )
         adapter.dataList = list
     }
 }

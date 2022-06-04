@@ -4,10 +4,10 @@ import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import coil.Coil
 import coil.ImageLoader
+import coil.annotation.ExperimentalCoilApi
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
-import coil.util.CoilUtils
 import coil.util.DebugLogger
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
@@ -33,7 +33,7 @@ object CoilUtil {
 
     fun setOkHttpClient(okHttpClient: OkHttpClient) {
         imageLoaderBuilder.okHttpClient(
-            okHttpClient.newBuilder().cache(CoilUtils.createDefaultCache(appContext)).build()
+            okHttpClient.newBuilder().build()
         ).build().apply { Coil.setImageLoader(this) }
     }
 
@@ -100,9 +100,9 @@ object CoilUtil {
         }
     }
 
-
+    @OptIn(ExperimentalCoilApi::class)
     fun clearMemoryDiskCache() {
-        appContext.imageLoader.memoryCache.clear()
-        CoilUtils.createDefaultCache(appContext).delete()
+        appContext.imageLoader.memoryCache?.clear()
+        Coil.imageLoader(appContext).diskCache?.clear()
     }
 }

@@ -51,7 +51,7 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
         AnimeTopBar(
             style = AnimeTopBarStyle.Small,
             title = {
-                Text(text = stringResource(R.string.title_url_map_activity))
+                Text(text = stringResource(R.string.url_map_activity_title))
             },
             navigationIcon = {
                 TopBarIcon(
@@ -72,11 +72,11 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
             onClick = {
                 val activity = context.activity
                 activity.showInputDialog(
-                    hint = activity.getString(R.string.input_old_url_map_activity),
+                    hint = activity.getString(R.string.url_map_activity_input_old),
                     multipleLine = true
                 ) { _, _, old ->
                     activity.showInputDialog(
-                        hint = activity.getString(R.string.input_new_url_map_activity),
+                        hint = activity.getString(R.string.url_map_activity_input_new),
                         multipleLine = true
                     ) { _, _, new ->
                         viewModel.setUrlMap(old.toString(), new.toString())
@@ -117,12 +117,12 @@ fun UrlMapEnabledCard() {
                     .padding(end = 15.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.enable_url_map_activity),
+                    text = stringResource(id = R.string.url_map_activity_enable),
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(
                     modifier = Modifier.padding(top = 7.dp),
-                    text = stringResource(id = R.string.enable_disadvantage_url_map_activity),
+                    text = stringResource(id = R.string.url_map_activity_enable_disadvantage),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -202,7 +202,7 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
                 )
                 Text(
                     modifier = Modifier.padding(top = 17.dp),
-                    text = stringResource(R.string.new_url_map_activity, urlMapEntity.newUrl),
+                    text = stringResource(R.string.url_map_activity_new, urlMapEntity.newUrl),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
@@ -235,7 +235,7 @@ fun WarnDeleteDialog(oldUrl: String, viewModel: UrlMapViewModel = hiltViewModel(
             Text(text = stringResource(id = R.string.warning))
         },
         text = {
-            Text(text = stringResource(id = R.string.delete_url_map_activity))
+            Text(text = stringResource(id = R.string.url_map_activity_delete))
         },
         confirmButton = {
             TextButton(

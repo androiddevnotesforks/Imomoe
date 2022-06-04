@@ -1,135 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="7dp"
     android:background="?android:selectableItemBackground">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_anime_cover_9_cover"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="120dp"
-        android:layout_height="0px"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_anime_cover_9_cover"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="120dp"
+            android:layout_height="0px"
             android:importantForAccessibility="no"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
             tools:src="@drawable/ic_launcher_background" />
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_anime_cover_9_title"
-        style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:ellipsize="end"
-        android:maxLines="3"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_9_detail_page"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/cv_anime_cover_9_cover"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="中二病也要谈恋爱！" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_anime_cover_9_detail_page"
-        style="@style/TextAppearance.Material3.LabelMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:drawableEnd="@drawable/ic_arrow_forward_ios_12"
-        android:gravity="center_vertical"
-        android:paddingStart="0px"
-        android:paddingTop="13dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="6dp"
-        android:text="@string/detail_page"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_anime_cover_9_episode"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/cv_anime_cover_9_cover"
-        app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_anime_cover_9_episode"
+            android:id="@+id/tv_anime_cover_9_title"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/tv_anime_cover_9_detail_page"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="中二病也要谈恋爱！" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_anime_cover_9_detail_page"
             style="@style/TextAppearance.Material3.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            android:textColor="?attr/colorOnSurface"
-            tools:text="第1集" />
-    </com.google.android.material.card.MaterialCardView>
+            android:layout_marginStart="10dp"
+            android:drawableEnd="@drawable/ic_arrow_forward_ios_12"
+            android:gravity="center_vertical"
+            android:paddingStart="0px"
+            android:paddingTop="13dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp"
+            android:text="@string/detail_page"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_anime_cover_9_time"
-        style="@style/TextAppearance.Material3.LabelMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="?attr/colorSecondary"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/cv_anime_cover_9_cover"
-        app:layout_constraintTop_toBottomOf="@id/card_anime_cover_9_episode"
-        app:layout_constraintVertical_bias="0"
-        tools:text="上次观看：2021.03.08" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_anime_cover_9_episode"
+            style="@style/Widget.Material3.CardView.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title">
 
-    <ImageView
-        android:id="@+id/iv_anime_cover_9_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:background="?android:selectableItemBackground"
-        android:contentDescription="@string/delete"
-        android:padding="3dp"
-        android:src="@drawable/ic_delete_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title"
-        app:layout_constraintVertical_bias="1" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_anime_cover_9_episode"
+                style="@style/TextAppearance.Material3.LabelMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:textColor="?attr/colorOnSurface"
+                tools:text="第1集" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dividerInsetEnd="16dp"
-        app:dividerInsetStart="16dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_anime_cover_9_time"
+            style="@style/TextAppearance.Material3.LabelMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_anime_cover_9_delete"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_anime_cover_9_cover"
+            app:layout_constraintTop_toBottomOf="@id/card_anime_cover_9_episode"
+            app:layout_constraintVertical_bias="0"
+            tools:text="上次观看：2021.03.08" />
+
+        <ImageView
+            android:id="@+id/iv_anime_cover_9_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="10dp"
+            android:background="?android:selectableItemBackground"
+            android:contentDescription="@string/delete"
+            android:padding="3dp"
+            android:src="@drawable/ic_delete_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_anime_cover_9_title"
+            app:layout_constraintVertical_bias="1" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

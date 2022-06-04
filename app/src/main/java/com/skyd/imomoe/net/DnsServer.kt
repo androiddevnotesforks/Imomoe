@@ -2,10 +2,7 @@ package com.skyd.imomoe.net
 
 import android.app.Activity
 import com.skyd.imomoe.R
-import com.skyd.imomoe.ext.editor
-import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.showInputDialog
-import com.skyd.imomoe.ext.showListDialog
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.showToast
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
@@ -84,7 +81,8 @@ object DnsServer {
     fun Activity.customDnsServer() {
         showInputDialog(
             title = getString(R.string.custom_dns_server_dialog_title),
-            hint = getString(R.string.custom_dns_server_describe)
+            hint = getString(R.string.custom_dns_server_describe),
+            validator = { it.toString().run { isUrl() && !endsWith("/") } }
         ) { _, _, text ->
             val url = text.toString()
             runCatching {

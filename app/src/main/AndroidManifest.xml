@@ -71,7 +71,21 @@
         <activity android:name=".view.activity.DlnaActivity" />
         <activity
             android:name=".view.activity.SimplePlayActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:exported="true"
+            android:label="@string/play_video_label"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+        </activity>
         <activity android:name=".view.activity.AnimeDownloadActivity" />
         <activity android:name=".view.activity.LicenseActivity" />
         <activity android:name=".view.activity.AboutActivity" />

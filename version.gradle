@@ -86,7 +86,7 @@ shuyu.GSYVideoPlayer = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.2.0-r
 deps.shuyu = shuyu
 
 def getActivity = [:]
-getActivity.XXPermissions = "com.github.getActivity:XXPermissions:13.5"
+getActivity.XXPermissions = "com.github.getActivity:XXPermissions:13.6"
 deps.getActivity = getActivity
 
 def aria = [:]
@@ -112,7 +112,7 @@ nanohttpd.nanohttpd = "org.nanohttpd:nanohttpd:2.3.1"
 deps.nanohttpd = nanohttpd
 
 def coil_kt = [:]
-coil_kt.coil = "io.coil-kt:coil:1.4.0"
+coil_kt.coil = "io.coil-kt:coil:2.1.0"
 deps.coil_kt = coil_kt
 
 def smart = [:]

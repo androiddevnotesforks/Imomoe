@@ -156,7 +156,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     private var tvOpenByExternalPlayer: TextView? = null
 
     // 右侧弹出栏
-    protected var vgRightContainer: ViewGroup? = null
+    protected open var vgRightContainer: ViewGroup? = null
 
     // 按住高速播放的tv
     private var tvTouchDownHighSpeed: TextView? = null
@@ -210,7 +210,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
         tvMoreScale = findViewById(R.id.tv_more_scale)
         tvSpeed = findViewById(R.id.tv_speed)
-//        mClingImageView = findViewById(R.id.iv_cling)
         vgRightContainer = findViewById(R.id.layout_right)
         rvSpeed = findViewById(R.id.rv_right)
         rvEpisode = findViewById(R.id.rv_right)
@@ -431,13 +430,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mReverseValue?.let { id -> findViewById<RadioButton>(id).isChecked = true }
             cbBottomProgress?.isChecked = sharedPreferences()
                 .getBoolean("showPlayerBottomProgressbar", false)
-
-//            mMediaCodecCheckBox?.isChecked = GSYVideoType.isMediaCodec()
-//            mMediaCodecCheckBox?.setOnCheckedChangeListener { buttonView, isChecked ->
-//                if (isChecked) GSYVideoType.enableMediaCodec()
-//                else GSYVideoType.disableMediaCodec()
-//                startPlayLogic()
-//            }
         }
     }
 
@@ -1156,7 +1148,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     /**
      * 适配刘海屏，防止重要内容落入刘海内被遮挡
      */
-    protected open fun supportDisplayCutouts() {
+    open fun supportDisplayCutouts() {
         if (currentPlayer == this && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val decorView: View = (activity ?: return).window.decorView
             decorView.post {
@@ -1169,34 +1161,40 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
 
     @TargetApi(28)
     protected fun View.updateSafeInset(displayCutout: DisplayCutout) {
-        coroutineScope.launch(Dispatchers.Main) {
-            val location = IntArray(2)
-            getLocationOnScreen(location)
-            val left = location[0]
-            val right = location[0] + width
-            val top = location[1]
-            val bottom = location[1] + height
+        val location = IntArray(2)
+        getLocationOnScreen(location)
+        val left = location[0]
+        val right = location[0] + width
+        val top = location[1]
+        val bottom = location[1] + height
 
-            if (inSafeInset(displayCutout)) {
-                updatePadding(left = 0, right = 0, top = 0, bottom = 0)
-            } else {
-                // left
-                if (left + paddingLeft < displayCutout.safeInsetLeft) {
-                    updatePadding(left = displayCutout.safeInsetLeft)
-                }
+        var leftSolved = false
+        var rightSolved = false
 
-                // right
-                if (right - paddingRight > getScreenWidth(true) - displayCutout.safeInsetRight) {
-                    updatePadding(right = displayCutout.safeInsetRight)
-                }
+        updatePadding(left = 0, right = 0, top = 0, bottom = 0)
+        if (!inSafeInset(displayCutout)) {
+            // left
+            if (left + paddingLeft < displayCutout.safeInsetLeft) {
+                updatePadding(left = displayCutout.safeInsetLeft)
+                leftSolved = true
+            }
 
-                // top
-                if (top + paddingTop < displayCutout.safeInsetTop) {
+            // right
+            if (right - paddingRight > getScreenWidth(true) - displayCutout.safeInsetRight) {
+                updatePadding(right = displayCutout.safeInsetRight)
+                rightSolved = true
+            }
+
+            // top
+            if (top + paddingTop < displayCutout.safeInsetTop) {
+                if (!leftSolved && !rightSolved) {
                     updatePadding(top = displayCutout.safeInsetTop)
                 }
+            }
 
-                // bottom
-                if (bottom - paddingBottom > getScreenHeight(true) - displayCutout.safeInsetBottom) {
+            // bottom
+            if (bottom - paddingBottom > getScreenHeight(true) - displayCutout.safeInsetBottom) {
+                if (!leftSolved && !rightSolved) {
                     updatePadding(bottom = displayCutout.safeInsetBottom)
                 }
             }

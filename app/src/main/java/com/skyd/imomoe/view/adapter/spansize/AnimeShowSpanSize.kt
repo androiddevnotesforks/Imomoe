@@ -23,6 +23,7 @@ class AnimeShowSpanSize(val adapter: VarietyAdapter) :
                 is Header1Bean -> 4
                 is Banner1Bean -> 4
                 is AnimeCover3Bean -> 4
+                is AnimeCover4Bean -> 2
                 is AnimeCover5Bean -> 4
                 is AnimeCover11Bean -> 4
                 else -> 1
