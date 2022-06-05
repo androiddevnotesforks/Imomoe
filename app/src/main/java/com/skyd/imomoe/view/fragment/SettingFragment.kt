@@ -244,6 +244,32 @@ class SettingFragment : BasePreferenceFragment() {
             isVisible = PlayerCore.playerCore.playManager == IjkPlayerManager::class.java
         }
 
+        findPreference<CheckBoxPreference>("enable_danmaku_in_local_video")?.apply {
+            isChecked = sharedPreferences().getBoolean("enableDanmakuInLocalVideo", false)
+            setOnPreferenceChangeListener { _, newValue ->
+                if (newValue == true) {
+                    showMessageDialog(
+                        title = getString(R.string.warning),
+                        message = getString(R.string.enable_danmaku_in_local_video_warning),
+                        icon = R.drawable.ic_forum_24,
+                        cancelable = false,
+                        onNegative = { _, _ ->
+                            isChecked = newValue != true
+                            sharedPreferences().editor {
+                                putBoolean("enableDanmakuInLocalVideo", newValue != true)
+                            }
+                        }
+                    ) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                }
+                sharedPreferences().editor {
+                    putBoolean("enableDanmakuInLocalVideo", newValue as? Boolean ?: false)
+                }
+                true
+            }
+        }
+
         findPreference<Preference>("url_map")?.apply {
             setOnPreferenceClickListener {
                 startActivity(Intent(activity, UrlMapActivity::class.java))

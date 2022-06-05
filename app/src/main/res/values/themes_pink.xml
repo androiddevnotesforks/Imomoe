@@ -41,7 +41,6 @@
 
     <style name="Theme.Anime.Pink" parent="Theme.Pink">
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 

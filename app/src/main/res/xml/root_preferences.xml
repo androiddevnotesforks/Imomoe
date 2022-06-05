@@ -76,6 +76,13 @@
             app:persistent="false"
             app:summary="@string/only_ijk_support_disable_media_codec"
             app:title="@string/media_codec" />
+
+        <CheckBoxPreference
+            app:icon="@drawable/ic_forum_24"
+            app:key="enable_danmaku_in_local_video"
+            app:persistent="false"
+            app:summary="@string/enable_danmaku_in_local_video_summary"
+            app:title="@string/enable_danmaku_in_local_video" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/advanced">

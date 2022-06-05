@@ -2,7 +2,13 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import com.efs.sdk.launch.LaunchManager
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
@@ -34,6 +40,22 @@ abstract class BaseComponentActivity : ComponentActivity() {
         }
 
         LaunchManager.onTraceApp(application, LaunchManager.PAGE_ON_CREATE, false)
+    }
+
+    fun setContentBase(content: @Composable () -> Unit) {
+        setContent {
+            val systemUiController = rememberSystemUiController()
+            val useDarkIcons = !isSystemInDarkTheme()
+
+            SideEffect {
+                systemUiController.setSystemBarsColor(
+                    color = Color.Transparent,
+                    darkIcons = useDarkIcons
+                )
+            }
+
+            content.invoke()
+        }
     }
 
     override fun onStart() {

@@ -89,6 +89,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 弹幕字号百分比
     private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
 
+    // 是否显示弹幕
+    var enableDanmaku: Boolean = true
+
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context) : super(context)
@@ -153,6 +156,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 try {
                     val url = URL(text.toString()).toString()
                     if (url.contains("bili", true)) {
+                        enableDanmaku = true
                         setDanmakuUrl(url, DanmakuType.BilibiliType)
                     }
                 } catch (e: Exception) {
@@ -213,9 +217,11 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
     override fun onPrepared() {
         super.onPrepared()
-        setDanmakuUrl()
-        seekDanmaku(0L)
+        if (enableDanmaku) {
+            setDanmakuUrl()
+            seekDanmaku(0L)
 //        playDanmaku()
+        }
     }
 
     override fun onVideoPause() {
@@ -290,7 +296,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         player.mDanmakuTextScalePercent = mDanmakuTextScalePercent
         player.sbDanmakuTextScale?.progress = mDanmakuTextScalePercent - mDanmakuTextScaleMinPercent
         player.setTextSizeScale(mDanmakuTextScalePercent / 100f)
-
+        player.enableDanmaku = enableDanmaku
 
         // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
         player.danmakuManager.recreatePlayer()
@@ -323,6 +329,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             sbDanmakuTextScale?.progress =
                 player.mDanmakuTextScalePercent - player.mDanmakuTextScaleMinPercent
             setTextSizeScale(player.mDanmakuTextScalePercent / 100f)
+            enableDanmaku = player.enableDanmaku
 
             // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
             danmakuManager.recreatePlayer()
@@ -346,6 +353,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 将old状态赋值给new
      */
     fun updatePlayerDanmakuState() {
+        if (!enableDanmaku) return
         danmakuManager.danmakuPlayer.updateData(DanmakuManager.danmakuDataList)
         danmakuManager.danmakuPlayer.start(DanmakuManager.config)
         onDanmakuStart()
@@ -459,7 +467,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 播放弹幕，要保证只在次方法内调用mDanmakuPlayer.start(config)
      */
     protected open fun playDanmaku() {
-        if (DanmakuManager.danmakuUrl.isBlank()) return
+        if (DanmakuManager.danmakuUrl.isBlank() || !enableDanmaku) return
         // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
         if (currentPlayer.isInPlayingState) danmakuManager.danmakuPlayer.start(DanmakuManager.config)
         onDanmakuStart()

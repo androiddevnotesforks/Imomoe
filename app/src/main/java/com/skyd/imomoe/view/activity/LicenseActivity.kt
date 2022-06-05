@@ -30,6 +30,13 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         )
         list += License1Bean(
             OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/google/accompanist")
+            }.toString(),
+            "Accompanist",
+            "Apache-2.0 License"
+        )
+        list += License1Bean(
+            OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/jhy/jsoup")
             }.toString(),
             "jsoup",
@@ -39,7 +46,7 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/coil-kt/coil")
             }.toString(),
-            "coil",
+            "Coil",
             "Apache-2.0 License"
         )
         list += License1Bean(
@@ -53,14 +60,14 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/square/okhttp")
             }.toString(),
-            "okhttp",
+            "OkHttp",
             "Apache-2.0 License"
         )
         list += License1Bean(
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/square/retrofit")
             }.toString(),
-            "retrofit",
+            "Retrofit",
             "Apache-2.0 License"
         )
         list += License1Bean(
@@ -88,21 +95,21 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/4thline/cling")
             }.toString(),
-            "cling",
+            "Cling",
             "LGPL License"
         )
         list += License1Bean(
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/eclipse/jetty.project")
             }.toString(),
-            "jetty.project",
+            "Eclipse Jetty",
             "EPL-2.0, Apache-2.0 License"
         )
         list += License1Bean(
             OpenBrowserProcessor.route.buildRouteUri {
                 appendQueryParameter("url", "https://github.com/NanoHttpd/nanohttpd")
             }.toString(),
-            "nanohttpd",
+            "NanoHTTPD",
             "BSD-3-Clause License"
         )
         list += License1Bean(

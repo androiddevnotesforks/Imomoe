@@ -27,6 +27,7 @@ fun Fragment.showMessageDialog(
     cancelable: Boolean = true,
     negativeText: String = resources.getString(R.string.cancel),
     positiveText: String = resources.getString(R.string.ok),
+    onCancel: ((dialog: DialogInterface) -> Unit)? = null,
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = { dialog, _ -> dialog.dismiss() },
     onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
 ): AlertDialog? =
@@ -37,6 +38,7 @@ fun Fragment.showMessageDialog(
         icon = icon,
         title = title,
         cancelable = cancelable,
+        onCancel = onCancel,
         positiveText = positiveText,
         negativeText = negativeText
     )
@@ -48,16 +50,21 @@ fun Activity.showMessageDialog(
     cancelable: Boolean = true,
     negativeText: String = getString(R.string.cancel),
     positiveText: String = getString(R.string.ok),
+    onCancel: ((dialog: DialogInterface) -> Unit)? = null,
     onNegative: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
     onPositive: ((dialog: DialogInterface, which: Int) -> Unit)? = null,
 ): AlertDialog? {
-    return MaterialAlertDialogBuilder(this)
+    return MaterialAlertDialogBuilder(
+        this,
+        R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+    )
         .setTitle(title)
         .setMessage(message)
         .apply { onPositive?.let { setPositiveButton(positiveText, it) } }
         .apply { onNegative?.let { setNegativeButton(negativeText, it) } }
         .setCancelable(cancelable)
         .setIcon(icon)
+        .setOnCancelListener { onCancel?.invoke(it) }
         .run {
             if (!isFinishing) show() else null
         }
@@ -79,7 +86,10 @@ fun Activity.showListDialog(
 ): AlertDialog? {
     var itemIndex = checkedItem
     var positionButton: Button? = null
-    return MaterialAlertDialogBuilder(this)
+    return MaterialAlertDialogBuilder(
+        this,
+        R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+    )
         .setTitle(title)
         .setSingleChoiceItems(items?.toTypedArray(), checkedItem) { dialog, which ->
             itemIndex = which
@@ -166,7 +176,10 @@ fun Activity.showInputDialog(
 ): AlertDialog? {
     var text: CharSequence = ""
     var positionButton: Button? = null
-    return MaterialAlertDialogBuilder(this)
+    return MaterialAlertDialogBuilder(
+        this,
+        R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered
+    )
         .setTitle(title)
         .apply {
             onPositive?.let {
@@ -188,7 +201,7 @@ fun Activity.showInputDialog(
         ?.apply {
             findViewById<TextInputLayout>(R.id.til_input_dialog)?.hint = hint
             findViewById<TextInputEditText>(R.id.et_input_dialog)?.also {
-                if (multipleLine) it.setSingleLine()
+                if (!multipleLine) it.setSingleLine()
                 it.doOnTextChanged { t, _, _, _ ->
                     if (t != null && t.isNotEmpty() || empty) {
                         text = t ?: ""

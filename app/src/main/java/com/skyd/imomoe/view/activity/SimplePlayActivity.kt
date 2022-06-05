@@ -2,14 +2,19 @@ package com.skyd.imomoe.view.activity
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_NORMAL
+import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAUSE
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
 import com.skyd.imomoe.ext.fileName
 import com.skyd.imomoe.ext.gone
+import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.util.Util.setFullScreen
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
@@ -25,6 +30,15 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
     private var animeTitle = ""
     private var episodeTitle = ""
     private lateinit var orientationUtils: OrientationUtils
+
+    // 是否是在onPause方法里自动暂停的
+    private var isPause = false
+
+    private var onPausePosition: Long = 0
+    private var onPauseState: Int = 0
+
+    // 是否播放过视频
+    private var startedPlayVideo: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +81,8 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
 
     private fun init() {
         mBinding.avpSimplePlayActivity.run {
+            // 设置是否启用自带弹幕功能
+            enableDanmaku = sharedPreferences().getBoolean("enableDanmakuInLocalVideo", false)
             // 设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
             // 进横屏旋转，不会竖屏
@@ -92,6 +108,8 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             setVideoAllCallBack(object : GSYSampleCallBack() {
                 override fun onPrepared(url: String?, vararg objects: Any?) {
                     super.onPrepared(url, *objects)
+                    startedPlayVideo = true
+                    isPause = false
                     this@run.currentPlayer.seekRatio = this@run.currentPlayer.duration / 90_000f
                 }
             })
@@ -100,23 +118,53 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
         }
     }
 
+
     override fun onPause() {
         super.onPause()
-        orientationUtils.setIsPause(true)
-        mBinding.avpSimplePlayActivity.currentPlayer.onVideoPause()
+
+        mBinding.avpSimplePlayActivity.currentPlayer.apply {
+            onPauseState = currentState
+            onPausePosition = currentPositionWhenPlaying
+
+            if (currentState != CURRENT_STATE_PAUSE) {
+                onVideoPause()
+                orientationUtils.setIsPause(true)
+                isPause = true
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
+
         orientationUtils.setIsPause(false)
-        mBinding.avpSimplePlayActivity.currentPlayer.onVideoResume()
+        mBinding.avpSimplePlayActivity.currentPlayer.apply {
+            if (currentState == CURRENT_STATE_NORMAL &&
+                onPausePosition != -1L &&
+                onPauseState != -1 &&
+                startedPlayVideo
+            ) {
+                seekOnStart = onPausePosition
+                startPlayLogic()
+                isPause = false
+                if (onPauseState == CURRENT_STATE_PAUSE) {
+                    onVideoPause()
+                    isPause = true
+                }
+            } else {
+                if (isPause) {
+                    onVideoResume()
+                    orientationUtils.setIsPause(false)
+                    isPause = false
+                }
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mBinding.avpSimplePlayActivity.currentPlayer.release()
         mBinding.avpSimplePlayActivity.setVideoAllCallBack(null)
-        GSYVideoManager.releaseAllVideos()
         orientationUtils.releaseListener()
     }
 }

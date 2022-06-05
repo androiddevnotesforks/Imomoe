@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewStub
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -29,6 +30,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(activityThemeRes)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         appThemeRes.collectWithLifecycle(this) {
             if (activityThemeRes != it) {
                 // 壁纸取色

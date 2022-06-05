@@ -8,7 +8,6 @@
 
     <style name="Theme.Anime.Dynamic" parent="Theme.Dynamic">
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 </resources>

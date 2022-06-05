@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -44,7 +43,7 @@ class AboutActivity : BaseComponentActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContentBase {
             Mdc3Theme(
                 setTextColors = true,
                 setDefaultFontFamily = true
@@ -206,6 +205,12 @@ fun AboutScreenList(modifier: Modifier = Modifier) {
             title = stringResource(id = R.string.github),
             onClick = {
                 openBrowser(Const.Common.GITHUB_URL)
+            }
+        )
+        AboutScreenListItem(
+            title = stringResource(id = R.string.about_activity_data_source_repo),
+            onClick = {
+                openBrowser(Const.Common.GITHUB_DATA_SOURCE_URL)
             }
         )
         AboutScreenListItem(

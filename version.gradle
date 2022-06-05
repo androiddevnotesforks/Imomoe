@@ -44,6 +44,10 @@ compose.ui_tooling = "androidx.compose.ui:ui-tooling:$compose_version"
 compose.runtime_livedata = "androidx.compose.runtime:runtime-livedata:$compose_version"
 deps.compose = compose
 
+def accompanist = [:]
+accompanist.systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
+deps.accompanist = accompanist
+
 def retrofit2 = [:]
 retrofit2.retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
 retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:2.9.0"

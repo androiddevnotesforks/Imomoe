@@ -300,8 +300,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                         .getBoolean("autoJumpToLastPosition", false)
                 ) seekOnStart = playPosition
                 withContext(Dispatchers.Main) {
-                    // 开始播放
-                    startPlayLogic()
+                    if (!activityInBackground) {
+                        // 开始播放
+                        startPlayLogic()
+                    }
                 }
             }
         }

@@ -20,15 +20,25 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
     protected open var isPause = false
     protected open var orientationUtils: AnimeOrientationUtils? = null
 
+    protected open var onPausePosition: Long = -1
+    protected open var onPauseState: Int = -1
+
+    // 是否播放过视频
+    protected open var startedPlayVideo: Boolean = false
+
+    // 是否在后台
+    protected open var activityInBackground: Boolean = false
+
     /**
      * 选择普通模式
      */
     protected open fun initVideo() {
         //外部辅助的旋转，帮助全屏
-        orientationUtils = AnimeOrientationUtils(this, getGSYVideoPlayer(), orientationOption).apply {
-            // 初始化不打开外部的旋转
-            isEnable = false
-        }
+        orientationUtils =
+            AnimeOrientationUtils(this, getGSYVideoPlayer(), orientationOption).apply {
+                // 初始化不打开外部的旋转
+                isEnable = false
+            }
         // 锁定后不随屏幕旋转而旋转视频
         getGSYVideoPlayer().setLockClickListener { _, lock ->
             orientationUtils?.isEnable = !lock
@@ -75,6 +85,12 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
 
     override fun onPause() {
         super.onPause()
+
+        activityInBackground = true
+
+        onPauseState = getGSYVideoPlayer().currentPlayer.currentState
+        onPausePosition = getGSYVideoPlayer().currentPlayer.currentPositionWhenPlaying
+
         if (getGSYVideoPlayer().currentPlayer.currentState != GSYVideoView.CURRENT_STATE_PAUSE) {
             getGSYVideoPlayer().currentPlayer.onVideoPause()
             orientationUtils?.setIsPause(true)
@@ -84,10 +100,28 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
 
     override fun onResume() {
         super.onResume()
-        if (isPause) {
-            getGSYVideoPlayer().currentPlayer.onVideoResume()
-            orientationUtils?.setIsPause(false)
-            isPause = false
+        activityInBackground = false
+
+        getGSYVideoPlayer().currentPlayer.apply {
+            if (currentState == GSYVideoView.CURRENT_STATE_NORMAL &&
+                onPausePosition != -1L &&
+                onPauseState != -1 &&
+                startedPlayVideo
+            ) {
+                seekOnStart = onPausePosition
+                startPlayLogic()
+                isPause = false
+                if (onPauseState == GSYVideoView.CURRENT_STATE_PAUSE) {
+                    onVideoPause()
+                    isPause = true
+                }
+            } else {
+                if (isPause) {
+                    getGSYVideoPlayer().currentPlayer.onVideoResume()
+                    orientationUtils?.setIsPause(false)
+                    isPause = false
+                }
+            }
         }
     }
 
@@ -124,6 +158,7 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
             }
             // 开始播放了才能旋转和全屏
             it.isEnable = detailOrientationRotateAuto && !isAutoFullWithSize
+            startedPlayVideo = true
             isPlay = true
             isPause = false
             videoPlayStatusChanged(true)

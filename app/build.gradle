@@ -166,6 +166,7 @@ dependencies {
     implementation deps.compose.runtime_livedata
     implementation deps.compose.compose_theme_adapter
     implementation deps.compose.material3_windo_size_class
+    implementation deps.accompanist.systemuicontroller
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
