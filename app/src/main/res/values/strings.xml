@@ -210,7 +210,7 @@
     <string name="auto_jump_to_last_position_summary">若上次未观看完，则自动跳转到上次的进度</string>
     <string name="enable_danmaku_in_local_video">本地视频启用弹幕</string>
     <string name="enable_danmaku_in_local_video_summary">在播放本地视频（包括缓存视频和外部视频）时启用弹幕功能</string>
-    <string name="enable_danmaku_in_local_video_warning">启用此功能后会在播放视频时使用视频文件名作为弹幕请求参数\n\n若视频文件名存在隐私信息，请勿开启此功能！\n\n确定要开启？</string>
+    <string name="enable_danmaku_in_local_video_warning">启用此功能后会在播放媒体时使用文件名作为弹幕请求参数\n\n若媒体文件名或标题存在隐私信息，请勿开启此功能！\n\n确定要开启？</string>
     <string name="switch_player_core">切换播放器内核</string>
     <string name="current_player_core">当前内核: %s</string>
     <string name="select_player_core">选择播放器内核</string>

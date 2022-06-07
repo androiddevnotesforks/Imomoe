@@ -1,16 +1,15 @@
 package com.skyd.imomoe.view.component.player
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -21,6 +20,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -146,8 +146,11 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 底部进度条CheckBox
     private var cbBottomProgress: CheckBox? = null
 
-    // 自动播放下一集CheckBox
-    private var cbAutoPlayNextEpisode: CheckBox? = null
+    // 一次/循环/顺序播放
+    private var tgSwitchVideoMode: MaterialButtonToggleGroup? = null
+
+    // 播放音频时常驻的封面
+    private var ivMediaThumb: ImageView? = null
 
     // 底部进度调
     private var pbBottomProgress: ProgressBar? = null
@@ -219,7 +222,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         vgSettingContainer = findViewById(R.id.layout_setting)
         rgReverse = findViewById(R.id.rg_reverse)
         cbBottomProgress = findViewById(R.id.cb_bottom_progress)
-        cbAutoPlayNextEpisode = findViewById(R.id.cb_auto_play_next_episode)
+        tgSwitchVideoMode = findViewById(R.id.tg_switch_video_mode)
         pbBottomProgress = super.mBottomProgressBar
         tvOpenByExternalPlayer = findViewById(R.id.tv_open_by_external_player)
         tvRestoreScreen = findViewById(R.id.tv_restore_screen)
@@ -233,6 +236,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         vgPlayPosition = findViewById(R.id.ll_play_position_view)
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
+        ivMediaThumb = findViewById(R.id.iv_media_thumb)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
@@ -334,13 +338,23 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         cbBottomProgress?.isChecked = sharedPreferences()
             .getBoolean("showPlayerBottomProgressbar", false)
 
-        cbAutoPlayNextEpisode?.setOnCheckedChangeListener { _, isChecked ->
-            sharedPreferences().editor {
-                putString("switchVideoMode", if (isChecked) "AutoPlayNextEpisode" else "StopPlay")
+        tgSwitchVideoMode?.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                when (checkedId) {
+                    R.id.btn_play_once -> switchVideoMode = SwitchVideoMode.Once
+                    R.id.btn_play_next -> switchVideoMode = SwitchVideoMode.Next
+                    R.id.btn_play_repeat_one -> switchVideoMode = SwitchVideoMode.RepeatOne
+                }
             }
         }
-        cbAutoPlayNextEpisode?.isChecked = sharedPreferences()
-            .getString("switchVideoMode", "StopPlay") == "AutoPlayNextEpisode"
+
+        tgSwitchVideoMode?.check(
+            when (switchVideoMode) {
+                SwitchVideoMode.Once -> R.id.btn_play_once
+                SwitchVideoMode.Next -> R.id.btn_play_next
+                SwitchVideoMode.RepeatOne -> R.id.btn_play_repeat_one
+            }
+        )
 
         //重置视频比例
         GSYVideoType.setShowType(mScaleStrings[mScaleIndex].second)
@@ -668,6 +682,18 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         cachePath: File?,
         title: String?
     ): Boolean {
+        runCatching {
+            if (mContext.getMediaMime(Uri.parse(url))?.startsWith("audio/") == true) {
+                mContext.getMediaAlbumArt(Uri.parse(url))?.let {
+                    ivMediaThumb?.visible()
+                    ivMediaThumb?.setImageBitmap(it)
+                }
+            } else {
+                ivMediaThumb?.gone()
+            }
+        }.onFailure {
+            ivMediaThumb?.gone()
+        }
         return super.setUp(url, cacheWithPlay, cachePath, title)
     }
 
@@ -1109,14 +1135,25 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
+    /**
+     * 切集是 onCompletion，onAutoComplete 就是正常播放结束的
+     * https://github.com/CarGuo/GSYVideoPlayer/issues/2983#issuecomment-708278308
+     */
     override fun onAutoCompletion() {
         super.onAutoCompletion()
         // 播放完毕
         storePlayPosition(-1L)
-        if (
-            sharedPreferences().getString("switchVideoMode", "StopPlay") ==
-            "AutoPlayNextEpisode"
-        ) onPlayNextEpisode()
+
+        // 不要使用自带的mLooping属性，自带的不支持动态设置
+        when (switchVideoMode) {
+            SwitchVideoMode.Once -> {}
+            SwitchVideoMode.Next -> {
+                onPlayNextEpisode()
+            }
+            SwitchVideoMode.RepeatOne -> {
+                startPlayLogic()
+            }
+        }
     }
 
     fun setEpisodeButtonOnClickListener(listener: OnClickListener) {

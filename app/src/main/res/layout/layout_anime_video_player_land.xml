@@ -17,6 +17,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center" />
+
+        <ImageView
+            android:id="@+id/iv_media_thumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <com.kuaishou.akdanmaku.ui.DanmakuView
@@ -32,14 +37,15 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter">
+
+    </RelativeLayout>
 
     <!--  要在这个位置，若往上，则深色会遮不住某些view，若往下，深色会遮住控制view  -->
     <View
         android:id="@+id/view_player_night_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
     <!--高度都加了20dp，让阴影往下延伸一点-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_bottom"
@@ -274,13 +280,14 @@
         android:layout_height="wrap_content"
         android:background="@drawable/shape_gray_transparent_angle_270"
         android:gravity="center_vertical"
-        android:paddingBottom="20dp">
+        android:paddingBottom="26dp">
 
         <ImageView
             android:id="@+id/back"
             android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_height="54dp"
             android:paddingStart="10dp"
+            android:paddingTop="6dp"
             android:paddingEnd="0px"
             android:scaleType="centerInside"
             android:src="@drawable/ic_arrow_back_ios_24"
@@ -294,6 +301,7 @@
             style="@style/TextAppearance.Material3.TitleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="marquee"
             android:focusable="true"
@@ -392,13 +400,38 @@
                 android:text="@string/bottom_progress"
                 android:textColor="@android:color/white" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/cb_auto_play_next_episode"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/tg_switch_video_mode"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/auto_play_next_episode"
-                android:textColor="@android:color/white" />
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/btn_play_once"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly.White"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_looks_one_24" />
+
+                <Button
+                    android:id="@+id/btn_play_repeat_one"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly.White"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_repeat_one_24" />
+
+                <Button
+                    android:id="@+id/btn_play_next"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly.White"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:icon="@drawable/ic_east_24" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"

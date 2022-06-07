@@ -34,7 +34,7 @@
 
 ## [>>必看使用说明(自定义数据源)<<](doc/customdatasource/README.md)
 
-## Discard频道：https://discord.gg/MyaRtRGEzr
+## Discord频道：https://discord.gg/MyaRtRGEzr
 
 ### 可以选择将自制数据源共享到[DataSourceRepository](https://github.com/SkyD666/DataSourceRepository)仓库，自制数据源/后端[帮助文档](doc/customdatasource/RV_ITEM.md)
 

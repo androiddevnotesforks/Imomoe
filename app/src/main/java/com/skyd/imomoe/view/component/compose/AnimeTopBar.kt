@@ -32,7 +32,7 @@ fun AnimeTopBar(
     val scrollFraction = scrollBehavior?.scrollFraction ?: 0f
     val appBarContainerColor by colors.containerColor(scrollFraction)
 
-    Surface(modifier = modifier, color = appBarContainerColor) {
+    Surface(modifier = modifier.navigationBarsPadding(), color = appBarContainerColor) {
         when (style) {
             AnimeTopBarStyle.Small -> {
                 SmallTopAppBar(

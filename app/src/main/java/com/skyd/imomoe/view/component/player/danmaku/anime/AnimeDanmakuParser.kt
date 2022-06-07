@@ -4,8 +4,6 @@ import android.graphics.Color
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.data.DanmakuItemData.Companion.DANMAKU_STYLE_NONE
 import com.skyd.imomoe.bean.danmaku.DanmakuData
-import com.skyd.imomoe.util.Util.sp
-import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser.Companion.toDanmakuItemData
 import kotlin.math.roundToLong
 
 class AnimeDanmakuParser(private var data: List<DanmakuData.Data>) {
@@ -31,8 +29,8 @@ class AnimeDanmakuParser(private var data: List<DanmakuData.Data>) {
         }
 
         private fun parseColor(s: String): Int {
-            if (s.startsWith("rgb")) {
-                runCatching {
+            runCatching {
+                if (s.startsWith("rgb")) {
                     val rgb = s.replace("rgb", "")
                         .replace("(", "")
                         .replace(")", "")
@@ -42,12 +40,11 @@ class AnimeDanmakuParser(private var data: List<DanmakuData.Data>) {
                         rgb[1].trim().toInt(),
                         rgb[2].trim().toInt()
                     )
-                }.onFailure {
-                    it.printStackTrace()
-                    return Color.WHITE
+                } else if (s.startsWith("#")) {
+                    return Color.parseColor(s)
                 }
-            } else if (s.startsWith("#")) {
-                return Color.parseColor(s)
+            }.onFailure {
+                it.printStackTrace()
             }
             return Color.WHITE
         }

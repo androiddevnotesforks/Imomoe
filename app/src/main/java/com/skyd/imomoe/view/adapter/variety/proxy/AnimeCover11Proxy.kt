@@ -39,7 +39,7 @@ class AnimeCover11Proxy : VarietyAdapter.Proxy<AnimeCover11Bean, AnimeCover11Vie
         }
         holder.tvAnimeCover11Title.text = data.title
         holder.itemView.setOnClickListener {
-            activity?.also { data.route.route(activity) }
+            data.route.route(activity)
         }
     }
 }

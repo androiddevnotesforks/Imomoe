@@ -13,6 +13,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_NORMAL
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAUSE
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding
 import com.skyd.imomoe.ext.fileName
+import com.skyd.imomoe.ext.getMediaTitle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.util.Util.setFullScreen
@@ -46,13 +47,18 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
         setFullScreen(window)
 
         val uri: Uri? = intent.data
-        url = intent.getStringExtra(URL)
-            .orEmpty()
-            .ifBlank { uri?.toString().orEmpty() }
-
         animeTitle = intent.getStringExtra(ANIME_TITLE)
             .orEmpty()
             .ifBlank { uri?.fileName(contentResolver).orEmpty() }
+
+        url = intent.getStringExtra(URL)
+            .orEmpty()
+            .ifBlank {
+                if (uri != null) {
+                    getMediaTitle(uri)?.let { animeTitle = it }
+                    uri.toString()
+                } else ""
+            }
 
         episodeTitle = intent.getStringExtra(EPISODE_TITLE)
             .orEmpty()
@@ -117,7 +123,6 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             setUp(url, false, episodeTitle)
         }
     }
-
 
     override fun onPause() {
         super.onPause()

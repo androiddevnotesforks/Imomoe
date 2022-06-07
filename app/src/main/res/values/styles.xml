@@ -14,4 +14,20 @@
         <!--        是否加遮罩（对话框出现时，背景变暗。为true则充许变暗）-->
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+
+    <style name="Widget.App.Button.OutlinedButton.IconOnly" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:minWidth">40dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="Widget.App.Button.OutlinedButton.IconOnly.White" parent="Widget.App.Button.OutlinedButton.IconOnly">
+        <item name="iconTint">@android:color/white</item>
+        <item name="strokeColor">@android:color/white</item>
+    </style>
 </resources>

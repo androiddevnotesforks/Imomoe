@@ -44,12 +44,7 @@ class AboutActivity : BaseComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentBase {
-            Mdc3Theme(
-                setTextColors = true,
-                setDefaultFontFamily = true
-            ) {
-                AboutScreen()
-            }
+            AboutScreen()
         }
     }
 }
@@ -98,8 +93,9 @@ fun AboutScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = it
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(it)
+                .navigationBarsPadding(),
         ) {
             if (isLand) {
                 item {

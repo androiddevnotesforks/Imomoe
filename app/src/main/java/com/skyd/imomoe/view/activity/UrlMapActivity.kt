@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -27,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.entity.UrlMapEntity
 import com.skyd.imomoe.ext.activity
@@ -41,12 +42,7 @@ class UrlMapActivity : BaseComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentBase {
-            Mdc3Theme(
-                setTextColors = true,
-                setDefaultFontFamily = true
-            ) {
-                UrlMapScreen()
-            }
+            UrlMapScreen()
         }
     }
 }
@@ -71,6 +67,7 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
         )
     }, floatingActionButton = {
         ExtendedFloatingActionButton(
+            modifier = Modifier.navigationBarsPadding(),
             text = {
                 Text(text = stringResource(id = R.string.add))
             },
@@ -153,8 +150,9 @@ fun UrlMapList(paddingValues: PaddingValues) {
     val urlMapListState by viewModel.urlMapList.collectAsState()
     LazyColumn(
         modifier = Modifier
+            .fillMaxWidth()
             .padding(paddingValues)
-            .fillMaxWidth(),
+            .navigationBarsPadding(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
         item {

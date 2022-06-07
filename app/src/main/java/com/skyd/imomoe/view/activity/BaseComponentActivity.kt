@@ -7,9 +7,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.core.view.WindowCompat
 import com.efs.sdk.launch.LaunchManager
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.collectWithLifecycle
@@ -35,6 +37,9 @@ abstract class BaseComponentActivity : ComponentActivity() {
             }
         }
 
+        // 全屏
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         if (Util.lastReadUserNoticeVersion() >= Const.Common.USER_NOTICE_VERSION) {
             initUM()
         }
@@ -44,17 +49,22 @@ abstract class BaseComponentActivity : ComponentActivity() {
 
     fun setContentBase(content: @Composable () -> Unit) {
         setContent {
-            val systemUiController = rememberSystemUiController()
-            val useDarkIcons = !isSystemInDarkTheme()
+            Mdc3Theme(
+                setTextColors = true,
+                setDefaultFontFamily = true
+            ) {
+                val systemUiController = rememberSystemUiController()
+                val useDarkIcons = !isSystemInDarkTheme()
 
-            SideEffect {
-                systemUiController.setSystemBarsColor(
-                    color = Color.Transparent,
-                    darkIcons = useDarkIcons
-                )
+                SideEffect {
+                    systemUiController.setSystemBarsColor(
+                        color = Color.Transparent,
+                        darkIcons = useDarkIcons
+                    )
+                }
+
+                content.invoke()
             }
-
-            content.invoke()
         }
     }
 
