@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
@@ -30,9 +29,6 @@ import com.skyd.imomoe.view.component.player.PlayerCore.selectPlayerCore
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.viewmodel.SettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -167,11 +163,14 @@ class SettingFragment : BasePreferenceFragment() {
                 startActivity(Intent(activity, ConfigDataSourceActivity::class.java))
                 false
             }
-            title = getString(R.string.custom_data_source, DataSourceManager.dataSourceName.let {
-                if (it == DataSourceManager.DEFAULT_DATA_SOURCE)
-                    getString(R.string.default_data_source)
-                else it
-            })
+            title = getString(
+                R.string.custom_data_source,
+                (DataSourceManager.customDataSourceInfo?.get("name")
+                    ?: DataSourceManager.dataSourceFileName.substringBeforeLast(".")).let {
+                    if (it == DataSourceManager.DEFAULT_DATA_SOURCE)
+                        getString(R.string.default_data_source)
+                    else it
+                })
         }
 
         findPreference<Preference>("dns_server")?.apply {

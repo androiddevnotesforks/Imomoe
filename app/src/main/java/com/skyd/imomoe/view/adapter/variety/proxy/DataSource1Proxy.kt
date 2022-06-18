@@ -34,7 +34,7 @@ class DataSource1Proxy(
         index: Int,
         action: ((Any?) -> Unit)?
     ) {
-        holder.tvDataSource1Name.text = data.file.name
+        holder.tvDataSource1Name.text = data.name
         holder.tvDataSource1Size.text = data.file.formatSize()
         if (data.selected) holder.ivDataSource1Selected.visible()
         else holder.ivDataSource1Selected.gone()

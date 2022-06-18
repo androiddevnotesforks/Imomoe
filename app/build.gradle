@@ -324,6 +324,11 @@ task makeAds(type: Sync) {
     }
 }
 
+task openDirectory(type: Exec) {
+    println project.projectDir
+    commandLine 'cmd', "/c", "explorer.exe /root,\"${project.projectDir}\\build\\libs\""
+}
+
 // 打包~
 makeDex.dependsOn(deleteOldJar)
 makeJar.dependsOn(makeDex)

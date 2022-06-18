@@ -202,7 +202,7 @@
     <string name="download_update">下载更新</string>
     <string name="refresh_everyday_anime_widget">刷新每日番剧小组件</string>
     <string name="local_data_source">本地数据源</string>
-    <string name="data_source_market">数据源商店</string>
+    <string name="data_source_market">数据源商店(BETA)</string>
     <string name="basic_settings">基本设置</string>
     <string name="play_settings">播放设置</string>
     <string name="show_player_bottom_progressbar">显示播放器底部进度条</string>
@@ -215,7 +215,7 @@
     <string name="current_player_core">当前内核: %s</string>
     <string name="select_player_core">选择播放器内核</string>
     <string name="only_ijk_support_disable_media_codec">仅ijk内核支持关闭硬解</string>
-    <string name="backup_and_restore">备份与恢复(BETA)</string>
+    <string name="backup_and_restore">备份与恢复</string>
     <string name="wrong_webdav_server_address_format">服务器地址格式不正确！\n正确格式至少包括协议、主机名或IP地址。\n例如：protocol://hostname[:port]/path/</string>
     <string name="webdav_server_address">WebDAV服务器地址</string>
     <string name="webdav_password">WebDAV密码</string>
@@ -281,10 +281,10 @@
     <string name="anime_download_activity_item_menu_delete">删除</string>
     <string name="anime_download_activity_deleting">正在删除，请稍候…</string>
     <string name="restore_play_speed">记忆播放速度</string>
-    <string name="anime_download_notification_title">正在下载 %s</string>
-    <string name="anime_download_service_start_download">%s 开始下载</string>
-    <string name="anime_download_service_download_failed">%s 下载失败</string>
-    <string name="anime_download_helper_no_storage">未获取存储权限，无法下载</string>
+    <string name="download_notification_title">正在下载 %s</string>
+    <string name="start_download">%s 开始下载</string>
+    <string name="download_failed">%s 下载失败</string>
+    <string name="no_storage_can_not_download">未获取存储权限，无法下载</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="m3u8_peer_count">共%s段</string>
@@ -309,5 +309,14 @@
     <string name="url_map_error_okhttp">在进行URL替换时发生错误，将使用原URL进行请求\n\n%s</string>
     <string name="input_dialog_error_message">输入内容的格式不符合规则</string>
     <string name="about_activity_data_source_repo">数据源仓库</string>
+    <string name="download">下载</string>
+    <string name="update">更新</string>
+    <string name="installing">安装中</string>
+    <string name="downloading">下载中</string>
+    <string name="installed">已安装</string>
+    <string name="data_source_market_download_complete">%s 下载完成！</string>
+    <string name="data_source_market_restart_after_downloaded">准备下载的数据源正在使用，下载完成后会重启APP，是否继续？</string>
+    <string name="data_source_author">作者：%s</string>
+    <string name="config_data_source_activity_menu_open_repo">访问数据源仓库</string>
 
 </resources>

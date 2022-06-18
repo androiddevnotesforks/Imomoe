@@ -51,6 +51,7 @@ object Router {
         RankActivityProcessor.route to RankActivityProcessor,
         SearchActivityProcessor.route to SearchActivityProcessor,
         StartActivityProcessor.route to StartActivityProcessor,
+        ConfigDataSourceActivityProcessor.route to ConfigDataSourceActivityProcessor,
     )
 
 }

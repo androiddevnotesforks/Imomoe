@@ -51,7 +51,7 @@ object AnimeDownloadHelper {
                         .putExtra(STORE_DIRECTORY_PATH_KEY, animeFilePath + animeTitle)
                 )
             }
-            onDenied { activity.getString(R.string.anime_download_helper_no_storage).showToast() }
+            onDenied { activity.getString(R.string.no_storage_can_not_download).showToast() }
         }
     }
 

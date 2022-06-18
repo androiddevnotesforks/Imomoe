@@ -26,7 +26,6 @@
             android:id="@+id/tl_config_data_source_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:tabGravity="center"
             app:tabMode="scrollable" />

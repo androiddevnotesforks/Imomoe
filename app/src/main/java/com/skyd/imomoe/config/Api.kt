@@ -11,15 +11,17 @@ interface Api {
         // github
         const val CHECK_UPDATE_URL = "https://api.github.com/repos/SkyD666/Imomoe/releases/latest"
 
-        // 数据源仓库raw地址
-        val DATA_SOURCE_DOWNLOAD_URL_PREFIX =
-            "https://raw.githubusercontent.com/SkyD666/DataSourceRepository/master/datasource/$interfaceVersion"
+        // github获取目录API
+        const val REPO_CONTENT_URL =
+            "https://api.github.com/repos/SkyD666/DataSourceRepository/contents/"
 
-        // 当前数据源接口版本的json
-        val DATA_SOURCE_JSON_URL = "$DATA_SOURCE_DOWNLOAD_URL_PREFIX/data_source_list.json"
+        // github获取data_source_list.json
+        fun dataSourceListJsonUrl(interfaceVersion: String) =
+            "${DATA_SOURCE_PREFIX}/datasource/${interfaceVersion}/data_source_list.json"
 
         // 数据源仓库icon前缀地址
-        val DATA_SOURCE_IMAGE_PREFIX = "https://github.com/SkyD666/DataSourceRepository/raw/master"
+        val DATA_SOURCE_PREFIX =
+            "https://raw.githubusercontent.com/SkyD666/DataSourceRepository/master"
 
         // 弹幕url
         const val DANMAKU_URL = "https://api.danmu.oyyds.top/api"

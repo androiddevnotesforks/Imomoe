@@ -5,10 +5,8 @@ import android.widget.Toast
 import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
-import com.skyd.imomoe.ext.editor
-import com.skyd.imomoe.ext.editor2
-import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.string
+import com.skyd.imomoe.bean.DataSource1Bean
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.interfaces.IConst
 import com.skyd.imomoe.model.interfaces.IRouter
 import com.skyd.imomoe.model.interfaces.IUtil
@@ -30,7 +28,8 @@ object DataSourceManager {
 
     const val DEFAULT_DATA_SOURCE = ""
 
-    var dataSourceName: String =
+    // 数据源文件名，例如：CustomDataSource1.ads
+    var dataSourceFileName: String =
         sharedPreferences().getString("dataSourceName", DEFAULT_DATA_SOURCE)
             ?: DEFAULT_DATA_SOURCE
         get() {
@@ -56,28 +55,33 @@ object DataSourceManager {
     // 第一个是传入的接口，第二个是实现类
     private val cache: LruCache<Class<*>, Class<*>> = LruCache(10)
     private val singletonCache: LruCache<Class<*>, Any> = LruCache(5)
-    private var customDataSourceInfo: HashMap<String, String>? = null
+    var customDataSourceInfo: HashMap<String, String>? = null
+        private set
         get() {
-            if (dataSourceName == DEFAULT_DATA_SOURCE) return null
+            if (dataSourceFileName == DEFAULT_DATA_SOURCE) return null
             if (field == null) {
-                val map: HashMap<String, String> = HashMap()
-                runCatching {
-                    val jar = JarFile(getJarPath())
-                    jar.getInputStream(jar.getEntry("CustomInfo"))
-                        .string().split("\n").forEach {
-                            it.split("=").let { kv ->
-                                if (kv.size == 2) map[kv[0].trim()] = kv[1].trim()
-                            }
-                        }
-                }.onFailure {
-                    it.printStackTrace()
-                }
-                field = map
+                field = gerJarInfo(getJarPath())
             }
             return field
         }
 
-    fun getJarPath(): String = "${getJarDirectory()}/${dataSourceName}"
+    fun gerJarInfo(jarPath: String): HashMap<String, String> {
+        val map: HashMap<String, String> = HashMap()
+        runCatching {
+            val jar = JarFile(jarPath)
+            jar.getInputStream(jar.getEntry("CustomInfo"))
+                .string().split("\n").forEach {
+                    it.split("=").let { kv ->
+                        if (kv.size == 2) map[kv[0].trim()] = kv[1].trim()
+                    }
+                }
+        }.onFailure {
+            it.printStackTrace()
+        }
+        return map
+    }
+
+    fun getJarPath(): String = "${getJarDirectory()}/${dataSourceFileName}"
 
     fun getJarDirectory(): String {
         return "${appContext.getExternalFilesDir(null).toString()}/DataSourceJar"
@@ -129,7 +133,7 @@ object DataSourceManager {
     @Suppress("UNCHECKED_CAST")
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
-        if (dataSourceName == DEFAULT_DATA_SOURCE && !testMode) return null
+        if (dataSourceFileName == DEFAULT_DATA_SOURCE && !testMode) return null
         if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !testMode) {
             if (!showInterfaceVersionTip) appContext.getString(
                 R.string.data_source_interface_version_not_match,
@@ -211,4 +215,25 @@ object DataSourceManager {
         "IRankListModel" to "CustomRankListModel",
         "IEverydayAnimeWidgetModel" to "CustomEverydayAnimeWidgetModel"
     )
+
+    fun getDataSourceList(directoryPath: String): List<DataSource1Bean> {
+        val directory = File(directoryPath)
+        return if (!directory.isDirectory) {
+            emptyList()
+        } else {
+            val jarList = directory.listFiles { _, name ->
+                name.endsWith(".ads", true) ||
+                        name.endsWith(".jar", true)
+            }
+            jarList.orEmpty().map {
+                val jarInfo = gerJarInfo(it.path)
+                DataSource1Bean(
+                    route = "", file = it, selected = it.name == dataSourceFileName,
+                    name = jarInfo["name"] ?: it.name.substringBeforeLast("."),
+                    versionCode = jarInfo["versionCode"]?.toIntOrNull(),
+                    versionName = jarInfo["versionName"]
+                )
+            }.toList()
+        }
+    }
 }

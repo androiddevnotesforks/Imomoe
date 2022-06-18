@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -150,9 +148,8 @@ fun UrlMapList(paddingValues: PaddingValues) {
     val urlMapListState by viewModel.urlMapList.collectAsState()
     LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(paddingValues)
-            .navigationBarsPadding(),
+            .fillMaxSize()
+            .padding(paddingValues),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
         item {

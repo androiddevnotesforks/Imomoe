@@ -9,6 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.More1Bean
 import com.skyd.imomoe.databinding.FragmentMoreBinding
 import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.processor.ConfigDataSourceActivityProcessor
 import com.skyd.imomoe.route.processor.JumpByUrlProcessor
 import com.skyd.imomoe.route.processor.StartActivityProcessor
 import com.skyd.imomoe.view.activity.*
@@ -52,11 +53,11 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             R.drawable.ic_cloud_download_24
         )
         list += More1Bean(
-            StartActivityProcessor.route.buildRouteUri {
-                appendQueryParameter("cls", BackupRestoreActivity::class.qualifiedName)
+            ConfigDataSourceActivityProcessor.route.buildRouteUri {
+                appendQueryParameter("selectPageIndex", "1")
             }.toString(),
-            getString(R.string.backup_and_restore),
-            R.drawable.ic_cloud_done_24
+            getString(R.string.data_source_market),
+            R.drawable.ic_plugin_24
         )
         list += More1Bean(
             StartActivityProcessor.route.buildRouteUri {
@@ -64,6 +65,13 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
             }.toString(),
             getString(R.string.setting),
             R.drawable.ic_settings_24
+        )
+        list += More1Bean(
+            StartActivityProcessor.route.buildRouteUri {
+                appendQueryParameter("cls", BackupRestoreActivity::class.qualifiedName)
+            }.toString(),
+            getString(R.string.backup_and_restore),
+            R.drawable.ic_cloud_done_24
         )
         list += More1Bean(
             StartActivityProcessor.route.buildRouteUri {

@@ -52,6 +52,12 @@ object CoilUtil {
     }
 
     fun ImageView.loadImage(
+        res: Int,
+    ) {
+        loadImage(res.toString(), referer = null)
+    }
+
+    fun ImageView.loadImage(
         url: String?,
         referer: String? = null,
         @DrawableRes placeholder: Int = 0,

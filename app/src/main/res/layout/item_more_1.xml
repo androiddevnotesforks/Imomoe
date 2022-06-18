@@ -17,12 +17,12 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="30dp">
+        android:paddingVertical="25dp">
 
         <ImageView
             android:id="@+id/iv_more_1"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_horizontal"
             android:importantForAccessibility="no"
             app:tint="?attr/colorControlNormal"

@@ -50,7 +50,7 @@
 5. 支持**WebDAV**备份恢复数据
 6. 支持部分视频**显示**、**发送弹幕**（需要数据源支持弹幕）
 7. 支持输入某站弹幕链接播放网络弹幕（例如<a href="https://api.bilibili.com/x/v1/dm/list.so?oid=97495910" target="_blank">https://api.bilibili.com/x/v1/dm/list.so?oid=97495910</a>）
-8. 支持**缓存视频**到本地（TODO：m3u8格式资源缓存）
+8. 支持**缓存视频**到本地
 9. 支持**追番**（数据保存在本地）
 10. 支持显示**观看历史**记录
 11. 支持显示**搜索历史**记录
@@ -141,6 +141,10 @@ App内不提供默认数据源，需要用户自行导入使用。
 2. 此软件显示的所有内容，其**版权**均**归原作者**所有。
 3. 此软件**仅可用作学习交流**，未经授权，**禁止用于其他用途**，请在下载**24小时内删除**。
 4. 因使用此软件产生的版权问题，软件作者概不负责。
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=SkyD666/Imomoe)](https://star-history.com/)
 
 ## 许可证
 

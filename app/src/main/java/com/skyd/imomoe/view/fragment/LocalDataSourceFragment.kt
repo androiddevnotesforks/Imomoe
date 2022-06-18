@@ -11,6 +11,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.databinding.FragmentLocalDataSourceBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.ext.dataSourceDirectoryChanged
 import com.skyd.imomoe.ext.showSnackbar
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
@@ -64,6 +65,10 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
                 }
                 else -> {}
             }
+        }
+
+        dataSourceDirectoryChanged.collectWithLifecycle(viewLifecycleOwner) { data ->
+            viewModel.getDataSourceList()
         }
     }
 

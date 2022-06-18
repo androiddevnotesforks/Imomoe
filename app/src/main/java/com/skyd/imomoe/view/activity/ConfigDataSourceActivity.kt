@@ -13,10 +13,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource1Bean
+import com.skyd.imomoe.config.Api
+import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.databinding.ActivityConfigDataSourceBinding
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.util.Util
+import com.skyd.imomoe.util.Util.openBrowser
+import com.skyd.imomoe.view.fragment.DataSourceMarketFragment
 import com.skyd.imomoe.view.fragment.LocalDataSourceFragment
 import com.skyd.imomoe.viewmodel.ConfigDataSourceViewModel
 import java.io.File
@@ -30,6 +34,10 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         arrayOf(getString(R.string.local_data_source), getString(R.string.data_source_market))
     }
 
+    companion object {
+        const val SELECT_PAGE_INDEX = "selectPageIndex"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,6 +48,10 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                     when (item.itemId) {
                         R.id.menu_item_config_data_source_activity_reset -> {
                             resetDataSource()
+                            true
+                        }
+                        R.id.menu_item_config_data_source_activity_repo -> {
+                            openBrowser(Const.Common.GITHUB_DATA_SOURCE_URL)
                             true
                         }
                         else -> false
@@ -60,6 +72,11 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         viewModel.deleteSource.collectWithLifecycle(this) {
             adapter.getFragment<LocalDataSourceFragment>(supportFragmentManager, 0)
                 ?.getDataSourceList()
+        }
+
+        val selectPageIndex = intent.getIntExtra(SELECT_PAGE_INDEX, 0)
+        if (selectPageIndex in 0 until adapter.itemCount) {
+            mBinding.vp2ConfigDataSourceActivity.setCurrentItem(selectPageIndex, false)
         }
 
         intent?.let { callToImport(it) }
@@ -129,7 +146,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
                         DataSourceManager.getJarDirectory() + "/" + sourceFileName
                     )
                     if (target.exists()) {
-                        val needRestartApp = DataSourceManager.dataSourceName == sourceFileName
+                        val needRestartApp = DataSourceManager.dataSourceFileName == sourceFileName
                         askOverwriteFile(needRestartApp) {
                             if (!it) onFailed?.invoke(
                                 FileAlreadyExistsException(
@@ -210,7 +227,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             icon = R.drawable.ic_category_24,
             message = getString(R.string.ask_delete_data_source),
             onPositive = { _, _ ->
-                if (DataSourceManager.dataSourceName == bean.file.name) {
+                if (DataSourceManager.dataSourceFileName == bean.file.name) {
                     resetDataSource { viewModel.deleteDataSource(bean) }
                 } else {
                     viewModel.deleteDataSource(bean)
@@ -245,10 +262,11 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             return position.toLong()
         }
 
-        override fun getItemCount() = 1
+        override fun getItemCount() = 2
 
         override fun createFragment(position: Int) = when (position) {
             0 -> LocalDataSourceFragment()
+            1 -> DataSourceMarketFragment()
             else -> LocalDataSourceFragment()
         }
 

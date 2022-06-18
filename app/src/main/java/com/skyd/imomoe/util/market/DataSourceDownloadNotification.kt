@@ -1,6 +1,7 @@
-package com.skyd.imomoe.util.download.downloadanime
+package com.skyd.imomoe.util.market
 
 import android.annotation.TargetApi
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,7 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.skyd.imomoe.R
 
 
-class AnimeDownloadNotification(
+class DataSourceDownloadNotification(
     val context: Context,
     val taskId: Long,
     val url: String,
@@ -38,11 +39,11 @@ class AnimeDownloadNotification(
     private val notifyId = ++MAX_NOTIFY_ID
 
     init {
-        val intent = Intent(context, AnimeDownloadReceiver::class.java).apply {
-            action = AnimeDownloadReceiver.CANCEL_ACTION
-            putExtra(AnimeDownloadReceiver.NOTIFY_ID, notifyId)
-            putExtra(AnimeDownloadReceiver.TASK_ID, taskId)
-            putExtra(AnimeDownloadReceiver.TASK_URL, url)
+        val intent = Intent(context, DataSourceDownloadReceiver::class.java).apply {
+            action = DataSourceDownloadReceiver.CANCEL_ACTION
+            putExtra(DataSourceDownloadReceiver.NOTIFY_ID, notifyId)
+            putExtra(DataSourceDownloadReceiver.TASK_ID, taskId)
+            putExtra(DataSourceDownloadReceiver.TASK_URL, url)
         }
         val pendingIntent: PendingIntent = PendingIntent.getBroadcast(
             context,
@@ -62,13 +63,17 @@ class AnimeDownloadNotification(
                 context.getString(R.string.cancel),
                 pendingIntent
             )
-        manager.notify(notifyId, builder.build())
+        manager.notify(notifyId, builder.build().apply {
+            flags = flags or Notification.FLAG_NO_CLEAR
+        })
     }
 
     fun upload(progress: Int) {
         builder.setProgress(100, progress, false)
             .setContentText("$progress%")
-        manager.notify(notifyId, builder.build())
+        manager.notify(notifyId, builder.build().apply {
+            flags = flags or Notification.FLAG_NO_CLEAR
+        })
     }
 
     fun cancel() {

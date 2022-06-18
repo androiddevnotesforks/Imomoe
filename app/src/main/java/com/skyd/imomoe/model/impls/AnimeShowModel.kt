@@ -4,13 +4,71 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.model.interfaces.IAnimeShowModel
 import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.processor.ConfigDataSourceActivityProcessor
 import com.skyd.imomoe.route.processor.OpenBrowserProcessor
 
 class AnimeShowModel : IAnimeShowModel {
     override suspend fun getAnimeShowData(
         partUrl: String
     ): Pair<ArrayList<Any>, PageNumberBean?> {
-        return Pair(
+        return if (partUrl == "/market") {
+            Pair(
+                arrayListOf(
+                    Banner1Bean(
+                        "",
+                        arrayListOf(
+                            AnimeCover6Bean(
+                                ConfigDataSourceActivityProcessor.route.buildRouteUri {
+                                    appendQueryParameter("selectPageIndex", "1")
+                                }.toString(),
+                                "点击这里跳转到数据源商店",
+                                ImageBean("", "", "")
+                            )
+                        )
+                    ),
+
+                    // 如何进入数据源商店？
+                    Header1Bean(
+                        "",
+                        "如何进入数据源商店？"
+                    ),
+                    AnimeCover1Bean(
+                        "",
+                        "",
+                        "点击上方的轮播（横幅）即可",
+                        ImageBean("", "", ""),
+                        "步骤1"
+                    ),
+
+                    // 如何下载和使用数据源？
+                    Header1Bean(
+                        "",
+                        "如何下载和使用数据源？"
+                    ),
+                    AnimeCover1Bean(
+                        "",
+                        "",
+                        "在商店页面点击下载按钮",
+                        ImageBean("", "", ""),
+                        "步骤1"
+                    ),
+                    AnimeCover1Bean(
+                        "",
+                        "",
+                        "等待下载完成",
+                        ImageBean("", "", ""),
+                        "步骤2"
+                    ),
+                    AnimeCover1Bean(
+                        "",
+                        "",
+                        "在下载页面左滑点击要使用的数据源",
+                        ImageBean("", "", ""),
+                        "步骤3"
+                    )
+                ), null
+            )
+        } else Pair(
             arrayListOf(
                 Banner1Bean(
                     "",

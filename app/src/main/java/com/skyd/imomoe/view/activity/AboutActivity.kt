@@ -94,8 +94,8 @@ fun AboutScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(it)
                 .navigationBarsPadding(),
+            contentPadding = it
         ) {
             if (isLand) {
                 item {

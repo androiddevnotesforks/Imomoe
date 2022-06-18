@@ -14,6 +14,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_data_source_market_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingVertical="6dp" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </RelativeLayout>

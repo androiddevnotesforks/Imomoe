@@ -6,5 +6,11 @@
         android:enabled="true"
         android:icon="@drawable/ic_restore_24"
         android:title="@string/config_data_source_activity_menu_reset"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item_config_data_source_activity_repo"
+        android:enabled="true"
+        android:title="@string/config_data_source_activity_menu_open_repo"
+        app:showAsAction="never" />
 </menu>

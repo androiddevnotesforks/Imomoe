@@ -1,101 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    android:paddingStart="16dp"
-    android:paddingTop="9dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="9dp">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="7dp">
 
-    <ImageView
-        android:id="@+id/iv_data_source_2_icon"
-        android:layout_width="36dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:importantForAccessibility="no"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_insert_drive_file_24" />
+        android:paddingHorizontal="12dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="7dp">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_data_source_2_name"
-        style="@style/TextAppearance.Material3.TitleMedium"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="10dp"
-        android:layout_weight="1"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="?attr/colorPrimary"
-        app:layout_constraintStart_toEndOf="@id/iv_data_source_2_icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="CustomDataSource.jar" />
+        <ImageView
+            android:id="@+id/iv_data_source_2_icon"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:importantForAccessibility="no"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_insert_drive_file_24" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_data_source_2_version"
-        style="@style/TextAppearance.Material3.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        app:layout_constraintStart_toStartOf="@id/tv_data_source_2_name"
-        app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_name"
-        tools:text="1.1.0(1)" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_data_source_2_name"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_data_source_2_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="CustomDataSource" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_data_source_2_author"
-        style="@style/TextAppearance.Material3.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        app:layout_constraintStart_toEndOf="@id/tv_data_source_2_version"
-        app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_name"
-        tools:text="author" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_data_source_2_version"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintStart_toStartOf="@id/tv_data_source_2_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_name"
+            tools:text="1.1.0(1)" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_data_source_2_publish_at"
-        style="@style/TextAppearance.Material3.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        app:layout_constraintStart_toEndOf="@id/tv_data_source_2_author"
-        app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_name"
-        tools:text="2022-02-21 21:20" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_data_source_2_author"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/tv_data_source_2_version"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_name"
+            tools:text="@string/data_source_author" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_data_source_2_describe"
-        style="@style/TextAppearance.Material3.LabelLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="?attr/colorSecondary"
-        app:layout_constraintStart_toStartOf="@id/tv_data_source_2_name"
-        app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_version"
-        tools:text="描述" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_data_source_2_publish_at"
+            style="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/tv_data_source_2_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_version"
+            tools:text="2022-02-21 21:20" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_data_source_2_describe"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/tv_data_source_2_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_publish_at"
+            tools:text="描述" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_data_source_2_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/download"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_data_source_2_describe" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

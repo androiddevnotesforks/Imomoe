@@ -1,6 +1,7 @@
 package com.skyd.imomoe.util
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ class DataSource2ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvDataSource2Describe: TextView = view.findViewById(R.id.tv_data_source_2_describe)
     val tvDataSource2PublishAt: TextView = view.findViewById(R.id.tv_data_source_2_publish_at)
     val tvDataSource2Version: TextView = view.findViewById(R.id.tv_data_source_2_version)
+    val btnDataSource2Action: Button = view.findViewById(R.id.btn_data_source_2_action)
 }
 
 class GridRecyclerView1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

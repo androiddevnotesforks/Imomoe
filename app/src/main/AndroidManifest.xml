@@ -151,6 +151,14 @@
             android:name=".util.download.downloadanime.AnimeDownloadReceiver"
             android:exported="false" />
 
+        <service
+            android:name=".util.market.DataSourceDownloadService"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".util.market.DataSourceDownloadReceiver"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
