@@ -2,29 +2,20 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
-import com.efs.sdk.launch.LaunchManager
+import com.flurry.android.FlurryAgent
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.ext.theme.initDarkMode
 import com.skyd.imomoe.util.CrashHandler
-import com.skyd.imomoe.util.PushHelper
-import com.skyd.imomoe.util.Util.getManifestMetaValue
 import com.skyd.imomoe.util.release
 import com.skyd.imomoe.view.component.player.PlayerCore
-import com.umeng.commonsdk.UMConfigure
 import dagger.hilt.android.HiltAndroidApp
 
 
 @HiltAndroidApp
 class App : Application() {
-
-    override fun attachBaseContext(base: Context?) {
-        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, true)
-        super.attachBaseContext(base)
-        LaunchManager.onTraceApp(this, LaunchManager.APP_ATTACH_BASE_CONTEXT, false)
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -35,23 +26,9 @@ class App : Application() {
         release {
             // Crash提示
             CrashHandler.getInstance(this)
-
-            // 友盟
-            // 初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
-            UMConfigure.preInit(
-                this,
-                getManifestMetaValue("UMENG_APPKEY"),
-                getManifestMetaValue("UMENG_CHANNEL")
-            )
-
-            UMConfigure.setLogEnabled(BuildConfig.DEBUG)
-
-            PushHelper.preInit(applicationContext)
         }
 
         PlayerCore.onAppCreate()
-
-        LaunchManager.onTraceApp(this, LaunchManager.APP_ON_CREATE, false)
     }
 
     companion object {

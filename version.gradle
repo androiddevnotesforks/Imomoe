@@ -1,4 +1,4 @@
-ext.version_code = 23
+ext.version_code = 24
 ext.version_name = "1.6.0_Akarin"
 ext.compose_version = '1.2.0-beta02'
 
@@ -125,12 +125,9 @@ smart.refresh_header_material = "io.github.scwang90:refresh-header-material:2.0.
 smart.refresh_footer_ball = "io.github.scwang90:refresh-footer-ball:2.0.5"            // 球脉冲加载
 deps.smart = smart
 
-def umsdk = [:]
-umsdk.common = "com.umeng.umsdk:common:9.4.4"
-umsdk.asms = "com.umeng.umsdk:asms:1.4.1"   // asms包依赖
-umsdk.push = "com.umeng.umsdk:push:6.5.1"
-umsdk.apm = "com.umeng.umsdk:apm:1.5.2"     // U-APM产品包依赖
-deps.umsdk = umsdk
+def flurry = [:]
+flurry.analytics = "com.flurry.android:analytics:13.3.0@aar"
+deps.flurry = flurry
 
 def kuaishou = [:]
 kuaishou.akdanmaku = "com.kuaishou:akdanmaku:1.0.3"

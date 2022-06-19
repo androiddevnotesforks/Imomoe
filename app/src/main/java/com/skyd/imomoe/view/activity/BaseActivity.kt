@@ -7,13 +7,13 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
-import com.efs.sdk.launch.LaunchManager
+import com.flurry.android.FlurryAgent
 import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.initUM
+import com.skyd.imomoe.ext.initializeFlurry
 import com.skyd.imomoe.ext.theme.appThemeRes
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.Util
@@ -44,10 +44,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         setContentView(mBinding.root)
 
         if (Util.lastReadUserNoticeVersion() >= Const.Common.USER_NOTICE_VERSION) {
-            initUM()
+            initializeFlurry(application)
         }
-
-        LaunchManager.onTraceApp(application, LaunchManager.PAGE_ON_CREATE, false)
     }
 
     protected abstract fun getBinding(): VB
@@ -55,26 +53,22 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (this is EventBusSubscriber) EventBus.getDefault().register(this)
-
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_START, true)
+        FlurryAgent.onStartSession(this)
     }
 
     override fun onStop() {
         super.onStop()
         if (this is EventBusSubscriber && EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().unregister(this)
-
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_STOP, true)
+        FlurryAgent.onEndSession(this)
     }
 
     override fun onRestart() {
         super.onRestart()
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RE_START, true)
     }
 
     override fun onResume() {
         super.onResume()
-        LaunchManager.onTracePage(this, LaunchManager.PAGE_ON_RESUME, false)
     }
 
     protected open fun getLoadFailedTipView(): ViewStub? = null

@@ -16,9 +16,9 @@
     <color name="error_container_blue">#FFDAD4</color>
     <color name="on_error_blue">#FFFFFF</color>
     <color name="on_error_container_blue">#410001</color>
-    <color name="background_blue">#FDFCFF</color>
+    <color name="background_blue">#F3F9FD</color>
     <color name="on_background_blue">#1B1B1B</color>
-    <color name="surface_blue">#FDFCFF</color>
+    <color name="surface_blue">#F3F9FD</color>
     <color name="on_surface_blue">#1B1B1B</color>
     <color name="surface_variant_blue">#DFE2EB</color>
     <color name="on_surface_variant_blue">#43474E</color>

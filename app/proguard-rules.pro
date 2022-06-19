@@ -24,48 +24,27 @@
 -keep class * implements java.io.Serializable { *;}
 -keep class * implements android.os.Parcelable { *;}
 
-#-------------------------Umeng
--keep class com.umeng.** {*;}
--keep class com.uc.** {*;}
--keep class com.efs.** { *; }
-
--keepclassmembers class * {
-   public <init> (org.json.JSONObject);
+#-------------------------Flurry SDK
+# Required to preserve the Flurry SDK
+-keep class com.flurry.** { *; }
+-dontwarn com.flurry.**
+-keepattributes *Annotation*,EnclosingMethod,Signature
+-keepclasseswithmembers class * {
+   public <init>(android.content.Context, android.util.AttributeSet, int);
 }
--keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
+# Google Play Services library
+-keep class * extends java.util.ListResourceBundle {
+protected Object[][] getContents();
 }
--keep public class com.skyd.imomoe.R$*{
-public static final int *;
+-keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
+public static final *** NULL;
 }
-
--dontwarn com.umeng.**
--dontwarn com.taobao.**
--dontwarn anet.channel.**
--dontwarn anetwork.channel.**
--dontwarn org.android.**
--dontwarn org.apache.thrift.**
--dontwarn com.xiaomi.**
--dontwarn com.huawei.**
--dontwarn com.meizu.**
-
--keepattributes *Annotation*
-
--keep class com.taobao.** {*;}
--keep class org.android.** {*;}
--keep class anet.channel.** {*;}
--keep class com.xiaomi.** {*;}
--keep class com.huawei.** {*;}
--keep class com.meizu.** {*;}
--keep class org.apache.thrift.** {*;}
-
--keep class com.alibaba.sdk.android.** {*;}
--keep class com.ut.** {*;}
--keep class com.ta.** {*;}
-
--keep public class **.R$* {
-    public static final int *;
+-keepnames @com.google.android.gms.common.annotation.KeepName class *
+-keepclassmembernames class * {
+@com.google.android.gms.common.annotation.KeepName *;
+}
+-keepnames class * implements android.os.Parcelable {
+public static final ** CREATOR;
 }
 
 #-------------------------EventBus

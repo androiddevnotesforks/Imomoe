@@ -2,6 +2,7 @@ package com.skyd.imomoe.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import com.flurry.android.FlurryAgent
 import com.skyd.imomoe.view.activity.CrashActivity
 import java.io.PrintWriter
 import java.io.StringWriter
@@ -17,6 +18,8 @@ class CrashHandler private constructor(val context: Context) : Thread.UncaughtEx
      */
     override fun uncaughtException(thread: Thread, ex: Throwable) {
         try {
+            // flurry使用UncaughtExceptionHandler捕获异常，与原有的冲突，因此要再调用一次flurry的uncaughtException
+            com.flurry.sdk.n.a().f.uncaughtException(thread, ex)
             val stringWriter = StringWriter()
             val printWriter = PrintWriter(stringWriter)
             ex.printStackTrace(printWriter)

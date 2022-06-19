@@ -3,12 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'AndResGuard'
-    id 'com.efs.sdk.plugin'
 }
 
 apply from: secret
-apply from: andresguard
 
 android.defaultConfig {
     secret.buildConfigField.forEach({ k, v ->
@@ -198,10 +195,7 @@ dependencies {
     // DLNACastService编译需要javax.enterprise.inject.Alternative类
 //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
     implementation deps.greenrobot.eventbus
-    implementation deps.umsdk.common
-    implementation deps.umsdk.asms
-    implementation deps.umsdk.apm
-    implementation deps.umsdk.push
+    implementation deps.flurry.analytics
     implementation deps.smart.refresh_layout_kernel
     implementation deps.smart.refresh_header_material
     implementation deps.smart.refresh_footer_ball
@@ -209,80 +203,6 @@ dependencies {
     implementation deps.kuaishou.akdanmaku
     implementation deps.okhttp3.okhttp_dnsoverhttps
     implementation deps.thegrizzlylabs.sardine_android
-}
-
-// UM U-APM性能报告
-efs {
-    //是否对启动过程进程插桩的开关，如果使用自动集成监控则必须开启
-    isAutoTrack = false
-    //您自定义Application的类名称，必填项，如没有自定义则填写系统Application
-    applicationName = "App"
-    //您自定义Activity的类名称，必填项，将您所有Activity的类名按如下格式填写
-    activityList = [
-            "AboutActivity",
-            "AnimeDetailActivity",
-            "AnimeDownloadActivity",
-            "ClassifyActivity",
-            "CrashActivity",
-            "ConfigDataSourceActivity",
-            "DlnaActivity",
-            "DlnaControlActivity",
-            "DownloadManagerActivity",
-            "FavoriteActivity",
-            "HistoryActivity",
-            "LicenseActivity",
-            "MainActivity",
-            "MonthAnimeActivity",
-            "PlayActivity",
-            "RankActivity",
-            "SearchActivity",
-            "SettingActivity",
-            "SimplePlayActivity",
-            "DetailPlayerActivity",
-            "WebViewActivity",
-            "SkinActivity",
-            "NoticeActivity",
-            "UrlMapActivity",
-            "BackupRestoreActivity"
-    ]
-}
-
-//AndResGuard资源混淆工具
-andResGuard {
-    // 使用mappingFile，防止需要换肤的资源id被替换
-//    mappingFile = file("./resource_mapping.txt")
-    mappingFile = null
-    use7zip = true
-    useSign = true
-    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
-    keepRoot = false
-    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
-    fixedResName = "arg"
-    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
-    mergeDuplicatedRes = true
-    whiteList = andresguard.whiteList
-    compressFilePattern = [
-            "*.png",
-            "*.jpg",
-            "*.jpeg",
-            "*.gif",
-            "resources.arsc"
-    ]
-    sevenzip {
-        artifact = 'com.tencent.mm:SevenZip:1.2.20'
-        //path = "/usr/local/bin/7za"
-    }
-
-    /**
-     * 可选： 如果不设置则会默认覆盖assemble输出的apk
-     **/
-    // finalApkBackupPath = "${project.rootDir}/final.apk"
-
-    /**
-     * 可选: 指定v1签名时生成jar文件的摘要算法
-     * 默认值为“SHA-1”
-     **/
-    // digestalg = "SHA-256"
 }
 
 /**

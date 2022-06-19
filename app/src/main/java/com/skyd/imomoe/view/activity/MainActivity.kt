@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -50,8 +51,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
                 positiveText = getString(R.string.agree),
                 onPositive = { _, _ ->
                     setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
-                    initUM()
                     initData()
+                    initializeFlurry(application)
                 },
                 negativeText = getString(R.string.disagree_and_exit),
                 onNegative = { _, _ -> finish() }
@@ -62,7 +63,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
     private fun initData() {
         doIntent(intent)
         action = intent.action.orEmpty()
-
         // 检查更新
         appUpdateHelper.getUpdateStatus().collectWithLifecycle(this) {
             when (it) {

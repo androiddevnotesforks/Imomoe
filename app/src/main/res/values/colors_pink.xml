@@ -16,9 +16,9 @@
     <color name="error_container_pink">#FFDAD4</color>
     <color name="on_error_pink">#FFFFFF</color>
     <color name="on_error_container_pink">#410001</color>
-    <color name="background_pink">#FCFCFC</color>
+    <color name="background_pink">#FFF6F7</color>
     <color name="on_background_pink">#201A1B</color>
-    <color name="surface_pink">#FCFCFC</color>
+    <color name="surface_pink">#FFF6F7</color>
     <color name="on_surface_pink">#201A1B</color>
     <color name="surface_variant_pink">#F3DDE0</color>
     <color name="on_surface_variant_pink">#514345</color>

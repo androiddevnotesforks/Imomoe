@@ -16,9 +16,9 @@
     <color name="error_container_purple">#F9DEDC</color>
     <color name="on_error_purple">#FFFFFF</color>
     <color name="on_error_container_purple">#410E0B</color>
-    <color name="background_purple">#FFFBFE</color>
+    <color name="background_purple">#F8F6FF</color>
     <color name="on_background_purple">#1C1B1F</color>
-    <color name="surface_purple">#FFFBFE</color>
+    <color name="surface_purple">#F8F6FF</color>
     <color name="on_surface_purple">#1C1B1F</color>
     <color name="surface_variant_purple">#E7E0EC</color>
     <color name="on_surface_variant_purple">#49454F</color>
