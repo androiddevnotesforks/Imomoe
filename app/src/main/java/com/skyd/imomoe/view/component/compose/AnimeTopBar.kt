@@ -2,19 +2,26 @@ package com.skyd.imomoe.view.component.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.skyd.imomoe.R
+import com.skyd.imomoe.ext.activity
 
 enum class AnimeTopBarStyle {
     Small, Large
 }
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun AnimeTopBar(
     modifier: Modifier = Modifier,
@@ -31,8 +38,16 @@ fun AnimeTopBar(
     }
     val scrollFraction = scrollBehavior?.scrollFraction ?: 0f
     val appBarContainerColor by colors.containerColor(scrollFraction)
-
-    Surface(modifier = modifier.navigationBarsPadding(), color = appBarContainerColor) {
+    val isLand = calculateWindowSizeClass(LocalContext.current.activity).run {
+        widthSizeClass != WindowWidthSizeClass.Compact
+    }
+    Surface(modifier = modifier.run {
+        if (isLand) {
+            navigationBarsPadding()
+        } else {
+            this
+        }
+    }, color = appBarContainerColor) {
         when (style) {
             AnimeTopBarStyle.Small -> {
                 SmallTopAppBar(
@@ -70,6 +85,24 @@ fun TopBarIcon(
         Icon(
             modifier = modifier.size(24.dp),
             painter = painter,
+            tint = tint,
+            contentDescription = contentDescription
+        )
+    }
+}
+
+@Composable
+fun TopBarIcon(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    tint: Color = LocalContentColor.current,
+    contentDescription: String?,
+) {
+    IconButton(onClick = onClick) {
+        Icon(
+            modifier = modifier.size(24.dp),
+            imageVector = imageVector,
             tint = tint,
             contentDescription = contentDescription
         )

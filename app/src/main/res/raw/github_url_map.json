@@ -1,0 +1,12 @@
+[
+    {
+        "enabled": true,
+        "oldUrl": "https://github.com",
+        "newUrl": "https://ghproxy.com/https://github.com"
+    },
+    {
+        "enabled": true,
+        "oldUrl": "https://raw.githubusercontent.com",
+        "newUrl": "https://ghproxy.com/https://raw.githubusercontent.com/"
+    }
+]

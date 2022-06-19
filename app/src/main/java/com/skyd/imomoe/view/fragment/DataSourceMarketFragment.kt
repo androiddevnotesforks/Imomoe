@@ -14,9 +14,13 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource2Bean
 import com.skyd.imomoe.databinding.FragmentDataSourceMarketBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.ext.getRawString
 import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.model.DataSourceManager
+import com.skyd.imomoe.route.Router.buildRouteUri
+import com.skyd.imomoe.route.Router.route
+import com.skyd.imomoe.route.processor.UrlMapActivityProcessor
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.market.DataSourceDownloadService
 import com.skyd.imomoe.util.showToast
@@ -24,8 +28,13 @@ import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.DataSource2Proxy
 import com.skyd.imomoe.viewmodel.DataSourceMarketViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>() {
+    companion object {
+        val needRefresh: MutableSharedFlow<Boolean> = MutableSharedFlow(extraBufferCapacity = 1)
+    }
+
     private val viewModel: DataSourceMarketViewModel by viewModels()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(DataSource2Proxy(
@@ -96,6 +105,33 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
                 else -> {
                     adapter.dataList = emptyList()
                     mBinding.srlDataSourceMarketFragment.finishRefresh()
+                }
+            }
+        }
+
+        needRefresh.collectWithLifecycle(viewLifecycleOwner) {
+            if (it) mBinding.srlDataSourceMarketFragment.autoRefresh()
+        }
+
+        viewModel.askAddUrlMap.collectWithLifecycle(viewLifecycleOwner) {
+            if (it) {
+                showMessageDialog(
+                    title = getString(R.string.ask),
+                    message = getString(R.string.data_source_market_ask_add_url_map),
+                    onNegative = { dialog, _ -> dialog.dismiss() }
+                ) { _, _ ->
+                    UrlMapActivityProcessor.route.buildRouteUri {
+                        appendQueryParameter(
+                            UrlMapActivityProcessor.JSON_DATA,
+                            requireActivity().getRawString(R.raw.github_url_map)
+                        )
+                        appendQueryParameter(
+                            UrlMapActivityProcessor.AUTO_ADD_AND_FINISH, "true"
+                        )
+                        appendQueryParameter(
+                            UrlMapActivityProcessor.ENABLED, "true"
+                        )
+                    }.route(requireActivity())
                 }
             }
         }

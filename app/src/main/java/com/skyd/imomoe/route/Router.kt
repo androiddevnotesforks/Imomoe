@@ -52,6 +52,7 @@ object Router {
         SearchActivityProcessor.route to SearchActivityProcessor,
         StartActivityProcessor.route to StartActivityProcessor,
         ConfigDataSourceActivityProcessor.route to ConfigDataSourceActivityProcessor,
+        UrlMapActivityProcessor.route to UrlMapActivityProcessor,
     )
 
 }

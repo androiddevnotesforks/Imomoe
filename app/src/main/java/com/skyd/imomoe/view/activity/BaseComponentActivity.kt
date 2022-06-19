@@ -78,12 +78,4 @@ abstract class BaseComponentActivity : ComponentActivity() {
             EventBus.getDefault().unregister(this)
         FlurryAgent.onEndSession(this)
     }
-
-    override fun onRestart() {
-        super.onRestart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
 }

@@ -14,6 +14,7 @@ import com.skyd.imomoe.net.service.DataSourceService
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.showToast
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -21,6 +22,7 @@ class DataSourceMarketViewModel : ViewModel() {
     var dataSourceMarketList: MutableStateFlow<DataState<List<Any>>> =
         MutableStateFlow(DataState.Empty)
     var localDataSourceMap = hashMapOf<String, DataSource1Bean>()
+    val askAddUrlMap: MutableSharedFlow<Boolean> = MutableSharedFlow(extraBufferCapacity = 1)
 
     init {
         getDataSourceMarketList()
@@ -51,6 +53,9 @@ class DataSourceMarketViewModel : ViewModel() {
             }
             dataSourceMarketList.tryEmit(DataState.Success(it.dataSourceList))
         }, error = {
+            if (it.message?.contains("timeout") == true) {
+                askAddUrlMap.tryEmit(true)
+            }
             dataSourceMarketList.tryEmit(DataState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })

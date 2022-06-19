@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.getRawString
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.model.DataSourceManager
 import java.io.BufferedReader
@@ -85,20 +86,7 @@ object Util {
     /**
      * 获取用户须知String
      */
-    fun getUserNoticeContent(): String {
-        val sb = StringBuffer()
-        try {
-            val inputStream = appContext.resources.openRawResource(R.raw.notice)
-            val reader = BufferedReader(InputStreamReader(inputStream, "UTF-8"))
-            var out: String?
-            while (reader.readLine().also { out = it } != null) {
-                sb.append(out)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return sb.toString()
-    }
+    fun getUserNoticeContent(): String = appContext.getRawString(R.raw.notice)
 
     fun getWebsiteLinkSuffix(): String {
         return sharedPreferences().getString("websiteLinkSuffix", ".html") ?: ".html"

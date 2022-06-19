@@ -93,9 +93,9 @@ fun AboutScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(it)
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .navigationBarsPadding(),
-            contentPadding = it
         ) {
             if (isLand) {
                 item {

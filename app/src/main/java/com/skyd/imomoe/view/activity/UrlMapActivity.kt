@@ -1,6 +1,7 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -19,10 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -30,15 +33,49 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.skyd.imomoe.R
 import com.skyd.imomoe.database.entity.UrlMapEntity
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.component.compose.AnimeTopBar
 import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
+import com.skyd.imomoe.view.component.compose.BackIcon
 import com.skyd.imomoe.view.component.compose.TopBarIcon
+import com.skyd.imomoe.view.fragment.DataSourceMarketFragment
 import com.skyd.imomoe.viewmodel.UrlMapViewModel
 
 class UrlMapActivity : BaseComponentActivity() {
+    private val viewModel: UrlMapViewModel by viewModels()
+
+    companion object {
+        const val ENABLED = "enabled"
+        const val JSON_DATA = "jsonData"
+        const val AUTO_ADD = "autoAdd"
+        const val AUTO_ADD_AND_FINISH = "autoAddAndFinish"
+        const val COMPLETED = 0
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val jsonData = intent.getStringExtra(JSON_DATA)
+        viewModel.autoAdd = intent.getBooleanExtra(AUTO_ADD, false)
+        viewModel.autoAddAndFinish = intent.getBooleanExtra(AUTO_ADD_AND_FINISH, false)
+        if (intent.getBooleanExtra(ENABLED, false)) {
+            com.skyd.imomoe.net.urlMapEnabled = true
+            urlMapEnabled = true
+        }
+        if (!jsonData.isNullOrBlank()) {
+            if (viewModel.autoAdd || viewModel.autoAddAndFinish) {
+                viewModel.setUrlMap(jsonData)
+            } else {
+                jsonDialogData.value = jsonData
+                showJsonDialog.value = true
+            }
+        }
+        viewModel.requestFinish.collectWithLifecycle(this) {
+            if (it) {
+                DataSourceMarketFragment.needRefresh.tryEmit(true)
+                finish()
+            }
+        }
         setContentBase {
             UrlMapScreen()
         }
@@ -56,10 +93,15 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
                 Text(text = stringResource(R.string.url_map_activity_title))
             },
             navigationIcon = {
-                TopBarIcon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back_24),
-                    contentDescription = null,
+                BackIcon(
                     onClick = { context.activity.finish() }
+                )
+            },
+            actions = {
+                TopBarIcon(
+                    imageVector = Icons.Rounded.List,
+                    contentDescription = null,
+                    onClick = { showJsonDialog.value = true }
                 )
             }
         )
@@ -84,6 +126,16 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
                 onConfirm = { oldUrl, newUrl ->
                     if (oldUrl.isNotBlank() && newUrl.isNotBlank()) {
                         viewModel.setUrlMap(oldUrl, newUrl)
+                    }
+                }
+            )
+        }
+        if (showJsonDialog.value) {
+            JsonDialog(
+                title = stringResource(id = R.string.url_map_activity_add_by_script),
+                onConfirm = { jsonData ->
+                    if (jsonData.isNotBlank()) {
+                        viewModel.setUrlMap(jsonData)
                     }
                 }
             )
@@ -149,7 +201,8 @@ fun UrlMapList(paddingValues: PaddingValues) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues),
+            .padding(paddingValues)
+            .navigationBarsPadding(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
         item {
@@ -186,7 +239,12 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
             modifier = Modifier
                 .combinedClickable(
                     onLongClick = { menuExpanded = true },
-                    onClick = { if (urlMapEnabled) enabled = !enabled }
+                    onClick = {
+                        if (urlMapEnabled) {
+                            enabled = !enabled
+                            viewModel.enabledUrlMap(urlMapEntity.oldUrl, enabled)
+                        }
+                    }
                 )
                 .padding(15.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -259,8 +317,9 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
             onConfirm = { oldUrl, newUrl ->
                 if (oldUrl.isNotBlank() && newUrl.isNotBlank()) {
                     viewModel.editUrlMap(
-                        urlMapEntity.oldUrl to urlMapEntity.newUrl,
-                        oldUrl to newUrl
+                        old = urlMapEntity.oldUrl to urlMapEntity.newUrl,
+                        new = oldUrl to newUrl,
+                        enabled = urlMapEntity.enabled
                     )
                 }
             }
@@ -379,6 +438,68 @@ fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
                 onClick = {
                     showDeleteDialog.value = false
                     deleteDialogOldUrl.value = null
+                }
+            ) {
+                Text(stringResource(id = R.string.cancel))
+            }
+        }
+    )
+}
+
+val showJsonDialog = mutableStateOf(false)
+val jsonDialogData = mutableStateOf<String?>(null)
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun JsonDialog(
+    title: String,
+    onConfirm: (jsonData: String) -> Unit
+) {
+    var jsonData by rememberSaveable { mutableStateOf(jsonDialogData.value.orEmpty()) }
+    val focusRequester = remember { FocusRequester() }
+    AlertDialog(
+        onDismissRequest = {
+            showJsonDialog.value = false
+            jsonDialogData.value = null
+        },
+        title = {
+            Text(text = title)
+        },
+        text = {
+            Column {
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
+                }
+                Text(text = stringResource(id = R.string.url_map_activity_json_warning))
+                TextField(
+                    modifier = Modifier
+                        .focusRequester(focusRequester)
+                        .wrapContentHeight(),
+                    value = jsonData,
+                    onValueChange = { jsonData = it },
+                    label = {
+                        Text(text = stringResource(id = R.string.url_map_activity_input_new))
+                    }
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                enabled = jsonData.isNotBlank() && jsonData.isNotBlank(),
+                onClick = {
+                    onConfirm.invoke(jsonData)
+                    showJsonDialog.value = false
+                    jsonDialogData.value = null
+                }
+            ) {
+                Text(stringResource(id = R.string.ok))
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    showJsonDialog.value = false
+                    jsonDialogData.value = null
                 }
             ) {
                 Text(stringResource(id = R.string.cancel))

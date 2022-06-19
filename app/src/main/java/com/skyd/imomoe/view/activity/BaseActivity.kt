@@ -63,14 +63,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         FlurryAgent.onEndSession(this)
     }
 
-    override fun onRestart() {
-        super.onRestart()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
-
     protected open fun getLoadFailedTipView(): ViewStub? = null
 
     protected open fun showLoadFailedTip(

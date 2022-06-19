@@ -87,6 +87,7 @@
     <string name="shortcuts_download_long">缓存番剧</string>
     <string name="shortcuts_download_short">缓存番剧</string>
     <string name="attention">声明</string>
+    <string name="ask">询问</string>
     <string name="update_widget">正在更新小组件</string>
     <string name="widget_everyday_anime">每日更新动漫</string>
     <string name="vertical_reverse">上下镜像</string>
@@ -298,11 +299,13 @@
     <string name="local_data_source_fragment_set_main_url_success">更改成功！</string>
     <string name="local_data_source_fragment_set_main_url_failed">更改当前数据源地址前缀失败！</string>
     <string name="url_map_activity_title">URL前缀替换</string>
+    <string name="url_map_activity_add_by_script">使用JSON格式文本导入</string>
     <string name="url_map">URL前缀替换</string>
     <string name="url_map_summary">替换APP内指定的请求URL</string>
     <string name="url_map_activity_new">替换为：\n%s</string>
     <string name="url_map_activity_input_old">请输入需要替换的URL</string>
     <string name="url_map_activity_input_new">请输入替换成的内容</string>
+    <string name="url_map_activity_json_warning">注意：此操作在遇到冲突时会替换掉旧的配置！</string>
     <string name="url_map_activity_delete">确定要删除此项吗？</string>
     <string name="url_map_activity_enable">启用此功能</string>
     <string name="url_map_activity_enable_disadvantage">此功能可能会在一定程度上导致请求数据时变慢</string>
@@ -314,6 +317,7 @@
     <string name="installing">安装中</string>
     <string name="downloading">下载中</string>
     <string name="installed">已安装</string>
+    <string name="data_source_market_ask_add_url_map">请求超时，建议配置GitHub代理（若已经配置，则忽略这条弹窗），点击“确定”进行配置。\n\n（原理是使用了URL前缀替换功能）</string>
     <string name="data_source_market_download_complete">%s 下载完成！</string>
     <string name="data_source_market_restart_after_downloaded">准备下载的数据源正在使用，下载完成后会重启APP，是否继续？</string>
     <string name="data_source_author">作者：%s</string>
