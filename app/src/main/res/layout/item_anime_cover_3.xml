@@ -97,7 +97,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="7dp"
         android:ellipsize="end"
-        android:maxLines="3"
+        android:maxLines="5"
         android:textColor="?attr/colorSecondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"

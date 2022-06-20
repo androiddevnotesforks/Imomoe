@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -99,8 +100,8 @@ fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
             },
             actions = {
                 TopBarIcon(
-                    imageVector = Icons.Rounded.List,
-                    contentDescription = null,
+                    painter = painterResource(id = R.drawable.ic_playlist_add_24),
+                    contentDescription = stringResource(id = R.string.url_map_activity_add_by_script),
                     onClick = { showJsonDialog.value = true }
                 )
             }
@@ -478,7 +479,7 @@ fun JsonDialog(
                     value = jsonData,
                     onValueChange = { jsonData = it },
                     label = {
-                        Text(text = stringResource(id = R.string.url_map_activity_input_new))
+                        Text(text = stringResource(id = R.string.url_map_activity_input_json))
                     }
                 )
             }

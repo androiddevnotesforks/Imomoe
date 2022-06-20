@@ -167,6 +167,7 @@
     <string name="custom_dns_server_dialog_title">自定义DNS提供商</string>
     <string name="custom_dns_server_describe">如：https://1.0.0.1/dns-query</string>
     <string name="config_data_source_tip">点击数据源条目可使用数据源，点击右上角按钮可恢复默认数据源，长按数据源条目可删除数据源</string>
+    <string name="data_source_market_bottom_tip">请在“本地数据源”页面（左侧页面）点击使用已下载的数据源。显示已下载只表示已经下载到本地，不代表正在使用！</string>
     <string name="invalid_data_source_suffix">无效数据源文件后缀：%s</string>
     <string name="the_data_source_is_using_now">正在使用此数据源！</string>
     <string name="activity_is_not_config_data_source_activity">activity is not ConfigDataSourceActivity</string>
@@ -305,6 +306,7 @@
     <string name="url_map_activity_new">替换为：\n%s</string>
     <string name="url_map_activity_input_old">请输入需要替换的URL</string>
     <string name="url_map_activity_input_new">请输入替换成的内容</string>
+    <string name="url_map_activity_input_json">请输入JSON字符串</string>
     <string name="url_map_activity_json_warning">注意：此操作在遇到冲突时会替换掉旧的配置！</string>
     <string name="url_map_activity_delete">确定要删除此项吗？</string>
     <string name="url_map_activity_enable">启用此功能</string>
@@ -316,11 +318,12 @@
     <string name="update">更新</string>
     <string name="installing">安装中</string>
     <string name="downloading">下载中</string>
-    <string name="installed">已安装</string>
+    <string name="installed">已下载</string>
     <string name="data_source_market_ask_add_url_map">请求超时，建议配置GitHub代理（若已经配置，则忽略这条弹窗），点击“确定”进行配置。\n\n（原理是使用了URL前缀替换功能）</string>
     <string name="data_source_market_download_complete">%s 下载完成！</string>
     <string name="data_source_market_restart_after_downloaded">准备下载的数据源正在使用，下载完成后会重启APP，是否继续？</string>
     <string name="data_source_author">作者：%s</string>
     <string name="config_data_source_activity_menu_open_repo">访问数据源仓库</string>
+    <string name="back">返回</string>
 
 </resources>

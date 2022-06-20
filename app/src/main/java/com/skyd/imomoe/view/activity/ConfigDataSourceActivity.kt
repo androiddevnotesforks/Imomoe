@@ -42,6 +42,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
         super.onCreate(savedInstanceState)
 
         mBinding.apply {
+            ablConfigDataSourceActivity.hideToolbarWhenCollapsed(tbConfigDataSourceActivity)
+
             tbConfigDataSourceActivity.apply {
                 setNavigationOnClickListener { finish() }
                 setOnMenuItemClickListener { item ->

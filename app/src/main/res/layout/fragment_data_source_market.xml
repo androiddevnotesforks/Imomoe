@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.fragment.DataSourceMarketFragment">
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_data_source_market_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1"
         android:descendantFocusability="blocksDescendants">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -18,4 +20,17 @@
             android:clipToPadding="false"
             android:paddingVertical="6dp" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-</RelativeLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        style="@style/TextAppearance.Material3.LabelLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="7dp"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxLines="5"
+        android:text="@string/data_source_market_bottom_tip"
+        android:textColor="?attr/colorSecondary" />
+</LinearLayout>

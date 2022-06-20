@@ -34,39 +34,39 @@
 
 #### 2.找到ads文件
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_ads_files.jpg" alt="use_data_source_step_ads_files" style="zoom:37%;" />
+<img src="image\use_data_source_step_ads_files.jpg" alt="use_data_source_step_ads_files" style="zoom:37%;" />
 
 #### 2.使用此应用打开ads(即选择打开方式)
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_open_ads.jpg" alt="use_data_source_step_open_ads" style="zoom: 37%;" />
+<img src="image\use_data_source_step_open_ads.jpg" alt="use_data_source_step_open_ads" style="zoom: 37%;" />
 
 #### 3.在配置界面导入自定义数据源ads包，点击确定
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_import_dialog.jpg" alt="use_data_source_step_import_dialog" style="zoom:37%;" />
+<img src="image\use_data_source_step_import_dialog.jpg" alt="use_data_source_step_import_dialog" style="zoom:37%;" />
 
 #### 4.点击列表里已有的数据源，选择重启APP，重启后即可生效
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_set.jpg" alt="use_data_source_step_set" style="zoom:37%;" />
+<img src="image\use_data_source_step_set.jpg" alt="use_data_source_step_set" style="zoom:37%;" />
 
 ### 二 删除数据源
 
 #### 1.进入配置自定义数据源页面，长按列表中的数据源
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_long_click.jpg" alt="use_data_source_step_long_click" style="zoom:37%;" />
+<img src="image\use_data_source_step_long_click.jpg" alt="use_data_source_step_long_click" style="zoom:37%;" />
 
 #### 2.点击确定，即可删除
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_delete.jpg" alt="use_data_source_step_delete" style="zoom:37%;" />
+<img src="image\use_data_source_step_delete.jpg" alt="use_data_source_step_delete" style="zoom:37%;" />
 
 ### 三 恢复默认数据源
 
 #### 1.进入配置自定义数据源页面，点击右上角恢复按钮
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_reset_button.jpg" alt="use_data_source_step_reset_button" style="zoom:37%;" />
+<img src="image\use_data_source_step_reset_button.jpg" alt="use_data_source_step_reset_button" style="zoom:37%;" />
 
 #### 2.点击重启，即可恢复
 
-<img src="E:\Android\Imomoe\doc\customdatasource\image\use_data_source_step_reset_dialog.jpg" alt="use_data_source_step_reset_dialog" style="zoom:37%;" />
+<img src="image\use_data_source_step_reset_dialog.jpg" alt="use_data_source_step_reset_dialog" style="zoom:37%;" />
 
 ### 四 自制数据源
 
