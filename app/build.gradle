@@ -65,9 +65,7 @@ android {
     }
 
     productFlavors {
-        Github {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "Github"]
-        }
+        Github
     }
 
     applicationVariants.all { variant ->

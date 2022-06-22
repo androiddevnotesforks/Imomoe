@@ -15,7 +15,7 @@
   
   // ===== in Code =====
   def buildConfigField = [:]
-  buildConfigField.UMENG_MESSAGE_SECRET = "..."
+  buildConfigField.XXX = "..."
   secret.buildConfigField = buildConfigField
   def shieldTextList = [:]
   shieldTextList.SHIELD_TEXT = '{..., ..., ...}'
@@ -32,7 +32,7 @@
   
   // ===== in Manifest =====
   def manifestPlaceholders = [:]
-  manifestPlaceholders.UMENG_APPKEY_VALUE = "..."
+  manifestPlaceholders.XXX = "..."
   secret.manifestPlaceholders = manifestPlaceholders
   // ===== in Manifest end =====
   
