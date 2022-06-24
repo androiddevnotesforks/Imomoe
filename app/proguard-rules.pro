@@ -91,6 +91,7 @@ public static final ** CREATOR;
 # 自定义数据源接口不应被混淆
 -keep class com.skyd.imomoe.model.interfaces.** { *; }
 # 与自定义数据源相关的类不应该被混淆
+-keep class com.skyd.imomoe.adsapi.** { *; }
 -keep class com.skyd.imomoe.util.Util { *; }
 -keep class com.skyd.imomoe.bean.** { *; }
 -keep class com.skyd.imomoe.config.** { *; }

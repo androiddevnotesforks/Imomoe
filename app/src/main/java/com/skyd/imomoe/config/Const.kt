@@ -2,6 +2,7 @@ package com.skyd.imomoe.config
 
 import android.os.Environment
 import com.skyd.imomoe.appContext
+import kotlin.random.Random
 
 interface Const {
     object Common {
@@ -47,6 +48,8 @@ interface Const {
 
     interface Request {
         companion object {
+            fun randomUserAgent(): String = USER_AGENT_ARRAY[Random.nextInt(USER_AGENT_ARRAY.size)]
+
             val USER_AGENT_ARRAY = arrayOf(
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 OPR/26.0.1656.60",
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36",

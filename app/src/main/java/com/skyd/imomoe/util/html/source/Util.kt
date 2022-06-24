@@ -10,6 +10,7 @@ import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
 
+@Deprecated("use WebSource instead!")
 object Util {
     const val HTMLFLAG = "<GettingVideo>GettingVideo</GettingVideo>"
     fun getContent(url: String): Array<Any?> {

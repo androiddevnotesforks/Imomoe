@@ -142,6 +142,7 @@
 
 ```
 com.skyd.imomoe.model.interfaces.**
+com.skyd.imomoe.adsapi.**
 com.skyd.imomoe.model.util.**
 com.skyd.imomoe.util.html.source.**
 com.skyd.imomoe.util.eventbus.**

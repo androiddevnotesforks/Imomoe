@@ -14,6 +14,7 @@ import com.skyd.imomoe.util.html.source.Util
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.logI
 
+@Deprecated("use WebSource instead!")
 class GettingWebViewClient(
     private val mWebView: WebView?,
     private val mURL: String,
@@ -68,25 +69,6 @@ class GettingWebViewClient(
         mH.postDelayed(FinishedRunnable(view, url).also { mFinished = it }, mFinishedTimeOut)
     }
 
-    //    @Override
-    //    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-    //        try {
-    ////            LogUtil.e("GettingUtil", "shouldInterceptRequest(URL)  --> " + url);
-    //            if(url.lastIndexOf(".") < url.length() - 5){
-    //                Object[] content = Util.getContent(url);
-    //                String s = content[1].toString();
-    //                if(s.toLowerCase().contains("video") || s.toLowerCase().contains("mpegurl")){
-    //                    mVideos.add(new GettingVideo(url,"m3u8",(int) content[0],"m3u8"));
-    //                }
-    //            }else if (mFilter != null) {
-    //                GettingVideo video = mFilter.onFilter(view, url);
-    //                if (video != null) mVideos.add(video);
-    //            }
-    //        } catch (Throwable e) {
-    //            e.printStackTrace();
-    //        }
-    //        return null;
-    //    }
     override fun onReceivedError(
         view: WebView,
         errorCode: Int,

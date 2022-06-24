@@ -1,7 +1,9 @@
 package com.skyd.imomoe.ext
 
+import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.Duration
 
 /**
  * 为空，执行nullAction，否则执行notNullAction
@@ -25,4 +27,9 @@ fun Date.toTimeString(
 ): String {
     val format = SimpleDateFormat(pattern, locale)
     return format.format(this)
+}
+
+suspend fun doAfter(time: Duration, onFinish: () -> Unit) {
+    delay(time)
+    onFinish()
 }

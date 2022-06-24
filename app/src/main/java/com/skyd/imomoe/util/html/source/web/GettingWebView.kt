@@ -8,6 +8,7 @@ import android.webkit.*
 import com.skyd.imomoe.util.html.source.GettingCallback
 
 @SuppressLint("SetJavaScriptEnabled", "ObsoleteSdkInt")
+@Deprecated("use WebSource instead!")
 class GettingWebView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

@@ -1,5 +1,5 @@
 ext.version_code = 24
-ext.version_name = "1.6.0_Akarin"
+ext.version_name = "1.7.0_Akarin"
 ext.compose_version = '1.2.0-beta02'
 
 def build_versions = [:]
@@ -128,6 +128,10 @@ deps.smart = smart
 def flurry = [:]
 flurry.analytics = "com.flurry.android:analytics:13.3.0@aar"
 deps.flurry = flurry
+
+def commons = [:]
+commons.commons_text = "org.apache.commons:commons-text:1.9"
+deps.commons = commons
 
 def kuaishou = [:]
 kuaishou.akdanmaku = "com.kuaishou:akdanmaku:1.0.3"

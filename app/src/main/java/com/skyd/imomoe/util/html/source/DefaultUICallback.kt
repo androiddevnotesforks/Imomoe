@@ -2,6 +2,7 @@ package com.skyd.imomoe.util.html.source
 
 import android.view.View
 
+@Deprecated("use WebSource instead!")
 open class DefaultUICallback : GettingUICallback {
     override fun onGettingStart(webView: View?, url: String?) {}
 

@@ -5,6 +5,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import com.skyd.imomoe.util.html.source.Util
 
+@Deprecated("use WebSource instead!")
 class GettingWebChromeClient(private val mClient: GettingWebViewClient) : WebChromeClient() {
     override fun onJsConfirm(webView: WebView, s: String, s1: String, jsResult: JsResult): Boolean {
         if (s1.contains(Util.HTMLFLAG)) {

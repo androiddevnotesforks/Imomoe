@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.lang.ref.SoftReference
 import kotlin.random.Random
 
+@Deprecated("use WebSource instead!")
 class GettingUtil private constructor() {
     private var mWebView: GettingWebView? = null
     private var mUrl: String = ""

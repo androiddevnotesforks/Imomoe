@@ -30,3 +30,10 @@ fun String.isUrl(): Boolean {
     return Regex("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
         .matches(this)
 }
+
+fun String.containIn(array: Array<String>): Boolean {
+    array.forEach {
+        if (this.contains(it)) return true
+    }
+    return false
+}

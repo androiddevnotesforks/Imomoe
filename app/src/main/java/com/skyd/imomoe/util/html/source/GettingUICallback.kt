@@ -2,6 +2,7 @@ package com.skyd.imomoe.util.html.source
 
 import android.view.View
 
+@Deprecated("use WebSource instead!")
 interface GettingUICallback : GettingCallback {
     /**
      * 开始获取源代码

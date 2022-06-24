@@ -7,10 +7,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.ext.*
-import com.skyd.imomoe.model.interfaces.IConst
-import com.skyd.imomoe.model.interfaces.IRouter
-import com.skyd.imomoe.model.interfaces.IUtil
-import com.skyd.imomoe.model.interfaces.interfaceVersion
+import com.skyd.imomoe.model.interfaces.*
 import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import dalvik.system.DexClassLoader
@@ -134,7 +131,10 @@ object DataSourceManager {
     fun <T> create(clazz: Class<T>): T? {
         // 如果不使用自定义数据，直接返回null
         if (dataSourceFileName == DEFAULT_DATA_SOURCE && !testMode) return null
-        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") && !testMode) {
+        if (interfaceVersion != customDataSourceInfo?.get("interfaceVersion") &&
+            !coexistentInterfaceVersions.contains(customDataSourceInfo?.get("interfaceVersion")) &&
+            !testMode
+        ) {
             if (!showInterfaceVersionTip) appContext.getString(
                 R.string.data_source_interface_version_not_match,
                 customDataSourceInfo?.get("interfaceVersion"),

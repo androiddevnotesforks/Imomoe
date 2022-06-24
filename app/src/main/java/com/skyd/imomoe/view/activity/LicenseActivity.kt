@@ -140,6 +140,13 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             "sardine-android",
             "Apache-2.0 License"
         )
+        list += License1Bean(
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/apache/commons-text")
+            }.toString(),
+            "Apache Commons Text",
+            "Apache-2.0 License"
+        )
         adapter.dataList = list
 
         mBinding.run {
