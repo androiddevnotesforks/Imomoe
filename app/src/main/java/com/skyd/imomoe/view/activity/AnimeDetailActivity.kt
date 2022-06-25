@@ -30,6 +30,7 @@ import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
+import com.skyd.imomoe.view.fragment.dialog.EpisodeDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,7 +77,14 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
                 HorizontalRecyclerView1Proxy(
                     color = HorizontalRecyclerView1Proxy.WHITE,
                     onMoreButtonClickListener = { _, data, _ ->
-                        showEpisodeSheetDialog(data.episodeList).show()
+                        EpisodeDialogFragment {
+                            title = getString(R.string.play_list)
+                            dataList = data.episodeList.toMutableList().sortEpisodeTitle()
+                            onEpisodeClick { _, data, _ ->
+                                data.route.route(context)
+                                dismiss()
+                            }
+                        }.show(supportFragmentManager, EpisodeDialogFragment.TAG)
                     },
                     onAnimeEpisodeClickListener = { _, data, _ ->
                         data.route.route(this)
@@ -171,27 +179,4 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
     override fun getBinding(): ActivityAnimeDetailBinding =
         ActivityAnimeDetailBinding.inflate(layoutInflater)
-
-    private fun showEpisodeSheetDialog(dataList: List<AnimeEpisodeDataBean>): BottomSheetDialog {
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
-        val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_2, null)
-        bottomSheetDialog.setContentView(contentView)
-        val recyclerView =
-            contentView.findViewById<BottomSheetRecyclerView>(R.id.rv_dialog_bottom_sheet_2)
-        recyclerView.layoutManager = GridLayoutManager(this, 3)
-        recyclerView.post {
-            recyclerView.setPadding(16.dp, 0, 16.dp, 16.dp)
-            recyclerView.scrollToPosition(0)
-        }
-        if (recyclerView.itemDecorationCount == 0) {
-            recyclerView.addItemDecoration(AnimeEpisodeItemDecoration())
-        }
-        recyclerView.adapter = VarietyAdapter(
-            mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, _ ->
-                data.route.route(this)
-                bottomSheetDialog.dismiss()
-            }, width = ViewGroup.LayoutParams.MATCH_PARENT)),
-        ).apply { this.dataList = dataList.toMutableList().sortEpisodeTitle() }
-        return bottomSheetDialog
-    }
 }

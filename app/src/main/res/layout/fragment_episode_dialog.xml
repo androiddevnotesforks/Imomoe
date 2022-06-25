@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_circle_corner_bottom_dialog_12"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_episode_dialog_fragment"
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:text="@string/play_list"
+            android:textColor="?attr/colorOnSurface" />
+
+        <ImageView
+            android:id="@+id/btn_dismiss_episode_dialog_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="16dp"
+            android:src="@drawable/ic_close_24"
+            app:tint="?attr/colorOnSurface" />
+    </LinearLayout>
+
+    <com.skyd.imomoe.view.component.BottomSheetRecyclerView
+        android:id="@+id/rv_title_episode_dialog_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp" />
+</LinearLayout>

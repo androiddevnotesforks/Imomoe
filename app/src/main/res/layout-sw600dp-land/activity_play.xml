@@ -71,6 +71,7 @@
                     android:maxLines="2"
                     android:textColor="?attr/colorPrimary"
                     app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/iv_play_activity_favorite"
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"

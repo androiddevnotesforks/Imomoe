@@ -7,17 +7,14 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
@@ -33,12 +30,10 @@ import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util
-import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
 import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.showToast
-import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -47,6 +42,7 @@ import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.AnimeVideoPositionMemoryStore
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
+import com.skyd.imomoe.view.fragment.dialog.EpisodeDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.PlayViewModel
@@ -68,7 +64,25 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 AnimeCover1Proxy(),
                 AnimeCover2Proxy(),
                 HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
-                    getSheetDialog("play").show()
+                    EpisodeDialogFragment(
+                        backgroundDim = false,
+                        offsetFromTop = if (resources.getBoolean(R.bool.is_landscape)) {
+                            null
+                        } else {
+                            mBinding.avpPlayActivity.height
+                        }
+                    ) {
+                        title = getString(R.string.play_list)
+                        dataList = viewModel.episodesList.value.readOrNull().orEmpty()
+                        onEpisodeClick { _, data, index ->
+                            viewModel.playAnotherEpisode(data.route, index)
+                            dismiss()
+                        }
+                        val job = viewModel.episodesList.collectWithLifecycle(this) {
+                            dataList = it.readOrNull().orEmpty()
+                        }
+                        onDismissListener = { job.cancel() }
+                    }.show(supportFragmentManager, EpisodeDialogFragment.TAG)
                 }, onAnimeEpisodeClickListener = { _, data, index ->
                     viewModel.playAnotherEpisode(data.route, index)
                 })
@@ -108,7 +122,25 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                         true
                     }
                     R.id.menu_item_play_activity_download -> {
-                        getSheetDialog("download").show()
+                        EpisodeDialogFragment(
+                            backgroundDim = false,
+                            offsetFromTop = if (resources.getBoolean(R.bool.is_landscape)) {
+                                null
+                            } else {
+                                mBinding.avpPlayActivity.height
+                            }
+                        ) {
+                            title = this@PlayActivity.getString(R.string.download_anime)
+                            dataList = viewModel.episodesList.value.readOrNull().orEmpty()
+                            onEpisodeClick { _, data, index ->
+                                getString(R.string.parsing_video).showToast()
+                                viewModel.getAnimeDownloadUrl(data.route, index)
+                            }
+                            val job = viewModel.episodesList.collectWithLifecycle(this) {
+                                dataList = it.readOrNull().orEmpty()
+                            }
+                            onDismissListener = { job.cancel() }
+                        }.show(supportFragmentManager, EpisodeDialogFragment.TAG)
                         true
                     }
                     R.id.menu_item_play_activity_more -> {
@@ -297,7 +329,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 val playPosition = AnimeVideoPositionMemoryStore.getPlayPosition(videoUrl)
                 // 若用户设置了自动跳转 且 没有播放完
                 if (playPosition != null && playPosition != -1L && sharedPreferences()
-                        .getBoolean("autoJumpToLastPosition", false)
+                        .getBoolean("autoJumpToLastPosition", true)
                 ) seekOnStart = playPosition
                 withContext(Dispatchers.Main) {
                     if (!activityInBackground) {
@@ -453,47 +485,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun clickForFullScreen() {}
 
     override val detailOrientationRotateAuto = true
-
-    private fun getSheetDialog(action: String): BottomSheetDialog {
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
-        val contentView = View.inflate(this, R.layout.dialog_bottom_sheet_2, null)
-        bottomSheetDialog.setContentView(contentView)
-        val tvTitle =
-            contentView.findViewById<TextView>(R.id.tv_dialog_bottom_sheet_2_title)
-        tvTitle.text = when (action) {
-            "play" -> getString(R.string.play_list)
-            "download" -> getString(R.string.download_anime)
-            else -> ""
-        }
-        val recyclerView = contentView.findViewById<RecyclerView>(R.id.rv_dialog_bottom_sheet_2)
-        recyclerView.layoutManager = GridLayoutManager(this, 3)
-        recyclerView.post {
-            recyclerView.setPadding(16.dp, 0, 16.dp, 16.dp)
-            recyclerView.scrollToPosition(0)
-        }
-        if (recyclerView.itemDecorationCount == 0) {
-            recyclerView.addItemDecoration(AnimeEpisodeItemDecoration())
-        }
-        val adapter = VarietyAdapter(
-            mutableListOf(AnimeEpisode1Proxy(onClickListener = { _, data, index ->
-                if (action == "play") {
-                    viewModel.playAnotherEpisode(data.route, index)
-                    bottomSheetDialog.dismiss()
-                } else if (action == "download") {
-                    getString(R.string.parsing_video).showToast()
-                    viewModel.getAnimeDownloadUrl(data.route, index)
-                }
-            }, width = ViewGroup.LayoutParams.MATCH_PARENT))
-        ).apply { dataList = viewModel.episodesList.value.readOrNull().orEmpty() }
-        val job = viewModel.episodesList.collectWithLifecycle(this) {
-            adapter.notifyDataSetChanged()
-        }
-        bottomSheetDialog.setOnDismissListener {
-            job.cancel()
-        }
-        recyclerView.adapter = adapter
-        return bottomSheetDialog
-    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

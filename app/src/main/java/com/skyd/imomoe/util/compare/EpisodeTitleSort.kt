@@ -19,7 +19,8 @@ object EpisodeTitleSort {
             fun getFromKey(s: String): EpisodeTitleSortMode = when (s) {
                 "Ascending" -> Ascending
                 "Descending" -> Descending
-                else -> Default
+                "Default" -> Default
+                else -> Ascending
             }
         }
 
@@ -37,7 +38,7 @@ object EpisodeTitleSort {
             when (this) {
                 is Ascending -> appContext.getString(R.string.episode_title_sort_ascending)
                 is Descending -> appContext.getString(R.string.episode_title_sort_descending)
-                else -> appContext.getString(R.string.episode_title_sort_default)
+                is Default -> appContext.getString(R.string.episode_title_sort_default)
             }
         }
 
@@ -45,7 +46,7 @@ object EpisodeTitleSort {
             when (this) {
                 is Ascending -> "Ascending"
                 is Descending -> "Descending"
-                else -> "Default"
+                is Default -> "Default"
             }
         }
     }

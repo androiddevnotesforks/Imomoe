@@ -60,8 +60,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 自定义弹幕链接
     private var tvInputCustomDanmakuUrl: TextView? = null
 
-    private var mDanmakuControllerHeight: Int = 0
-
     // 弹幕进度-2s
     private var tvRewindDanmakuProgress: TextView? = null
 
@@ -112,10 +110,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         sbDanmakuTextScale = findViewById(R.id.sb_danmaku_text_size_scale)
         tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
         tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
-        etDanmakuInput?.gone()
-        ivShowDanmaku?.gone()
-        // 设置高度是0
-        hideBottomDanmakuController()
+        vgDanmakuController?.gone()
 
         etDanmakuInput?.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -291,8 +286,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ): GSYBaseVideoPlayer {
         val player =
             super.startWindowFullscreen(context, actionBar, statusBar) as DanmakuVideoPlayer
-        player.ivShowDanmaku?.visibility = ivShowDanmaku?.visibility ?: View.GONE
-        player.etDanmakuInput?.visibility = etDanmakuInput?.visibility ?: View.GONE
+        player.vgDanmakuController?.visibility = vgDanmakuController?.visibility ?: View.GONE
         player.mDanmakuTextScalePercent = mDanmakuTextScalePercent
         player.sbDanmakuTextScale?.progress = mDanmakuTextScalePercent - mDanmakuTextScaleMinPercent
         player.setTextSizeScale(mDanmakuTextScalePercent / 100f)
@@ -321,10 +315,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         super.resolveNormalVideoShow(oldF, vp, gsyVideoPlayer)
         gsyVideoPlayer?.let {
             val player = it as DanmakuVideoPlayer
-            if (player.etDanmakuInput?.visibility == View.VISIBLE) showBottomDanmakuController()
-            else hideBottomDanmakuController()
-            ivShowDanmaku?.visibility = player.ivShowDanmaku?.visibility ?: View.GONE
-            etDanmakuInput?.visibility = player.etDanmakuInput?.visibility ?: View.GONE
+            vgDanmakuController?.visibility = player.vgDanmakuController?.visibility ?: View.GONE
             mDanmakuTextScalePercent = player.mDanmakuTextScalePercent
             sbDanmakuTextScale?.progress =
                 player.mDanmakuTextScalePercent - player.mDanmakuTextScaleMinPercent
@@ -440,8 +431,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 开始播放弹幕
      */
     private fun onDanmakuStart() {
-        etDanmakuInput?.visible()
-        ivShowDanmaku?.visible()
+        vgDanmakuController?.visible()
         tvRewindDanmakuProgress?.visible()
         tvResetDanmakuProgress?.visible()
         tvForwardDanmakuProgress?.visible()
@@ -455,7 +445,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             etDanmakuInput?.disable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku_is_disabled)
         }
-        showBottomDanmakuController()
         setTextSizeScale(mDanmakuTextScalePercent / 100f)
 
         mVideoAllCallBack.let {
@@ -568,42 +557,5 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     override fun release() {
         super.release()
         releaseDanmaku()
-    }
-
-    /**
-     * 显示非全屏模式下播放器下方弹幕控制部分
-     */
-    private fun showBottomDanmakuController() {
-        vgDanmakuController?.let { danmakuController ->
-            val dcLayoutParams = danmakuController.layoutParams
-            if (dcLayoutParams.height == 0) {
-                post {
-                    dcLayoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    mDanmakuControllerHeight = danmakuController.height
-                    val playerLayoutParams = this.layoutParams
-                    playerLayoutParams.height = height + danmakuController.height
-
-                    danmakuController.layoutParams = dcLayoutParams
-                    this.layoutParams = playerLayoutParams
-                }
-            }
-        }
-    }
-
-    /**
-     * 隐藏非全屏模式下播放器下方弹幕控制部分
-     */
-    private fun hideBottomDanmakuController() {
-        vgDanmakuController?.let { danmakuController ->
-            if (danmakuController.layoutParams.height != 0) {
-                if (danmakuController.height > 0) {
-                    mDanmakuControllerHeight = danmakuController.height
-                    layoutParams.height = height - danmakuController.height
-                    requestLayout()
-                }
-                danmakuController.layoutParams.height = 0
-                danmakuController.requestLayout()
-            }
-        }
     }
 }

@@ -191,10 +191,10 @@ class SettingFragment : BasePreferenceFragment() {
         }
 
         findPreference<CheckBoxPreference>("auto_jump_to_last_position")?.apply {
-            isChecked = sharedPreferences().getBoolean("autoJumpToLastPosition", false)
+            isChecked = sharedPreferences().getBoolean("autoJumpToLastPosition", true)
             setOnPreferenceChangeListener { _, newValue ->
                 sharedPreferences().editor {
-                    putBoolean("autoJumpToLastPosition", newValue as? Boolean ?: false)
+                    putBoolean("autoJumpToLastPosition", newValue as? Boolean ?: true)
                 }
                 true
             }

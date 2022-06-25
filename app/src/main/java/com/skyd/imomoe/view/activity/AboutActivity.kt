@@ -271,6 +271,12 @@ fun AboutScreenList(modifier: Modifier = Modifier) {
                             R.string.data_source_jar_version_code,
                             versionCode().toString()
                         )
+                    }\n${
+                        stringResource(
+                            R.string.data_source_interface_version,
+                            DataSourceManager.customDataSourceInfo?.get("interfaceVersion")
+                                .orEmpty()
+                        )
                     }\n${about()}"
                 },
                 onPositive = { openDataSourceInfoDialog = false },

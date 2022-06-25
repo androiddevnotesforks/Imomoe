@@ -1070,7 +1070,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
                     playPositionViewJob = launch(Dispatchers.Main) {
                         // 若用户没有设置自动跳转 或者 看完了，才显示提示
                         if (!sharedPreferences()
-                                .getBoolean("autoJumpToLastPosition", false) || it == -1L
+                                .getBoolean("autoJumpToLastPosition", true) || it == -1L
                         ) {
                             tvPlayPosition?.text = positionFormat(it)
                             vgPlayPosition?.visible()

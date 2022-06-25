@@ -46,14 +46,14 @@ object PlayerCore {
     private infix fun String.to(that: Class<out IPlayerManager>): Core = Core(this, that)
 
     val playerCores: List<Core> = listOf(
-        "ijk内核 (默认)" to IjkPlayerManager::class.java,
-        "ExoPlayer内核" to Exo2PlayerManager::class.java,
+        "ExoPlayer内核 (默认)" to Exo2PlayerManager::class.java,
+        "ijk内核" to IjkPlayerManager::class.java,
         "系统内核" to SystemPlayerManager::class.java
     )
 
     var playerCore: Core = (playerCores.firstOrNull {
         it.equals(sharedPreferences().getString("playerCore", null)
-            .run { this ?: IjkPlayerManager::class.java.name })
+            .run { this ?: Exo2PlayerManager::class.java.name })
     } ?: playerCores.first()).also { PlayerFactory.setPlayManager(it.playManager) }
         set(value) {
             if (value == field) return
