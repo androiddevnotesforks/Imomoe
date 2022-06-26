@@ -111,6 +111,10 @@ class DataSource2Proxy(
                     isEnabled = true
                     activity.getString(R.string.update)
                 }
+                else -> {
+                    isEnabled = true
+                    activity.getString(R.string.download)
+                }
             }
         }
     }

@@ -47,7 +47,7 @@ class DataSourceRepositoryBean(
     val publicAt: Long,      // 发布时间戳
     @SerializedName("downloadUrl")
     val downloadUrl: String?,
-    var status: Status = Status.NONE
+    var status: Status? = Status.NONE
 ) : BaseBean, Diff, Cloneable {
     override fun sameAs(o: Any?): Boolean {
         return o is DataSourceRepositoryBean && name == o.name && interfaceVersion == o.interfaceVersion

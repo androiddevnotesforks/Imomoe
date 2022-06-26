@@ -199,6 +199,7 @@ dependencies {
     implementation deps.smart.refresh_footer_ball
     implementation deps.coil_kt.coil
     implementation deps.kuaishou.akdanmaku
+    implementation deps.vadiole.colorpicker
     implementation deps.commons.commons_text
     implementation deps.okhttp3.okhttp_dnsoverhttps
     implementation deps.thegrizzlylabs.sardine_android

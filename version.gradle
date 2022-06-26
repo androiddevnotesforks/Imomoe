@@ -137,6 +137,10 @@ def kuaishou = [:]
 kuaishou.akdanmaku = "com.kuaishou:akdanmaku:1.0.3"
 deps.kuaishou = kuaishou
 
+def vadiole = [:]
+vadiole.colorpicker = "io.github.vadiole:colorpicker:1.0.2"
+deps.vadiole = vadiole
+
 def thegrizzlylabs = [:]
 thegrizzlylabs.sardine_android = "com.github.thegrizzlylabs:sardine-android:0.8"
 deps.thegrizzlylabs = thegrizzlylabs

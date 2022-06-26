@@ -147,6 +147,13 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
             "Apache Commons Text",
             "Apache-2.0 License"
         )
+        list += License1Bean(
+            OpenBrowserProcessor.route.buildRouteUri {
+                appendQueryParameter("url", "https://github.com/vadiole/colorpicker")
+            }.toString(),
+            "Color Picker",
+            "Apache-2.0 License"
+        )
         adapter.dataList = list
 
         mBinding.run {

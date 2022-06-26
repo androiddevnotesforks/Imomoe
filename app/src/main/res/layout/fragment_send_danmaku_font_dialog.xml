@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Filled"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/gray_2">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:minWidth="360dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="26dp"
+        android:paddingVertical="20dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:gravity="center"
+            android:text="@string/danmaku_mode"
+            android:textColor="@android:color/white" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/tg_danmaku_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/btn_danmaku_mode_scroll"
+                style="@style/Widget.App.Button.OutlinedButton.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:text="@string/danmaku_mode_scroll"
+                app:icon="@drawable/ic_danmaku_scroll_24" />
+
+            <Button
+                android:id="@+id/btn_danmaku_mode_top"
+                style="@style/Widget.App.Button.OutlinedButton.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:text="@string/danmaku_mode_top"
+                app:icon="@drawable/ic_danmaku_top_24" />
+
+            <Button
+                android:id="@+id/btn_danmaku_mode_bottom"
+                style="@style/Widget.App.Button.OutlinedButton.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="100dp"
+                android:text="@string/danmaku_mode_bottom"
+                app:icon="@drawable/ic_danmaku_bottom_24" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/danmaku_color"
+            android:textColor="@android:color/white" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_danmaku_color"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            app:cardBackgroundColor="@android:color/white" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

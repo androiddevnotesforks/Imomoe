@@ -325,5 +325,10 @@
     <string name="data_source_author">作者：%s</string>
     <string name="config_data_source_activity_menu_open_repo">访问数据源仓库</string>
     <string name="back">返回</string>
+    <string name="danmaku_mode">模式</string>
+    <string name="danmaku_mode_bottom">底部</string>
+    <string name="danmaku_mode_top">顶部</string>
+    <string name="danmaku_mode_scroll">滚动</string>
+    <string name="danmaku_color">弹幕颜色</string>
 
 </resources>

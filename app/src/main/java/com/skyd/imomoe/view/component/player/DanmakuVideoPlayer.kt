@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.component.player
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.data.DanmakuItemData.Companion.DANMAKU_STYLE_ICON_UP
 import com.kuaishou.akdanmaku.ui.DanmakuView
@@ -21,20 +23,18 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuManager
+import com.skyd.imomoe.view.component.player.danmaku.DanmakuMode
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuType
-import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser
-import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuParser.Companion.toDanmakuItemData
-import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuRequester
-import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuSender
-import com.skyd.imomoe.view.component.player.danmaku.bili.BilibiliDanmakuParser
-import com.skyd.imomoe.view.component.player.danmaku.bili.BilibiliDanmakuRequester
+import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuRepository
+import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuRepository.Companion.toDanmakuItemData
+import com.skyd.imomoe.view.component.player.danmaku.bili.BilibiliDanmakuRepository
+import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
+import com.skyd.imomoe.view.fragment.dialog.SendDanmakuFontDialogFragment
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
-import java.util.zip.Inflater
-import java.util.zip.InflaterInputStream
 
 
 open class DanmakuVideoPlayer : AnimeVideoPlayer {
@@ -55,7 +55,16 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 弹幕开关
     private var ivShowDanmaku: ImageView? = null
 
+    // 发送弹幕样式按钮
+    private var ivSendDanmakuFont: ImageView? = null
+
     private var vgDanmakuController: ViewGroup? = null
+
+    // 发送弹幕样式
+    var sendDanmakuMode: DanmakuMode = DanmakuMode.Scroll
+
+    // 发送弹幕颜色
+    var sendDanmakuColor: Int = Color.WHITE
 
     // 自定义弹幕链接
     private var tvInputCustomDanmakuUrl: TextView? = null
@@ -101,8 +110,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         mDanmakuView = findViewById(R.id.danmaku_view)
         danmakuManager = DanmakuManager(mDanmakuView)
         ivShowDanmaku = findViewById(R.id.iv_show_danmaku)
+        ivSendDanmakuFont = findViewById(R.id.iv_send_danmaku_font)
         etDanmakuInput = findViewById(R.id.et_input_danmaku)
-        vgDanmakuController = findViewById(R.id.cl_danmaku_controller)
+        vgDanmakuController = findViewById(R.id.vg_danmaku_controller)
         tvInputCustomDanmakuUrl = findViewById(R.id.tv_input_custom_danmaku_url)
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
         tvResetDanmakuProgress = findViewById(R.id.tv_player_reset_danmaku_progress)
@@ -138,6 +148,18 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             }
         }
 
+        ivSendDanmakuFont?.setOnClickListener {
+            val fragmentActivity =
+                mContext.activity as? FragmentActivity ?: return@setOnClickListener
+            SendDanmakuFontDialogFragment(
+                danmakuMode = sendDanmakuMode,
+                danmakuColor = sendDanmakuColor
+            ) { danmakuMode, danmakuColor ->
+                sendDanmakuMode = danmakuMode
+                sendDanmakuColor = danmakuColor
+            }.show(fragmentActivity.supportFragmentManager, SendDanmakuFontDialogFragment.TAG)
+        }
+
         ivShowDanmaku?.setOnClickListener {
             startDismissControlViewTimer()
             mDanmakuShow = !mDanmakuShow
@@ -152,7 +174,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                     val url = URL(text.toString()).toString()
                     if (url.contains("bili", true)) {
                         enableDanmaku = true
-                        setDanmakuUrl(url, DanmakuType.BilibiliType)
+                        setDanmakuUrl(url, DanmakuType.BilibiliType())
                     }
                 } catch (e: Exception) {
                     mContext.getString(R.string.website_format_error).showToast()
@@ -352,7 +374,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
     fun setDanmakuUrl(
         url: String = ANIME_DANMAKU_URL,
-        danmakuSourceType: DanmakuType = DanmakuType.AnimeType(),
+        danmakuType: DanmakuType<*> = DanmakuType.AnimeType(),
         autoPlayIfVideoIsPlaying: Boolean = true    // 调用此方法后若视频在播放，则自动播放弹幕
     ) {
         if (url.isEmpty()) return
@@ -365,21 +387,19 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             runCatching {
                 var success = false
                 val dataList: MutableList<DanmakuItemData> = arrayListOf()
-                DanmakuManager.danmakuSourceType = danmakuSourceType
+                DanmakuManager.danmakuType = danmakuType
 
-                when (danmakuSourceType) {
+                when (danmakuType) {
                     is DanmakuType.AnimeType -> {
-                        val danmakuData = AnimeDanmakuRequester.request(animeTitle, mTitle)
-                        danmakuSourceType.data = danmakuData
-                        dataList += AnimeDanmakuParser(danmakuData?.data.orEmpty()).parse()
+                        danmakuType.repository = AnimeDanmakuRepository(animeTitle, mTitle).apply {
+                            dataList += parse()
+                        }
                         success = true
                     }
                     is DanmakuType.BilibiliType -> {
-                        val inputStream = InflaterInputStream(
-                            BilibiliDanmakuRequester.request(url),
-                            Inflater(true)
-                        )
-                        dataList += BilibiliDanmakuParser(inputStream.string()).parse()
+                        danmakuType.repository = BilibiliDanmakuRepository(url).apply {
+                            dataList += parse()
+                        }
                         success = true
                     }
                 }
@@ -438,7 +458,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         sbDanmakuTextScale?.visible()
         tvDanmakuTextScaleHeader?.visible()
         tvDanmakuTextScale?.visible()
-        if (DanmakuManager.danmakuSourceType is DanmakuType.AnimeType) {
+        if (DanmakuManager.danmakuType is DanmakuType.AnimeType) {
             etDanmakuInput?.enable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
         } else {
@@ -471,13 +491,13 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     ) {
         coroutineScope.launch {
             runCatching {
-                when (val danmakuSourceType = DanmakuManager.danmakuSourceType) {
+                when (val danmakuType = DanmakuManager.danmakuType) {
                     is DanmakuType.AnimeType -> {
-                        val episode = danmakuSourceType.data?.episode ?: return@launch
-                        AnimeDanmakuSender.send(
+                        danmakuType.repository?.send(
                             content = content,
-                            episodeId = episode.id,
-                            time = time
+                            time = time,
+                            mode = sendDanmakuMode,
+                            color = sendDanmakuColor
                         )?.let {
                             val data = it.toDanmakuItemData(DANMAKU_STYLE_ICON_UP)
                             withContext(Dispatchers.Main) {

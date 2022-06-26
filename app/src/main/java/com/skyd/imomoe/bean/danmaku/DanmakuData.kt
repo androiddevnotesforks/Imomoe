@@ -7,7 +7,7 @@ class DanmakuData(
     @SerializedName("episode")
     val episode: Episode?,
     @SerializedName("data")
-    val data: List<Data>?,
+    val data: MutableList<Data>?,
     @SerializedName("total")
     val total: Int,
 ) : Serializable {

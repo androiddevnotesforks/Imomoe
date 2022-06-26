@@ -20,7 +20,7 @@ class DanmakuManager(val danmakuView: DanmakuView) {
         val danmakuDataList: MutableList<DanmakuItemData> = mutableListOf()
 
         // 弹幕源类型
-        var danmakuSourceType: DanmakuType = DanmakuType.AnimeType()
+        var danmakuType: DanmakuType<*>? = null
 
         private fun createDataFilters(): List<DanmakuDataFilter> =
             listOf(

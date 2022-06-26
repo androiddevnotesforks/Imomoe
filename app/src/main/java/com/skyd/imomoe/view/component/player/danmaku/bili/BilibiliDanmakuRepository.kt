@@ -2,31 +2,32 @@ package com.skyd.imomoe.view.component.player.danmaku.bili
 
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.skyd.imomoe.ext.string
+import com.skyd.imomoe.net.RetrofitManager
+import com.skyd.imomoe.net.service.DanmakuService
+import com.skyd.imomoe.util.Util.toEncodedUrl
+import com.skyd.imomoe.view.component.player.danmaku.DanmakuRepository
 import org.xml.sax.Attributes
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
 import org.xml.sax.helpers.DefaultHandler
 import org.xml.sax.helpers.XMLReaderFactory
 import java.io.IOException
-import java.io.InputStream
 import java.util.*
+import java.util.zip.Inflater
+import java.util.zip.InflaterInputStream
 
-class BilibiliDanmakuParser {
+class BilibiliDanmakuRepository(val url: String) : DanmakuRepository {
     init {
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver")
     }
 
-    private var data: String = ""
-
-    constructor(data: String) {
-        this.data = data
-    }
-
-    constructor(inputStream: InputStream) {
-        this.data = inputStream.string()
-    }
-
-    fun parse(): List<DanmakuItemData> {
+    override suspend fun parse(): List<DanmakuItemData> {
+        val inputStream = InflaterInputStream(
+            RetrofitManager.get().create(DanmakuService::class.java)
+                .getCustomizeDanmaku(url.toEncodedUrl()).byteStream(),
+            Inflater(true)
+        )
+        val data: String = inputStream.string()
         if (data.isBlank()) return ArrayList()
         try {
             val xmlReader = XMLReaderFactory.createXMLReader()
