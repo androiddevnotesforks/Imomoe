@@ -2,19 +2,16 @@ package com.skyd.imomoe.view.component.player
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.kuaishou.akdanmaku.data.DanmakuItemData
 import com.kuaishou.akdanmaku.data.DanmakuItemData.Companion.DANMAKU_STYLE_ICON_UP
-import com.kuaishou.akdanmaku.ui.DanmakuView
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
@@ -23,14 +20,12 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuManager
-import com.skyd.imomoe.view.component.player.danmaku.DanmakuMode
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuType
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuRepository
 import com.skyd.imomoe.view.component.player.danmaku.anime.AnimeDanmakuRepository.Companion.toDanmakuItemData
 import com.skyd.imomoe.view.component.player.danmaku.bili.BilibiliDanmakuRepository
-import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
+import com.skyd.imomoe.view.fragment.dialog.DanmakuSettingDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.SendDanmakuFontDialogFragment
-import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,12 +37,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         const val ANIME_DANMAKU_URL = Api.DANMAKU_URL
     }
 
-    private lateinit var mDanmakuView: DanmakuView          //弹幕view
-
     private lateinit var danmakuManager: DanmakuManager
-
-    // 是否在显示弹幕
-    private var mDanmakuShow = true
 
     // 弹幕输入文本框
     private var etDanmakuInput: EditText? = null
@@ -55,16 +45,13 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 弹幕开关
     private var ivShowDanmaku: ImageView? = null
 
+    // 弹幕设置
+    private var ivDanmakuSetting: ImageView? = null
+
     // 发送弹幕样式按钮
     private var ivSendDanmakuFont: ImageView? = null
 
     private var vgDanmakuController: ViewGroup? = null
-
-    // 发送弹幕样式
-    var sendDanmakuMode: DanmakuMode = DanmakuMode.Scroll
-
-    // 发送弹幕颜色
-    var sendDanmakuColor: Int = Color.WHITE
 
     // 自定义弹幕链接
     private var tvInputCustomDanmakuUrl: TextView? = null
@@ -81,24 +68,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
     // 弹幕进度delta
     private var mDanmakuProgressDelta: Long = 0L
 
-    // 弹幕字号缩放百分比SeekBar
-    private var sbDanmakuTextScale: SeekBar? = null
-
-    // "弹幕字号"TextView
-    private var tvDanmakuTextScaleHeader: TextView? = null
-
-    // 显示弹幕字号缩放百分比TextView
-    private var tvDanmakuTextScale: TextView? = null
-
-    // 弹幕字号缩放最小百分比
-    private val mDanmakuTextScaleMinPercent: Int = 70
-
-    // 弹幕字号百分比
-    private var mDanmakuTextScalePercent: Int = mDanmakuTextScaleMinPercent + 60
-
-    // 是否显示弹幕
-    var enableDanmaku: Boolean = true
-
+    @Suppress("unused")
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
 
     constructor(context: Context) : super(context)
@@ -107,9 +77,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
     override fun init(context: Context?) {
         super.init(context)
-        mDanmakuView = findViewById(R.id.danmaku_view)
-        danmakuManager = DanmakuManager(mDanmakuView)
+        danmakuManager = DanmakuManager(findViewById(R.id.danmaku_view))
         ivShowDanmaku = findViewById(R.id.iv_show_danmaku)
+        ivDanmakuSetting = findViewById(R.id.iv_danmaku_setting)
         ivSendDanmakuFont = findViewById(R.id.iv_send_danmaku_font)
         etDanmakuInput = findViewById(R.id.et_input_danmaku)
         vgDanmakuController = findViewById(R.id.vg_danmaku_controller)
@@ -117,9 +87,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         tvRewindDanmakuProgress = findViewById(R.id.tv_player_rewind_danmaku_progress)
         tvResetDanmakuProgress = findViewById(R.id.tv_player_reset_danmaku_progress)
         tvForwardDanmakuProgress = findViewById(R.id.tv_player_forward_danmaku_progress)
-        sbDanmakuTextScale = findViewById(R.id.sb_danmaku_text_size_scale)
-        tvDanmakuTextScaleHeader = findViewById(R.id.tv_danmaku_text_size_scale_header)
-        tvDanmakuTextScale = findViewById(R.id.tv_danmaku_text_size_scale)
         vgDanmakuController?.gone()
 
         etDanmakuInput?.setOnEditorActionListener { v, actionId, _ ->
@@ -152,18 +119,36 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             val fragmentActivity =
                 mContext.activity as? FragmentActivity ?: return@setOnClickListener
             SendDanmakuFontDialogFragment(
-                danmakuMode = sendDanmakuMode,
-                danmakuColor = sendDanmakuColor
+                danmakuMode = DanmakuManager.sendDanmakuMode,
+                danmakuColor = DanmakuManager.sendDanmakuColor
             ) { danmakuMode, danmakuColor ->
-                sendDanmakuMode = danmakuMode
-                sendDanmakuColor = danmakuColor
+                DanmakuManager.sendDanmakuMode = danmakuMode
+                DanmakuManager.sendDanmakuColor = danmakuColor
             }.show(fragmentActivity.supportFragmentManager, SendDanmakuFontDialogFragment.TAG)
         }
 
         ivShowDanmaku?.setOnClickListener {
             startDismissControlViewTimer()
-            mDanmakuShow = !mDanmakuShow
+            DanmakuManager.showDanmaku = !DanmakuManager.showDanmaku
             resolveDanmakuShow()
+        }
+
+        ivDanmakuSetting?.setOnClickListener {
+            val fragmentActivity =
+                mContext.activity as? FragmentActivity ?: return@setOnClickListener
+            DanmakuSettingDialogFragment(
+                fillParentWidth = !mIfCurrentIsFullscreen,
+                filter = DanmakuManager.showDanmakuType,
+                allowOverlap = DanmakuManager.allowOverlap,
+                danmakuAlpha = DanmakuManager.alpha,
+                danmakuScale = DanmakuManager.danmakuScale,
+                danmakuBold = DanmakuManager.danmakuBold,
+                onDanmakuFilterChanged = { danmakuManager.switchTypeFilter(it) },
+                onAllowOverlapChanged = { danmakuManager.allowOverlap(it) },
+                onDanmakuAlphaChanged = { danmakuManager.danmakuAlpha(it) },
+                onDanmakuScaleChanged = { danmakuManager.danmakuScale(it) },
+                onDanmakuBoldChanged = { danmakuManager.danmakuBold(it) }
+            ).show(fragmentActivity.supportFragmentManager, DanmakuSettingDialogFragment.TAG)
         }
 
         tvInputCustomDanmakuUrl?.setOnClickListener {
@@ -173,7 +158,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                 try {
                     val url = URL(text.toString()).toString()
                     if (url.contains("bili", true)) {
-                        enableDanmaku = true
+                        DanmakuManager.enableDanmaku = true
                         setDanmakuUrl(url, DanmakuType.BilibiliType())
                     }
                 } catch (e: Exception) {
@@ -206,15 +191,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             mDanmakuProgressDelta = 0L
             seekDanmaku(currentPlayer.currentPositionWhenPlaying)
         }
-
-        sbDanmakuTextScale?.setOnSeekBarChangeListener {
-            onProgressChanged { seekBar, progress, _ ->
-                seekBar ?: return@onProgressChanged
-                mDanmakuTextScalePercent = progress + mDanmakuTextScaleMinPercent
-                setTextSizeScale(mDanmakuTextScalePercent / 100f)
-                tvDanmakuTextScale?.text = mDanmakuTextScalePercent.percentage
-            }
-        }
     }
 
     override fun onCompletion() {
@@ -234,7 +210,7 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
 
     override fun onPrepared() {
         super.onPrepared()
-        if (enableDanmaku) {
+        if (DanmakuManager.enableDanmaku) {
             setDanmakuUrl()
             seekDanmaku(0L)
 //        playDanmaku()
@@ -309,14 +285,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         val player =
             super.startWindowFullscreen(context, actionBar, statusBar) as DanmakuVideoPlayer
         player.vgDanmakuController?.visibility = vgDanmakuController?.visibility ?: View.GONE
-        player.mDanmakuTextScalePercent = mDanmakuTextScalePercent
-        player.sbDanmakuTextScale?.progress = mDanmakuTextScalePercent - mDanmakuTextScaleMinPercent
-        player.setTextSizeScale(mDanmakuTextScalePercent / 100f)
-        player.enableDanmaku = enableDanmaku
 
         // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
         player.danmakuManager.recreatePlayer()
-        player.mDanmakuShow = mDanmakuShow
         player.resolveDanmakuShow()
         player.updatePlayerDanmakuState()
         player.seekDanmaku(currentPositionWhenPlaying)
@@ -338,15 +309,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         gsyVideoPlayer?.let {
             val player = it as DanmakuVideoPlayer
             vgDanmakuController?.visibility = player.vgDanmakuController?.visibility ?: View.GONE
-            mDanmakuTextScalePercent = player.mDanmakuTextScalePercent
-            sbDanmakuTextScale?.progress =
-                player.mDanmakuTextScalePercent - player.mDanmakuTextScaleMinPercent
-            setTextSizeScale(player.mDanmakuTextScalePercent / 100f)
-            enableDanmaku = player.enableDanmaku
 
             // 重建一个DanmakuPlayer，以便清除上次播放的弹幕
             danmakuManager.recreatePlayer()
-            mDanmakuShow = player.mDanmakuShow
             resolveDanmakuShow()
             updatePlayerDanmakuState()
             seekDanmaku(player.currentPositionWhenPlaying)
@@ -366,9 +331,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 将old状态赋值给new
      */
     fun updatePlayerDanmakuState() {
-        if (!enableDanmaku) return
+        if (!DanmakuManager.enableDanmaku) return
         danmakuManager.danmakuPlayer.updateData(DanmakuManager.danmakuDataList)
-        danmakuManager.danmakuPlayer.start(DanmakuManager.config)
+        danmakuManager.playDanmaku()
         onDanmakuStart()
     }
 
@@ -432,19 +397,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      */
     private fun resolveDanmakuShow() {
         post {
-            if (mDanmakuShow) {
-                setDanmakuVisibility(true)
-                ivShowDanmaku?.isSelected = true
-            } else {
-                setDanmakuVisibility(false)
-                ivShowDanmaku?.isSelected = false
-            }
+            danmakuManager.setDanmakuVisibility(DanmakuManager.showDanmaku)
+            ivShowDanmaku?.isSelected = DanmakuManager.showDanmaku
         }
-    }
-
-    private fun setDanmakuVisibility(visible: Boolean) {
-        DanmakuManager.config = DanmakuManager.config.copy(visibility = visible)
-        danmakuManager.danmakuPlayer.updateConfig(DanmakuManager.config)
     }
 
     /**
@@ -455,9 +410,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
         tvRewindDanmakuProgress?.visible()
         tvResetDanmakuProgress?.visible()
         tvForwardDanmakuProgress?.visible()
-        sbDanmakuTextScale?.visible()
-        tvDanmakuTextScaleHeader?.visible()
-        tvDanmakuTextScale?.visible()
         if (DanmakuManager.danmakuType is DanmakuType.AnimeType) {
             etDanmakuInput?.enable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku)
@@ -465,8 +417,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             etDanmakuInput?.disable()
             etDanmakuInput?.hint = mContext.getString(R.string.send_a_danmaku_is_disabled)
         }
-        setTextSizeScale(mDanmakuTextScalePercent / 100f)
-
         mVideoAllCallBack.let {
             if (it is MyVideoAllCallBack) it.onDanmakuStart()
         }
@@ -476,9 +426,9 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
      * 播放弹幕，要保证只在次方法内调用mDanmakuPlayer.start(config)
      */
     protected open fun playDanmaku() {
-        if (DanmakuManager.danmakuUrl.isBlank() || !enableDanmaku) return
+        if (DanmakuManager.danmakuUrl.isBlank() || !DanmakuManager.enableDanmaku) return
         // 若不加下面的if，则切换横竖屏后不管是否暂停，弹幕都会自动播放
-        if (currentPlayer.isInPlayingState) danmakuManager.danmakuPlayer.start(DanmakuManager.config)
+        if (currentPlayer.isInPlayingState) danmakuManager.playDanmaku()
         onDanmakuStart()
     }
 
@@ -496,8 +446,8 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
                         danmakuType.repository?.send(
                             content = content,
                             time = time,
-                            mode = sendDanmakuMode,
-                            color = sendDanmakuColor
+                            mode = DanmakuManager.sendDanmakuMode,
+                            color = DanmakuManager.sendDanmakuColor
                         )?.let {
                             val data = it.toDanmakuItemData(DANMAKU_STYLE_ICON_UP)
                             withContext(Dispatchers.Main) {
@@ -553,15 +503,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             mCurrentState == GSYVideoView.CURRENT_STATE_NORMAL
         )
             stopDanmaku()
-    }
-
-    /**
-     * 更改弹幕字号缩放百分比
-     * @param scale 缩放倍数，例如2.7f指的是弹幕字号乘2.7
-     */
-    private fun setTextSizeScale(scale: Float) {
-        DanmakuManager.config = DanmakuManager.config.copy(textSizeScale = scale)
-        danmakuManager.danmakuPlayer.updateConfig(DanmakuManager.config)
     }
 
     /**

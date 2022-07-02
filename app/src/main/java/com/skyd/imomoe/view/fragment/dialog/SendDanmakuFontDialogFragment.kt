@@ -2,11 +2,11 @@ package com.skyd.imomoe.view.fragment.dialog
 
 import android.content.DialogInterface
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentSendDanmakuFontDialogBinding
 import com.skyd.imomoe.view.component.player.danmaku.DanmakuMode
@@ -23,13 +23,16 @@ class SendDanmakuFontDialogFragment(
         const val TAG = "SendDanmakuFontDialogFragment"
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme_NoBackgroundDim)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dialog?.window?.apply {
+            // make dialog itself transparent
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            // background dim
+            setDimAmount(0.2f)
+        }
+
         mBinding.apply {
             tgDanmakuMode.addOnButtonCheckedListener { _, checkedId, isChecked ->
                 if (isChecked) {
@@ -63,15 +66,6 @@ class SendDanmakuFontDialogFragment(
                     .create()
                     .show(childFragmentManager, "color_picker")
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        dialog?.window?.attributes?.also {
-            it.width = WindowManager.LayoutParams.WRAP_CONTENT
-            it.height = WindowManager.LayoutParams.WRAP_CONTENT
-            dialog?.window?.attributes = it
         }
     }
 

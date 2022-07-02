@@ -9,6 +9,8 @@ import android.content.Intent
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.*
 import android.view.View.OnClickListener
@@ -21,6 +23,7 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.utils.CommonUtil
 import com.shuyu.gsyvideoplayer.utils.Debuger
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -38,11 +41,14 @@ import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.getScreenHeight
 import com.skyd.imomoe.util.Util.getScreenWidth
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
+import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.VideoSpeed1Proxy
 import com.skyd.imomoe.view.component.ZoomView
+import com.skyd.imomoe.view.component.getData
+import com.skyd.imomoe.view.component.setData
 import com.skyd.imomoe.view.listener.dsl.setOnSeekBarChangeListener
 import kotlinx.coroutines.*
 import java.io.File
@@ -198,6 +204,10 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 全屏手动滑动下拉状态栏的起始偏移位置
     protected open var mStatusBarOffset: Int = 50.dp
 
+    open var storeStateCurrentState: Int? = null
+
+    protected open var surfaceContainer: View? = null
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, fullFlag: Boolean?) : super(context, fullFlag)
@@ -237,6 +247,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         tvPlayPosition = findViewById(R.id.tv_play_position_time)
         ivClosePlayPositionTip = findViewById(R.id.iv_close_play_position_tip)
         ivMediaThumb = findViewById(R.id.iv_media_thumb)
+        surfaceContainer = findViewById(R.id.surface_container)
 
         vgRightContainer?.gone()
         vgSettingContainer?.gone()
@@ -533,6 +544,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         player.sbNightScreen?.progress = mNightScreenSeekBarProgress
         player.onPlayNextEpisode = onPlayNextEpisode
         player.animeTitle = animeTitle
+        player.storeStateCurrentState = storeStateCurrentState
+
         if (player.mBottomProgressBar != null) player.pbBottomProgress = player.mBottomProgressBar
         player.setBottomProgressBarVisibility(
             sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
@@ -581,6 +594,8 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mNightScreenSeekBarProgress = player.sbNightScreen?.progress ?: 0
             onPlayNextEpisode = player.onPlayNextEpisode
             animeTitle = player.animeTitle
+            storeStateCurrentState = player.storeStateCurrentState
+
             if (mBottomProgressBar != null) pbBottomProgress = mBottomProgressBar
             setBottomProgressBarVisibility(
                 sharedPreferences().getBoolean("showPlayerBottomProgressbar", false)
@@ -719,7 +734,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
-    override fun onBrightnessSlide(percent: Float) {
+    override public fun onBrightnessSlide(percent: Float) {
         val activity = mContext as Activity
         val lpa = activity.window.attributes
         val mBrightnessData = lpa.screenBrightness
@@ -1275,5 +1290,85 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         suspend fun deletePlayPosition(url: String)
 
         fun positionFormat(position: Long): String
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        return Bundle().apply {
+            putParcelable("super", super.onSaveInstanceState())
+            putString("mUrl", mUrl)
+            putString("mOriginUrl", mOriginUrl)
+            putBoolean("mIfCurrentIsFullscreen", mIfCurrentIsFullscreen)
+            putString("animeTitle", animeTitle)
+            putString("mTitle", mTitle)
+            putLong("currentPosition", GSYVideoManager.instance().currentPosition)
+            putBoolean("mActionBar", mActionBar)
+            putBoolean("mStatusBar", mStatusBar)
+            // 存储播放状态信息，注意需要是currentPlayer的（因为全屏的播放器在恢复后不会走onRestoreInstanceState）
+            putInt(
+                "mCurrentState",
+                (currentPlayer as? AnimeVideoPlayer)?.storeStateCurrentState ?: mCurrentState
+            )
+            // 存储亮度信息，注意不是mBrightnessData
+            putFloat("brightness", mContext.activity.window.attributes.screenBrightness)
+            // 存储缩放信息，注意需要是currentPlayer的（因为全屏的播放器在恢复后不会走onRestoreInstanceState）
+            putSerializable(
+                "zoomData",
+                ((currentPlayer as? AnimeVideoPlayer)?.surfaceContainer as? ZoomView)?.getData()
+            )
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is Bundle) {
+            runCatching {
+                super.onRestoreInstanceState(state.getParcelable("super"))
+            }.onFailure {
+                if (it !is IllegalArgumentException) it.printStackTrace()
+            }
+            // 恢复mUrl和mTitle并装载视频
+            val mUrl = state.getString("mUrl")
+            val mTitle = state.getString("mTitle")
+            if (!mUrl.isNullOrBlank() && !mTitle.isNullOrBlank()) {
+                setUp(mUrl, false, mTitle)
+            }
+
+            // 恢复animeTitle
+            animeTitle = state.getString("animeTitle").orEmpty()
+
+            // 恢复亮度信息，注意不是mBrightnessData
+            val brightness = state.getFloat("brightness", -1f)
+            if (brightness >= 0) {
+                ((currentPlayer as? AnimeVideoPlayer) ?: this).onBrightnessSlide(brightness)
+            }
+
+            // 恢复播放状态和播放位置
+            val currentPosition = state.getLong("currentPosition")
+            if (currentPosition > 0L) seekOnStart = currentPosition
+            when (state.getInt("mCurrentState", -1)) {
+                CURRENT_STATE_PREPAREING, CURRENT_STATE_PLAYING, CURRENT_STATE_PLAYING_BUFFERING_START -> {
+                    startPlayLogic()
+                }
+                else -> {
+                    startPlayLogic()
+                    onVideoPause()
+                }
+            }
+
+            // 恢复是否全屏
+            val mIfCurrentIsFullscreen = state.getBoolean("mIfCurrentIsFullscreen")
+            if (mIfCurrentIsFullscreen) {
+                startWindowFullscreen(
+                    mContext,
+                    state.getBoolean("mActionBar"),
+                    state.getBoolean("mStatusBar")
+                )
+            }
+
+            // 恢复缩放信息，注意在“恢复是否全屏”之后执行，且需要是currentPlayer的
+            // （因为全屏的播放器在恢复后不会走onRestoreInstanceState）
+            ((currentPlayer as? AnimeVideoPlayer)?.surfaceContainer as? ZoomView)
+                ?.setData(state.getSerializable("zoomData") as? ZoomView.ZoomData)
+
+        }
     }
 }

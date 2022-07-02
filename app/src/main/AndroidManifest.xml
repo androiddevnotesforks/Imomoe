@@ -89,7 +89,7 @@
         <activity android:name=".view.activity.SearchActivity" />
         <activity
             android:name=".view.activity.PlayActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize" />
         <activity android:name=".view.activity.AnimeDetailActivity" />
         <activity android:name=".view.activity.BaseActivity" />
         <activity

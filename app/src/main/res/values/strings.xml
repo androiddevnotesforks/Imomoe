@@ -330,5 +330,13 @@
     <string name="danmaku_mode_top">顶部</string>
     <string name="danmaku_mode_scroll">滚动</string>
     <string name="danmaku_color">弹幕颜色</string>
+    <string name="filtrate_danmaku_by_type">按类型屏蔽</string>
+    <string name="danmaku_type_scroll">滚动</string>
+    <string name="danmaku_type_top">顶部</string>
+    <string name="danmaku_type_bottom">底部</string>
+    <string name="danmaku_type_color">彩色</string>
+    <string name="danmaku_setting_allow_overlap">允许弹幕重叠</string>
+    <string name="danmaku_setting_alpha">弹幕透明度</string>
+    <string name="danmaku_setting_bold">粗体弹幕</string>
 
 </resources>

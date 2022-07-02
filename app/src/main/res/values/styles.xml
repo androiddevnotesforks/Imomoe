@@ -1,7 +1,7 @@
 <resources>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
-        <!-- ialog是否有边框-->
+        <!-- dialog是否有边框-->
         <item name="android:windowFrame">@null</item>
         <!-- dialog是否悬浮在activity上,设置为false，相当于布局在activity中，例如软键盘，可以顶起false的dialog-->
         <item name="android:windowIsFloating">true</item>
@@ -28,6 +28,10 @@
         <item name="android:paddingRight">0dp</item>
         <item name="android:minWidth">40dp</item>
         <item name="android:minHeight">40dp</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="Widget.Material3.Button.IconTextStart" parent="Widget.Material3.Button.OutlinedButton">
         <item name="iconGravity">textStart</item>
     </style>
 

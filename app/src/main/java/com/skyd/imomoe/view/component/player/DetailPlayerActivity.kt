@@ -85,14 +85,19 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
 
     override fun onPause() {
         super.onPause()
+        val player = getGSYVideoPlayer().currentPlayer
 
         activityInBackground = true
 
-        onPauseState = getGSYVideoPlayer().currentPlayer.currentState
-        onPausePosition = getGSYVideoPlayer().currentPlayer.currentPositionWhenPlaying
+        onPauseState = player.currentState
+        onPausePosition = player.currentPositionWhenPlaying
 
-        if (getGSYVideoPlayer().currentPlayer.currentState != GSYVideoView.CURRENT_STATE_PAUSE) {
-            getGSYVideoPlayer().currentPlayer.onVideoPause()
+        if (player is AnimeVideoPlayer) {
+            player.storeStateCurrentState = player.currentState
+        }
+
+        if (player.currentState != GSYVideoView.CURRENT_STATE_PAUSE) {
+            player.onVideoPause()
             orientationUtils?.setIsPause(true)
             isPause = true
         }
@@ -103,6 +108,9 @@ abstract class DetailPlayerActivity<T : GSYBaseVideoPlayer, VB : ViewBinding> : 
         activityInBackground = false
 
         getGSYVideoPlayer().currentPlayer.apply {
+            if (this is AnimeVideoPlayer) {
+                storeStateCurrentState = null
+            }
             if (currentState == GSYVideoView.CURRENT_STATE_NORMAL &&
                 onPausePosition != -1L &&
                 onPauseState != -1 &&

@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
+import java.io.Serializable
 import kotlin.math.atan2
 import kotlin.math.sqrt
 
@@ -18,10 +19,10 @@ class ZoomView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     var useAnimate: Boolean = true
 
-    private var scale = 1f      // 伸缩比例
-    private var mTranslationX = 0f // 移动X
-    private var mTranslationY = 0f // 移动Y
-    private var mRotation = 0f // 旋转角度
+    var scale = 1f      // 伸缩比例
+    var mTranslationX = 0f // 移动X
+    var mTranslationY = 0f // 移动Y
+    var mRotation = 0f // 旋转角度
 
     // 移动过程中临时变量
     private var actionX = 0f
@@ -139,4 +140,36 @@ class ZoomView @JvmOverloads constructor(
     init {
         isClickable = true
     }
+
+    data class ZoomData(
+        val useAnimate: Boolean,
+        val scale: Float,
+        val mTranslationX: Float,
+        val mTranslationY: Float,
+        val mRotation: Float,
+    ) : Serializable
+}
+
+fun ZoomView.getData(): ZoomView.ZoomData {
+    return ZoomView.ZoomData(
+        useAnimate = useAnimate,
+        scale = scale,
+        mTranslationX = mTranslationX,
+        mTranslationY = mTranslationY,
+        mRotation = mRotation,
+    )
+}
+
+fun ZoomView.setData(other: ZoomView.ZoomData?) {
+    other ?: return
+    useAnimate = other.useAnimate
+    scale = other.scale
+    mTranslationX = other.mTranslationX
+    mTranslationY = other.mTranslationY
+    mRotation = other.mRotation
+    rotation = mRotation
+    translationX = mTranslationX
+    translationY = mTranslationY
+    scaleX = scale
+    scaleY = scale
 }

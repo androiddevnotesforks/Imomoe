@@ -7,7 +7,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
@@ -42,6 +41,7 @@ import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
 import com.skyd.imomoe.view.component.player.AnimeVideoPositionMemoryStore
 import com.skyd.imomoe.view.component.player.DanmakuVideoPlayer
 import com.skyd.imomoe.view.component.player.DetailPlayerActivity
+import com.skyd.imomoe.view.component.player.danmaku.DanmakuManager
 import com.skyd.imomoe.view.fragment.dialog.EpisodeDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.MoreDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
@@ -89,7 +89,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             )
         )
     }
-    private var isFirstTime = true
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
 
@@ -230,9 +229,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     mBinding.srlPlayActivity.isRefreshing = false
                     mBinding.tvPlayActivityTitle.text = viewModel.playBean.title.title
                     adapter.dataList = it.data
-                    if (isFirstTime) {
+                    if (viewModel.isFirstTimeToPlay) {
                         mBinding.avpPlayActivity.currentPlayer.startPlay()
-                        isFirstTime = false
+                        viewModel.isFirstTimeToPlay = false
                     }
                 }
                 else -> {
@@ -301,8 +300,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             }
         }
 
-        mBinding.srlPlayActivity.isRefreshing = true
-        viewModel.getPlayData()
+        if (viewModel.isFirstTimeToPlay) {
+            mBinding.srlPlayActivity.isRefreshing = true
+            viewModel.getPlayData()
+        }
 
         val videoOptionModel =
             VideoOptionModel(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1)
@@ -313,6 +314,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     private fun GSYBaseVideoPlayer.startPlay() {
         if (isDestroyed) return
+        DanmakuManager.enableDanmaku = true
         currentPlayer.apply {
             val videoUrl = viewModel.animeEpisodeDataBean.videoUrl
             val episodeTitle = viewModel.animeEpisodeDataBean.title
@@ -380,7 +382,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                 )
                 val playerWidth: Int = avpPlayActivity.width
-                if (abs(playerWidth.toDouble() / avpPlayActivity.height - ratio) < 0.001) return@post
                 var playerHeight = playerWidth / ratio
                 avpPlayActivity.currentPlayer.let {
                     if (it is DanmakuVideoPlayer) playerHeight += it.getDanmakuControllerHeight()
@@ -405,11 +406,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun onPlayError(url: String?, vararg objects: Any?) {
         super.onPlayError(url, *objects)
         "${objects[0].toString()}, ${getString(R.string.get_data_failed)}".showToast()
-    }
-
-    override fun onQuitFullscreen(url: String?, vararg objects: Any?) {
-        super.onQuitFullscreen(url, *objects)
-        adapter.notifyDataSetChanged()
     }
 
     override fun onPrepared(url: String?, vararg objects: Any?) {
@@ -485,21 +481,4 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun clickForFullScreen() {}
 
     override val detailOrientationRotateAuto = true
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        (newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK).let {
-            if (it != currentNightMode) {
-                currentNightMode = it
-                adapter.notifyDataSetChanged()
-                mBinding.ivPlayActivityFavorite.setImageResource(
-                    if (viewModel.favorite.value) {
-                        R.drawable.ic_star_24
-                    } else {
-                        R.drawable.ic_star_border_24
-                    }
-                )
-            }
-        }
-    }
 }

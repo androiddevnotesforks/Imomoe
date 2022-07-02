@@ -72,7 +72,7 @@
             android:id="@+id/start"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:paddingHorizontal="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -82,9 +82,9 @@
 
         <ImageView
             android:id="@+id/iv_next"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:paddingHorizontal="9dp"
+            android:layout_width="40dp"
+            android:layout_height="0px"
+            android:paddingHorizontal="6dp"
             android:src="@drawable/ic_skip_next_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/start"
@@ -96,7 +96,7 @@
             style="@style/TextAppearance.Material3.LabelLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="10dp"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_next"
@@ -179,6 +179,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
+                android:id="@+id/iv_danmaku_setting"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="3dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:src="@drawable/ic_danmaku_setting_24"
+                app:tint="@android:color/white" />
+
+            <ImageView
                 android:id="@+id/iv_show_danmaku"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
@@ -226,7 +238,7 @@
             android:layout_height="0px"
             android:gravity="center"
             android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:paddingEnd="7dp"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fullscreen"
@@ -583,44 +595,6 @@
                     app:layout_constraintStart_toEndOf="@id/tv_player_reset_danmaku_progress"
                     tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_danmaku_text_size_scale_header"
-                    style="@style/TextAppearance.Material3.LabelLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/danmaku_text_size_scale"
-                    android:textColor="@android:color/white"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tv_danmaku_text_size_scale"
-                    style="@style/TextAppearance.Material3.LabelLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:textColor="@android:color/white"
-                    android:visibility="gone"
-                    tools:text="160%"
-                    tools:visibility="visible" />
-            </LinearLayout>
-
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/sb_danmaku_text_size_scale"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="150"
-                android:paddingVertical="6dp"
-                android:progress="0"
-                android:visibility="gone"
-                tools:visibility="visible" />
 
             <com.google.android.material.textview.MaterialTextView
                 style="@style/TextAppearance.Material3.LabelLarge"

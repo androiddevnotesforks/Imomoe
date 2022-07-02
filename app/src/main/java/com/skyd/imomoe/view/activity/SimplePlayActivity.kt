@@ -17,6 +17,7 @@ import com.skyd.imomoe.ext.getMediaTitle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.sharedPreferences
 import com.skyd.imomoe.util.Util.setFullScreen
+import com.skyd.imomoe.view.component.player.danmaku.DanmakuManager
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 
 
@@ -88,7 +89,8 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
     private fun init() {
         mBinding.avpSimplePlayActivity.run {
             // 设置是否启用自带弹幕功能
-            enableDanmaku = sharedPreferences().getBoolean("enableDanmakuInLocalVideo", false)
+            DanmakuManager.enableDanmaku =
+                sharedPreferences().getBoolean("enableDanmakuInLocalVideo", false)
             // 设置旋转
             orientationUtils = OrientationUtils(this@SimplePlayActivity, this)
             // 进横屏旋转，不会竖屏

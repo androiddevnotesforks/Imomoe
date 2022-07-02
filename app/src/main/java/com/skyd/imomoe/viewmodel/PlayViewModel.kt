@@ -23,8 +23,10 @@ import javax.inject.Inject
 class PlayViewModel @Inject constructor(
     private val playModel: IPlayModel
 ) : ViewModel() {
+    var isFirstTimeToPlay = true
     lateinit var playBean: PlayBean
     var partUrl: String = ""
+    var lastPlayPosition: Long = 0L
     val animeCover: MutableStateFlow<ImageBean?> = MutableStateFlow(null)
     val playDataList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
 
