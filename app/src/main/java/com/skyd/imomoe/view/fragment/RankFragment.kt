@@ -45,7 +45,10 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
-            rvRankFragment.layoutManager = GridLayoutManager(activity, 4)
+            rvRankFragment.layoutManager = GridLayoutManager(
+                activity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            )
                 .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
             rvRankFragment.adapter = adapter

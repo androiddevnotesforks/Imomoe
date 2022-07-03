@@ -5,9 +5,7 @@
     style="@style/TextAppearance.Material3.TitleMedium"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="2dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="4dp"
     android:textColor="?attr/colorPrimary"
     tools:text="动漫电影" />

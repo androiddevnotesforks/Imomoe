@@ -35,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingHorizontal="16dp"
             android:paddingTop="6dp"
             android:paddingBottom="6dp" />
     </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>

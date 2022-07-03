@@ -15,6 +15,7 @@ import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize.Companion.MAX_SPAN_SIZE
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.viewmodel.AnimeShowViewModel
@@ -64,7 +65,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
         }
         mBinding.apply {
             rvAnimeShowFragment.adapter = adapter
-            rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, 4).apply {
+            rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, MAX_SPAN_SIZE).apply {
                 spanSizeLookup = AnimeShowSpanSize(adapter)
             }
             rvAnimeShowFragment.addItemDecoration(AnimeShowItemDecoration())

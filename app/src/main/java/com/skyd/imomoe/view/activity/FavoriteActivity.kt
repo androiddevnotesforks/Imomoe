@@ -8,7 +8,8 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
-import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover8Proxy
 import com.skyd.imomoe.viewmodel.FavoriteViewModel
@@ -24,9 +25,12 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
             tbFavoriteActivity.setNavigationOnClickListener { finish() }
 
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
-            rvFavoriteActivity.layoutManager = GridLayoutManager(this@FavoriteActivity, 3)
+            rvFavoriteActivity.layoutManager = GridLayoutManager(
+                this@FavoriteActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvFavoriteActivity.addItemDecoration(AnimeShowItemDecoration())
             rvFavoriteActivity.adapter = adapter
-            rvFavoriteActivity.addItemDecoration(AnimeEpisodeItemDecoration())
         }
 
         viewModel.favoriteList.collectWithLifecycle(this) { data ->

@@ -9,8 +9,8 @@ import com.skyd.imomoe.bean.SkinCover1Bean
 import com.skyd.imomoe.databinding.ActivitySkinBinding
 import com.skyd.imomoe.ext.theme.appThemeRes
 import com.skyd.imomoe.ext.theme.getAttrColor
-import com.skyd.imomoe.view.adapter.decoration.SkinItemDecoration
-import com.skyd.imomoe.view.adapter.spansize.SkinSpanSize
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.SkinCover1Proxy
 
@@ -25,9 +25,11 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
         mBinding.run {
             tbSkinActivityToolbar.setNavigationOnClickListener { finish() }
 
-            rvSkinActivity.layoutManager = GridLayoutManager(this@SkinActivity, 2)
-                .apply { spanSizeLookup = SkinSpanSize(adapter) }
-            rvSkinActivity.addItemDecoration(SkinItemDecoration())
+            rvSkinActivity.layoutManager = GridLayoutManager(
+                this@SkinActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvSkinActivity.addItemDecoration(AnimeShowItemDecoration())
             rvSkinActivity.adapter = adapter
         }
     }

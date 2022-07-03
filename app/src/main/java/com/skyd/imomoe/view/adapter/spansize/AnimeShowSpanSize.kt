@@ -6,27 +6,48 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
-class AnimeShowSpanSize(val adapter: VarietyAdapter) :
-    GridLayoutManager.SpanSizeLookup() {
+class AnimeShowSpanSize(val adapter: VarietyAdapter) : GridLayoutManager.SpanSizeLookup() {
+    companion object {
+        const val MAX_SPAN_SIZE = 60
+    }
+
     override fun getSpanSize(position: Int): Int {
         return if (appContext.resources.getBoolean(R.bool.is_landscape)) {
             when (adapter.dataList[position]) {
-                is Header1Bean -> 4
-                is Banner1Bean -> 4
-                is AnimeCover3Bean -> 2
-                is AnimeCover5Bean -> 2
-                is AnimeCover11Bean -> 2
-                else -> 1
+                is Header1Bean,
+                is Banner1Bean,
+                is AnimeDescribe1Bean,
+                is AnimeInfo1Bean,
+                is SearchHistory1Bean,
+                is HorizontalRecyclerView1Bean -> MAX_SPAN_SIZE
+                is AnimeEpisode1Bean,
+                is AnimeCover8Bean,
+                is AnimeCover1Bean -> MAX_SPAN_SIZE / 5
+                is AnimeCover3Bean,
+                is AnimeCover5Bean,
+                is AnimeCover11Bean -> MAX_SPAN_SIZE / 2
+                is More1Bean,
+                is SkinCover1Bean -> MAX_SPAN_SIZE / 3
+                else -> MAX_SPAN_SIZE / 3
             }
         } else {
             when (adapter.dataList[position]) {
-                is Header1Bean -> 4
-                is Banner1Bean -> 4
-                is AnimeCover3Bean -> 4
-                is AnimeCover4Bean -> 2
-                is AnimeCover5Bean -> 4
-                is AnimeCover11Bean -> 4
-                else -> 1
+                is Header1Bean,
+                is Banner1Bean,
+                is AnimeDescribe1Bean,
+                is AnimeInfo1Bean,
+                is AnimeCover3Bean,
+                is AnimeCover5Bean,
+                is AnimeCover11Bean,
+                is SearchHistory1Bean,
+                is HorizontalRecyclerView1Bean -> MAX_SPAN_SIZE
+                is AnimeEpisode1Bean,
+                is AnimeCover8Bean,
+                is AnimeCover1Bean -> MAX_SPAN_SIZE / 3
+                is More1Bean,
+                is SkinCover1Bean,
+                is AnimeCover4Bean -> MAX_SPAN_SIZE / 2
+                else -> MAX_SPAN_SIZE / 3
             }
         }
     }

@@ -4,7 +4,13 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.skyd.imomoe.bean.AnimeEpisode1Bean
+import com.skyd.imomoe.bean.HorizontalRecyclerView1Bean
+import com.skyd.imomoe.bean.SearchHistory1Bean
 import com.skyd.imomoe.util.Util.dp
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize.Companion.MAX_SPAN_SIZE
+import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
+import kotlin.math.roundToInt
 
 
 class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
@@ -18,46 +24,148 @@ class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
         val layoutParams = view.layoutParams as GridLayoutManager.LayoutParams
         val spanSize = layoutParams.spanSize
         val spanIndex = layoutParams.spanIndex
-        /**
-         * 不相等时说明是Grid形式显示的
-         * 然后判断是左边还有右边显示，分别设置间距为15
-         */
-        if (spanSize == 1) {
-            when (spanIndex) {
-                // 16+x=y+5/2
-                // x+y=5
-                // x=-4.25 y=9.25
-                0 -> {
-                    outRect.left = 16.dp
-                    outRect.right = -(4.25f.dp).toInt()   // -4.25
-                }
-                1 -> {
-                    outRect.left = 9.25f.dp.toInt()   // 9.25
-                    outRect.right = 2.5f.dp.toInt()   // 测试机5dp==15px
-                }
-                2 -> {
-                    outRect.left = 2.5f.dp.toInt()
-                    outRect.right = 9.25f.dp.toInt()  // 9.25
-                }
-                3 -> {
-                    outRect.left = -(4.25f.dp).toInt()    // -4.25
-                    outRect.right = 16.dp
-                }
+
+        val item = (parent.adapter as? VarietyAdapter)
+            ?.dataList
+            ?.getOrNull(parent.getChildAdapterPosition(view))
+        if (needVerticalMargin(item?.javaClass)) {
+            outRect.top = 10.dp
+            outRect.bottom = 2.dp
+        }
+        if (spanSize == MAX_SPAN_SIZE) {
+            /**
+             * 只有一列
+             */
+
+            if (noHorizontalMargin(item?.javaClass)) return
+            outRect.left = HORIZONTAL_PADDING
+            outRect.right = HORIZONTAL_PADDING
+        } else if (spanSize == MAX_SPAN_SIZE / 2) {
+            /**
+             * 只有两列，没有在中间的item
+             * 2x = ITEM_SPACING
+             */
+            val x: Int = (ITEM_SPACING / 2f).roundToInt()
+            if (spanIndex == 0) {
+                outRect.left = HORIZONTAL_PADDING
+                outRect.right = x
+            } else {
+                outRect.left = x
+                outRect.right = HORIZONTAL_PADDING
             }
-        } else if (spanSize == 2) {
-            outRect.top = 7.dp
-            outRect.bottom = 7.dp
-            when (spanIndex) {
-                0 -> {
-                    outRect.left = 16.dp
-                    outRect.right = 7.dp
-                }
-                // 每一项占两个，因此第二个不是1而是2
-                2 -> {
-                    outRect.left = 7.dp
-                    outRect.right = 16.dp
-                }
+        } else if (spanSize == MAX_SPAN_SIZE / 3) {
+            /**
+             * 只有三列，一个在中间的item
+             * HORIZONTAL_PADDING + x = 2y
+             * x + y = ITEM_SPACING
+             */
+            val y: Int = ((HORIZONTAL_PADDING + ITEM_SPACING) / 3f).roundToInt()
+            val x: Int = ITEM_SPACING - y
+            if (spanIndex == 0) {
+                outRect.left = HORIZONTAL_PADDING
+                outRect.right = x
+            } else if (spanIndex + spanSize == MAX_SPAN_SIZE) {
+                // 最右侧最后一个
+                outRect.left = x
+                outRect.right = HORIZONTAL_PADDING
+            } else {
+                outRect.left = y
+                outRect.right = y
             }
+        } else if (spanSize == MAX_SPAN_SIZE / 5) {
+            /**
+             * 只有五列
+             * HORIZONTAL_PADDING + x = y + z
+             * x + y = ITEM_SPACING
+             * z + (HORIZONTAL_PADDING + x) / 2 = ITEM_SPACING
+             */
+            val x: Int = ((4 * ITEM_SPACING - 3 * HORIZONTAL_PADDING) / 5f).roundToInt()
+            val y: Int = ITEM_SPACING - x
+            val z: Int = HORIZONTAL_PADDING + x - y
+            if (spanIndex == 0) {
+                // 最左侧第一个
+                outRect.left = HORIZONTAL_PADDING
+                outRect.right = x
+            } else if (spanIndex + spanSize == MAX_SPAN_SIZE) {
+                // 最右侧最后一个
+                outRect.left = x
+                outRect.right = HORIZONTAL_PADDING
+            } else if (spanIndex == spanSize) {
+                // 第二个
+                outRect.left = y
+                outRect.right = z
+            } else if (spanIndex == MAX_SPAN_SIZE - 2 * spanSize) {
+                // 倒数第二个
+                outRect.left = z
+                outRect.right = y
+            } else {
+                // 最中间的
+                outRect.left = ((HORIZONTAL_PADDING + x) / 2f).roundToInt()
+                outRect.right = ((HORIZONTAL_PADDING + x) / 2f).roundToInt()
+            }
+        } else {
+            /**
+             * 多于三列（不包括五列），有在中间的item
+             */
+            if ((MAX_SPAN_SIZE / spanSize) % 2 == 0) {
+                /**
+                 * 偶数个item
+                 * HORIZONTAL_PADDING + x = y + ITEM_SPACING / 2
+                 * x + y = ITEM_SPACING
+                 */
+                val y: Int = ((HORIZONTAL_PADDING + ITEM_SPACING / 2f) / 2f).roundToInt()
+                val x: Int = ITEM_SPACING - y
+                if (spanIndex == 0) {
+                    // 最左侧第一个
+                    outRect.left = HORIZONTAL_PADDING
+                    outRect.right = x
+                } else if (spanIndex + spanSize == MAX_SPAN_SIZE) {
+                    // 最右侧最后一个
+                    outRect.left = x
+                    outRect.right = HORIZONTAL_PADDING
+                } else {
+                    // 中间的项目
+                    if (spanIndex < MAX_SPAN_SIZE / 2) {
+                        // 左侧部分
+                        outRect.left = y
+                        outRect.right = ITEM_SPACING / 2
+                    } else {
+                        // 右侧部分
+                        outRect.left = ITEM_SPACING / 2
+                        outRect.right = y
+                    }
+                }
+            } else {
+                /**
+                 * 奇数个item，严格大于5的奇数（暂无需求，未实现）
+                 */
+            }
+        }
+    }
+
+    companion object {
+        val ITEM_SPACING: Int = 12.dp
+        val HORIZONTAL_PADDING: Int = 16.dp
+
+        private val noHorizontalMarginType: Set<Class<*>> = setOf(
+            HorizontalRecyclerView1Bean::class.java,
+            SearchHistory1Bean::class.java,
+        )
+
+        fun noHorizontalMargin(clz: Class<*>?): Boolean {
+            clz ?: return true
+            if (clz in noHorizontalMarginType) return true
+            return false
+        }
+
+        private val needVerticalMarginType: Set<Class<*>> = setOf(
+            AnimeEpisode1Bean::class.java,
+        )
+
+        fun needVerticalMargin(clz: Class<*>?): Boolean {
+            clz ?: return false
+            if (clz in needVerticalMarginType) return true
+            return false
         }
     }
 }

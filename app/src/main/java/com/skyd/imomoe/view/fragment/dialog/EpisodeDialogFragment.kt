@@ -1,18 +1,17 @@
 package com.skyd.imomoe.view.fragment.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.AnimeEpisode1Bean
 import com.skyd.imomoe.databinding.FragmentEpisodeDialogBinding
 import com.skyd.imomoe.util.AnimeEpisode1ViewHolder
-import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeEpisode1Proxy
 
@@ -62,9 +61,12 @@ open class EpisodeDialogFragment(
         super.onViewCreated(view, savedInstanceState)
         mBinding.apply {
             btnDismissEpisodeDialogFragment.setOnClickListener { dismiss() }
-            rvTitleEpisodeDialogFragment.layoutManager = GridLayoutManager(activity, 3)
+            rvTitleEpisodeDialogFragment.layoutManager = GridLayoutManager(
+                activity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             if (rvTitleEpisodeDialogFragment.itemDecorationCount == 0) {
-                rvTitleEpisodeDialogFragment.addItemDecoration(AnimeEpisodeItemDecoration())
+                rvTitleEpisodeDialogFragment.addItemDecoration(AnimeShowItemDecoration())
             }
             rvTitleEpisodeDialogFragment.adapter = adapter
         }

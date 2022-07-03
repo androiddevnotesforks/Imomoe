@@ -34,7 +34,7 @@ import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
-import com.skyd.imomoe.view.adapter.spansize.PlaySpanSize
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
 import com.skyd.imomoe.view.component.player.AnimeVideoPlayer
@@ -195,8 +195,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 //        viewModel.detailPartUrl = intent.getStringExtra("detailPartUrl").orEmpty()
 
         mBinding.apply {
-            rvPlayActivity.layoutManager = GridLayoutManager(this@PlayActivity, 4)
-                .apply { spanSizeLookup = PlaySpanSize(adapter) }
+            rvPlayActivity.layoutManager = GridLayoutManager(
+                this@PlayActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             // 复用AnimeShow的ItemDecoration
             rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
             rvPlayActivity.adapter = adapter

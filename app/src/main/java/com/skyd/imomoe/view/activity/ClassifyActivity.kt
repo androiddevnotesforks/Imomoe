@@ -12,6 +12,7 @@ import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.state.DataState
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -67,8 +68,11 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
             )
             rvClassifyActivityTab.adapter = classifyTabAdapter
 
-            rvClassifyActivity.layoutManager = GridLayoutManager(this@ClassifyActivity, 4)
-                .apply { spanSizeLookup = AnimeShowSpanSize(classifyAdapter) }
+            rvClassifyActivity.layoutManager = GridLayoutManager(
+                this@ClassifyActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(classifyAdapter) }
+            rvClassifyActivity.addItemDecoration(AnimeShowItemDecoration())
             rvClassifyActivity.adapter = classifyAdapter
 
             spinnerClassifyActivity.adapter = spinnerAdapter

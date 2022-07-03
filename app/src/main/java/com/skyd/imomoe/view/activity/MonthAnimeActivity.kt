@@ -8,6 +8,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
@@ -29,8 +30,11 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
             tbMonthAnimeActivity.title = getString(R.string.year_month_anime, viewModel.partUrl)
             tbMonthAnimeActivity.setNavigationOnClickListener { finish() }
 
-            rvMonthAnimeActivity.layoutManager = GridLayoutManager(this@MonthAnimeActivity, 4)
-                .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvMonthAnimeActivity.layoutManager = GridLayoutManager(
+                this@MonthAnimeActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvMonthAnimeActivity.addItemDecoration(AnimeShowItemDecoration())
             rvMonthAnimeActivity.adapter = adapter
 
             srlMonthAnimeActivity.setOnRefreshListener { //避免刷新间隔太短

@@ -102,6 +102,7 @@ class SimplePlayActivity : BaseActivity<ActivitySimplePlayBinding>() {
             }
             setEpisodeButtonVisibility(View.GONE)
             fullscreenButton.gone()
+            dismissControlTime = 5000
             // 是否开启自动旋转
             isRotateViewAuto = false
             // 是否需要全屏锁定屏幕功能

@@ -52,10 +52,9 @@ fun Context.getMediaMime(uri: Uri): String? {
 }
 
 fun Context.getMediaAlbumArt(uri: Uri): Bitmap? {
-    val image: Bitmap?
-    val mData = MediaMetadataRetriever()
-    mData.setDataSource(this, uri)
-    image = try {
+    val image: Bitmap? = try {
+        val mData = MediaMetadataRetriever()
+        mData.setDataSource(this, uri)
         val art = mData.embeddedPicture!!
         BitmapFactory.decodeByteArray(art, 0, art.size)
     } catch (e: Exception) {
@@ -66,10 +65,9 @@ fun Context.getMediaAlbumArt(uri: Uri): Bitmap? {
 }
 
 private fun Context.getMediaStringInfo(uri: Uri, keyCode: Int): String? {
-    val info: String?
-    val mData = MediaMetadataRetriever()
-    mData.setDataSource(this, uri)
-    info = try {
+    val info: String? = try {
+        val mData = MediaMetadataRetriever()
+        mData.setDataSource(this, uri)
         mData.extractMetadata(keyCode)
     } catch (e: Exception) {
         e.printStackTrace()
@@ -79,10 +77,9 @@ private fun Context.getMediaStringInfo(uri: Uri, keyCode: Int): String? {
 }
 
 fun getMediaAlbumArt(path: String): Bitmap? {
-    val image: Bitmap?
-    val mData = MediaMetadataRetriever()
-    mData.setDataSource(path)
-    image = try {
+    val image: Bitmap? = try {
+        val mData = MediaMetadataRetriever()
+        mData.setDataSource(path)
         val art = mData.embeddedPicture!!
         BitmapFactory.decodeByteArray(art, 0, art.size)
     } catch (e: Exception) {

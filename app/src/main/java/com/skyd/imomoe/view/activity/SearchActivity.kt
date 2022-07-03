@@ -5,13 +5,15 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SearchHistoryBean
 import com.skyd.imomoe.databinding.ActivitySearchBinding
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover3Proxy
 import com.skyd.imomoe.view.adapter.variety.proxy.SearchHistory1Proxy
@@ -45,7 +47,13 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             srlSearchActivity.setEnableRefresh(false)
             srlSearchActivity.setOnLoadMoreListener { viewModel.loadMoreSearchData() }
 
-            rvSearchActivity.layoutManager = LinearLayoutManager(this@SearchActivity)
+            rvSearchActivity.layoutManager = GridLayoutManager(
+                this@SearchActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply {
+                spanSizeLookup = AnimeShowSpanSize(adapter)
+            }
+            rvSearchActivity.addItemDecoration(AnimeShowItemDecoration())
             rvSearchActivity.adapter = adapter
             showSearchHistory()
 

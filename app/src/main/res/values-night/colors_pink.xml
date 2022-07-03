@@ -34,5 +34,6 @@
     <color name="widget_everyday_anime_refresh_color">#ECDFE0</color>
     <color name="widget_everyday_anime_title_color">#ECDFE0</color>
     <color name="widget_everyday_anime_item_text_color">#ECDFE0</color>
+    <color name="widget_everyday_anime_item_text_color_2">#D1C4C5</color>
 
 </resources>

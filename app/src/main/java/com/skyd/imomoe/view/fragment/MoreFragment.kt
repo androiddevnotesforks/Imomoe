@@ -13,6 +13,8 @@ import com.skyd.imomoe.route.processor.ConfigDataSourceActivityProcessor
 import com.skyd.imomoe.route.processor.JumpByUrlProcessor
 import com.skyd.imomoe.route.processor.StartActivityProcessor
 import com.skyd.imomoe.view.activity.*
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.More1Proxy
 
@@ -82,7 +84,11 @@ class MoreFragment : BaseFragment<FragmentMoreBinding>() {
         )
 
         mBinding.run {
-            rvMoreFragment.layoutManager = GridLayoutManager(activity, 2)
+            rvMoreFragment.layoutManager = GridLayoutManager(
+                activity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvMoreFragment.addItemDecoration(AnimeShowItemDecoration())
             rvMoreFragment.adapter = adapter
             adapter.dataList = list
         }

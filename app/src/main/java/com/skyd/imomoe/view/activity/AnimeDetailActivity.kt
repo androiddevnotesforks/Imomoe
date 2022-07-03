@@ -1,13 +1,9 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
-import com.skyd.imomoe.bean.AnimeEpisodeDataBean
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
@@ -20,16 +16,13 @@ import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.PlayActivityProcessor
 import com.skyd.imomoe.state.DataState
-import com.skyd.imomoe.util.Util.dp
 import com.skyd.imomoe.util.coil.CoilUtil.loadImage
 import com.skyd.imomoe.util.coil.DarkBlurTransformation
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
-import com.skyd.imomoe.view.adapter.decoration.AnimeEpisodeItemDecoration
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
-import com.skyd.imomoe.view.adapter.spansize.AnimeDetailSpanSize
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.*
-import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.view.fragment.dialog.EpisodeDialogFragment
 import com.skyd.imomoe.view.fragment.dialog.ShareDialogFragment
 import com.skyd.imomoe.viewmodel.AnimeDetailViewModel
@@ -135,8 +128,10 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         }
 
         mBinding.run {
-            rvAnimeDetailActivityInfo.layoutManager = GridLayoutManager(this@AnimeDetailActivity, 4)
-                .apply { spanSizeLookup = AnimeDetailSpanSize(adapter) }
+            rvAnimeDetailActivityInfo.layoutManager = GridLayoutManager(
+                this@AnimeDetailActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             // 复用AnimeShow的ItemDecoration
             rvAnimeDetailActivityInfo.addItemDecoration(AnimeShowItemDecoration())
             rvAnimeDetailActivityInfo.adapter = adapter

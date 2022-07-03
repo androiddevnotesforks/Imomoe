@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="7dp"
-    android:paddingBottom="3dp">
+    android:paddingBottom="7dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_anime_cover_1_cover"

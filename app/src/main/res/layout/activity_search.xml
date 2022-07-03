@@ -60,8 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbarSize="4dp"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/item_anime_cover_3" />
+            android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     <ViewStub

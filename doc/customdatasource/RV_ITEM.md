@@ -28,7 +28,7 @@
 |       AnimeCover4       | <img src="rv_item/image/anime_cover_4.jpg" alt="anime_cover_4" style="zoom:33%;" /> |               AnimeCover4Bean                |                                                              |
 |       AnimeCover5       | <img src="rv_item/image/anime_cover_5.jpg" alt="anime_cover_5" style="zoom:33%;" /> |               AnimeCover5Bean                |                                                              |
 |       AnimeCover6       | <img src="rv_item/image/anime_cover_6.jpg" alt="anime_cover_6" style="zoom:33%;" /> |               AnimeCover6Bean                |         注意**与Banner1的区别**，为Banner1的**子项**         |
-|      AnimeCover10       | <img src="rv_item/image/anime_cover_10.jpg" alt="anime_cover_10" style="zoom:33%;" /> |               AnimeCover10Bean               | 与**AnimeCover12基本一样**，但**不支持换肤**，建议仅用做**桌面微件** |
+|      AnimeCover10       | <img src="rv_item/image/anime_cover_10.jpg" alt="anime_cover_10" style="zoom:33%;" /> |               AnimeCover10Bean               |            **不支持换肤**，建议仅用做**桌面微件**            |
 |      AnimeCover11       | <img src="rv_item/image/anime_cover_11.jpg" alt="anime_cover_11" style="zoom:33%;" /> |               AnimeCover11Bean               |                                                              |
 |      AnimeCover12       | <img src="rv_item/image/anime_cover_12.jpg" alt="anime_cover_12" style="zoom:33%;" /> |               AnimeCover12Bean               |                                                              |
 |     AnimeDescribe1      | <img src="rv_item/image/anime_describe_1.jpg" alt="anime_describe_1" style="zoom:33%;" /> |              AnimeDescribe1Bean              |                                                              |

@@ -18,12 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/gray_2"
-        android:paddingVertical="7dp">
+        android:background="@drawable/shape_gray_transparent_angle_90"
+        android:paddingTop="27dp"
+        android:paddingBottom="10dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_anime_cover_6_title"
-            style="@style/TextAppearance.Material3.TitleSmall"
+            style="@style/TextAppearance.Material3.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -40,7 +41,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_anime_cover_6_describe"
-            style="@style/TextAppearance.Material3.BodySmall"
+            style="@style/TextAppearance.Material3.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
