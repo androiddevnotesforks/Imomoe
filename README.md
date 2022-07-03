@@ -72,7 +72,7 @@
 
 ![favorite](screenshot/favorite.jpg) ![history](screenshot/history.jpg) 
 
-![player](screenshot/player.jpg) 
+<img src="screenshot/player.png" alt="player" style="zoom:77%;" /> 
 
 ## 主要技术栈
 

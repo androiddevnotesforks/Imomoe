@@ -179,7 +179,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_input_danmaku"
                     android:layout_width="0px"
-                    android:layout_height="39dp"
+                    android:layout_height="37dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:background="@null"
@@ -194,7 +194,7 @@
                 <ImageView
                     android:id="@+id/iv_send_danmaku_font"
                     android:layout_width="45dp"
-                    android:layout_height="40dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:clickable="true"
                     android:focusable="true"
