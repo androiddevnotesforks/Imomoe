@@ -57,7 +57,6 @@ class AnimeInfo1Proxy(
         holder.tvAnimeInfo1Info.text = data.info
         holder.flAnimeInfo1Type.removeAllViews()
         data.animeType?.forEach { type ->
-            activity ?: return@forEach
             val cardView = activity.layoutInflater.inflate(
                 R.layout.item_anime_type_1,
                 holder.flAnimeInfo1Type,
@@ -72,7 +71,6 @@ class AnimeInfo1Proxy(
         }
         holder.flAnimeInfo1Tag.removeAllViews()
         data.tag?.forEach { tag ->
-            activity ?: return@forEach
             val cardView = activity.layoutInflater.inflate(
                 R.layout.item_anime_type_1,
                 holder.flAnimeInfo1Type,

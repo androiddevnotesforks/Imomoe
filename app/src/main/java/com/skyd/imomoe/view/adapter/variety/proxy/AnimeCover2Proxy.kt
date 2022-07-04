@@ -27,7 +27,7 @@ class AnimeCover2Proxy : VarietyAdapter.Proxy<AnimeCover2Bean, AnimeCover2ViewHo
         holder.tvAnimeCover1Title.text = data.title
         holder.tvAnimeCover1Episode.gone()
         holder.itemView.setOnClickListener {
-            activity?.let { data.route.route(it) }
+            data.route.route(activity)
         }
     }
 }

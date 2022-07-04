@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.os.Build
 import android.util.TypedValue
-import androidx.annotation.StyleRes
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
 import com.skyd.imomoe.ext.sharedPreferences

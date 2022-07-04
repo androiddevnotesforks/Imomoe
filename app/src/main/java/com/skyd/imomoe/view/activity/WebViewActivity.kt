@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.webkit.*
 import com.skyd.imomoe.databinding.ActivityWebViewBinding
@@ -77,20 +76,11 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
             syncCookie()
             useWideViewPort = true
             loadWithOverviewMode = true
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
-            } else {
-                cacheMode = WebSettings.LOAD_DEFAULT
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                displayZoomControls = false
-            }
-            loadsImagesAutomatically = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) CookieManager.getInstance()
-                .setAcceptThirdPartyCookies(mBinding.wvWebViewActivity, true)
+            cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+            displayZoomControls = false
+            loadsImagesAutomatically = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mBinding.wvWebViewActivity, true)
 
             mBinding.wvWebViewActivity.scrollBarStyle = WebView.SCROLLBARS_INSIDE_OVERLAY
             mBinding.wvWebViewActivity.isHorizontalScrollBarEnabled = false

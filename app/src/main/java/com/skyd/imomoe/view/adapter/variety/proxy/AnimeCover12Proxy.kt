@@ -31,7 +31,7 @@ class AnimeCover12Proxy : VarietyAdapter.Proxy<AnimeCover12Bean, AnimeCover12Vie
             data.episodeClickable.route.ifBlank { data.route }.route(activity)
         }
         holder.tvAnimeCover12Title.setOnClickListener {
-            activity?.also { data.route.route(activity) }
+            data.route.route(activity)
         }
     }
 }

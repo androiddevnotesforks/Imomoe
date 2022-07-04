@@ -2,7 +2,6 @@ package com.skyd.imomoe.util
 
 import android.annotation.SuppressLint
 import android.content.Context
-import com.flurry.android.FlurryAgent
 import com.skyd.imomoe.view.activity.CrashActivity
 import java.io.PrintWriter
 import java.io.StringWriter

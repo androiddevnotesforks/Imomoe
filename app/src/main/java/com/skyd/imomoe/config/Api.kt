@@ -1,7 +1,6 @@
 package com.skyd.imomoe.config
 
 import com.skyd.imomoe.model.DataSourceManager
-import com.skyd.imomoe.model.interfaces.interfaceVersion
 
 interface Api {
     companion object {

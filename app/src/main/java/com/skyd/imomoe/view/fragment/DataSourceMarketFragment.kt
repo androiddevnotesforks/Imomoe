@@ -157,7 +157,8 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
                 onTaskCancelEvent.collectWithLifecycle(this@DataSourceMarketFragment) { task ->
                     viewModel.onTaskCancel(task.downloadEntity, dataSourceTitleMap)
                 }
-                onTaskStopEvent.collectWithLifecycle(this@DataSourceMarketFragment) {
+                onTaskStopEvent.collectWithLifecycle(this@DataSourceMarketFragment) { task ->
+                    viewModel.onTaskCancel(task.downloadEntity, dataSourceTitleMap)
                 }
                 onTaskResumeEvent.collectWithLifecycle(this@DataSourceMarketFragment) {
                 }

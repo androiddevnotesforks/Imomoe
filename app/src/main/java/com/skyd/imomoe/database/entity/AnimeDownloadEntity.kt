@@ -19,4 +19,11 @@ class AnimeDownloadEntity(
     override fun equals(other: Any?): Boolean {
         return this.md5 == (other as AnimeDownloadEntity).md5
     }
+
+    override fun hashCode(): Int {
+        var result = md5.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + (fileName?.hashCode() ?: 0)
+        return result
+    }
 }

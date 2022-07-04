@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.preference.Preference
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,8 +19,6 @@ import com.skyd.imomoe.view.adapter.variety.proxy.RestoreFile1Proxy
 import com.skyd.imomoe.view.component.BottomSheetRecyclerView
 import com.skyd.imomoe.view.component.preference.BasePreferenceFragment
 import com.skyd.imomoe.viewmodel.WebDavViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.cancel
 
 class WebDavFragment : BasePreferenceFragment() {
     private val viewModel: WebDavViewModel by viewModels()

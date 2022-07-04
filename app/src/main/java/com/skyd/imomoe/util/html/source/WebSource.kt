@@ -11,7 +11,6 @@ import org.apache.commons.text.StringEscapeUtils
 import java.io.ByteArrayInputStream
 import java.net.SocketTimeoutException
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @SuppressLint("SetJavaScriptEnabled")
 object WebSource {
@@ -65,7 +64,11 @@ object WebSource {
         userAgent: String? = null,
         timeout: Long = 10000L
     ): String = withContext(Dispatchers.Main) {
-        suspendCoroutine { con ->
+        suspendCancellableCoroutine { con ->
+            con.invokeOnCancellation {
+                webView.stopLoading()
+                webView.pauseTimers()
+            }
             webView.settings.apply {
                 userAgent?.let { userAgentString = it }
                 defaultTextEncodingName = encoding

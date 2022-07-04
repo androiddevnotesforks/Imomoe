@@ -1,9 +1,6 @@
 package com.skyd.imomoe.view.component.compose
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog

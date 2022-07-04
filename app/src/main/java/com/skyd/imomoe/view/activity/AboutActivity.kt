@@ -24,18 +24,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.StartActivityProcessor
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.openBrowser
-import com.skyd.imomoe.view.component.compose.*
+import com.skyd.imomoe.view.component.compose.AnimeTopBar
+import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
+import com.skyd.imomoe.view.component.compose.BackIcon
+import com.skyd.imomoe.view.component.compose.MessageDialog
 import java.net.URL
 import java.util.*
 

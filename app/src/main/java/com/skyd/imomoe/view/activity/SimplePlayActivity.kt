@@ -2,13 +2,11 @@ package com.skyd.imomoe.view.activity
 
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils
-import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_NORMAL
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoView.CURRENT_STATE_PAUSE
 import com.skyd.imomoe.databinding.ActivitySimplePlayBinding

@@ -2,7 +2,6 @@ package com.skyd.imomoe
 
 import android.app.Application
 import android.content.Context
-import com.flurry.android.FlurryAgent
 import com.scwang.smart.refresh.footer.BallPulseFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout

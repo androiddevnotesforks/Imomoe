@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.activity.result.contract.ActivityResultContracts
 import com.skyd.imomoe.route.Route
 import com.skyd.imomoe.view.activity.UrlMapActivity
 

@@ -41,7 +41,6 @@ import com.skyd.imomoe.util.Util.getScreenBrightness
 import com.skyd.imomoe.util.Util.getScreenHeight
 import com.skyd.imomoe.util.Util.getScreenWidth
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
-import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.DlnaActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -1202,7 +1201,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
      */
     open fun supportDisplayCutouts() {
         if (currentPlayer == this && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val decorView: View = (activity ?: return).window.decorView
+            val decorView: View = activity.window.decorView
             decorView.post {
                 val displayCutout = decorView.rootWindowInsets?.displayCutout ?: return@post
                 mTopContainer?.updateSafeInset(displayCutout)

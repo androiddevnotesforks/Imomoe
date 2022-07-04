@@ -38,7 +38,7 @@ class AnimeCover7Proxy(
         holder.tvAnimeCover7Title.text = data.title
         holder.tvAnimeCover7Size.text = data.size
         if (data.pathType == 1) {
-            holder.tvAnimeCover7OldPath.text = activity?.getString(R.string.old_path)
+            holder.tvAnimeCover7OldPath.text = activity.getString(R.string.old_path)
             holder.tvAnimeCover7OldPath.visible()
         } else {
             holder.tvAnimeCover7OldPath.gone()
@@ -53,7 +53,7 @@ class AnimeCover7Proxy(
             onLongClickListener?.invoke(holder, data, index) ?: false
         }
         holder.itemView.setOnClickListener {
-            data.route.route(activity ?: return@setOnClickListener)
+            data.route.route(activity)
         }
     }
 }

@@ -12,7 +12,7 @@ import com.skyd.imomoe.util.Util.dp
 /**
  * Created by Sky_D on 2021-02-08.
  */
-class DotIndicator : View, Indicator {
+class DotIndicator(context: Context) : View(context), Indicator {
     private val mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)        //抗锯齿
     private var mRadius: Float = 3f.dp
     private var mDotsPadding = 3.dp
@@ -33,20 +33,6 @@ class DotIndicator : View, Indicator {
     private val mMarginEnd = 10.dp
     private val mMarginTop = 10.dp
     private val mMarginBottom = 0
-
-    constructor(context: Context) : super(context) {
-        val layoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
-        layoutParams.leftMargin = mMarginStart
-        layoutParams.rightMargin = mMarginEnd
-        layoutParams.topMargin = mMarginTop
-        layoutParams.bottomMargin = mMarginBottom
-        setLayoutParams(layoutParams)
-    }
 
     override fun getView(): View {
         return this
@@ -92,5 +78,19 @@ class DotIndicator : View, Indicator {
                 cx += mRadius * 2 + mDotsPadding
             }
         }
+    }
+
+    init {
+        val layoutParams: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.WRAP_CONTENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
+        layoutParams.leftMargin = mMarginStart
+        layoutParams.rightMargin = mMarginEnd
+        layoutParams.topMargin = mMarginTop
+        layoutParams.bottomMargin = mMarginBottom
+        setLayoutParams(layoutParams)
     }
 }

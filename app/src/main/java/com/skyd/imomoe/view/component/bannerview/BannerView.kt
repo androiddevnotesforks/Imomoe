@@ -22,7 +22,7 @@ import kotlin.math.abs
 /**
  * Created by Sky_D on 2021-02-08.
  */
-open class BannerView(mContext: Context, attrs: AttributeSet?) :
+class BannerView(mContext: Context, attrs: AttributeSet?) :
     RelativeLayout(mContext, attrs) {
 
     companion object {
@@ -63,17 +63,6 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
     private var mBannerPaddingEnd: Int = 0
     private var mBannerPaddingTop: Int = 0
     private var mBannerPaddingBottom: Int = 0
-
-    init {
-        mViewPager2.layoutParams =
-            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        addView(mViewPager2)
-        mViewPager2.offscreenPageLimit = mOffscreenPageLimit
-        // 初始化自定义属性
-        initAttr(attrs)
-
-        mViewPager2.registerOnPageChangeCallback(CycleOnPageChangeCallback())
-    }
 
     /**
      * 初始化自定义属性
@@ -224,7 +213,7 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      * @param interval 轮播间隔，单位：毫秒
      */
     fun startPlay(interval: Long) {
-        if (!autoPlay && mViewPager2.adapter?.itemCount ?: 0 > 1) {
+        if (!autoPlay && (mViewPager2.adapter?.itemCount ?: 0) > 1) {
             mAutoPlayInterval = interval
             mHandler.postDelayed(mAutoPlayRunnable, mAutoPlayInterval)
             autoPlay = true
@@ -250,7 +239,7 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
      * 切换到下一页（不会循环）
      */
     private fun nextPage() {
-        if (mViewPager2.adapter?.itemCount ?: 0 > 1 && autoPlay) {
+        if ((mViewPager2.adapter?.itemCount ?: 0) > 1 && autoPlay) {
             setCurrentItem(getCurrentItem() + 1, true)
         }
     }
@@ -310,6 +299,17 @@ open class BannerView(mContext: Context, attrs: AttributeSet?) :
             }
         }
         return super.onInterceptTouchEvent(event)
+    }
+
+    init {
+        mViewPager2.layoutParams =
+            LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        addView(mViewPager2)
+        mViewPager2.offscreenPageLimit = mOffscreenPageLimit
+        // 初始化自定义属性
+        initAttr(attrs)
+
+        mViewPager2.registerOnPageChangeCallback(CycleOnPageChangeCallback())
     }
 
     private inner class CycleOnPageChangeCallback : OnPageChangeCallback() {

@@ -27,7 +27,7 @@ class More1Proxy : VarietyAdapter.Proxy<More1Bean, More1ViewHolder>() {
         holder.ivMore1.setImageDrawable(Util.getResDrawable(data.image))
         holder.tvMore1.text = data.title
         holder.itemView.setOnClickListener {
-            activity?.also { data.route.route(activity) }
+            data.route.route(activity)
         }
     }
 }

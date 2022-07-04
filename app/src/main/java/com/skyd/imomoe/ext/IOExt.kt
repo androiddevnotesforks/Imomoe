@@ -2,7 +2,6 @@ package com.skyd.imomoe.ext
 
 import android.content.Context
 import androidx.annotation.RawRes
-import com.skyd.imomoe.R
 import java.io.*
 import java.nio.charset.Charset
 

@@ -62,7 +62,6 @@ class AnimeCover5Proxy : VarietyAdapter.Proxy<AnimeCover5Bean, AnimeCover5ViewHo
             data.area.route.route(activity)
         }
         holder.tvAnimeCover5Title.setOnClickListener {
-            activity ?: return@setOnClickListener
             data.route.route(activity)
         }
     }

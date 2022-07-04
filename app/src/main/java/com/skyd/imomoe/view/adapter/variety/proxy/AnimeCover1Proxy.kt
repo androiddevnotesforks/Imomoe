@@ -44,10 +44,8 @@ class AnimeCover1Proxy(
             )
         }
         holder.ivAnimeCover1Cover.setTag(R.id.image_view_tag, data.cover.url)
-        activity?.let {
-            if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == data.cover.url) {
-                holder.ivAnimeCover1Cover.loadImage(data.cover.url, referer = data.cover.referer)
-            }
+        if (holder.ivAnimeCover1Cover.getTag(R.id.image_view_tag) == data.cover.url) {
+            holder.ivAnimeCover1Cover.loadImage(data.cover.url, referer = data.cover.referer)
         }
         holder.tvAnimeCover1Title.text = data.title
         if (data.episode.isBlank()) {
@@ -57,7 +55,7 @@ class AnimeCover1Proxy(
             holder.tvAnimeCover1Episode.text = data.episode
         }
         holder.itemView.setOnClickListener {
-            activity?.also { data.route.route(it) }
+            data.route.route(activity)
         }
     }
 }

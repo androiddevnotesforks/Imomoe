@@ -26,7 +26,7 @@ class License1Proxy : VarietyAdapter.Proxy<License1Bean, License1ViewHolder>() {
         holder.tvLicense1Name.text = data.title
         holder.tvLicense1License.text = data.license
         holder.itemView.setOnClickListener {
-            activity?.also { data.route.route(it) }
+            data.route.route(activity)
         }
     }
 }

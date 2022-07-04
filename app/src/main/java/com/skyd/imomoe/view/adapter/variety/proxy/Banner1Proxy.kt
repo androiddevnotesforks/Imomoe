@@ -26,7 +26,7 @@ class Banner1Proxy : VarietyAdapter.Proxy<Banner1Bean, Banner1ViewHolder>() {
         val activity = holder.itemView.activity
         holder.banner1.apply {
             setAdapter(MyCycleBannerAdapter(data.animeCoverList))
-            activity?.also { setIndicator(DotIndicator(it)) }
+            setIndicator(DotIndicator(activity))
             startPlay(5000)
         }
     }

@@ -56,7 +56,7 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
                 is DataState.Success -> {
                     hideLoadFailedTip()
                     val list = data.data
-                    if (!list.isNullOrEmpty()) {
+                    if (list.isNotEmpty()) {
                         mBinding.vp2RankActivity.offscreenPageLimit = list.size
                     }
                     adapter.notifyDataSetChanged()

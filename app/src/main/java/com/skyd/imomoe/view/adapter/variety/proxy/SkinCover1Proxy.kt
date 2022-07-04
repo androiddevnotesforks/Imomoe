@@ -52,7 +52,7 @@ class SkinCover1Proxy : VarietyAdapter.Proxy<SkinCover1Bean, SkinCover1ViewHolde
             selectedItem = holder
             selectedItemPosition = index
             appThemeRes.tryEmit(data.themeRes)
-            holder.itemView.activity?.recreate()
+            holder.itemView.activity.recreate()
         }
     }
 }

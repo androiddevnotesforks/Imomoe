@@ -45,7 +45,7 @@ class AnimeCover6Proxy(
             holder.tvAnimeCover6Describe.text = data.describe
         }
         holder.itemView.setOnClickListener {
-            activity?.let { data.route.route(it) }
+            data.route.route(activity)
         }
     }
 }
