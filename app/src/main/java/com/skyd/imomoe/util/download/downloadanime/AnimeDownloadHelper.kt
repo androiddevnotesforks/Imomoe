@@ -2,6 +2,8 @@ package com.skyd.imomoe.util.download.downloadanime
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Const
@@ -13,6 +15,7 @@ import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companio
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.DOWNLOAD_URL_KEY
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.STORE_DIRECTORY_PATH_KEY
 import com.skyd.imomoe.util.showToast
+import com.skyd.imomoe.view.listener.dsl.requestPermissions
 import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
@@ -41,18 +44,31 @@ object AnimeDownloadHelper {
                 .showToast()
             return
         }
-        activity.requestManageExternalStorage {
-            onGranted {
-                activity.startService(
-                    Intent(activity, AnimeDownloadService::class.java)
-                        .putExtra(DOWNLOAD_URL_KEY, url)
-                        .putExtra(ANIME_TITLE, animeTitle)
-                        .putExtra(ANIME_EPISODE, animeEpisode)
-                        .putExtra(STORE_DIRECTORY_PATH_KEY, animeFilePath + animeTitle)
-                )
+        XXPermissions.with(activity)
+            .permission(
+                Permission.MANAGE_EXTERNAL_STORAGE,
+                Permission.NOTIFICATION_SERVICE
+            )
+            .requestPermissions {
+                onGranted { _, all ->
+                    if (!all) return@onGranted
+                    activity.startService(
+                        Intent(activity, AnimeDownloadService::class.java)
+                            .putExtra(DOWNLOAD_URL_KEY, url)
+                            .putExtra(ANIME_TITLE, animeTitle)
+                            .putExtra(ANIME_EPISODE, animeEpisode)
+                            .putExtra(STORE_DIRECTORY_PATH_KEY, animeFilePath + animeTitle)
+                    )
+                }
+                onDenied { permissions, _ ->
+                    if (permissions?.contains(Permission.MANAGE_EXTERNAL_STORAGE) == false) {
+                        activity.getString(R.string.no_storage_can_not_download).showToast()
+                    }
+                    if (permissions?.contains(Permission.NOTIFICATION_SERVICE) == false) {
+                        activity.getString(R.string.no_notification_service).showToast()
+                    }
+                }
             }
-            onDenied { activity.getString(R.string.no_storage_can_not_download).showToast() }
-        }
     }
 
     private fun createXml(folderName: String) {

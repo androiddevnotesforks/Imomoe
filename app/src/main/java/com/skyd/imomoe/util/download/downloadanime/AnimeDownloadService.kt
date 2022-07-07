@@ -162,6 +162,7 @@ class AnimeDownloadService : LifecycleService() {
     ) {
         val id = Aria.download(this)
             .load(downloadUrl)
+            .ignoreCheckPermissions()
             .option(HttpOption().apply {
                 useServerFileName(true)
             })

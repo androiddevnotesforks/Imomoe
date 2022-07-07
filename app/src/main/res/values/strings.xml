@@ -287,6 +287,7 @@
     <string name="start_download">%s 开始下载</string>
     <string name="download_failed">%s 下载失败</string>
     <string name="no_storage_can_not_download">未获取存储权限，无法下载</string>
+    <string name="no_notification_service">未获取通知权限，无法继续</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="m3u8_peer_count">共%s段</string>

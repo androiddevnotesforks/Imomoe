@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arialyy.aria.core.task.DownloadTask
+import com.hjq.permissions.Permission
+import com.hjq.permissions.XXPermissions
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource2Bean
 import com.skyd.imomoe.databinding.FragmentDataSourceMarketBinding
@@ -23,6 +25,7 @@ import com.skyd.imomoe.util.market.DataSourceDownloadService
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.DataSource2Proxy
+import com.skyd.imomoe.view.listener.dsl.requestPermissions
 import com.skyd.imomoe.viewmodel.DataSourceMarketViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -36,23 +39,36 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
     private val adapter: VarietyAdapter by lazy {
         VarietyAdapter(mutableListOf(DataSource2Proxy(
             onActionClickListener = { _, data, _ ->
-                requestManageExternalStorage {
-                    onGranted {
-                        if (DataSourceManager.customDataSourceInfo?.get("name") == data.name ||
-                            DataSourceManager.dataSourceFileName.substringBeforeLast(".") == data.name
-                        ) {
-                            showMessageDialog(
-                                icon = R.drawable.ic_warning_2_24,
-                                message = getString(R.string.data_source_market_restart_after_downloaded)
-                            ) { _, _ ->
+                XXPermissions.with(this)
+                    .permission(
+                        Permission.MANAGE_EXTERNAL_STORAGE,
+                        Permission.NOTIFICATION_SERVICE
+                    )
+                    .requestPermissions {
+                        onGranted { _, all ->
+                            if (!all) return@onGranted
+                            if (DataSourceManager.customDataSourceInfo?.get("name") == data.name ||
+                                DataSourceManager.dataSourceFileName.substringBeforeLast(".") == data.name
+                            ) {
+                                showMessageDialog(
+                                    icon = R.drawable.ic_warning_2_24,
+                                    message = getString(R.string.data_source_market_restart_after_downloaded)
+                                ) { _, _ ->
+                                    startDownload(data)
+                                }
+                            } else {
                                 startDownload(data)
                             }
-                        } else {
-                            startDownload(data)
+                        }
+                        onDenied { permissions, _ ->
+                            if (permissions?.contains(Permission.MANAGE_EXTERNAL_STORAGE) == false) {
+                                getString(R.string.no_storage_can_not_download).showToast()
+                            }
+                            if (permissions?.contains(Permission.NOTIFICATION_SERVICE) == false) {
+                                getString(R.string.no_notification_service).showToast()
+                            }
                         }
                     }
-                    onDenied { getString(R.string.no_storage_can_not_download).showToast() }
-                }
             }
         )))
     }
