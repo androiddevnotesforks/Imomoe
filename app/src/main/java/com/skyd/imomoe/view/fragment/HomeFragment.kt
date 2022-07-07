@@ -13,9 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentHomeBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
-import com.skyd.imomoe.ext.requestManageExternalStorage
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.SearchActivityProcessor
 import com.skyd.imomoe.state.DataState
@@ -41,6 +39,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
+            if (resources.getBoolean(R.bool.is_landscape)) {
+                tbHomeFragment.addFitsSystemWindows(right = true)
+                tlHomeFragment.addFitsSystemWindows(right = true)
+            }
+
             vp2HomeFragment.adapter = adapter
             val tabLayoutMediator = TabLayoutMediator(
                 tlHomeFragment, vp2HomeFragment.getViewPager()
@@ -54,8 +57,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
             tbHomeFragment.apply {
                 setNavigationOnClickListener {
-                    startActivity(Intent(activity, RankActivity::class.java))
-                    activity?.overridePendingTransition(R.anim.anl_push_left_in, R.anim.anl_stay)
+                    startActivity(Intent(requireActivity(), RankActivity::class.java))
+                    requireActivity().overridePendingTransition(
+                        R.anim.anl_push_left_in,
+                        R.anim.anl_stay
+                    )
                 }
 
                 setOnMenuItemClickListener { item ->

@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import com.skyd.imomoe.databinding.ActivityNoticeBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.toHtml
 import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
@@ -32,6 +33,8 @@ class NoticeActivity : BaseActivity<ActivityNoticeBinding>() {
         }
 
         mBinding.run {
+            ablNoticeActivity.addFitsSystemWindows(right = true, top = true)
+            root.addFitsSystemWindows(right = true, bottom = true)
             tbNoticeActivity.run {
                 setNavigationOnClickListener { finish() }
                 title = paramMap[TOOLBAR_TITLE] ?: "通知"

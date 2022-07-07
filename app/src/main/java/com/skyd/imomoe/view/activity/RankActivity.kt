@@ -8,6 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityRankBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.state.DataState
@@ -27,6 +28,9 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
         super.onCreate(savedInstanceState)
 
         mBinding.run {
+            ablRankActivity.hideToolbarWhenCollapsed(tbRankActivity)
+            ablRankActivity.addFitsSystemWindows(right = true, top = true)
+
             tbRankActivity.setNavigationOnClickListener { finish() }
 
             vp2RankActivity.offscreenPageLimit = offscreenPageLimit
@@ -46,8 +50,6 @@ class RankActivity : BaseActivity<ActivityRankBinding>() {
                 }
             }
             tabLayoutMediator.attach()
-
-            ablRankActivity.hideToolbarWhenCollapsed(tbRankActivity)
         }
 
 

@@ -7,9 +7,9 @@
     tools:context=".view.activity.HistoryActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_history_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@+id/srl_history_activity">
 
@@ -17,7 +17,6 @@
             android:id="@+id/tb_history_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:menu="@menu/menu_history_activity"
             app:navigationIcon="@drawable/ic_arrow_back_24"

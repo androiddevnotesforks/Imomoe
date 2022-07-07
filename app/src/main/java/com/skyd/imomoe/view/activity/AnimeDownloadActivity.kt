@@ -46,7 +46,8 @@ class AnimeDownloadActivity : BaseActivity<ActivityAnimeDownloadBinding>() {
         mBinding.run {
             tbAnimeDownloadActivity.title = viewModel.actionBarTitle
             tbAnimeDownloadActivity.setNavigationOnClickListener { finish() }
-
+            ablAnimeDownloadActivity.addFitsSystemWindows(right = true, top = true)
+            rvAnimeDownloadActivity.addFitsSystemWindows(right = true, bottom = true)
             rvAnimeDownloadActivity.layoutManager = LinearLayoutManager(this@AnimeDownloadActivity)
             rvAnimeDownloadActivity.adapter = adapter
 

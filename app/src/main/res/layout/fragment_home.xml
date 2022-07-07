@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context=".view.fragment.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,6 +19,7 @@
             android:id="@+id/tb_home_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
             app:buttonGravity="center_vertical"
             app:layout_scrollFlags="scroll|enterAlways"
             app:menu="@menu/menu_home_fragment"
@@ -44,6 +46,7 @@
             android:id="@+id/tl_home_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipToPadding="false"
             app:tabGravity="center"
             app:tabMode="scrollable" />
     </com.google.android.material.appbar.AppBarLayout>

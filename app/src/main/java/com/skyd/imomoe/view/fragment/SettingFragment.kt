@@ -9,10 +9,7 @@ import androidx.preference.Preference
 import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.editor
-import com.skyd.imomoe.ext.sharedPreferences
-import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.ext.theme.selectDarkMode
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.net.DnsServer.selectDnsServer
@@ -42,6 +39,7 @@ class SettingFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        listView.addFitsSystemWindows(right = true, bottom = true)
         // 清理历史记录
         viewModel.deleteAllHistory.collectWithLifecycle(viewLifecycleOwner) { data ->
             data.second.showToast()

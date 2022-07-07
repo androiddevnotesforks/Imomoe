@@ -3,7 +3,6 @@ package com.skyd.imomoe.view.activity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewStub
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -15,11 +14,13 @@ import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.initializeFlurry
 import com.skyd.imomoe.ext.theme.appThemeRes
+import com.skyd.imomoe.ext.theme.transparentSystemBar
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.logE
 import org.greenrobot.eventbus.EventBus
+
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     protected lateinit var mBinding: VB
@@ -30,7 +31,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(activityThemeRes)
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         appThemeRes.collectWithLifecycle(this) {
             if (activityThemeRes != it) {
                 // 壁纸取色
@@ -43,10 +43,16 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         mBinding = getBinding()
         setContentView(mBinding.root)
 
+        if (transparentSystemBar()) {
+            window.transparentSystemBar(mBinding.root)
+        }
+
         if (Util.lastReadUserNoticeVersion() >= Const.Common.USER_NOTICE_VERSION) {
             initializeFlurry(application)
         }
     }
+
+    protected open fun transparentSystemBar(): Boolean = true
 
     protected abstract fun getBinding(): VB
 

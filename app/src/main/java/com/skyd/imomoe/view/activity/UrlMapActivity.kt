@@ -34,6 +34,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.database.entity.UrlMapEntity
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.ext.plus
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.component.compose.AnimeTopBar
 import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
@@ -199,11 +200,9 @@ fun UrlMapList(paddingValues: PaddingValues) {
     val viewModel: UrlMapViewModel = hiltViewModel()
     val urlMapListState by viewModel.urlMapList.collectAsState()
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .navigationBarsPadding(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = paddingValues + WindowInsets.navigationBars.asPaddingValues() +
+                PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
         item {
             UrlMapEnabledCard()

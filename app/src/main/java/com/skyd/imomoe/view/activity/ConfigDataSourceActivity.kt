@@ -42,6 +42,8 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
 
         mBinding.apply {
             ablConfigDataSourceActivity.hideToolbarWhenCollapsed(tbConfigDataSourceActivity)
+            ablConfigDataSourceActivity.addFitsSystemWindows(right = true, top = true)
+            vp2ConfigDataSourceActivity.fitsSystemWindows2()
 
             tbConfigDataSourceActivity.apply {
                 setNavigationOnClickListener { finish() }
@@ -63,7 +65,7 @@ class ConfigDataSourceActivity : BaseActivity<ActivityConfigDataSourceBinding>()
             vp2ConfigDataSourceActivity.adapter = adapter
 
             val tabLayoutMediator = TabLayoutMediator(
-                tlConfigDataSourceActivity, vp2ConfigDataSourceActivity.getViewPager()
+                tlConfigDataSourceActivity, vp2ConfigDataSourceActivity//.getViewPager()
             ) { tab, position ->
                 tab.text = tabLayoutTitle[position % 2]
             }

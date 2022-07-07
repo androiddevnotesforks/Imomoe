@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.SkinCover1Bean
 import com.skyd.imomoe.databinding.ActivitySkinBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.theme.appThemeRes
 import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -23,8 +24,10 @@ class SkinActivity : BaseActivity<ActivitySkinBinding>() {
 
         initSkinData()
         mBinding.run {
+            ablSkinActivityToolbar.addFitsSystemWindows(right = true, top = true)
             tbSkinActivityToolbar.setNavigationOnClickListener { finish() }
 
+            rvSkinActivity.addFitsSystemWindows(bottom = true)
             rvSkinActivity.layoutManager = GridLayoutManager(
                 this@SkinActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE

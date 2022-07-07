@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityMonthAnimeBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -29,6 +30,8 @@ class MonthAnimeActivity : BaseActivity<ActivityMonthAnimeBinding>() {
         mBinding.run {
             tbMonthAnimeActivity.title = getString(R.string.year_month_anime, viewModel.partUrl)
             tbMonthAnimeActivity.setNavigationOnClickListener { finish() }
+            ablMonthAnimeActivity.addFitsSystemWindows(right = true, top = true)
+            rvMonthAnimeActivity.addFitsSystemWindows(right = true, bottom = true)
 
             rvMonthAnimeActivity.layoutManager = GridLayoutManager(
                 this@MonthAnimeActivity,

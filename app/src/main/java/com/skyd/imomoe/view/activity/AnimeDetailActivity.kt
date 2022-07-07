@@ -8,9 +8,7 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.database.getAppDataBase
 import com.skyd.imomoe.databinding.ActivityAnimeDetailBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
@@ -92,6 +90,8 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
 
         mBinding.tbAnimeDetailActivity.run {
+            addFitsSystemWindows(right = true, top = true)
+
             setNavigationOnClickListener { finish() }
             menu.getItem(1).isVisible = false
             setOnMenuItemClickListener { item ->
@@ -128,6 +128,8 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
         }
 
         mBinding.run {
+            rvAnimeDetailActivityInfo.addFitsSystemWindows(right = true, bottom = true)
+
             rvAnimeDetailActivityInfo.layoutManager = GridLayoutManager(
                 this@AnimeDetailActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE

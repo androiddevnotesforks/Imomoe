@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,8 +19,8 @@
         android:id="@+id/tb_anime_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:buttonGravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_anime_detail_activity"
         app:navigationIcon="@drawable/ic_arrow_back_24"
         app:navigationIconTint="@android:color/white"
@@ -29,14 +29,16 @@
     <com.skyd.imomoe.view.component.VpSwipeRefreshLayout
         android:id="@+id/srl_anime_detail_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tb_anime_detail_activity"
+        android:layout_height="0px"
         android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_anime_detail_activity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_anime_detail_activity_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:clipToPadding="false" />
     </com.skyd.imomoe.view.component.VpSwipeRefreshLayout>
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,16 +7,15 @@
     tools:context=".view.activity.SkinActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_skin_activity_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_skin_activity_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="@string/skin_center" />
@@ -26,5 +25,6 @@
         android:id="@+id/rv_skin_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.bean.License1Bean
 import com.skyd.imomoe.bean.LicenseHeader1Bean
 import com.skyd.imomoe.databinding.ActivityLicenseBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.processor.OpenBrowserProcessor
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -157,7 +158,9 @@ class LicenseActivity : BaseActivity<ActivityLicenseBinding>() {
         adapter.dataList = list
 
         mBinding.run {
+            ablLicenseActivity.addFitsSystemWindows(right = true, top = true)
             tbLicenseActivity.setNavigationOnClickListener { finish() }
+            rvLicenseActivity.addFitsSystemWindows(right = true, bottom = true)
             rvLicenseActivity.layoutManager = LinearLayoutManager(this@LicenseActivity)
             rvLicenseActivity.adapter = adapter
         }

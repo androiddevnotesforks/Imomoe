@@ -7,9 +7,9 @@
     tools:context=".view.activity.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_search_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@+id/srl_search_activity">
 
@@ -17,7 +17,6 @@
             android:id="@+id/tb_search_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             android:paddingStart="0dp"
             android:paddingEnd="6dp"
             app:buttonGravity="center_vertical"
@@ -59,6 +58,7 @@
             android:id="@+id/rv_search_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
             android:scrollbarSize="4dp"
             android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>

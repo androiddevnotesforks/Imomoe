@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.databinding.FragmentRankBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.showToast
@@ -44,11 +45,11 @@ class RankFragment : BaseFragment<FragmentRankBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
+            rvRankFragment.addFitsSystemWindows(right = true, bottom = true)
             rvRankFragment.layoutManager = GridLayoutManager(
                 activity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE
-            )
-                .apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
             rvRankFragment.addItemDecoration(AnimeShowItemDecoration())
             rvRankFragment.adapter = adapter
             srlRankFragment.setOnRefreshListener { viewModel.getRankListData() }

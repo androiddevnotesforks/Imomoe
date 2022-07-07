@@ -15,7 +15,6 @@
             android:id="@+id/tb_more_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_beans_24"
             app:title="@string/more" />

@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource1Bean
 import com.skyd.imomoe.databinding.FragmentLocalDataSourceBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.dataSourceDirectoryChanged
-import com.skyd.imomoe.ext.showSnackbar
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.activity.ConfigDataSourceActivity
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
@@ -54,6 +52,7 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
 
     private fun initData() {
         mBinding.apply {
+            root.addFitsSystemWindows(right = true, bottom = true)
             rvLocalDataSourceFragment.layoutManager = LinearLayoutManager(activity)
             rvLocalDataSourceFragment.adapter = adapter
         }

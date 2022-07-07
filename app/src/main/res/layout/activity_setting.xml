@@ -8,9 +8,9 @@
     tools:context=".view.activity.SettingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_setting_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@+id/fragment_container">
 
@@ -18,7 +18,6 @@
             android:id="@+id/tb_setting_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="@string/setting" />

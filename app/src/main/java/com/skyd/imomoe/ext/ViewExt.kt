@@ -3,10 +3,15 @@ package com.skyd.imomoe.ext
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
+import android.text.BoringLayout
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.skyd.imomoe.appContext
+import com.skyd.imomoe.util.logE
 
 
 fun View.enable() {
@@ -74,4 +79,30 @@ fun View.overlap(rect: Rect): Boolean {
     val top = location[1]
     val bottom = location[1] + height
     return !(left > rect.right || right < rect.left || top > rect.bottom || bottom < rect.top)
+}
+
+fun View.addFitsSystemWindows(
+    top: Boolean = false,
+    bottom: Boolean = false,
+    left: Boolean = false,
+    right: Boolean = false
+) {
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, ins ->
+        var newPaddingTop = v.paddingTop
+        var newPaddingBottom = v.paddingBottom
+        var newPaddingLeft = v.paddingLeft
+        var newPaddingRight = v.paddingRight
+        if (top) newPaddingTop = ins.getInsets(WindowInsetsCompat.Type.statusBars()).top
+        if (bottom) newPaddingBottom = ins.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+        if (left) newPaddingLeft = ins.getInsets(WindowInsetsCompat.Type.statusBars()).left
+        if (right) newPaddingRight = ins.getInsets(WindowInsetsCompat.Type.navigationBars()).right
+
+        v.updatePadding(
+            top = newPaddingTop,
+            bottom = newPaddingBottom,
+            left = newPaddingLeft,
+            right = newPaddingRight
+        )
+        ins
+    }
 }

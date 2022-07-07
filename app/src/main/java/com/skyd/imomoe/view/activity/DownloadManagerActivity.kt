@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.databinding.ActivityDownloadManagerBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService
@@ -42,7 +43,9 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
 
         mBinding.apply {
             tbDownloadManagerActivity.setNavigationOnClickListener { finish() }
+            ablDownloadManagerActivity.addFitsSystemWindows(right = true, top = true)
 
+            rvDownloadManagerActivity.addFitsSystemWindows(right = true, bottom = true)
             rvDownloadManagerActivity.layoutManager =
                 LinearLayoutManager(this@DownloadManagerActivity)
             rvDownloadManagerActivity.adapter = adapter

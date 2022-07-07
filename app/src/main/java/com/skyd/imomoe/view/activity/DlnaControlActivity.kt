@@ -9,6 +9,7 @@ import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityDlnaControlBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.gone
 import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.util.Util.setColorStatusBar
@@ -58,6 +59,7 @@ class DlnaControlActivity : BaseActivity<ActivityDlnaControlBinding>() {
 
         //禁止发送数据时点击
         mBinding.run {
+            root.addFitsSystemWindows(right = true, top = true, bottom = true)
             layoutDlnaControlActivityLoading.layoutCircleProgressTextTip1.isClickable = true
             layoutDlnaControlActivityLoading.layoutCircleProgressTextTip1.isFocusable = true
             layoutDlnaControlActivityLoading.tvCircleProgressTextTip1.text =

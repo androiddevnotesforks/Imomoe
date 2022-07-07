@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.appbar.AppBarLayout
@@ -22,15 +23,11 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoView
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.databinding.ActivityPlayBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.sharedPreferences
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.ext.theme.getAttrColor
-import com.skyd.imomoe.ext.visible
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.Util.openVideoByExternalPlayer
-import com.skyd.imomoe.util.Util.setColorStatusBar
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -92,12 +89,16 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     private var currentNightMode: Int = 0
     private var lastCanCollapsed: Boolean? = null
 
+    override fun transparentSystemBar(): Boolean = false
+
     private fun initView() {
         currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        setColorStatusBar(window, Color.BLACK)
+        window.statusBarColor = Color.BLACK
+        WindowInsetsControllerCompat(window, mBinding.root).isAppearanceLightStatusBars = false
 
         mBinding.apply {
-            supportActionBar?.setDisplayShowTitleEnabled(false)
+            root.addFitsSystemWindows(right = true, top = true)
+            rvPlayActivity.addFitsSystemWindows(right = true, bottom = true)
 
             if (ctlPlayActivity != null && ablPlayActivity != null) {
                 ablPlayActivity.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -192,14 +193,12 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
         initVideoBuilderMode()
 
         viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
-//        viewModel.detailPartUrl = intent.getStringExtra("detailPartUrl").orEmpty()
 
         mBinding.apply {
             rvPlayActivity.layoutManager = GridLayoutManager(
                 this@PlayActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE
             ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
-            // 复用AnimeShow的ItemDecoration
             rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
             rvPlayActivity.adapter = adapter
 

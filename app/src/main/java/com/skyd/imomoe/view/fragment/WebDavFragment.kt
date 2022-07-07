@@ -26,6 +26,8 @@ class WebDavFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        listView.addFitsSystemWindows(right = true, bottom = true)
+
         findPreference<Preference>("backup_app_database_to_cloud")?.title = getString(
             R.string.backup_app_database_to_cloud, ""
         )

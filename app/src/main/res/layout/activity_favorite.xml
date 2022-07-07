@@ -7,9 +7,9 @@
     tools:context=".view.activity.FavoriteActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_favorite_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@+id/srl_favorite_activity">
 
@@ -17,7 +17,6 @@
             android:id="@+id/tb_favorite_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="@string/my_favorite" />

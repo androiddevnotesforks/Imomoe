@@ -7,16 +7,15 @@
     tools:context=".view.activity.NoticeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_notice_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_notice_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_arrow_back_24"
             app:title="@string/config_custom_data_source" />

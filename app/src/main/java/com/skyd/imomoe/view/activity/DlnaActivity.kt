@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.databinding.ActivityDlnaBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.util.Util.getRedirectUrl
 import com.skyd.imomoe.util.dlna.Utils.isLocalMediaAddress
 import com.skyd.imomoe.util.dlna.dmc.DLNACastManager
@@ -55,7 +56,9 @@ class DlnaActivity : BaseActivity<ActivityDlnaBinding>() {
 
         mBinding.run {
             tbDlnaActivity.setNavigationOnClickListener { finish() }
+            ablDlnaActivity.addFitsSystemWindows(right = true, top = true)
 
+            rvDlnaActivityDevice.addFitsSystemWindows(right = true, bottom = true)
             rvDlnaActivityDevice.layoutManager = LinearLayoutManager(this@DlnaActivity)
             rvDlnaActivityDevice.adapter = adapter
         }

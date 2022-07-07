@@ -10,7 +10,8 @@
         android:id="@+id/rv_local_data_source_fragment"
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clipToPadding="false" />
 
     <com.google.android.material.textview.MaterialTextView
         style="@style/TextAppearance.Material3.LabelLarge"

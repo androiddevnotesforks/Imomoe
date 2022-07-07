@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.webkit.*
 import com.skyd.imomoe.databinding.ActivityWebViewBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 
 
 class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
@@ -24,25 +25,30 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>() {
                 it as HashMap<String, String>
             }
         }
-        mBinding.tbWebViewActivity.setNavigationOnClickListener { finish() }
-        mBinding.wvWebViewActivity.webViewClient = object : WebViewClient() {
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-            }
-
-            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-                if (url.startsWith("https") || url.startsWith("http")) {
-                    view.loadUrl(url)
-                } else {
-                    try {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
-                    }
+        mBinding.apply {
+            ablWebViewActivity.addFitsSystemWindows(right = true, top = true)
+            wvWebViewActivity.addFitsSystemWindows(right = true, bottom = true)
+            tbWebViewActivity.setNavigationOnClickListener { finish() }
+            wvWebViewActivity.webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
                 }
-                return true
+
+                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                    if (url.startsWith("https") || url.startsWith("http")) {
+                        view.loadUrl(url)
+                    } else {
+                        try {
+                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                        } catch (e: ActivityNotFoundException) {
+                            e.printStackTrace()
+                        }
+                    }
+                    return true
+                }
             }
         }
+
         initSettings()
 
         mBinding.wvWebViewActivity.loadUrl(url, headers)

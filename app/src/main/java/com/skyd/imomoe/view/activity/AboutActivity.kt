@@ -28,6 +28,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
+import com.skyd.imomoe.ext.plus
 import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.model.DataSourceManager
@@ -62,6 +63,7 @@ fun AboutScreen() {
     }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         decayAnimationSpec = rememberSplineBasedDecay(),
+        state = rememberTopAppBarScrollState()
     )
     Scaffold(
         topBar = {
@@ -97,9 +99,8 @@ fun AboutScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .navigationBarsPadding(),
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = it + WindowInsets.navigationBars.asPaddingValues()
         ) {
             if (isLand) {
                 item {

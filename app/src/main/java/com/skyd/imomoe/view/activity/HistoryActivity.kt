@@ -6,8 +6,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityHistoryBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeCover9Proxy
@@ -44,6 +43,8 @@ class HistoryActivity : BaseActivity<ActivityHistoryBinding>() {
         }
 
         mBinding.run {
+            ablHistoryActivity.addFitsSystemWindows(right = true, top = true)
+            rvHistoryActivity.addFitsSystemWindows(right = true, bottom = true)
             srlHistoryActivity.setOnRefreshListener { viewModel.getHistoryList() }
 
             rvHistoryActivity.layoutManager = LinearLayoutManager(this@HistoryActivity)

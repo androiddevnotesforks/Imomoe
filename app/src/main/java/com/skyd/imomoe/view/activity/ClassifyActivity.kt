@@ -9,6 +9,7 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.ClassifyBean
 import com.skyd.imomoe.bean.ClassifyTab1Bean
 import com.skyd.imomoe.databinding.ActivityClassifyBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.state.DataState
@@ -48,6 +49,8 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
         mBinding.run {
             tbClassifyActivity.setNavigationOnClickListener { finish() }
+            ablClassifyActivity.addFitsSystemWindows(right = true, top = true)
+            rvClassifyActivity.addFitsSystemWindows(right = true, bottom = true)
             srlClassifyActivity.setOnRefreshListener {
                 //避免刷新间隔太短
                 if (System.currentTimeMillis() - lastRefreshTime > 500) {

@@ -1,15 +1,11 @@
 package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
-import androidx.core.view.WindowCompat
 import com.flurry.android.FlurryAgent
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.composethemeadapter3.Mdc3Theme
 import com.skyd.imomoe.R
@@ -17,6 +13,7 @@ import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.initializeFlurry
 import com.skyd.imomoe.ext.theme.appThemeRes
+import com.skyd.imomoe.ext.theme.transparentSystemBar
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import org.greenrobot.eventbus.EventBus
@@ -37,8 +34,8 @@ abstract class BaseComponentActivity : ComponentActivity() {
             }
         }
 
-        // 全屏
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // 透明状态栏
+        window.transparentSystemBar(window.decorView.findViewById<ViewGroup>(android.R.id.content))
 
         if (Util.lastReadUserNoticeVersion() >= Const.Common.USER_NOTICE_VERSION) {
             initializeFlurry(application)
@@ -51,16 +48,6 @@ abstract class BaseComponentActivity : ComponentActivity() {
                 setTextColors = true,
                 setDefaultFontFamily = true
             ) {
-                val systemUiController = rememberSystemUiController()
-                val useDarkIcons = !isSystemInDarkTheme()
-
-                SideEffect {
-                    systemUiController.setSystemBarsColor(
-                        color = Color.Transparent,
-                        darkIcons = useDarkIcons
-                    )
-                }
-
                 content.invoke()
             }
         }

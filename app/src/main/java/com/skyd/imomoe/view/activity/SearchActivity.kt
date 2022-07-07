@@ -46,7 +46,9 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
         mBinding.run {
             srlSearchActivity.setEnableRefresh(false)
             srlSearchActivity.setOnLoadMoreListener { viewModel.loadMoreSearchData() }
+            ablSearchActivity.addFitsSystemWindows(right = true, top = true)
 
+            rvSearchActivity.addFitsSystemWindows(right = true, bottom = true)
             rvSearchActivity.layoutManager = GridLayoutManager(
                 this@SearchActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE
@@ -57,7 +59,6 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>() {
             rvSearchActivity.adapter = adapter
             showSearchHistory()
 
-            tbSearchActivity.fixKeyboardFitsSystemWindows()
             svSearchActivity.isSubmitButtonEnabled = true
             svSearchActivity.requestFocus()
             svSearchActivity.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

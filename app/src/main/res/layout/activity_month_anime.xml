@@ -7,9 +7,9 @@
     tools:context=".view.activity.MonthAnimeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_month_anime_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true"
         app:liftOnScrollTargetViewId="@+id/srl_month_anime_activity">
 
@@ -17,7 +17,6 @@
             android:id="@+id/tb_month_anime_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
             app:buttonGravity="center_vertical"
             app:navigationIcon="@drawable/ic_arrow_back_24" />
     </com.google.android.material.appbar.AppBarLayout>
@@ -32,7 +31,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_month_anime_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     <ViewStub

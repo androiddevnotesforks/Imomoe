@@ -14,6 +14,7 @@
             android:id="@+id/rv_anime_show_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
             android:scrollbarSize="4dp"
             android:scrollbars="vertical" />
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>

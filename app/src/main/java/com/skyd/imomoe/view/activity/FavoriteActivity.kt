@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityFavoriteBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
@@ -23,8 +24,10 @@ class FavoriteActivity : BaseActivity<ActivityFavoriteBinding>() {
 
         mBinding.run {
             tbFavoriteActivity.setNavigationOnClickListener { finish() }
+            ablFavoriteActivity.addFitsSystemWindows(right = true, top = true)
 
             srlFavoriteActivity.setOnRefreshListener { viewModel.getFavoriteData() }
+            rvFavoriteActivity.addFitsSystemWindows(right = true, bottom = true)
             rvFavoriteActivity.layoutManager = GridLayoutManager(
                 this@FavoriteActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE

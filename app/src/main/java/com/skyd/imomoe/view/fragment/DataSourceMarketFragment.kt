@@ -13,10 +13,7 @@ import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.DataSource2Bean
 import com.skyd.imomoe.databinding.FragmentDataSourceMarketBinding
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.getRawString
-import com.skyd.imomoe.ext.requestManageExternalStorage
-import com.skyd.imomoe.ext.showMessageDialog
+import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
@@ -86,6 +83,7 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
 
     private fun initData() {
         mBinding.apply {
+            root.addFitsSystemWindows(right = true, bottom = true)
             rvDataSourceMarketFragment.layoutManager = LinearLayoutManager(activity)
             rvDataSourceMarketFragment.adapter = adapter
 

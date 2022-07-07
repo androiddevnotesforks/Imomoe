@@ -9,7 +9,9 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.util.showToast
@@ -64,6 +66,9 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             it.message?.showToast(Toast.LENGTH_LONG)
         }
         mBinding.apply {
+            if (resources.getBoolean(R.bool.is_landscape)) {
+                rvAnimeShowFragment.addFitsSystemWindows(right = true, bottom = true)
+            }
             rvAnimeShowFragment.adapter = adapter
             rvAnimeShowFragment.layoutManager = GridLayoutManager(activity, MAX_SPAN_SIZE).apply {
                 spanSizeLookup = AnimeShowSpanSize(adapter)
