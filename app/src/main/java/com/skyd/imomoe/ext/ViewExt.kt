@@ -93,7 +93,7 @@ fun View.addFitsSystemWindows(
         var newPaddingRight = v.paddingRight
         if (top) newPaddingTop = ins.getInsets(WindowInsetsCompat.Type.statusBars()).top
         if (bottom) newPaddingBottom = ins.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
-        if (left) newPaddingLeft = ins.getInsets(WindowInsetsCompat.Type.statusBars()).left
+        if (left) newPaddingLeft = ins.getInsets(WindowInsetsCompat.Type.displayCutout()).left
         if (right) newPaddingRight = ins.getInsets(WindowInsetsCompat.Type.navigationBars()).right
 
         v.updatePadding(

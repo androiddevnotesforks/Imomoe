@@ -4,8 +4,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -97,6 +99,11 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
         )
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mBinding.root.addFitsSystemWindows(right = true, bottom = true)
+    }
+
     override fun onResume() {
         super.onResume()
         if (isFirstLoadData) {
@@ -107,7 +114,6 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
 
     private fun initData() {
         mBinding.apply {
-            root.addFitsSystemWindows(right = true, bottom = true)
             rvDataSourceMarketFragment.layoutManager = LinearLayoutManager(activity)
             rvDataSourceMarketFragment.adapter = adapter
 

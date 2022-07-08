@@ -44,6 +44,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        if (resources.getBoolean(R.bool.is_landscape)) {
+            mBinding.nvMainActivity.addFitsSystemWindows(top = true, bottom = true, left = true)
+        } else {
+            mBinding.nvMainActivity.addFitsSystemWindows(bottom = true, left = true)
+        }
+
         if (lastReadUserNoticeVersion() < Const.Common.USER_NOTICE_VERSION) {
             showMessageDialog(
                 title = getString(R.string.user_notice_update),
@@ -75,7 +81,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
 
         mBinding.vp2MainActivity.also {
             it.adapter = adapter
-            it.fitsSystemWindows2()
             it.offscreenPageLimit = adapter.itemCount
             it.isUserInputEnabled = false
         }

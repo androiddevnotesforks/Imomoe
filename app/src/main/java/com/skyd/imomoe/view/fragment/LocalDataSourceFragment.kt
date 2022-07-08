@@ -1,5 +1,6 @@
 package com.skyd.imomoe.view.fragment
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -42,6 +43,11 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
 
     fun getDataSourceList() = viewModel.getDataSourceList()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mBinding.root.addFitsSystemWindows(right = true, bottom = true)
+    }
+
     override fun onResume() {
         super.onResume()
         if (isFirstLoadData) {
@@ -52,7 +58,6 @@ class LocalDataSourceFragment : BaseFragment<FragmentLocalDataSourceBinding>() {
 
     private fun initData() {
         mBinding.apply {
-            root.addFitsSystemWindows(right = true, bottom = true)
             rvLocalDataSourceFragment.layoutManager = LinearLayoutManager(activity)
             rvLocalDataSourceFragment.adapter = adapter
         }

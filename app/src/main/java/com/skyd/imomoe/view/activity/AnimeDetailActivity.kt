@@ -2,6 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
@@ -86,6 +87,7 @@ class AnimeDetailActivity : BaseActivity<ActivityAnimeDetailBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowInsetsControllerCompat(window, mBinding.root).isAppearanceLightStatusBars = false
 
         viewModel.partUrl = intent.getStringExtra("partUrl").orEmpty()
 

@@ -126,10 +126,13 @@ class AnimeDownloadService : LifecycleService() {
         val storeDirectoryPath = intent.getStringExtra(STORE_DIRECTORY_PATH_KEY).orEmpty()
         val animeTitle = intent.getStringExtra(ANIME_TITLE).orEmpty()
         val animeEpisode = intent.getStringExtra(ANIME_EPISODE).orEmpty()
-        val fileName = downloadUrl.substringAfterLast("/", animeEpisode).ifBlank { animeEpisode }
 
         coroutineScope.launch {
             runCatching {
+                val fileName = downloadUrl
+                    .substringAfterLast("/", animeEpisode)
+                    .ifBlank { animeEpisode }
+                    .toMD5()
                 val contentType = RetrofitManager
                     .get()
                     .create(HtmlService::class.java)

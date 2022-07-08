@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.databinding.ActivityDownloadManagerBinding
@@ -14,6 +15,8 @@ import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService
+import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
+import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.AnimeDownload1Proxy
 import com.skyd.imomoe.viewmodel.DownloadManagerViewModel
@@ -46,8 +49,11 @@ class DownloadManagerActivity : BaseActivity<ActivityDownloadManagerBinding>() {
             ablDownloadManagerActivity.addFitsSystemWindows(right = true, top = true)
 
             rvDownloadManagerActivity.addFitsSystemWindows(right = true, bottom = true)
-            rvDownloadManagerActivity.layoutManager =
-                LinearLayoutManager(this@DownloadManagerActivity)
+            rvDownloadManagerActivity.layoutManager = GridLayoutManager(
+                this@DownloadManagerActivity,
+                AnimeShowSpanSize.MAX_SPAN_SIZE
+            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            rvDownloadManagerActivity.addItemDecoration(AnimeShowItemDecoration())
             rvDownloadManagerActivity.adapter = adapter
         }
 

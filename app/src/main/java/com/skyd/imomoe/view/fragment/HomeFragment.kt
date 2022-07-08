@@ -39,10 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
-            if (resources.getBoolean(R.bool.is_landscape)) {
-                tbHomeFragment.addFitsSystemWindows(right = true)
-                tlHomeFragment.addFitsSystemWindows(right = true)
-            }
+            ablHomeFragment.addFitsSystemWindows(right = true, top = true)
 
             vp2HomeFragment.adapter = adapter
             val tabLayoutMediator = TabLayoutMediator(

@@ -19,6 +19,7 @@ class AnimeShowSpanSize(val adapter: VarietyAdapter) : GridLayoutManager.SpanSiz
                 is AnimeDescribe1Bean,
                 is AnimeInfo1Bean,
                 is SearchHistory1Bean,
+                is AnimeDownload1Bean,
                 is HorizontalRecyclerView1Bean -> MAX_SPAN_SIZE
                 is AnimeEpisode1Bean,
                 is AnimeCover8Bean,
@@ -40,6 +41,7 @@ class AnimeShowSpanSize(val adapter: VarietyAdapter) : GridLayoutManager.SpanSiz
                 is AnimeCover5Bean,
                 is AnimeCover11Bean,
                 is SearchHistory1Bean,
+                is AnimeDownload1Bean,
                 is HorizontalRecyclerView1Bean -> MAX_SPAN_SIZE
                 is AnimeEpisode1Bean,
                 is AnimeCover8Bean,

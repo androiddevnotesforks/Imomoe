@@ -9,6 +9,7 @@ import android.view.ViewStub
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.skyd.imomoe.databinding.FragmentEverydayAnimeBinding
+import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
 import com.skyd.imomoe.state.DataState
@@ -62,6 +63,8 @@ class EverydayAnimeFragment : BaseFragment<FragmentEverydayAnimeBinding>(), Even
         super.onViewCreated(view, savedInstanceState)
 
         mBinding.run {
+            ablEverydayAnimeFragment.addFitsSystemWindows(right = true, top = true)
+            vp2EverydayAnimeFragment.addFitsSystemWindows(right = true)
             vp2EverydayAnimeFragment.offscreenPageLimit = offscreenPageLimit
             srlEverydayAnimeFragment.setOnRefreshListener { refresh() }
 
