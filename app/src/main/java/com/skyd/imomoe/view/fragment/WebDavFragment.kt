@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.*
-import com.skyd.imomoe.util.logE
 import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 import com.skyd.imomoe.view.adapter.variety.proxy.RestoreFile1Proxy
@@ -224,7 +223,6 @@ class WebDavFragment : BasePreferenceFragment() {
             job.cancel()
         }
         recyclerView.adapter = adapter
-        logE(bottomSheetDialog.toString())
         return bottomSheetDialog
     }
 

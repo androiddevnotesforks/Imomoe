@@ -11,7 +11,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.skyd.imomoe.appContext
-import com.skyd.imomoe.util.logE
 
 
 fun View.enable() {

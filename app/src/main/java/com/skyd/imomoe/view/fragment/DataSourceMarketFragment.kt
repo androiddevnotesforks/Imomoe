@@ -45,8 +45,16 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
                         Permission.NOTIFICATION_SERVICE
                     )
                     .requestPermissions {
-                        onGranted { _, all ->
-                            if (!all) return@onGranted
+                        onGranted { permissions, all ->
+                            if (!all) {
+                                if (permissions?.contains(Permission.MANAGE_EXTERNAL_STORAGE) == false) {
+                                    getString(R.string.no_storage_can_not_download).showToast()
+                                }
+                                if (permissions?.contains(Permission.NOTIFICATION_SERVICE) == false) {
+                                    getString(R.string.no_notification_service).showToast()
+                                }
+                                return@onGranted
+                            }
                             if (DataSourceManager.customDataSourceInfo?.get("name") == data.name ||
                                 DataSourceManager.dataSourceFileName.substringBeforeLast(".") == data.name
                             ) {
@@ -172,6 +180,9 @@ class DataSourceMarketFragment : BaseFragment<FragmentDataSourceMarketBinding>()
                     viewModel.onTaskCancel(task.downloadEntity, dataSourceTitleMap)
                 }
                 onTaskStopEvent.collectWithLifecycle(this@DataSourceMarketFragment) { task ->
+                    viewModel.onTaskCancel(task.downloadEntity, dataSourceTitleMap)
+                }
+                onTaskFailEvent.collectWithLifecycle(this@DataSourceMarketFragment) { task ->
                     viewModel.onTaskCancel(task.downloadEntity, dataSourceTitleMap)
                 }
                 onTaskResumeEvent.collectWithLifecycle(this@DataSourceMarketFragment) {

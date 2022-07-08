@@ -7,6 +7,6 @@
     {
         "enabled": true,
         "oldUrl": "https://raw.githubusercontent.com",
-        "newUrl": "https://ghproxy.com/https://raw.githubusercontent.com/"
+        "newUrl": "https://ghproxy.com/https://raw.githubusercontent.com"
     }
 ]
