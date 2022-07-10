@@ -1,0 +1,47 @@
+name: Pre-Release
+
+# 触发器
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # 设置JDK为11
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Checkout Secret
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ secrets.SECRET_REPO }}
+        token: ${{ secrets.TOKEN }}                     # 连接仓库的Token
+        path: secret
+    # 准备secret文件
+    - name: Copy Secret Files
+      run: |
+        cd secret/Imomoe
+        cp key.jks ../..
+        cp secret.gradle ../..
+        cp notice.html ../../app/src/main/res/raw
+    # 清理secret文件
+    - name: Clean Temp Secret Files
+      run: |
+        rm -rf ./secret
+    # 打包
+    - name: Build with Gradle
+      run: |
+        bash ./gradlew assembleGithub
+    # 存档打包的文件
+    - name: Upload Pre-Release Apk
+      uses: actions/upload-artifact@v3
+      with:
+        name: Pre-Release Apk
+        path: app/build/outputs/apk/Github/release/*.apk
