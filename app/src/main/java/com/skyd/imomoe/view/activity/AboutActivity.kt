@@ -56,7 +56,7 @@ class AboutActivity : BaseComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun AboutScreen() {
+private fun AboutScreen() {
     val context = LocalContext.current
     val isLand = calculateWindowSizeClass(LocalContext.current.activity).run {
         widthSizeClass != WindowWidthSizeClass.Compact
@@ -125,7 +125,7 @@ fun AboutScreen() {
  * 显示图标、应用名和版本的上半部分
  */
 @Composable
-fun AppIconArea(modifier: Modifier = Modifier) {
+private fun AppIconArea(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -182,7 +182,7 @@ fun AppIconArea(modifier: Modifier = Modifier) {
  * 下方的列表部分
  */
 @Composable
-fun AboutScreenList(modifier: Modifier = Modifier) {
+private fun AboutScreenList(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     var openDataSourceWebsiteDialog by remember { mutableStateOf(false) }
@@ -341,7 +341,7 @@ fun AboutScreenList(modifier: Modifier = Modifier) {
  * 下方列表部分的子项
  */
 @Composable
-fun AboutScreenListItem(
+private fun AboutScreenListItem(
     title: String,
     showIcon: Boolean = false,
     onIconClick: () -> Unit = {},

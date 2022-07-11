@@ -42,17 +42,18 @@ fun AnimeTopBar(
     val isLand = calculateWindowSizeClass(LocalContext.current.activity).run {
         widthSizeClass != WindowWidthSizeClass.Compact
     }
-    Surface(modifier = modifier.run {
+    val topBarModifier = Modifier.padding(contentPadding).run {
         if (isLand) {
             navigationBarsPadding()
         } else {
             this
         }
-    }, color = appBarContainerColor) {
+    }
+    Surface(modifier = modifier, color = appBarContainerColor) {
         when (style) {
             AnimeTopBarStyle.Small -> {
                 SmallTopAppBar(
-                    modifier = Modifier.padding(contentPadding),
+                    modifier = topBarModifier,
                     title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,
@@ -62,7 +63,7 @@ fun AnimeTopBar(
             }
             AnimeTopBarStyle.Large -> {
                 LargeTopAppBar(
-                    modifier = Modifier.padding(contentPadding),
+                    modifier = topBarModifier,
                     title = title,
                     navigationIcon = navigationIcon,
                     actions = actions,

@@ -68,6 +68,7 @@ object WebSource {
             con.invokeOnCancellation {
                 webView.stopLoading()
                 webView.pauseTimers()
+                webView.loadUrl("about:blank")
             }
             webView.settings.apply {
                 userAgent?.let { userAgentString = it }
@@ -89,9 +90,10 @@ object WebSource {
             isFinished = true
             web.evaluateJavascript("(function() { return document.documentElement.outerHTML })()") {
                 web.apply {
-                    onResult(StringEscapeUtils.unescapeEcmaScript(it))
                     stopLoading()
                     pauseTimers()
+                    loadUrl("about:blank")
+                    onResult(StringEscapeUtils.unescapeEcmaScript(it))
                 }
             }
         }

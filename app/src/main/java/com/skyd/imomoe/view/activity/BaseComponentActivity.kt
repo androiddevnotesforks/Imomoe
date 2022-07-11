@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.runtime.Composable
 import com.flurry.android.FlurryAgent
 import com.google.android.material.color.DynamicColors
@@ -44,10 +46,7 @@ abstract class BaseComponentActivity : ComponentActivity() {
 
     fun setContentBase(content: @Composable () -> Unit) {
         setContent {
-            Mdc3Theme(
-                setTextColors = true,
-                setDefaultFontFamily = true
-            ) {
+            Mdc3Theme {
                 content.invoke()
             }
         }

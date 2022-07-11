@@ -85,7 +85,7 @@ class UrlMapActivity : BaseComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
+private fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
     val context = LocalContext.current
     Scaffold(topBar = {
         AnimeTopBar(
@@ -151,7 +151,7 @@ private var urlMapEnabled by mutableStateOf(com.skyd.imomoe.net.urlMapEnabled)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UrlMapEnabledCard() {
+private fun UrlMapEnabledCard() {
     Card(
         modifier = Modifier
             .padding(vertical = 7.dp)
@@ -196,7 +196,7 @@ fun UrlMapEnabledCard() {
  * 展示列表
  */
 @Composable
-fun UrlMapList(paddingValues: PaddingValues) {
+private fun UrlMapList(paddingValues: PaddingValues) {
     val viewModel: UrlMapViewModel = hiltViewModel()
     val urlMapListState by viewModel.urlMapList.collectAsState()
     LazyColumn(
@@ -224,7 +224,7 @@ fun UrlMapList(paddingValues: PaddingValues) {
  */
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun UrlMapItem(urlMapEntity: UrlMapEntity) {
+private fun UrlMapItem(urlMapEntity: UrlMapEntity) {
     val viewModel: UrlMapViewModel = hiltViewModel()
     var menuExpanded by remember { mutableStateOf(false) }
     val enabledData = urlMapEntity.enabled
@@ -326,12 +326,12 @@ fun UrlMapItem(urlMapEntity: UrlMapEntity) {
     }
 }
 
-val showEditDialog = mutableStateOf(false)
-val editDialogData = mutableStateOf<Pair<String, String>?>(null)
+private val showEditDialog = mutableStateOf(false)
+private val editDialogData = mutableStateOf<Pair<String, String>?>(null)
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun EditDialog(
+private fun EditDialog(
     title: String,
     onConfirm: (oldUrl: String, newUrl: String) -> Unit
 ) {
@@ -403,11 +403,11 @@ fun EditDialog(
     )
 }
 
-val showDeleteDialog = mutableStateOf(false)
-val deleteDialogOldUrl = mutableStateOf<String?>(null)
+private val showDeleteDialog = mutableStateOf(false)
+private val deleteDialogOldUrl = mutableStateOf<String?>(null)
 
 @Composable
-fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
+private fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
     AlertDialog(
         onDismissRequest = {
             showDeleteDialog.value = false
@@ -445,12 +445,12 @@ fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
     )
 }
 
-val showJsonDialog = mutableStateOf(false)
-val jsonDialogData = mutableStateOf<String?>(null)
+private val showJsonDialog = mutableStateOf(false)
+private val jsonDialogData = mutableStateOf<String?>(null)
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun JsonDialog(
+private fun JsonDialog(
     title: String,
     onConfirm: (jsonData: String) -> Unit
 ) {

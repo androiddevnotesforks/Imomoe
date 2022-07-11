@@ -27,7 +27,9 @@ class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
 
         val item = (parent.adapter as? VarietyAdapter)
             ?.dataList
-            ?.getOrNull(parent.getChildAdapterPosition(view))
+            // 注意这里使用getChildLayoutPosition的目的
+            // 如果使用getChildAdapterPosition，刷新的时候可能会（边框）闪动一下，（返回-1）
+            ?.getOrNull(parent.getChildLayoutPosition(view))
         if (needVerticalMargin(item?.javaClass)) {
             outRect.top = 10.dp
             outRect.bottom = 2.dp
@@ -36,7 +38,6 @@ class AnimeShowItemDecoration : RecyclerView.ItemDecoration() {
             /**
              * 只有一列
              */
-
             if (noHorizontalMargin(item?.javaClass)) return
             outRect.left = HORIZONTAL_PADDING
             outRect.right = HORIZONTAL_PADDING

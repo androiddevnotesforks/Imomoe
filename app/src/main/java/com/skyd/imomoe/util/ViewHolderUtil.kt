@@ -124,16 +124,6 @@ class Banner1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val banner1: BannerView = view.findViewById(R.id.banner_1)
 }
 
-class LicenseHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvLicenseHeader1Name: TextView = view.findViewById(R.id.tv_license_header_1_name)
-    val tvLicenseHeader1License: TextView = view.findViewById(R.id.tv_license_header_1_license)
-}
-
-class License1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvLicense1Name: TextView = view.findViewById(R.id.tv_license_1_name)
-    val tvLicense1License: TextView = view.findViewById(R.id.tv_license_1_license)
-}
-
 class SearchHistoryHeader1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvSearchHistoryHeader1Title: TextView =
         view.findViewById(R.id.tv_search_history_header_1_title)
