@@ -198,7 +198,9 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
             rvPlayActivity.layoutManager = GridLayoutManager(
                 this@PlayActivity,
                 AnimeShowSpanSize.MAX_SPAN_SIZE
-            ).apply { spanSizeLookup = AnimeShowSpanSize(adapter) }
+            ).apply {
+                spanSizeLookup = AnimeShowSpanSize(adapter = adapter, enableLandScape = false)
+            }
             rvPlayActivity.addItemDecoration(AnimeShowItemDecoration())
             rvPlayActivity.adapter = adapter
 

@@ -6,13 +6,16 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.bean.*
 import com.skyd.imomoe.view.adapter.variety.VarietyAdapter
 
-class AnimeShowSpanSize(val adapter: VarietyAdapter) : GridLayoutManager.SpanSizeLookup() {
+class AnimeShowSpanSize(
+    val adapter: VarietyAdapter,
+    val enableLandScape: Boolean = true
+) : GridLayoutManager.SpanSizeLookup() {
     companion object {
         const val MAX_SPAN_SIZE = 60
     }
 
     override fun getSpanSize(position: Int): Int {
-        return if (appContext.resources.getBoolean(R.bool.is_landscape)) {
+        return if (enableLandScape && appContext.resources.getBoolean(R.bool.is_landscape)) {
             when (adapter.dataList[position]) {
                 is Header1Bean,
                 is Banner1Bean,

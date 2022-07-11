@@ -137,7 +137,6 @@ open class DanmakuVideoPlayer : AnimeVideoPlayer {
             val fragmentActivity =
                 mContext.activity as? FragmentActivity ?: return@setOnClickListener
             DanmakuSettingDialogFragment(
-                fillParentWidth = !mIfCurrentIsFullscreen,
                 filter = DanmakuManager.showDanmakuType,
                 allowOverlap = DanmakuManager.allowOverlap,
                 danmakuAlpha = DanmakuManager.alpha,

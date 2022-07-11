@@ -30,7 +30,7 @@ class SendDanmakuFontDialogFragment(
             // make dialog itself transparent
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             // background dim
-            setDimAmount(0.2f)
+            setDimAmount(0f)
         }
 
         mBinding.apply {

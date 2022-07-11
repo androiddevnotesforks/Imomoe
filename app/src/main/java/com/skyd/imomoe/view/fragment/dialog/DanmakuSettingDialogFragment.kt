@@ -1,5 +1,7 @@
 package com.skyd.imomoe.view.fragment.dialog
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +16,7 @@ import java.io.Serializable
 
 
 class DanmakuSettingDialogFragment(
-    private val fillParentWidth: Boolean = true,
+    private val fillParentWidth: Boolean = false,
     private var filter: ShowDanmakuType = ShowDanmakuType(),
     private var allowOverlap: Boolean = true,
     @IntRange(from = 0, to = 100)
@@ -48,7 +50,7 @@ class DanmakuSettingDialogFragment(
 
         dialog?.window?.apply {
             // make dialog itself transparent
-//            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             // background dim
             setDimAmount(0f)
         }

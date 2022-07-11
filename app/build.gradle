@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.devtools.ksp'
 }
 
 apply from: secret
@@ -36,10 +37,8 @@ android {
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
 
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
         }
 
         ndk {
@@ -136,7 +135,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion '1.2.0'
     }
 }
 
@@ -160,7 +159,7 @@ dependencies {
     implementation deps.compose.ui_tooling_preview
     implementation deps.compose.runtime_livedata
     implementation deps.compose.compose_theme_adapter
-    implementation deps.compose.material3_windo_size_class
+    implementation deps.compose.material3_window_size_class
     implementation deps.accompanist.systemuicontroller
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
@@ -179,7 +178,7 @@ dependencies {
     implementation deps.room.room_runtime
     implementation deps.room.room_ktx
     implementation deps.support.legacy_support_v4
-    kapt deps.room.room_compiler
+    ksp deps.room.room_compiler
     implementation deps.aria.core
     kapt deps.aria.compiler
     implementation deps.aria.m3u8Component

@@ -1,6 +1,6 @@
 ext.version_code = 25
 ext.version_name = "1.7.0_Akarin"
-ext.compose_version = '1.2.0-beta02'
+ext.compose_version = '1.3.0-alpha01'
 
 def build_versions = [:]
 build_versions.compile_sdk = 32
@@ -11,12 +11,12 @@ ext.build_versions = build_versions
 
 def deps = [:]
 def kotlin = [:]
-kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
-kotlin.core_ktx = "androidx.core:core-ktx:1.7.0"
+kotlin.kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.7.0"
+kotlin.core_ktx = "androidx.core:core-ktx:1.8.0"
 deps.kotlin = kotlin
 
 def kotlinx = [:]
-kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0"
+kotlinx.kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3"
 deps.kotlinx = kotlinx
 
 def support = [:]
@@ -31,13 +31,13 @@ support.fragment_ktx = "androidx.fragment:fragment-ktx:1.4.1"
 support.preference = "androidx.preference:preference:1.2.0"
 support.security_crypto = "androidx.security:security-crypto:1.1.0-alpha03"
 support.legacy_support_v4 = "androidx.legacy:legacy-support-v4:1.0.0"
-support.core_splashscreen = "androidx.core:core-splashscreen:1.0.0-beta02"
+support.core_splashscreen = "androidx.core:core-splashscreen:1.0.0-rc01"
 deps.support = support
 
 def compose = [:]
 compose.ui = "androidx.compose.ui:ui:$compose_version"
 compose.material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
-compose.material3_windo_size_class = "androidx.compose.material3:material3-window-size-class:1.0.0-alpha11"
+compose.material3_window_size_class = "androidx.compose.material3:material3-window-size-class:1.0.0-alpha13"
 compose.compose_theme_adapter = "com.google.android.material:compose-theme-adapter-3:1.0.10"
 compose.ui_tooling_preview = "androidx.compose.ui:ui-tooling-preview:$compose_version"
 compose.ui_tooling = "androidx.compose.ui:ui-tooling:$compose_version"
@@ -45,7 +45,7 @@ compose.runtime_livedata = "androidx.compose.runtime:runtime-livedata:$compose_v
 deps.compose = compose
 
 def accompanist = [:]
-accompanist.systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:0.23.1"
+accompanist.systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:0.24.13-rc"
 deps.accompanist = accompanist
 
 def retrofit2 = [:]
@@ -54,14 +54,14 @@ retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:2.9.0"
 deps.retrofit2 = retrofit2
 
 def lifecycle = [:]
-lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+lifecycle.lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
 lifecycle.lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
 lifecycle.lifecycle_extensions = 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 deps.lifecycle = lifecycle
 
 def hilt = [:]
-hilt.hilt_android = "com.google.dagger:hilt-android:2.41"
-hilt.hilt_android_compiler = "com.google.dagger:hilt-android-compiler:2.41"
+hilt.hilt_android = "com.google.dagger:hilt-android:2.42"
+hilt.hilt_android_compiler = "com.google.dagger:hilt-android-compiler:2.42"
 hilt.hilt_navigation_compose = "androidx.hilt:hilt-navigation-compose:1.0.0"
 deps.hilt = hilt
 
@@ -73,7 +73,7 @@ deps.okhttp3 = okhttp3
 
 def room = [:]
 room.room_runtime = "androidx.room:room-runtime:2.4.2"
-room.room_ktx = "androidx.room:room-ktx:2.4.0"
+room.room_ktx = "androidx.room:room-ktx:2.4.2"
 room.room_compiler = "androidx.room:room-compiler:2.4.2"
 deps.room = room
 
