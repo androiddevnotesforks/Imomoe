@@ -4,7 +4,21 @@ name: Pre-Release
 on:
   workflow_dispatch:
   push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '**.md'
+      - 'doc/**'
+      - 'screenshot/**'
+      - 'image/**'
   pull_request:
+    branches:
+      - 'master'
+    paths-ignore:
+      - '**.md'
+      - 'doc/**'
+      - 'screenshot/**'
+      - 'image/**'
 
 jobs:
   build:

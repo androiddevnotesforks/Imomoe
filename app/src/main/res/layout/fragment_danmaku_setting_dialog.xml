@@ -5,7 +5,7 @@
     style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@android:color/white"
+    app:cardBackgroundColor="?attr/background"
     app:cardCornerRadius="0px">
 
     <androidx.core.widget.NestedScrollView
@@ -155,8 +155,8 @@
                     style="@style/TextAppearance.Material3.TitleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minWidth="30dp"
                     android:layout_marginStart="10dp"
+                    android:minWidth="30dp"
                     android:textColor="?attr/colorPrimary"
                     tools:text="70%" />
 

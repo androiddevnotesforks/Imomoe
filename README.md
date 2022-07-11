@@ -6,6 +6,9 @@
         <a href="https://codebeat.co/projects/github-com-skyd666-imomoe-master" style="text-decoration:none">
             <img src="https://codebeat.co/badges/63fb5d12-bece-4d8f-913e-5bcde2f01242" alt="codebeat badge"  />
         </a>
+        <a href="https://github.com/SkyD666/Imomoe/actions" style="text-decoration:none">
+            <img src="https://img.shields.io/github/workflow/status/SkyD666/Imomoe/Pre-Release" alt="GitHub Workflow Status"  />
+        </a>
         <a href="https://github.com/SkyD666/Imomoe/releases/latest" style="text-decoration:none">
             <img src="https://img.shields.io/github/v/release/SkyD666/Imomoe?display_name=release" alt="GitHub release (latest by date)"/>
         </a>
@@ -26,6 +29,7 @@
         <b>（Android 5用户请尽快升级到6及以上，后续可能会将最低支持版本提高为Android 6）</b>
     </p>
 </div>
+
 
 
 
