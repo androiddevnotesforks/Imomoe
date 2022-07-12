@@ -4,14 +4,18 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.devtools.ksp'
+//    id 'com.flurry.android.symbols'
 }
 
 apply from: secret
+
+def buildTime = new Date().format("YYYY-MM-dd HH:mm:ss", TimeZone.getTimeZone("GMT+8:00"))
 
 android.defaultConfig {
     secret.buildConfigField.forEach({ k, v ->
         buildConfigField("String", k, "\"${v}\"")
     })
+    buildConfigField("String", "BUILD_TIME", "\"${buildTime}\"")
     secret.shieldTextList.forEach({ k, v ->
         buildConfigField("String[]", k, v)
     })
@@ -156,6 +160,7 @@ dependencies {
     implementation deps.support.core_splashscreen
     implementation deps.compose.ui
     implementation deps.compose.material3
+    implementation deps.compose.ui_viewbinding
     implementation deps.compose.ui_tooling_preview
     implementation deps.compose.runtime_livedata
     implementation deps.compose.compose_theme_adapter
@@ -203,6 +208,12 @@ dependencies {
     implementation deps.okhttp3.okhttp_dnsoverhttps
     implementation deps.thegrizzlylabs.sardine_android
 }
+
+//flurryCrash {
+//    apiKey secret.buildConfigField.FLURRY_API_KEY
+//    useEnvVar false
+//    token secret.buildConfigField.PROGRAMMATIC_TOKEN
+//}
 
 /**
  * 下面是生成数据源Jar的过程。保证生成了数据源的class文件后，再直接运行makeAds任务即可

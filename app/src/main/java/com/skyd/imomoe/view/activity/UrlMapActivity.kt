@@ -43,7 +43,7 @@ import com.skyd.imomoe.view.component.compose.TopBarIcon
 import com.skyd.imomoe.view.fragment.DataSourceMarketFragment
 import com.skyd.imomoe.viewmodel.UrlMapViewModel
 
-class UrlMapActivity : BaseComponentActivity() {
+class UrlMapActivity : BaseComposeActivity() {
     private val viewModel: UrlMapViewModel by viewModels()
 
     companion object {

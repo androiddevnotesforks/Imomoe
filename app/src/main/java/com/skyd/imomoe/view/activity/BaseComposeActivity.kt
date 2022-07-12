@@ -2,11 +2,9 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import android.view.ViewGroup
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.runtime.Composable
+import androidx.fragment.app.FragmentActivity
 import com.flurry.android.FlurryAgent
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.composethemeadapter3.Mdc3Theme
@@ -20,7 +18,7 @@ import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import org.greenrobot.eventbus.EventBus
 
-abstract class BaseComponentActivity : ComponentActivity() {
+abstract class BaseComposeActivity : FragmentActivity() {
     protected open var activityThemeRes = appThemeRes.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,7 @@ abstract class BaseComponentActivity : ComponentActivity() {
             if (activityThemeRes != it) {
                 // 壁纸取色
                 if (it == R.style.Theme_Anime_Dynamic) {
-                    DynamicColors.applyToActivityIfAvailable(this@BaseComponentActivity)
+                    DynamicColors.applyToActivityIfAvailable(this@BaseComposeActivity)
                 }
                 recreate()
             }

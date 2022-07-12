@@ -22,7 +22,7 @@ import com.skyd.imomoe.view.component.compose.AnimeTopBar
 import com.skyd.imomoe.view.component.compose.BackIcon
 
 
-class LicenseActivity : BaseComponentActivity() {
+class LicenseActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentBase {

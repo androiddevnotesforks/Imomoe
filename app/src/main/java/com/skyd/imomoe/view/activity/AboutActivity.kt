@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import com.skyd.imomoe.BuildConfig
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
@@ -44,7 +45,7 @@ import com.skyd.imomoe.view.component.compose.MessageDialog
 import java.net.URL
 import java.util.*
 
-class AboutActivity : BaseComponentActivity() {
+class AboutActivity : BaseComposeActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,7 +172,8 @@ private fun AppIconArea(modifier: Modifier = Modifier) {
                     stringResource(
                         R.string.data_source_interface_version,
                         com.skyd.imomoe.model.interfaces.interfaceVersion
-                    ),
+                    ) + "\n" +
+                    stringResource(R.string.build_time, BuildConfig.BUILD_TIME),
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge
         )

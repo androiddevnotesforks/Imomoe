@@ -200,6 +200,7 @@
     <string name="update_favorite_failed_in_play_activity">未获取到番剧链接，无法更新追番状态…</string>
     <string name="data_source_interface_version_not_match">选择的数据源接口版本与APP支持的版本不匹配，请更新数据源！\n选择的数据源接口版本：%s\nAPP支持的版本：%s</string>
     <string name="data_source_interface_version">数据源接口版本: %s</string>
+    <string name="build_time">编译时间: %s</string>
     <string name="no_browser_found">未找到浏览器！网址: %s</string>
     <string name="download_update">下载更新</string>
     <string name="refresh_everyday_anime_widget">刷新每日番剧小组件</string>

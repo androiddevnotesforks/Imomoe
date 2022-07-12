@@ -39,7 +39,6 @@ class SettingFragment : BasePreferenceFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listView.addFitsSystemWindows(right = true, bottom = true)
         // 清理历史记录
         viewModel.deleteAllHistory.collectWithLifecycle(viewLifecycleOwner) { data ->
             data.second.showToast()

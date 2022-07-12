@@ -1,5 +1,5 @@
 ext.version_code = 25
-ext.version_name = "1.7.0_Akarin"
+ext.version_name = "1.7.1_Akarin"
 ext.compose_version = '1.3.0-alpha01'
 
 def build_versions = [:]
@@ -39,6 +39,7 @@ compose.ui = "androidx.compose.ui:ui:$compose_version"
 compose.material3 = "androidx.compose.material3:material3:1.0.0-alpha14"
 compose.material3_window_size_class = "androidx.compose.material3:material3-window-size-class:1.0.0-alpha13"
 compose.compose_theme_adapter = "com.google.android.material:compose-theme-adapter-3:1.0.10"
+compose.ui_viewbinding = "androidx.compose.ui:ui-viewbinding:$compose_version"
 compose.ui_tooling_preview = "androidx.compose.ui:ui-tooling-preview:$compose_version"
 compose.ui_tooling = "androidx.compose.ui:ui-tooling:$compose_version"
 compose.runtime_livedata = "androidx.compose.runtime:runtime-livedata:$compose_version"
