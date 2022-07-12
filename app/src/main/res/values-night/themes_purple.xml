@@ -2,7 +2,6 @@
 
     <style name="Theme.Anime.Purple" parent="Theme.Purple">
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 </resources>

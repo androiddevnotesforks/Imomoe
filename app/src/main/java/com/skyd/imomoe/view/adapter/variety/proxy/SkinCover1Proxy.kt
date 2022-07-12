@@ -45,13 +45,13 @@ class SkinCover1Proxy : VarietyAdapter.Proxy<SkinCover1Bean, SkinCover1ViewHolde
         holder.itemView.setOnClickListener {
             if (data.using) return@setOnClickListener
             holder.ivSkinCover1Selected.visible()
-            ((holder.bindingAdapter as VarietyAdapter)
-                .dataList.getOrNull(selectedItemPosition) as? SkinCover1Bean)
+            ((holder.bindingAdapter as? VarietyAdapter)
+                ?.dataList?.getOrNull(selectedItemPosition) as? SkinCover1Bean)
                 ?.using = false
             selectedItem?.ivSkinCover1Selected?.gone()
             selectedItem = holder
             selectedItemPosition = index
-            appThemeRes.tryEmit(data.themeRes)
+            appThemeRes = data.themeRes
             holder.itemView.activity.recreate()
         }
     }

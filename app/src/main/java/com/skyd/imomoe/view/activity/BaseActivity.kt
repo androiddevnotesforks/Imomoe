@@ -7,39 +7,24 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.flurry.android.FlurryAgent
-import com.google.android.material.color.DynamicColors
 import com.skyd.imomoe.R
 import com.skyd.imomoe.config.Const
-import com.skyd.imomoe.ext.collectWithLifecycle
-import com.skyd.imomoe.ext.gone
-import com.skyd.imomoe.ext.initializeFlurry
-import com.skyd.imomoe.ext.theme.appThemeRes
-import com.skyd.imomoe.ext.theme.transparentSystemBar
-import com.skyd.imomoe.ext.visible
+import com.skyd.imomoe.ext.*
+import com.skyd.imomoe.ext.theme.*
 import com.skyd.imomoe.util.Util
 import com.skyd.imomoe.util.eventbus.EventBusSubscriber
 import com.skyd.imomoe.util.logE
 import org.greenrobot.eventbus.EventBus
 
-
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     protected lateinit var mBinding: VB
-    protected open var activityThemeRes = appThemeRes.value
     private lateinit var loadFailedTipView: View
     private lateinit var tvImageTextTip1: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(activityThemeRes)
-        appThemeRes.collectWithLifecycle(this) {
-            if (activityThemeRes != it) {
-                // 壁纸取色
-                if (it == R.style.Theme_Anime_Dynamic) {
-                    DynamicColors.applyToActivityIfAvailable(this@BaseActivity)
-                }
-                recreate()
-            }
-        }
+        beforeSetContentView()
+
         mBinding = getBinding()
         setContentView(mBinding.root)
 

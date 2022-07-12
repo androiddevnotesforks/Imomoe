@@ -12,11 +12,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.editor
+import com.skyd.imomoe.ext.recreateAllBaseActivity
 import com.skyd.imomoe.ext.sharedPreferences
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 
 private val map = hashMapOf(
@@ -37,28 +34,23 @@ private fun getKeyByValue(v: Int): String? {
     return null
 }
 
-private val coroutineScope by lazy { CoroutineScope(Dispatchers.IO) }
-
-var appThemeRes: MutableStateFlow<Int> = MutableStateFlow(
+var appThemeRes: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
     // getOrDefault method was added in API level 24
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        map.getOrDefault(
-            sharedPreferences().getString("themeRes", null),
-            R.style.Theme_Anime_Pink
-        )
-    } else {
-        val v = sharedPreferences().getString("themeRes", null)
-        map[v] ?: R.style.Theme_Anime_Pink
-    }
-).apply {
-    coroutineScope.launch {
-        collect {
-            sharedPreferences().editor {
-                putString("themeRes", getKeyByValue(value))
-            }
-        }
-    }
+    map.getOrDefault(
+        sharedPreferences().getString("themeRes", null),
+        R.style.Theme_Anime_Pink
+    )
+} else {
+    val v = sharedPreferences().getString("themeRes", null)
+    map[v] ?: R.style.Theme_Anime_Pink
 }
+    set(value) {
+        sharedPreferences().editor {
+            putString("themeRes", getKeyByValue(value))
+        }
+        field = value
+        recreateAllBaseActivity.tryEmit(Unit)
+    }
 
 fun Context.getAttrColor(attr: Int): Int {
     val typedValue = TypedValue()

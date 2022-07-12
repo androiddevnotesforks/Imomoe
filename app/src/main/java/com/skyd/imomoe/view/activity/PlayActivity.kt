@@ -92,10 +92,6 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
     override fun transparentSystemBar(): Boolean = false
 
     private fun initView() {
-        currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        window.statusBarColor = Color.BLACK
-        WindowInsetsControllerCompat(window, mBinding.root).isAppearanceLightStatusBars = false
-
         mBinding.apply {
             root.addFitsSystemWindows(right = true, top = true)
             rvPlayActivity.addFitsSystemWindows(right = true, bottom = true)
@@ -185,6 +181,10 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        window.statusBarColor = Color.BLACK
+        WindowInsetsControllerCompat(window, mBinding.root).isAppearanceLightStatusBars = false
 
         initView()
 

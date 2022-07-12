@@ -141,6 +141,14 @@ class SettingFragment : BasePreferenceFragment() {
             }
         }
 
+        findPreference<CheckBoxPreference>("disable_screenshot")?.apply {
+            isChecked = disableScreenshot
+            setOnPreferenceChangeListener { _, newValue ->
+                disableScreenshot = newValue as? Boolean ?: false
+                true
+            }
+        }
+
         findPreference<Preference>("update")?.apply {
             summary = getString(R.string.current_version, Util.getAppVersionName())
             setOnPreferenceClickListener {

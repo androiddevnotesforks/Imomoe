@@ -27,6 +27,13 @@
             app:persistent="false"
             app:title="@string/setting_fragment_dark_mode" />
 
+        <CheckBoxPreference
+            app:icon="@drawable/ic_screenshot_24"
+            app:key="disable_screenshot"
+            app:persistent="false"
+            app:summary="@string/disable_screenshot_summary"
+            app:title="@string/disable_screenshot" />
+
         <Preference
             app:icon="@drawable/ic_update_24"
             app:key="update"

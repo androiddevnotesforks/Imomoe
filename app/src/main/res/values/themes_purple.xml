@@ -33,11 +33,14 @@
         <item name="colorErrorContainer">@color/error_container_purple</item>
         <item name="colorOnErrorContainer">@color/on_error_container_purple</item>
         <item name="colorOutline">@color/outline_purple</item>
+
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">
+            shortEdges
+        </item>
     </style>
 
     <style name="Theme.Anime.Purple" parent="Theme.Purple">
         <!-- Customize your theme here. -->
-        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 </resources>

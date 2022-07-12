@@ -340,5 +340,7 @@
     <string name="danmaku_setting_allow_overlap">允许弹幕重叠</string>
     <string name="danmaku_setting_alpha">弹幕透明度</string>
     <string name="danmaku_setting_bold">粗体弹幕</string>
+    <string name="disable_screenshot">禁止捕捉屏幕</string>
+    <string name="disable_screenshot_summary">禁止后无法在APP内截图（包括系统多任务界面）</string>
 
 </resources>
