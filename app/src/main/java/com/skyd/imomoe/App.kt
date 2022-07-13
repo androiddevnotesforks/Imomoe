@@ -8,6 +8,7 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.skyd.imomoe.ext.theme.getAttrColor
 import com.skyd.imomoe.ext.theme.initDarkMode
 import com.skyd.imomoe.util.CrashHandler
+import com.skyd.imomoe.util.initHeadsetEventReceiver
 import com.skyd.imomoe.util.release
 import com.skyd.imomoe.view.component.player.PlayerCore
 import dagger.hilt.android.HiltAndroidApp
@@ -26,6 +27,8 @@ class App : Application() {
             // Crash提示
             CrashHandler.getInstance(this)
         }
+
+        initHeadsetEventReceiver()
 
         PlayerCore.onAppCreate()
     }
