@@ -175,7 +175,8 @@ dependencies {
     kapt deps.hilt.hilt_android_compiler
     implementation deps.okhttp3.okhttp
     implementation deps.okhttp3.logging_interceptor
-    implementation deps.shuyu.GSYVideoPlayer
+    implementation deps.shuyu.gsyVideoPlayer_java
+    implementation deps.shuyu.gsyVideoPlayer_exo2
     implementation deps.retrofit2.retrofit
     implementation deps.retrofit2.converter_gson
     implementation deps.getActivity.XXPermissions

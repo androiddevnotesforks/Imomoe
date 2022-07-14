@@ -2,7 +2,6 @@ package com.skyd.imomoe.view.component.player
 
 import android.app.Activity
 import com.shuyu.gsyvideoplayer.player.IPlayerManager
-import com.shuyu.gsyvideoplayer.player.IjkPlayerManager
 import com.shuyu.gsyvideoplayer.player.PlayerFactory
 import com.shuyu.gsyvideoplayer.player.SystemPlayerManager
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType
@@ -47,7 +46,6 @@ object PlayerCore {
 
     val playerCores: List<Core> = listOf(
         "ExoPlayer内核 (默认)" to Exo2PlayerManager::class.java,
-        "ijk内核" to IjkPlayerManager::class.java,
         "系统内核" to SystemPlayerManager::class.java
     )
 

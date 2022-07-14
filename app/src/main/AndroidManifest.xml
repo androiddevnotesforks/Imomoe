@@ -114,13 +114,13 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="androidx.media.session.MediaButtonReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver-->
+<!--            android:name="androidx.media.session.MediaButtonReceiver"-->
+<!--            android:exported="false">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MEDIA_BUTTON" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <service
             android:name=".view.component.widget.everydayanime.EverydayAnimeService"

@@ -87,7 +87,8 @@ jsoup.jsoup = "org.jsoup:jsoup:1.14.3"
 deps.jsoup = jsoup
 
 def shuyu = [:]
-shuyu.GSYVideoPlayer = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.3.2-release-jitpack"
+shuyu.gsyVideoPlayer_java = "com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.3.2-release-jitpack"
+shuyu.gsyVideoPlayer_exo2 = "com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer-exo2:v8.3.2-release-jitpack"
 deps.shuyu = shuyu
 
 def getActivity = [:]
