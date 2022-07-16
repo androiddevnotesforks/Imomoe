@@ -51,8 +51,6 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.NoticeActivity" />
-        <activity android:name=".view.activity.WebViewActivity" />
         <activity android:name=".view.activity.SkinActivity" />
         <activity android:name=".view.activity.CrashActivity" />
         <activity android:name=".view.activity.HistoryActivity" />

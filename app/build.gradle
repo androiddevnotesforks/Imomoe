@@ -158,7 +158,9 @@ dependencies {
     implementation deps.support.preference
     implementation deps.support.security_crypto
     implementation deps.support.core_splashscreen
+    implementation deps.support.profileinstaller
     implementation deps.compose.ui
+    implementation deps.compose.constraintlayout_compose
     implementation deps.compose.material3
     implementation deps.compose.ui_viewbinding
     implementation deps.compose.ui_tooling_preview
@@ -166,6 +168,7 @@ dependencies {
     implementation deps.compose.compose_theme_adapter
     implementation deps.compose.material3_window_size_class
     implementation deps.accompanist.systemuicontroller
+    implementation deps.accompanist.swiperefresh
     implementation deps.jsoup.jsoup
     implementation deps.lifecycle.lifecycle_viewmodel_ktx
     implementation deps.lifecycle.lifecycle_runtime_ktx
@@ -203,6 +206,7 @@ dependencies {
     implementation deps.smart.refresh_header_material
     implementation deps.smart.refresh_footer_ball
     implementation deps.coil_kt.coil
+    implementation deps.coil_kt.coil_compose
     implementation deps.kuaishou.akdanmaku
     implementation deps.vadiole.colorpicker
     implementation deps.commons.commons_text

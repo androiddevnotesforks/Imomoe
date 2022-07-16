@@ -43,7 +43,6 @@ object Router {
         EpisodeDownloadProcessor.route to EpisodeDownloadProcessor,
         JumpByUrlProcessor.route to JumpByUrlProcessor,
         MonthAnimeActivityProcessor.route to MonthAnimeActivityProcessor,
-        NoticeActivityProcessor.route to NoticeActivityProcessor,
         OpenBrowserProcessor.route to OpenBrowserProcessor,
         PlayActivityProcessor.route to PlayActivityProcessor,
         PlayDownloadProcessor.route to PlayDownloadProcessor,

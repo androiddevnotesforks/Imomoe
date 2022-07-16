@@ -9,6 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.DialogProperties
@@ -26,6 +29,56 @@ fun MessageDialog(
     onNegative: (() -> Unit)? = null,
     onPositive: (() -> Unit)? = null,
 ) {
+    MessageDialog(
+        title = title,
+        message = message,
+        icon = if (icon == 0) null else painterResource(id = icon),
+        properties = properties,
+        negativeText = negativeText,
+        positiveText = positiveText,
+        onDismissRequest = onDismissRequest,
+        onNegative = onNegative,
+        onPositive = onPositive
+    )
+}
+
+@Composable
+fun MessageDialog(
+    title: String = stringResource(id = R.string.warning),
+    message: String,
+    icon: ImageVector? = null,
+    properties: DialogProperties = DialogProperties(),
+    negativeText: String = stringResource(id = R.string.cancel),
+    positiveText: String = stringResource(id = R.string.ok),
+    onDismissRequest: (() -> Unit)? = null,
+    onNegative: (() -> Unit)? = null,
+    onPositive: (() -> Unit)? = null,
+) {
+    MessageDialog(
+        title = title,
+        message = message,
+        icon = if (icon == null) null else rememberVectorPainter(icon),
+        properties = properties,
+        negativeText = negativeText,
+        positiveText = positiveText,
+        onDismissRequest = onDismissRequest,
+        onNegative = onNegative,
+        onPositive = onPositive
+    )
+}
+
+@Composable
+fun MessageDialog(
+    title: String = stringResource(id = R.string.warning),
+    message: String,
+    icon: Painter? = null,
+    properties: DialogProperties = DialogProperties(),
+    negativeText: String = stringResource(id = R.string.cancel),
+    positiveText: String = stringResource(id = R.string.ok),
+    onDismissRequest: (() -> Unit)? = null,
+    onNegative: (() -> Unit)? = null,
+    onPositive: (() -> Unit)? = null,
+) {
     val dismissButton: @Composable (() -> Unit) = {
         TextButton(
             onClick = {
@@ -35,11 +88,11 @@ fun MessageDialog(
             Text(text = negativeText)
         }
     }
-    val iconLambda: @Composable (() -> Unit) = {
-        Icon(painter = painterResource(id = icon), contentDescription = null)
-    }
+    val iconLambda: @Composable (() -> Unit)? = if (icon != null) {
+        { Icon(painter = icon, contentDescription = null) }
+    } else null
     AlertDialog(
-        icon = if (icon != 0) iconLambda else null,
+        icon = if (icon != null) iconLambda else null,
         title = {
             Text(text = title)
         },

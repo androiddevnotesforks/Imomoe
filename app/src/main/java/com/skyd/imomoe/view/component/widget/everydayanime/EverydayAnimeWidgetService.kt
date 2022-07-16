@@ -3,6 +3,7 @@ package com.skyd.imomoe.view.component.widget.everydayanime
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import android.widget.RemoteViewsService.RemoteViewsFactory
@@ -44,7 +45,12 @@ internal class EverydayAnimeRemoteViewsFactory(
         val item = mWidgetItems[position]
         val rv = RemoteViews(mContext.packageName, R.layout.item_anime_cover_10)
         rv.setTextViewText(R.id.tv_anime_cover_10_title, item.title)
-        rv.setTextViewText(R.id.tv_anime_cover_10_episode, item.episodeClickable?.title)
+        if (item.episodeClickable?.title.isNullOrBlank()) {
+            rv.setViewVisibility(R.id.tv_anime_cover_10_episode, View.GONE)
+        } else {
+            rv.setViewVisibility(R.id.tv_anime_cover_10_episode, View.VISIBLE)
+            rv.setTextViewText(R.id.tv_anime_cover_10_episode, item.episodeClickable?.title)
+        }
 
         val extras = Bundle()
         // 传Serializable的对象获取为null，原因未知，只能传转成json之后的了

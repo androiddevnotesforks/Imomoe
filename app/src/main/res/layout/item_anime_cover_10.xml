@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingVertical="10dp">
     <!-- 此项专为widget_everyday_anime使用 -->
     <!-- ?attr/colorPrimary不能使用，只能用@color/primary_pink -->
     <TextView
         android:id="@+id/tv_anime_cover_10_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginHorizontal="16dp"
         android:gravity="center_vertical"
         android:textColor="@color/widget_everyday_anime_item_text_color"
         android:textSize="17sp"
@@ -24,10 +23,8 @@
         android:id="@+id/tv_anime_cover_10_episode"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:textColor="@color/widget_everyday_anime_item_text_color_2"
         android:textSize="14sp"

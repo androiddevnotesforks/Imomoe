@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -343,6 +344,9 @@ private fun EditDialog(
             showEditDialog.value = false
             editDialogData.value = null
         },
+        icon = {
+            Icon(Icons.Rounded.Edit, null)
+        },
         title = {
             Text(text = title)
         },
@@ -413,6 +417,9 @@ private fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
             showDeleteDialog.value = false
             deleteDialogOldUrl.value = null
         },
+        icon = {
+            Icon(Icons.Rounded.Warning, null)
+        },
         title = {
             Text(text = stringResource(id = R.string.warning))
         },
@@ -448,7 +455,6 @@ private fun DeleteDialog(viewModel: UrlMapViewModel = hiltViewModel()) {
 private val showJsonDialog = mutableStateOf(false)
 private val jsonDialogData = mutableStateOf<String?>(null)
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun JsonDialog(
     title: String,
@@ -460,6 +466,9 @@ private fun JsonDialog(
         onDismissRequest = {
             showJsonDialog.value = false
             jsonDialogData.value = null
+        },
+        icon = {
+            Icon(painter = painterResource(id = R.drawable.ic_playlist_add_24), null)
         },
         title = {
             Text(text = title)

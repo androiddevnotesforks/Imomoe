@@ -30,7 +30,6 @@ import com.skyd.imomoe.config.Api
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.ext.activity
 import com.skyd.imomoe.ext.plus
-import com.skyd.imomoe.ext.showMessageDialog
 import com.skyd.imomoe.ext.toHtml
 import com.skyd.imomoe.model.DataSourceManager
 import com.skyd.imomoe.route.Router.buildRouteUri
@@ -66,6 +65,7 @@ private fun AboutScreen() {
         decayAnimationSpec = rememberSplineBasedDecay(),
         state = rememberTopAppBarScrollState()
     )
+    var showAboutInfoDialog by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             AnimeTopBar(
@@ -79,15 +79,7 @@ private fun AboutScreen() {
                 },
                 actions = {
                     IconButton(onClick = {
-                        val activity = context.activity
-                        activity.showMessageDialog(
-                            title = activity.getString(R.string.attention),
-                            message = "本软件免费开源，严禁商用，支持Android 5.0+！仅在GitHub仓库长期发布！\n不介意的话可以给我的GitHub仓库点个Star",
-                            positiveText = "去点Star",
-                            negativeText = activity.getString(R.string.cancel),
-                            onPositive = { _, _ -> openBrowser(Const.Common.GITHUB_URL) },
-                            onNegative = { dialog, _ -> dialog.dismiss() }
-                        )
+                        showAboutInfoDialog = true
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Info,
@@ -96,7 +88,8 @@ private fun AboutScreen() {
                     }
                 }
             )
-        }) {
+        }
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -118,6 +111,23 @@ private fun AboutScreen() {
                     AboutScreenList()
                 }
             }
+        }
+
+        if (showAboutInfoDialog) {
+            MessageDialog(
+                icon = R.drawable.ic_info_24,
+                title = stringResource(id = R.string.attention),
+                message = "本软件免费开源，严禁商用，支持Android 5.0+！仅在GitHub仓库长期发布！\n不介意的话可以给我的GitHub仓库点个Star",
+                positiveText = "去点Star",
+                onPositive = {
+                    showAboutInfoDialog = false
+                    openBrowser(Const.Common.GITHUB_URL)
+                },
+                onNegative = { showAboutInfoDialog = false },
+                onDismissRequest = {
+                    showAboutInfoDialog = false
+                }
+            )
         }
     }
 }
@@ -187,21 +197,21 @@ private fun AppIconArea(modifier: Modifier = Modifier) {
 private fun AboutScreenList(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
-    var openDataSourceWebsiteDialog by remember { mutableStateOf(false) }
-    var openDataSourceInfoDialog by remember { mutableStateOf(false) }
-    var openUserNoticeDialog by remember { mutableStateOf(false) }
-    var openThanksDialog by remember { mutableStateOf(false) }
-    var openTestDeviceDialog by remember { mutableStateOf(false) }
+    var showDataSourceWebsiteDialog by remember { mutableStateOf(false) }
+    var showDataSourceInfoDialog by remember { mutableStateOf(false) }
+    var showUserNoticeDialog by remember { mutableStateOf(false) }
+    var showThanksDialog by remember { mutableStateOf(false) }
+    var showTestDeviceDialog by remember { mutableStateOf(false) }
 
     Column(modifier = modifier) {
         AboutScreenListItem(
             title = stringResource(id = R.string.data_source_url),
             showIcon = true,
             onIconClick = {
-                openDataSourceInfoDialog = true
+                showDataSourceInfoDialog = true
             },
             onClick = {
-                openDataSourceWebsiteDialog = true
+                showDataSourceWebsiteDialog = true
             }
         )
         AboutScreenListItem(
@@ -227,44 +237,46 @@ private fun AboutScreenList(modifier: Modifier = Modifier) {
         AboutScreenListItem(
             title = stringResource(id = R.string.user_notice),
             onClick = {
-                openUserNoticeDialog = true
+                showUserNoticeDialog = true
             }
         )
         AboutScreenListItem(
             title = stringResource(id = R.string.test_device),
             onClick = {
-                openTestDeviceDialog = true
+                showTestDeviceDialog = true
             }
         )
         AboutScreenListItem(
             title = stringResource(id = R.string.about_activity_thanks),
             onClick = {
-                openThanksDialog = true
+                showThanksDialog = true
             }
         )
 
-        if (openDataSourceWebsiteDialog) {
+        if (showDataSourceWebsiteDialog) {
             var warningString: String = stringResource(R.string.jump_to_data_source_website_warning)
             if (URL(Api.MAIN_URL).protocol == "http") {
                 warningString = stringResource(R.string.jump_to_browser_http_warning) +
                         "\n" + warningString
             }
             MessageDialog(
+                icon = R.drawable.ic_warning_2_24,
                 message = warningString,
                 positiveText = stringResource(R.string.still_to_visit),
                 onPositive = {
                     openBrowser(Api.MAIN_URL)
-                    openDataSourceWebsiteDialog = false
+                    showDataSourceWebsiteDialog = false
                 },
-                onNegative = { openDataSourceWebsiteDialog = false },
+                onNegative = { showDataSourceWebsiteDialog = false },
                 onDismissRequest = {
-                    openDataSourceWebsiteDialog = false
+                    showDataSourceWebsiteDialog = false
                 }
             )
         }
 
-        if (openDataSourceInfoDialog) {
+        if (showDataSourceInfoDialog) {
             MessageDialog(
+                icon = R.drawable.ic_info_24,
                 title = stringResource(id = R.string.data_source_info),
                 message = (DataSourceManager.getConst()
                     ?: com.skyd.imomoe.model.impls.Const()).run {
@@ -286,15 +298,16 @@ private fun AboutScreenList(modifier: Modifier = Modifier) {
                         )
                     }\n${about()}"
                 },
-                onPositive = { openDataSourceInfoDialog = false },
+                onPositive = { showDataSourceInfoDialog = false },
                 onDismissRequest = {
-                    openDataSourceInfoDialog = false
+                    showDataSourceInfoDialog = false
                 }
             )
         }
 
-        if (openUserNoticeDialog) {
+        if (showUserNoticeDialog) {
             MessageDialog(
+                icon = R.drawable.ic_info_24,
                 title = stringResource(id = R.string.user_notice),
                 message = Util.getUserNoticeContent().toHtml().toString(),
                 properties = DialogProperties(
@@ -303,36 +316,38 @@ private fun AboutScreenList(modifier: Modifier = Modifier) {
                 ),
                 onPositive = {
                     Util.setReadUserNoticeVersion(Const.Common.USER_NOTICE_VERSION)
-                    openUserNoticeDialog = false
+                    showUserNoticeDialog = false
                 },
                 onDismissRequest = {
-                    openUserNoticeDialog = false
+                    showUserNoticeDialog = false
                 }
             )
         }
 
-        if (openTestDeviceDialog) {
+        if (showTestDeviceDialog) {
             MessageDialog(
+                icon = R.drawable.ic_info_24,
                 title = stringResource(id = R.string.test_device),
                 message = "Physical Device: \nAndroid 10",
-                onPositive = { openTestDeviceDialog = false },
+                onPositive = { showTestDeviceDialog = false },
                 onDismissRequest = {
-                    openTestDeviceDialog = false
+                    showTestDeviceDialog = false
                 }
             )
         }
 
-        if (openThanksDialog) {
+        if (showThanksDialog) {
             MessageDialog(
+                icon = R.drawable.ic_info_24,
                 title = stringResource(id = R.string.about_activity_thanks),
                 message = "MaybeQHL提供弹幕服务器：\nhttps://github.com/MaybeQHL/my_danmu_pub",
                 positiveText = stringResource(R.string.about_activity_open_danmaku_server_page),
                 onPositive = {
                     openBrowser("https://github.com/MaybeQHL/my_danmu_pub")
-                    openThanksDialog = false
+                    showThanksDialog = false
                 },
                 onDismissRequest = {
-                    openThanksDialog = false
+                    showThanksDialog = false
                 }
             )
         }

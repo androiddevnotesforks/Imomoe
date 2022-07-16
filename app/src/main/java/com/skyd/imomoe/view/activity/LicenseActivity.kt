@@ -237,5 +237,12 @@ private fun initData(): List<License1Bean> {
         "Color Picker",
         "Apache-2.0 License"
     )
+    list += License1Bean(
+        OpenBrowserProcessor.route.buildRouteUri {
+            appendQueryParameter("url", "https://github.com/re-ovo/iwara4a")
+        }.toString(),
+        "Iwara4A",
+        "Apache-2.0 License"
+    )
     return list
 }
