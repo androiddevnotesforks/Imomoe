@@ -11,8 +11,7 @@ class LazyGridAdapter(
     @Suppress("UNCHECKED_CAST")
     @Composable
     fun draw(index: Int, data: Any) {
-        var type = -1
-        type = getProxyIndex(data)
+        val type: Int = getProxyIndex(data)
         if (type != -1) (proxyList[type] as Proxy<Any>).draw(index, data)
     }
 
@@ -22,7 +21,11 @@ class LazyGridAdapter(
         (it.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0].let { argument ->
             if (argument.toString() == data.javaClass.toString())
                 true    // 正常情况
-            else {
+            else if (((argument as? ParameterizedType)?.rawType as? Class<*>)
+                    ?.isAssignableFrom(data.javaClass) == true
+            ) {
+                true    // data是T的子类的情况
+            } else {
                 // Proxy第一个泛型是类似List<T>，又嵌套了个泛型
                 if (argument is ParameterizedType)
                     argument.rawType.toString() == data.javaClass.toString()

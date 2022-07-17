@@ -151,10 +151,6 @@ class AnimeEpisode1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeEpisode1: TextView = view.findViewById(R.id.tv_anime_episode_1)
 }
 
-class UpnpDevice1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvUpnpDevice1Title: TextView = view.findViewById(R.id.tv_upnp_device_1_title)
-}
-
 class More1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivMore1: ImageView = view.findViewById(R.id.iv_more_1)
     val tvMore1: TextView = view.findViewById(R.id.tv_more_1)

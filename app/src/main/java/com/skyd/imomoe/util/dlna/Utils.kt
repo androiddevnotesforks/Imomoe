@@ -29,8 +29,9 @@ object Utils {
     fun String.toLocalHttpServerAddress(): String {
         if (isBlank() || !isLocalMediaAddress()) return this
         val mediaServer = DLNACastManager.instance.mediaServer ?: return this
-        val prefix = if (startsWith("file://")) "file://" else ""
-        var newSourceUrl: String = mediaServer.baseUrl + replace(prefix, "")
+        val prefix = if (startsWith("file:///")) "file:///"
+        else if (startsWith("content://")) "content://" else ""
+        var newSourceUrl: String = mediaServer.baseUrl + replace(prefix, "/")
         try {
             val urlSplits = newSourceUrl.split("/").toTypedArray()
             val originFileName = urlSplits[urlSplits.size - 1]

@@ -55,15 +55,9 @@ class HistoryViewModel : ViewModel() {
 }
 
 sealed interface HistoryUiState {
-    data class Success(val dataList: List<Any>) : HistoryUiState
+    data class Success(override val dataList: List<Any>) : WithData(dataList)
     data class Error(val message: String = "") : HistoryUiState
-    data class Refreshing(val oldList: List<Any>? = null) : HistoryUiState
+    data class Refreshing(override val dataList: List<Any>? = null) : WithData(dataList)
 
-    fun readOrNull(): List<Any>? {
-        return when (this) {
-            is Success -> dataList
-            is Refreshing -> oldList
-            else -> null
-        }
-    }
+    abstract class WithData(open val dataList: List<Any>? = null) : HistoryUiState
 }

@@ -158,8 +158,11 @@ public static final ** CREATOR;
 -dontwarn org.eclipse.jetty.**
 -dontwarn org.fourthline.cling.**
 -dontwarn org.seamless.**
--keep class org.fourthline.cling.** {*;}
+-keep class org.fourthline.cling.** { *; }
 -keepattributes Annotation
+-keep class org.xmlpull.v1.* { *; }
+-dontwarn org.xmlpull.v1.**
+-dontwarn javax.xml.namespace.**
 
 #for media render state machine
 #-keep class org.seamless.statemachine.** {;}

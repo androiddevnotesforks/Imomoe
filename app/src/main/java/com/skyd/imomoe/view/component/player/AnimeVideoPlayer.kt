@@ -109,9 +109,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     // 速度
     private var mPlaySpeed = 1f
 
-    // 投屏按钮
-    private var ivCling: ImageView? = null
-
     // 下一集按钮
     private var ivNextEpisode: ImageView? = null
 
@@ -382,15 +379,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
             mScaleIndex = (mScaleIndex + 1) % mScaleStrings.size
             resolveTypeUI()
         })
-
-        ivCling?.setOnClickListener {
-            mContext.startActivity(
-                Intent(mContext, DlnaActivity::class.java)
-                    .putExtra("url", mUrl)
-                    .putExtra("title", mTitle)
-            )
-            mOriginUrl
-        }
 
         tvOpenByExternalPlayer?.setOnClickListener {
             if (!openVideoByExternalPlayer(mContext, mUrl))
@@ -1181,8 +1169,6 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
     fun getEpisodeButton() = tvEpisode
 
     fun getBottomContainer() = mBottomContainer
-
-    fun getClingButton() = ivCling
 
     fun getRightContainer() = vgRightContainer
 

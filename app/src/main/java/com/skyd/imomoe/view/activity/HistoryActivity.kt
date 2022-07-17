@@ -2,9 +2,6 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Warning
@@ -20,8 +17,6 @@ import com.skyd.imomoe.R
 import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.view.adapter.compose.LazyGridAdapter
 import com.skyd.imomoe.view.adapter.compose.proxy.AnimeCover9Proxy
-import com.skyd.imomoe.view.adapter.compose.MAX_SPAN_SIZE
-import com.skyd.imomoe.view.adapter.compose.animeShowSpan
 import com.skyd.imomoe.view.component.compose.*
 import com.skyd.imomoe.viewmodel.HistoryUiState
 import com.skyd.imomoe.viewmodel.HistoryViewModel
@@ -77,7 +72,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
                     message = uiStateValue.message.ifBlank { stringResource(id = R.string.get_data_failed) }
                 )
             }
-            is HistoryUiState.Success, is HistoryUiState.Refreshing -> {
+            is HistoryUiState.WithData -> {
                 SwipeRefresh(
                     modifier = Modifier.padding(padding),
                     state = swipeRefreshState,
@@ -85,7 +80,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
                         viewModel.getHistoryList()
                     }
                 ) {
-                    val dataList = uiStateValue.readOrNull() ?: return@SwipeRefresh
+                    val dataList = uiStateValue.dataList ?: return@SwipeRefresh
                     if (dataList.isEmpty()) {
                         ImageTextPlaceholder(
                             modifier = Modifier.padding(WindowInsets.navigationBars.asPaddingValues()),
@@ -120,7 +115,6 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
 
 @Composable
 private fun HistoryList(dataList: List<Any>, viewModel: HistoryViewModel = hiltViewModel()) {
-    val listState = rememberLazyGridState()
     val adapter = LazyGridAdapter(
         mutableListOf(
             AnimeCover9Proxy(onDeleteButtonClickListener = { _, data ->
@@ -128,17 +122,9 @@ private fun HistoryList(dataList: List<Any>, viewModel: HistoryViewModel = hiltV
             })
         )
     )
-    LazyVerticalGrid(
+    AnimeLazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(MAX_SPAN_SIZE),
-        state = listState,
-        contentPadding = WindowInsets.navigationBars.asPaddingValues()
-    ) {
-        items(
-            count = dataList.size,
-            span = animeShowSpan(dataList)
-        ) {
-            adapter.draw(index = it, data = dataList[it])
-        }
-    }
+        dataList = dataList,
+        adapter = adapter
+    )
 }

@@ -49,10 +49,7 @@ fun AnimeCover9Item(
 ) {
     val activity = LocalContext.current.activity
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 7.dp)
-
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier

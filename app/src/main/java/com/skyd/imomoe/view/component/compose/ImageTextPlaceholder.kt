@@ -22,18 +22,17 @@ fun ImageTextPlaceholder(
     modifier: Modifier = Modifier,
     painter: Painter = painterResource(id = R.drawable.ic_sentiment_very_dissatisfied_24),
     message: String,
-    onClick: (() -> Unit) = { }
+    onClick: (() -> Unit)? = null
 ) {
     Centered(
         modifier = modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
-                .clickable(onClick = onClick)
+                .run { if (onClick != null) clickable(onClick = onClick) else this }
                 .fillMaxWidth(fraction = 0.5f),
             horizontalAlignment = Alignment.CenterHorizontally,
-
-            ) {
+        ) {
             Image(
                 modifier = Modifier.fillMaxWidth(fraction = 0.6f),
                 painter = painter,
