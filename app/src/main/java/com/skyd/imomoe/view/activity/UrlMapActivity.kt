@@ -121,7 +121,7 @@ private fun UrlMapScreen(viewModel: UrlMapViewModel = hiltViewModel()) {
             },
         )
     }) {
-        UrlMapList(it)
+        UrlMapList(modifier = Modifier.padding(it))
         if (showEditDialog.value) {
             EditDialog(
                 title = stringResource(id = R.string.add),
@@ -197,12 +197,12 @@ private fun UrlMapEnabledCard() {
  * 展示列表
  */
 @Composable
-private fun UrlMapList(paddingValues: PaddingValues) {
+private fun UrlMapList(modifier: Modifier = Modifier) {
     val viewModel: UrlMapViewModel = hiltViewModel()
     val urlMapListState by viewModel.urlMapList.collectAsState()
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = paddingValues + WindowInsets.navigationBars.asPaddingValues() +
+        modifier = modifier.fillMaxSize(),
+        contentPadding = WindowInsets.navigationBars.asPaddingValues() +
                 PaddingValues(horizontal = 16.dp, vertical = 6.dp),
     ) {
         item {

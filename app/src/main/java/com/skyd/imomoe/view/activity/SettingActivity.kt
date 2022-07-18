@@ -14,7 +14,6 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivitySettingContainerBinding
 import com.skyd.imomoe.ext.activity
-import com.skyd.imomoe.ext.plus
 import com.skyd.imomoe.view.component.compose.AnimeTopBar
 import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
 import com.skyd.imomoe.view.component.compose.BackIcon
@@ -56,8 +55,9 @@ private fun SettingScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(it)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = it + WindowInsets.navigationBars.asPaddingValues()
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
             item {
                 AndroidViewBinding(

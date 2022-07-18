@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.IBinder
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.arialyy.aria.core.task.DownloadTask
 import com.skyd.imomoe.databinding.ActivityDownloadManagerBinding
 import com.skyd.imomoe.ext.addFitsSystemWindows

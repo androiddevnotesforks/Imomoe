@@ -3,7 +3,6 @@ package com.skyd.imomoe.ext
 import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
-import android.text.BoringLayout
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.inputmethod.InputMethodManager

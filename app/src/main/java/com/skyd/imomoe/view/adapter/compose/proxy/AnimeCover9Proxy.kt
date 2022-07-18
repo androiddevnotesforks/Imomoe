@@ -28,8 +28,9 @@ class AnimeCover9Proxy(
     ) -> Unit)? = null
 ) : LazyGridAdapter.Proxy<AnimeCover9Bean>() {
     @Composable
-    override fun draw(index: Int, data: AnimeCover9Bean) {
+    override fun draw(modifier: Modifier, index: Int, data: AnimeCover9Bean) {
         AnimeCover9Item(
+            modifier = modifier,
             index = index,
             data = data,
             onDeleteButtonClickListener = onDeleteButtonClickListener
@@ -40,6 +41,7 @@ class AnimeCover9Proxy(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimeCover9Item(
+    modifier: Modifier = Modifier,
     index: Int,
     data: AnimeCover9Bean,
     onDeleteButtonClickListener: ((
@@ -49,7 +51,9 @@ fun AnimeCover9Item(
 ) {
     val activity = LocalContext.current.activity
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
+            .padding(vertical = 7.dp)
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier

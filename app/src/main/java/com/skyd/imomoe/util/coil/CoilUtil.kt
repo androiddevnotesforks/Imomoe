@@ -1,6 +1,7 @@
 package com.skyd.imomoe.util.coil
 
 import android.widget.ImageView
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -199,7 +200,7 @@ fun AnimeAsyncImage(
 
 @Composable
 fun AnimeAsyncImage(
-    @DrawableRes res: Int,
+    @ColorInt color: Int,
     contentDescription: String?,
     imageLoader: ImageLoader = CoilUtil.imageLoader,
     modifier: Modifier = Modifier,
@@ -216,7 +217,7 @@ fun AnimeAsyncImage(
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
 ) {
     AsyncImage(
-        model = res,
+        model = color,
         contentDescription = contentDescription,
         imageLoader = imageLoader,
         modifier = modifier,

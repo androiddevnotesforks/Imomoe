@@ -158,7 +158,6 @@ private fun DeviceList(viewModel: DlnaViewModel = hiltViewModel()) {
     }
     AnimeLazyVerticalGrid(
         modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(),
         dataList = uiState.readOrNull().orEmpty(),
         adapter = adapter
     )

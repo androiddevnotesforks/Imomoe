@@ -9,7 +9,6 @@ import com.skyd.imomoe.appContext
 import com.skyd.imomoe.config.Const
 import com.skyd.imomoe.config.Const.DownloadAnime.animeFilePath
 import com.skyd.imomoe.database.entity.AnimeDownloadEntity
-import com.skyd.imomoe.ext.requestManageExternalStorage
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.ANIME_EPISODE
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.ANIME_TITLE
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadService.Companion.DOWNLOAD_URL_KEY

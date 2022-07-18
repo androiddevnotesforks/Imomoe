@@ -14,7 +14,6 @@ import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.processor.EpisodeDownloadProcessor
 import com.skyd.imomoe.route.processor.PlayDownloadM3U8Processor
 import com.skyd.imomoe.route.processor.PlayDownloadProcessor
-import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.compare.EpisodeTitleSort.sortEpisodeTitle
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.deleteAnimeFromXml
 import com.skyd.imomoe.util.download.downloadanime.AnimeDownloadHelper.getAnimeFromXml
@@ -31,8 +30,9 @@ class AnimeDownloadViewModel : ViewModel() {
     var actionBarTitle = ""
     var directoryName = ""
     var path = 0
-    val animeCoverList: MutableStateFlow<DataState<List<Any>>> = MutableStateFlow(DataState.Empty)
-    val delete: MutableSharedFlow<Pair<Boolean, String>> = MutableSharedFlow(extraBufferCapacity = 1)
+    val animeCoverList: MutableStateFlow<AnimeDownloadUiState> =
+        MutableStateFlow(AnimeDownloadUiState.None)
+    val delete: MutableSharedFlow<DeleteUiState> = MutableSharedFlow(extraBufferCapacity = 1)
 
     fun getAnimeCover() {
         request(request = {
@@ -75,9 +75,9 @@ class AnimeDownloadViewModel : ViewModel() {
             }
             list
         }, success = {
-            animeCoverList.tryEmit(DataState.Success(it))
+            animeCoverList.tryEmit(AnimeDownloadUiState.Success(it))
         }, error = {
-            animeCoverList.tryEmit(DataState.Error(it.message.orEmpty()))
+            animeCoverList.tryEmit(AnimeDownloadUiState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -166,9 +166,9 @@ class AnimeDownloadViewModel : ViewModel() {
                 emptyList()
             }
         }, success = {
-            animeCoverList.tryEmit(DataState.Success(it))
+            animeCoverList.tryEmit(AnimeDownloadUiState.Success(it))
         }, error = {
-            animeCoverList.tryEmit(DataState.Error(it.message.orEmpty()))
+            animeCoverList.tryEmit(AnimeDownloadUiState.Error(it.message.orEmpty()))
             "${appContext.getString(R.string.get_data_failed)}\n${it.message}".showToast()
         })
     }
@@ -184,10 +184,30 @@ class AnimeDownloadViewModel : ViewModel() {
             val file = File(path)
             file.deleteRecursively()
         }, success = {
-            delete.tryEmit(it to path)
+            delete.tryEmit(if (it) DeleteUiState.Success(path) else DeleteUiState.Failed(path))
         }, error = {
-            delete.tryEmit(false to path)
+            delete.tryEmit(DeleteUiState.Failed(path))
             it.message?.showToast()
         }, finish = { deleteJob = null })
     }
+}
+
+sealed interface DeleteUiState {
+    object None : DeleteUiState
+    data class Success(val message: String = "") : DeleteUiState
+    data class Failed(val message: String = "") : DeleteUiState
+
+    fun getMessageData(): String {
+        return if (this is Success) message else if (this is Failed) message else ""
+    }
+}
+
+sealed interface AnimeDownloadUiState {
+    object None : AnimeDownloadUiState
+    data class Success(override val dataList: List<Any>) : WithData(dataList)
+    data class Error(val message: String = "") : AnimeDownloadUiState
+    data class Refreshing(override val dataList: List<Any>? = null) : WithData(dataList)
+
+    abstract class WithData(open val dataList: List<Any>? = null) : AnimeDownloadUiState
+    fun readOrNull(): List<Any>? = (this as? WithData)?.dataList
 }

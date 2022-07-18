@@ -1,8 +1,7 @@
 package com.skyd.imomoe.view.adapter.compose
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import java.lang.reflect.ParameterizedType
 
 class LazyGridAdapter(
@@ -10,9 +9,9 @@ class LazyGridAdapter(
 ) {
     @Suppress("UNCHECKED_CAST")
     @Composable
-    fun draw(index: Int, data: Any) {
+    fun draw(modifier: Modifier, index: Int, data: Any) {
         val type: Int = getProxyIndex(data)
-        if (type != -1) (proxyList[type] as Proxy<Any>).draw(index, data)
+        if (type != -1) (proxyList[type] as Proxy<Any>).draw(modifier, index, data)
     }
 
     // 获取策略在列表中的索引，可能返回-1
@@ -37,6 +36,6 @@ class LazyGridAdapter(
     // 抽象策略类
     abstract class Proxy<T> {
         @Composable
-        abstract fun draw(index: Int, data: T)
+        abstract fun draw(modifier: Modifier, index: Int, data: T)
     }
 }

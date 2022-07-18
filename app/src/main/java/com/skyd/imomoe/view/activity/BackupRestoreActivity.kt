@@ -2,10 +2,7 @@ package com.skyd.imomoe.view.activity
 
 import android.os.Bundle
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,7 +14,6 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.ActivityBackupRestoreContainerBinding
 import com.skyd.imomoe.ext.activity
-import com.skyd.imomoe.ext.plus
 import com.skyd.imomoe.view.component.compose.AnimeTopBar
 import com.skyd.imomoe.view.component.compose.AnimeTopBarStyle
 import com.skyd.imomoe.view.component.compose.BackIcon
@@ -56,8 +52,9 @@ private fun WebDavScreen() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(it)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = it + WindowInsets.navigationBars.asPaddingValues()
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
             item {
                 AndroidViewBinding(

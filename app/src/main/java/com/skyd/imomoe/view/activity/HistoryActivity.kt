@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -41,7 +42,6 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
 
     Scaffold(topBar = {
         AnimeTopBar(
-            style = AnimeTopBarStyle.Small,
             title = {
                 Text(text = stringResource(R.string.watch_history))
             },
@@ -115,16 +115,20 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
 
 @Composable
 private fun HistoryList(dataList: List<Any>, viewModel: HistoryViewModel = hiltViewModel()) {
-    val adapter = LazyGridAdapter(
-        mutableListOf(
-            AnimeCover9Proxy(onDeleteButtonClickListener = { _, data ->
-                viewModel.deleteHistory(data)
-            })
+    val adapter = remember {
+        LazyGridAdapter(
+            mutableListOf(
+                AnimeCover9Proxy(onDeleteButtonClickListener = { _, data ->
+                    viewModel.deleteHistory(data)
+                })
+            )
         )
-    )
+    }
     AnimeLazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
         dataList = dataList,
-        adapter = adapter
+        adapter = adapter,
+        contentPadding = WindowInsets.navigationBars.asPaddingValues() +
+                PaddingValues(vertical = 7.dp)
     )
 }

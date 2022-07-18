@@ -1,6 +1,5 @@
 package com.skyd.imomoe.view.fragment
 
-import com.skyd.imomoe.ext.collectWithLifecycle
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +8,10 @@ import android.view.ViewStub
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.skyd.imomoe.R
 import com.skyd.imomoe.databinding.FragmentAnimeShowBinding
 import com.skyd.imomoe.ext.addFitsSystemWindows
+import com.skyd.imomoe.ext.collectWithLifecycle
+import com.skyd.imomoe.ext.screenIsLand
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.util.Banner1ViewHolder
 import com.skyd.imomoe.util.showToast
@@ -66,7 +66,7 @@ class AnimeShowFragment : BaseFragment<FragmentAnimeShowBinding>() {
             it.message?.showToast(Toast.LENGTH_LONG)
         }
         mBinding.apply {
-            if (resources.getBoolean(R.bool.is_landscape)) {
+            if (requireContext().screenIsLand) {
                 rvAnimeShowFragment.addFitsSystemWindows(right = true, bottom = true)
             }
             rvAnimeShowFragment.adapter = adapter

@@ -76,19 +76,6 @@ class AnimeCover6ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover6Describe: TextView = view.findViewById(R.id.tv_anime_cover_6_describe)
 }
 
-class AnimeCover7ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvAnimeCover7Title: TextView = view.findViewById(R.id.tv_anime_cover_7_title)
-    val tvAnimeCover7Size: TextView = view.findViewById(R.id.tv_anime_cover_7_size)
-    val tvAnimeCover7Episodes: TextView = view.findViewById(R.id.tv_anime_cover_7_episodes)
-    val tvAnimeCover7OldPath: TextView = view.findViewById(R.id.tv_anime_cover_7_old_path)
-}
-
-class AnimeCover8ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvAnimeCover8Title: TextView = view.findViewById(R.id.tv_anime_cover_8_title)
-    val tvAnimeCover8Episodes: TextView = view.findViewById(R.id.tv_anime_cover_8_episode)
-    val ivAnimeCover8Cover: ImageView = view.findViewById(R.id.iv_anime_cover_8_cover)
-}
-
 class AnimeCover11ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val tvAnimeCover11Title: TextView = view.findViewById(R.id.tv_anime_cover_11_title)
     val tvAnimeCover11Rank: TextView = view.findViewById(R.id.tv_anime_cover_11_rank)
@@ -154,12 +141,6 @@ class AnimeEpisode1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class More1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val ivMore1: ImageView = view.findViewById(R.id.iv_more_1)
     val tvMore1: TextView = view.findViewById(R.id.tv_more_1)
-}
-
-class SkinCover1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val ivSkinCover1Cover: ImageView = view.findViewById(R.id.iv_skin_cover_1_cover)
-    val tvSkinCover1Title: TextView = view.findViewById(R.id.tv_skin_cover_1_title)
-    val ivSkinCover1Selected: ImageView = view.findViewById(R.id.iv_skin_cover_1_selected)
 }
 
 class ClassifyTab1ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

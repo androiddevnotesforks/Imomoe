@@ -79,11 +79,11 @@
 - Kotlin Coroutine
 - Hilt
 - Room
-- 少部分Jetpack Compose
+- Jetpack Compose
 - SplashScreen
 - DiffUtil
 - Retrofit
-- Okhttp
+- OkHttp
 - Jsoup
 - ......
 

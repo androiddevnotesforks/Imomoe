@@ -44,7 +44,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), EventBusSubscriber {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        if (resources.getBoolean(R.bool.is_landscape)) {
+        if (screenIsLand) {
             mBinding.nvMainActivity.addFitsSystemWindows(top = true, bottom = true, left = true)
         } else {
             mBinding.nvMainActivity.addFitsSystemWindows(bottom = true, left = true)

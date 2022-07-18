@@ -3,10 +3,7 @@ package com.skyd.imomoe.view.component.compose
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -115,6 +112,46 @@ fun MessageDialog(
         onDismissRequest = {
             onDismissRequest?.invoke()
         },
+        properties = properties
+    )
+}
+
+@Composable
+fun WaitingDialog(
+    message: String,
+    properties: DialogProperties = DialogProperties(),
+    negativeText: String = stringResource(id = R.string.cancel),
+    positiveText: String = stringResource(id = R.string.ok),
+    onDismissRequest: (() -> Unit)? = null,
+    onNegative: (() -> Unit)? = null,
+    onPositive: (() -> Unit)? = null,
+) {
+    val confirmButton: @Composable (() -> Unit) = {
+        TextButton(
+            onClick = {
+                onPositive?.invoke()
+            }
+        ) {
+            Text(text = positiveText)
+        }
+    }
+    val dismissButton: @Composable (() -> Unit) = {
+        TextButton(
+            onClick = {
+                onNegative?.invoke()
+            }
+        ) {
+            Text(text = negativeText)
+        }
+    }
+    AlertDialog(
+        onDismissRequest = { onDismissRequest?.invoke() },
+        text = { Text(text = message) },
+        icon = { CircularProgressIndicator() },
+        confirmButton = if (onPositive == null) {
+            {}
+        } else confirmButton,
+        dismissButton = if (onNegative == null) null else dismissButton,
         properties = properties
     )
 }

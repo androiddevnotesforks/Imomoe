@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -17,7 +16,6 @@ import com.skyd.imomoe.ext.*
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.SearchActivityProcessor
 import com.skyd.imomoe.state.DataState
-import com.skyd.imomoe.util.showToast
 import com.skyd.imomoe.view.activity.AnimeDownloadActivity
 import com.skyd.imomoe.view.activity.ClassifyActivity
 import com.skyd.imomoe.view.activity.FavoriteActivity
@@ -68,14 +66,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                             true
                         }
                         R.id.menu_item_home_fragment_download -> {
-                            requestManageExternalStorage {
-                                onGranted {
-                                    startActivity(
-                                        Intent(activity, AnimeDownloadActivity::class.java)
-                                    )
-                                }
-                                onDenied { "无存储权限，无法播放本地缓存视频".showToast(Toast.LENGTH_LONG) }
-                            }
+                            startActivity(Intent(activity, AnimeDownloadActivity::class.java))
                             true
                         }
                         R.id.menu_item_home_fragment_favorite -> {
@@ -102,7 +93,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             ablHomeFragment.hideToolbarWhenCollapsed(tbHomeFragment)
         }
 
-        viewModel.allTabList.collectWithLifecycle(viewLifecycleOwner) { data ->
+        viewModel.allTabList.collectWithLifecycle(viewLifecycleOwner)
+        { data ->
             when (data) {
                 is DataState.Success -> {
                     hideLoadFailedTip()

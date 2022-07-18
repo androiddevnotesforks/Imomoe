@@ -188,7 +188,7 @@
     <string name="danmaku_data_is_null_or_blank">弹幕数据为null或空！</string>
     <string name="danmaku_input_stream_is_null">弹幕输入流为null！</string>
     <string name="episode_play_completed">已看完</string>
-    <string name="have_not_watched_this_anime">追番后还未观看</string>
+    <string name="have_not_watched_this_anime">未观看</string>
     <string name="already_seen_episode_x">看到 %s</string>
     <string name="no_storage_permission_can_not_olay_local_video">无存储权限，无法播放本地缓存视频</string>
     <string name="confirm_delete_all_watch_history">确定要删除所有观看历史记录？</string>
@@ -205,7 +205,7 @@
     <string name="download_update">下载更新</string>
     <string name="refresh_everyday_anime_widget">刷新每日番剧小组件</string>
     <string name="local_data_source">本地数据源</string>
-    <string name="data_source_market">数据源商店(BETA)</string>
+    <string name="data_source_market">数据源商店</string>
     <string name="basic_settings">基本设置</string>
     <string name="play_settings">播放设置</string>
     <string name="show_player_bottom_progressbar">显示播放器底部进度条</string>

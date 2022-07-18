@@ -16,7 +16,7 @@ class UpnpDevice1Proxy(
     ) -> Unit)? = null
 ) : LazyGridAdapter.Proxy<Device<*, *, *>>() {
     @Composable
-    override fun draw(index: Int, data: Device<*, *, *>) {
+    override fun draw(modifier: Modifier, index: Int, data: Device<*, *, *>) {
         UpnpDevice1Item(
             index = index,
             data = data,

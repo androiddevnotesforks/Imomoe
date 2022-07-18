@@ -63,7 +63,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                 HorizontalRecyclerView1Proxy(onMoreButtonClickListener = { _, _, _ ->
                     EpisodeDialogFragment(
                         backgroundDim = false,
-                        offsetFromTop = if (resources.getBoolean(R.bool.is_landscape)) {
+                        offsetFromTop = if (screenIsLand) {
                             null
                         } else {
                             mBinding.avpPlayActivity.height
@@ -120,7 +120,7 @@ class PlayActivity : DetailPlayerActivity<DanmakuVideoPlayer, ActivityPlayBindin
                     R.id.menu_item_play_activity_download -> {
                         EpisodeDialogFragment(
                             backgroundDim = false,
-                            offsetFromTop = if (resources.getBoolean(R.bool.is_landscape)) {
+                            offsetFromTop = if (screenIsLand) {
                                 null
                             } else {
                                 mBinding.avpPlayActivity.height

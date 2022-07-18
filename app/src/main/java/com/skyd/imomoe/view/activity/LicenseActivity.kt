@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -14,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.skyd.imomoe.R
 import com.skyd.imomoe.bean.License1Bean
 import com.skyd.imomoe.ext.activity
-import com.skyd.imomoe.ext.plus
 import com.skyd.imomoe.route.Router.buildRouteUri
 import com.skyd.imomoe.route.Router.route
 import com.skyd.imomoe.route.processor.OpenBrowserProcessor
@@ -47,11 +47,13 @@ fun LicenseScreen() {
             )
         }
     ) {
+        val dataList = remember { initData() }
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = it + WindowInsets.navigationBars.asPaddingValues()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
-            val dataList = initData()
             item {
                 LicenseHeader()
             }

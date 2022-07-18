@@ -12,6 +12,7 @@ import com.skyd.imomoe.databinding.ActivityClassifyBinding
 import com.skyd.imomoe.ext.addFitsSystemWindows
 import com.skyd.imomoe.ext.collectWithLifecycle
 import com.skyd.imomoe.ext.hideToolbarWhenCollapsed
+import com.skyd.imomoe.ext.screenIsLand
 import com.skyd.imomoe.state.DataState
 import com.skyd.imomoe.view.adapter.decoration.AnimeShowItemDecoration
 import com.skyd.imomoe.view.adapter.spansize.AnimeShowSpanSize
@@ -66,7 +67,7 @@ class ClassifyActivity : BaseActivity<ActivityClassifyBinding>() {
 
             rvClassifyActivityTab.layoutManager = GridLayoutManager(
                 this@ClassifyActivity, 2,
-                if (resources.getBoolean(R.bool.is_landscape)) GridLayoutManager.VERTICAL
+                if (screenIsLand) GridLayoutManager.VERTICAL
                 else GridLayoutManager.HORIZONTAL, false
             )
             rvClassifyActivityTab.adapter = classifyTabAdapter

@@ -721,7 +721,7 @@ open class AnimeVideoPlayer : StandardGSYVideoPlayer {
         }
     }
 
-    override public fun onBrightnessSlide(percent: Float) {
+    public override fun onBrightnessSlide(percent: Float) {
         val activity = mContext as Activity
         val lpa = activity.window.attributes
         val mBrightnessData = lpa.screenBrightness
